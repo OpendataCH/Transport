@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://demo.hafas.de/hafas-res/sbb/xml/47r/hafasXMLInterface.xsd" ver="3.0.5" prod="5.30.SBB.4.7v2 [Sep 13 2011]" lang="EN">
+  <LocValRes flag="FINAL" id="from">
+    <Station name="Zuerich" score="100" externalId="008503000#85" externalStationNr="008503000" type="WGS84" x="8540192" y="47378177"/>
+    <Station name="Zurich" score="99" externalId="008503000#85" externalStationNr="008503000" type="WGS84" x="8540192" y="47378177"/>
+    <Station name="Zürich" score="99" externalId="000000315#85" externalStationNr="000000315" type="WGS84" x="8540786" y="47366005"/>
+    <Station name="Zürich HB" score="99" externalId="008503000#85" externalStationNr="008503000" type="WGS84" x="8540192" y="47378177"/>
+    <Station name="Zurich Airport" score="98" externalId="008503016#95" externalStationNr="008503016" type="WGS84" x="8562387" y="47450378"/>
+    <Station name="Zurich Aéroport" score="98" externalId="008503016#95" externalStationNr="008503016" type="WGS84" x="8562387" y="47450378"/>
+    <Station name="Zurich Flughafen" score="98" externalId="008503016#95" externalStationNr="008503016" type="WGS84" x="8562387" y="47450378"/>
+    <Station name="Zürich Flughafen" score="98" externalId="008503016#95" externalStationNr="008503016" type="WGS84" x="8562387" y="47450378"/>
+    <Station name="Zuerich Flughafen" score="88" externalId="008503016#95" externalStationNr="008503016" type="WGS84" x="8562387" y="47450378"/>
+    <Station name="Zürich Oerlikon" score="88" externalId="008503006#95" externalStationNr="008503006" type="WGS84" x="8544112" y="47411527"/>
+    <Station name="Zürich Altstetten" score="87" externalId="008503001#95" externalStationNr="008503001" type="WGS84" x="8488936" y="47391481"/>
+    <Station name="Zürich Enge" score="87" externalId="008503010#95" externalStationNr="008503010" type="WGS84" x="8530808" y="47364091"/>
+    <Station name="Zürich Rehalp" score="87" externalId="008503069#95" externalStationNr="008503069" type="WGS84" x="8583206" y="47351011"/>
+    <Station name="Zürich, Werd" score="87" externalId="000106238#95" externalStationNr="000106238" type="WGS84" x="8526789" y="47372576"/>
+    <Station name="Zürich Binz" score="86" externalId="008503051#95" externalStationNr="008503051" type="WGS84" x="8518420" y="47362625"/>
+    <Station name="Zürich, Zoo" score="86" externalId="000103005#95" externalStationNr="000103005" type="WGS84" x="8571556" y="47381566"/>
+    <Station name="Zürich Römerhof" score="86" externalId="008503083#95" externalStationNr="008503083" type="WGS84" x="8560697" y="47368307"/>
+    <Station name="Zürich Kreuzplatz" score="86" externalId="008530813#95" externalStationNr="008530813" type="WGS84" x="8554081" y="47364873"/>
+    <Station name="Zürich, Auzelg" score="83" externalId="000100132#95" externalStationNr="000100132" type="WGS84" x="8568823" y="47417091"/>
+    <Station name="Zürich Balgrist" score="82" externalId="008530811#95" externalStationNr="008530811" type="WGS84" x="8575016" y="47354571"/>
+    <Station name="Zürich, Central" score="82" externalId="000100619#95" externalStationNr="000100619" type="WGS84" x="8543959" y="47376801"/>
+    <Station name="Zürich, Cinemax" score="81" externalId="000100799#95" externalStationNr="000100799" type="WGS84" x="8523041" y="47390474"/>
+    <Station name="Zürich, Laubegg" score="81" externalId="000101519#95" externalStationNr="000101519" type="WGS84" x="8515876" y="47358607"/>
+    <Station name="Zürich, Triemli" score="81" externalId="008503610#95" externalStationNr="008503610" type="WGS84" x="8495345" y="47368055"/>
+    <Station name="Zürich, Irchel" score="81" externalId="000101334#95" externalStationNr="000101334" type="WGS84" x="8544831" y="47396155"/>
+    <Station name="Zürich, Platte" score="80" externalId="000101889#95" externalStationNr="000101889" type="WGS84" x="8552642" y="47375003"/>
+    <Station name="Zürich Brunau" score="80" externalId="008503086#95" externalStationNr="008503086" type="WGS84" x="8526232" y="47352117"/>
+    <Station name="Zürich Manegg" score="80" externalId="008503093#95" externalStationNr="008503093" type="WGS84" x="8519679" y="47338372"/>
+    <Station name="Zürich HB SZU" score="80" externalId="008503088#95" externalStationNr="008503088" type="WGS84" x="8540192" y="47378177"/>
+    <Station name="Zürich Selnau" score="80" externalId="008503090#95" externalStationNr="008503090" type="WGS84" x="8532030" y="47372936"/>
+    <Station name="Zürich, Dammweg" score="80" externalId="000100648#95" externalStationNr="000100648" type="WGS84" x="8526007" y="47388424"/>
+    <Station name="Zürich, Heuried" score="80" externalId="000101187#95" externalStationNr="000101187" type="WGS84" x="8506357" y="47369403"/>
+    <Station name="Zürich, Rathaus" score="80" externalId="000102030#95" externalStationNr="000102030" type="WGS84" x="8542880" y="47371731"/>
+    <Station name="Zürich, Rennweg" score="80" externalId="000102054#95" externalStationNr="000102054" type="WGS84" x="8538269" y="47373098"/>
+  </LocValRes>
+  <LocValRes flag="FINAL" id="to">
+    <Station name="Bern" score="101" externalId="008507000#85" externalStationNr="008507000" type="WGS84" x="7439122" y="46948825"/>
+  </LocValRes>
+</ResC>

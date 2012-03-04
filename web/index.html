@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Transport API</title>
+
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="media/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="media/css/layout.css" />
+
+    <script src="media/js/jquery-1.7.1.min.js"></script>
+    <script src="media/bootstrap/js/bootstrap-tabs.js"></script>
+</head>
+<body lang="en">
+
+    <div class="wrapper">
+        <header>
+            <h1>Transport</h1>
+            <p>Swiss public transport API</p>
+        </header>
+
+        <article>
+            <h2>Introduction</h2>
+
+            <p>The Transport API allows interested developers to build their own applications using public timetable data, whether they're on the web, the desktop or mobile devices. Find out more about how you can start exploring the timetable data playground or just browse the API Documentation.</p>
+
+            <h2 id="documentation">API Documentation</h2>
+
+            <p>The Transport API builds on REST style resources which respond in JSON. Individual resources are detailed below.</p>
+
+            <ul class="tabs">
+              <li class="active"><a href="#stations">/stations</a></li>
+              <li><a href="#connections">/connections</a></li>
+              <li><a href="#stationboard">/stationboard</a></li>
+            </ul>
+
+            <div class="pill-content">
+              <div class="active" id="stations">
+                  <p>Returns the matching locations for the given parameters.</p>
+
+                  <p>The locations in the response are scored to determine which is the most exact location.</p>
+
+                  <p>This method can return a refine response, what means that the request has to be redone.</p>
+
+                  <h3>Resource URL</h3>
+
+                  <p><pre>http://transport.opendata.ch/v1/locations</pre></p>
+
+                  <h3>Request Parameters</h3>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Required</th>
+                              <th>Description</th>
+                              <th>Example</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>query</code></td>
+                              <td>required</td>
+                              <td>Specifies the location name to search for</td>
+                              <td>Basel</td>
+                          </tr>
+                          <tr>
+                              <td><code>type</code></td>
+                              <td>optional</td>
+                              <td>
+                                  Specifies the location type, possible types are:
+                                  <ul>
+                                      <li>all (default): Looks up for all types of locations</li>
+                                      <li>station: Looks up for stations (train station, bus station)</li>
+                                      <li>poi: Looks up for points of interest (Clock tower, China garden)</li>
+                                      <li>address: Looks up for an address (Zurich Bahnhofstrasse 33)</li>
+                                  </ul>
+                              </td>
+                              <td>address</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h3>Response parameters</h3>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th colspan="2">Name</th>
+                              <th>Description</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td colspan="2"><code>id</code></td>
+                              <td>The id of the location</td>
+                          </tr>
+                          <tr>
+                              <td colspan="2"><code>type</code></td>
+                              <td>
+                                  Type of the location, can contain:
+                                  <ul>
+                                      <li>station: Location is a train station, bus station</li>
+                                      <li>poi: Location is a point of interest (Clock tower, China garden)</li>
+                                      <li>address: Location is an address</li>
+                                      <li>refine: Location is not defined, the user has to relocate</li>
+                                  </ul>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td colspan="2"><code>name</code></td>
+                              <td>The location name</td>
+                          </tr>
+                          <tr>
+                              <td colspan="2"><code>score</code></td>
+                              <td>The accuracy of fire</td>
+                          </tr>
+                          <tr>
+                              <td rowspan="4"><code>coordinates</code></td>
+                          </tr>
+                          <tr>
+                              <td><code>type</code></td>
+                              <td>The type of the given coordinate</td>
+                          </tr>
+                          <tr>
+                              <td><code>x</code></td>
+                              <td>Latitude</td>
+                          </tr>
+                          <tr>
+                              <td><code>y</code></td>
+                              <td>Longitude</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h3>Example Request</h3>
+
+                  <p><pre>GET http://transport.opendata.ch/v1/locations?query=Basel</pre></p>
+
+                  <h3>Example response</h3>
+
+                  <p><pre>
+{
+    "stations": [
+        {
+            "coordinate": {
+                "type": "WGS84",
+                "x": "8540192",
+                "y": "47378177"
+            },
+            "id": "008503000",
+            "name": "Zuerich",
+            "score": "100"
+        },
+        {
+            "coordinate": {
+                "type": "WGS84",
+                "x": "8540192",
+                "y": "47378177"
+            },
+            "id": "008503000",
+            "name": "Zurich",
+            "score": "99"
+        }
+    ]
+}
+</pre></p>
+              </div>
+              <div id="connections">...</div>
+              <div id="stationboard">...</div>
+            </div>
+
+            <script>
+              $(function () {
+                $('.tabs').tabs()
+              })
+            </script>
+        </article>
+
+        <footer>
+            <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+        </footer>
+    </div>
+</body>
+</html>

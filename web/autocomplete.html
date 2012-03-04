@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Transport API</title>
+    
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script>
+    
+    $(function () {
+        $('#from, #to').autocomplete({
+			source: function (request, response) {
+				$.get('api.php/locations', {query: request.term, type: 'station'}, function(data) {
+					response($.map(data.stations, function(station) {
+						return {
+							label: station.name,
+							station: station
+						}
+					}));
+				}, 'json');
+			},
+			select: function (event, ui) {
+				console.log(ui.item.station.id);
+			}
+		});
+    });
+    
+    </script>
+</head>
+<body>
+
+<div class="ui-widget">
+    <label>Von:</label>
+    <input id="from" />
+</div>
+
+<div class="ui-widget">
+    <label>Nach:</label>
+    <input id="to" />
+</div>
+
+</body>
+</html>

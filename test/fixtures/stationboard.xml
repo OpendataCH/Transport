@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://demo.hafas.de/hafas-res/sbb/xml/47r/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.30.SBB.4.7v5" lang="EN">
+<STBRes>
+<JourneyList>
+<STBJourney>
+<JHandle tNr="191542" puic="085" cycle="01"/>
+<MainStop>
+<BasicStop>
+<Station name="Zürich, Bäckeranlage" x="8525342" y="47378473" type="WGS84" externalId="8591052#85" externalStationNr="8591052"/>
+<Dep>
+<Time>19:00</Time>
+</Dep>
+<StopPrognosis>
+<Capacity1st>-1</Capacity1st> 
+<Capacity2nd>-1</Capacity2nd> 
+</StopPrognosis>
+</BasicStop>
+</MainStop>
+<JourneyAttributeList>
+<JourneyAttribute from="12" to="27">
+<Attribute type="NAME">
+<AttributeVariant type="NORMAL">
+<Text>Bus 31</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+<JourneyAttribute from="12" to="27">
+<Attribute type="CATEGORY" code="6">
+<AttributeVariant type="NORMAL">
+<Text>Bus</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+<JourneyAttribute from="12" to="27">
+<Attribute type="INTERNALCATEGORY">
+<AttributeVariant type="NORMAL">
+<Text>Nbu</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+<JourneyAttribute from="12" to="27">
+<Attribute type="OPERATOR">
+<AttributeVariant type="NORMAL">
+<Text>VBZ</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+<JourneyAttribute from="12" to="27">
+<Attribute type="NUMBER">
+<AttributeVariant type="NORMAL">
+<Text>31</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+<JourneyAttribute from="12" to="27">
+<Attribute type="DIRECTION">
+<AttributeVariant type="NORMAL">
+<Text>Schlieren, Zentrum</Text>
+</AttributeVariant>
+</Attribute>
+</JourneyAttribute>
+</JourneyAttributeList>
+</STBJourney>
+</JourneyList>
+</STBRes>
+</ResC>
