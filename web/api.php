@@ -35,7 +35,7 @@ $app->get('/v1/', function(Request $request) use ($app) {
 
     return json_encode(array(
         'date' => date('c'),
-        'author' => 'Liip AG',
+        'author' => 'Opendata.ch',
         'version' => '1.0',
     ));
 });
