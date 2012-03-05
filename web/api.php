@@ -30,6 +30,12 @@ $app->after(function (Request $request, Response $response) {
 });
 
 
+// index
+$app->get('/', function(Request $request) use ($app) {
+    return file_get_contents('index.html');
+});
+
+
 // home
 $app->get('/v1/', function(Request $request) use ($app) {
 
