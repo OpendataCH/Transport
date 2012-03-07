@@ -1,0 +1,1897 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://demo.hafas.de/hafas-res/sbb/xml/47r/hafasXMLInterface.xsd" ver="3.0.5" prod="5.30.SBB.4.7v2 [Sep 13 2011]" lang="EN">
+  <ConRes dir="O">
+    <ConResCtxt>c5.025297191.1325870951#1</ConResCtxt>
+    <ConnectionList type="OEV">
+      <Connection id="C1-0">
+        <Overview>
+          <Date>20120131</Date>
+          <Departure>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                <StAttr code="KANTON" text="ZH" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="8000" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Zürich" priority="3"/>
+                <StAttr code="WG" text="43" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+              <Dep getIn="YES">
+                <Time>00d19:14:00</Time>
+                <Platform>
+                  <Text>21/22   </Text>
+                </Platform>
+              </Dep>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+                <Capacity1st>1</Capacity1st>
+                <Capacity2nd>2</Capacity2nd>
+              </StopPrognosis>
+            </BasicStop>
+          </Departure>
+          <Arrival>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Baden" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                <StAttr code="KANTON" text="AG" priority="3"/>
+                <StAttr code="ORTGR" text="5" priority="3"/>
+                <StAttr code="PLZ" text="5400" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Baden" priority="3"/>
+                <StAttr code="WG" text="41" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+              <Arr getOut="YES">
+                <Time>00d19:42:00</Time>
+                <Platform>
+                  <Text>3       </Text>
+                </Platform>
+              </Arr>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+              </StopPrognosis>
+            </BasicStop>
+          </Arrival>
+          <Transfers>0</Transfers>
+          <Duration>
+            <Time>00d00:28:00</Time>
+          </Duration>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text>daily</Text>
+            </RegularServiceText>
+          </ServiceDays>
+          <Products>
+            <Product cat="S12     "/>
+          </Products>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/en?seqnr=1&amp;ident=c5.025297191.1325870951&amp;guiVCtrl_connection_detailsOut_select_C1-0&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p_pds.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=c5.025297191.1325870951:1:C1-0"/>
+        </Overview>
+        <ConSectionList>
+          <ConSection>
+            <Departure>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                  <StAttr code="KANTON" text="ZH" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="8000" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Zürich" priority="3"/>
+                  <StAttr code="WG" text="43" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                <Dep getIn="YES">
+                  <Time>00d19:14:00</Time>
+                  <Platform>
+                    <Text>21/22   </Text>
+                  </Platform>
+                </Dep>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                  <Capacity1st>1</Capacity1st>
+                  <Capacity2nd>2</Capacity2nd>
+                </StopPrognosis>
+              </BasicStop>
+            </Departure>
+            <Journey>
+              <JHandle tNr="2578" cycle="0" puic="85"/>
+              <JourneyAttributeList>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="NAME">
+                    <AttributeVariant type="NORMAL">
+                      <Text>S1219278</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="CATEGORY" code="5">
+                    <AttributeVariant type="SHORT">
+                      <Text>S12</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>S12     </Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>Urban train line 12</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="NUMBER">
+                    <AttributeVariant type="NORMAL">
+                      <Text>19278</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="ADMINISTRATION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>000011</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+              </JourneyAttributeList>
+              <PassList>
+                <BasicStop index="5" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                  <Dep getIn="YES">
+                    <Time>00d19:14:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="6" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Hardbrücke" x="8517108" y="47385188" type="WGS84" externalId="008503020#85" externalStationNr="008503020"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:16:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:16:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="7" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Altstetten" x="8488936" y="47391481" type="WGS84" externalId="008503001#85" externalStationNr="008503001"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:20:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:21:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="8" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="8952" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Schlieren" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Schlieren" x="8447226" y="47399166" type="WGS84" externalId="008503509#85" externalStationNr="008503509"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:23:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:23:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="9" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="4" priority="3"/>
+                    <StAttr code="PLZ" text="8953" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Dietikon" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Glanzenberg" x="8420420" y="47398870" type="WGS84" externalId="008503512#85" externalStationNr="008503512"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:26:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:26:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="10" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="4" priority="3"/>
+                    <StAttr code="PLZ" text="8953" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Dietikon" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Dietikon" x="8404968" y="47405774" type="WGS84" externalId="008503508#85" externalStationNr="008503508"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:29:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:30:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="11" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="8" priority="3"/>
+                    <StAttr code="PLZ" text="8956" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Killwangen" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Killwangen-Spreitenbach" x="8354196" y="47433326" type="WGS84" externalId="008503506#85" externalStationNr="008503506"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:34:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:34:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="12" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="6" priority="3"/>
+                    <StAttr code="PLZ" text="5432" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Neuenhof" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Neuenhof" x="8331229" y="47450657" type="WGS84" externalId="008503511#85" externalStationNr="008503511"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:36:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:36:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="13" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5430" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Wettingen" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Wettingen" x="8315983" y="47459637" type="WGS84" externalId="008503505#85" externalStationNr="008503505"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:39:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:40:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="14" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5400" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Baden" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:42:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                  </StopPrognosis>
+                </BasicStop>
+              </PassList>
+              <JProg>
+                <JStatus>SCHEDULED</JStatus>
+              </JProg>
+            </Journey>
+            <Arrival>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Baden" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                  <StAttr code="KANTON" text="AG" priority="3"/>
+                  <StAttr code="ORTGR" text="5" priority="3"/>
+                  <StAttr code="PLZ" text="5400" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Baden" priority="3"/>
+                  <StAttr code="WG" text="41" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                <Arr getOut="YES">
+                  <Time>00d19:42:00</Time>
+                  <Platform>
+                    <Text>3       </Text>
+                  </Platform>
+                </Arr>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                </StopPrognosis>
+              </BasicStop>
+            </Arrival>
+          </ConSection>
+        </ConSectionList>
+      </Connection>
+      <Connection id="C1-1">
+        <Overview>
+          <Date>20120131</Date>
+          <Departure>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                <StAttr code="KANTON" text="ZH" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="8000" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Zürich" priority="3"/>
+                <StAttr code="WG" text="43" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+              <Dep getIn="YES">
+                <Time>00d19:32:00</Time>
+                <Platform>
+                  <Text>21/22   </Text>
+                </Platform>
+              </Dep>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+                <Capacity1st>1</Capacity1st>
+                <Capacity2nd>2</Capacity2nd>
+              </StopPrognosis>
+            </BasicStop>
+          </Departure>
+          <Arrival>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Baden" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                <StAttr code="KANTON" text="AG" priority="3"/>
+                <StAttr code="ORTGR" text="5" priority="3"/>
+                <StAttr code="PLZ" text="5400" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Baden" priority="3"/>
+                <StAttr code="WG" text="41" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+              <Arr getOut="YES">
+                <Time>00d20:09:00</Time>
+                <Platform>
+                  <Text>5       </Text>
+                </Platform>
+              </Arr>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+              </StopPrognosis>
+            </BasicStop>
+          </Arrival>
+          <Transfers>0</Transfers>
+          <Duration>
+            <Time>00d00:37:00</Time>
+          </Duration>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text>daily</Text>
+            </RegularServiceText>
+          </ServiceDays>
+          <Products>
+            <Product cat="S6      "/>
+          </Products>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/en?seqnr=1&amp;ident=c5.025297191.1325870951&amp;guiVCtrl_connection_detailsOut_select_C1-1&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p_pds.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=c5.025297191.1325870951:1:C1-1"/>
+        </Overview>
+        <ConSectionList>
+          <ConSection>
+            <Departure>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                  <StAttr code="KANTON" text="ZH" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="8000" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Zürich" priority="3"/>
+                  <StAttr code="WG" text="43" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                <Dep getIn="YES">
+                  <Time>00d19:32:00</Time>
+                  <Platform>
+                    <Text>21/22   </Text>
+                  </Platform>
+                </Dep>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                  <Capacity1st>1</Capacity1st>
+                  <Capacity2nd>2</Capacity2nd>
+                </StopPrognosis>
+              </BasicStop>
+            </Departure>
+            <Journey>
+              <JHandle tNr="2382" cycle="0" puic="85"/>
+              <JourneyAttributeList>
+                <JourneyAttribute from="0" to="11">
+                  <Attribute type="NAME">
+                    <AttributeVariant type="NORMAL">
+                      <Text>S6 18680</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="11">
+                  <Attribute type="CATEGORY" code="5">
+                    <AttributeVariant type="SHORT">
+                      <Text>S6</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>S6      </Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>Urban train line 6</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="11">
+                  <Attribute type="NUMBER">
+                    <AttributeVariant type="NORMAL">
+                      <Text>18680</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="11">
+                  <Attribute type="ADMINISTRATION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>000011</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+              </JourneyAttributeList>
+              <PassList>
+                <BasicStop index="10" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                  <Dep getIn="YES">
+                    <Time>00d19:32:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="11" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Hardbrücke" x="8517108" y="47385188" type="WGS84" externalId="008503020#85" externalStationNr="008503020"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:34:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:34:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="12" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Oerlikon" x="8544112" y="47411527" type="WGS84" externalId="008503006#85" externalStationNr="008503006"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:38:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:39:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="13" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Seebach" x="8544633" y="47418745" type="WGS84" externalId="008503007#85" externalStationNr="008503007"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:41:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:41:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="14" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Affoltern" x="8508263" y="47421091" type="WGS84" externalId="008503008#85" externalStationNr="008503008"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:44:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:44:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="15" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dielsdorf" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="8105" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Regensdorf" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Regensdorf-Watt" x="8472063" y="47436562" type="WGS84" externalId="008503526#85" externalStationNr="008503526"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:47:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:48:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="16" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dielsdorf" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="7" priority="3"/>
+                    <StAttr code="PLZ" text="8107" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Buchs (ZH)" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Buchs-Dällikon" x="8435576" y="47453389" type="WGS84" externalId="008503527#85" externalStationNr="008503527"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:51:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:51:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="17" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dielsdorf" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="8" priority="3"/>
+                    <StAttr code="PLZ" text="8112" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Otelfingen" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Otelfingen Golfpark" x="8402100" y="47455808" type="WGS84" externalId="008503525#85" externalStationNr="008503525"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:53:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:53:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="18" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dielsdorf" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="8" priority="3"/>
+                    <StAttr code="PLZ" text="8112" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Otelfingen" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Otelfingen" x="8387510" y="47454936" type="WGS84" externalId="008503528#85" externalStationNr="008503528"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:56:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:56:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="19" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="7" priority="3"/>
+                    <StAttr code="PLZ" text="5436" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Würenlos" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Würenlos" x="8357639" y="47445758" type="WGS84" externalId="008503529#85" externalStationNr="008503529"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:58:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:58:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="20" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5430" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Wettingen" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Wettingen" x="8315983" y="47459637" type="WGS84" externalId="008503505#85" externalStationNr="008503505"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:04:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d20:05:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="21" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5400" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Baden" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:09:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                  </StopPrognosis>
+                </BasicStop>
+              </PassList>
+              <JProg>
+                <JStatus>SCHEDULED</JStatus>
+              </JProg>
+            </Journey>
+            <Arrival>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Baden" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                  <StAttr code="KANTON" text="AG" priority="3"/>
+                  <StAttr code="ORTGR" text="5" priority="3"/>
+                  <StAttr code="PLZ" text="5400" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Baden" priority="3"/>
+                  <StAttr code="WG" text="41" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                <Arr getOut="YES">
+                  <Time>00d20:09:00</Time>
+                  <Platform>
+                    <Text>5       </Text>
+                  </Platform>
+                </Arr>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                </StopPrognosis>
+              </BasicStop>
+            </Arrival>
+          </ConSection>
+        </ConSectionList>
+      </Connection>
+      <Connection id="C1-2">
+        <Overview>
+          <Date>20120131</Date>
+          <Departure>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                <StAttr code="KANTON" text="ZH" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="8000" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Zürich" priority="3"/>
+                <StAttr code="WG" text="43" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+              <Dep getIn="YES">
+                <Time>00d19:36:00</Time>
+                <Platform>
+                  <Text>12      </Text>
+                </Platform>
+              </Dep>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+                <Capacity1st>2</Capacity1st>
+                <Capacity2nd>3</Capacity2nd>
+              </StopPrognosis>
+            </BasicStop>
+          </Departure>
+          <Arrival>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Baden" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                <StAttr code="KANTON" text="AG" priority="3"/>
+                <StAttr code="ORTGR" text="5" priority="3"/>
+                <StAttr code="PLZ" text="5400" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Baden" priority="3"/>
+                <StAttr code="WG" text="41" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+              <Arr getOut="YES">
+                <Time>00d19:51:00</Time>
+                <Platform>
+                  <Text>3       </Text>
+                </Platform>
+              </Arr>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+              </StopPrognosis>
+            </BasicStop>
+          </Arrival>
+          <Transfers>0</Transfers>
+          <Duration>
+            <Time>00d00:15:00</Time>
+          </Duration>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text>daily</Text>
+            </RegularServiceText>
+          </ServiceDays>
+          <Products>
+            <Product cat="IR      "/>
+          </Products>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/en?seqnr=1&amp;ident=c5.025297191.1325870951&amp;guiVCtrl_connection_detailsOut_select_C1-2&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p_pds.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=c5.025297191.1325870951:1:C1-2"/>
+        </Overview>
+        <ConSectionList>
+          <ConSection>
+            <Departure>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                  <StAttr code="KANTON" text="ZH" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="8000" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Zürich" priority="3"/>
+                  <StAttr code="WG" text="43" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                <Dep getIn="YES">
+                  <Time>00d19:36:00</Time>
+                  <Platform>
+                    <Text>12      </Text>
+                  </Platform>
+                </Dep>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                  <Capacity1st>2</Capacity1st>
+                  <Capacity2nd>3</Capacity2nd>
+                </StopPrognosis>
+              </BasicStop>
+            </Departure>
+            <Journey>
+              <JHandle tNr="437" cycle="1" puic="85"/>
+              <JourneyAttributeList>
+                <JourneyAttribute from="0" to="1">
+                  <Attribute type="NAME">
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR 1988 </Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="1">
+                  <Attribute type="CATEGORY" code="2">
+                    <AttributeVariant type="SHORT">
+                      <Text>IR</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR      </Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>InterRegio</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="1">
+                  <Attribute type="NUMBER">
+                    <AttributeVariant type="NORMAL">
+                      <Text>1988</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="1">
+                  <Attribute type="ADMINISTRATION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>000011</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="1">
+                  <Attribute priority="4" code="PA">
+                    <AttributeVariant type="NORMAL">
+                      <Text>Panorama coach</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+              </JourneyAttributeList>
+              <PassList>
+                <BasicStop index="0" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                  <Dep getIn="YES">
+                    <Time>00d19:36:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>2</Capacity1st>
+                    <Capacity2nd>3</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="1" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5400" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Baden" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:51:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                  </StopPrognosis>
+                </BasicStop>
+              </PassList>
+              <JProg>
+                <JStatus>SCHEDULED</JStatus>
+              </JProg>
+            </Journey>
+            <Arrival>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Baden" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                  <StAttr code="KANTON" text="AG" priority="3"/>
+                  <StAttr code="ORTGR" text="5" priority="3"/>
+                  <StAttr code="PLZ" text="5400" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Baden" priority="3"/>
+                  <StAttr code="WG" text="41" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                <Arr getOut="YES">
+                  <Time>00d19:51:00</Time>
+                  <Platform>
+                    <Text>3       </Text>
+                  </Platform>
+                </Arr>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                </StopPrognosis>
+              </BasicStop>
+            </Arrival>
+          </ConSection>
+        </ConSectionList>
+      </Connection>
+      <Connection id="C1-3">
+        <Overview>
+          <Date>20120131</Date>
+          <Departure>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                <StAttr code="KANTON" text="ZH" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="8000" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Zürich" priority="3"/>
+                <StAttr code="WG" text="43" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+              <Dep getIn="YES">
+                <Time>00d19:44:00</Time>
+                <Platform>
+                  <Text>21/22   </Text>
+                </Platform>
+              </Dep>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+                <Capacity1st>1</Capacity1st>
+                <Capacity2nd>2</Capacity2nd>
+              </StopPrognosis>
+            </BasicStop>
+          </Departure>
+          <Arrival>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="AGGLO" text="Baden" priority="3"/>
+                <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                <StAttr code="KANTON" text="AG" priority="3"/>
+                <StAttr code="ORTGR" text="5" priority="3"/>
+                <StAttr code="PLZ" text="5400" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Baden" priority="3"/>
+                <StAttr code="WG" text="41" priority="3"/>
+                <StAttr code="WR" text="4" priority="3"/>
+                <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+              <Arr getOut="YES">
+                <Time>00d20:12:00</Time>
+                <Platform>
+                  <Text>3       </Text>
+                </Platform>
+              </Arr>
+              <StopPrognosis>
+                <Arr handicappedAccess="0"/>
+                <Dep handicappedAccess="0"/>
+                <Status>SCHEDULED</Status>
+              </StopPrognosis>
+            </BasicStop>
+          </Arrival>
+          <Transfers>0</Transfers>
+          <Duration>
+            <Time>00d00:28:00</Time>
+          </Duration>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text>daily</Text>
+            </RegularServiceText>
+          </ServiceDays>
+          <Products>
+            <Product cat="S12     "/>
+          </Products>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/en?seqnr=1&amp;ident=c5.025297191.1325870951&amp;guiVCtrl_connection_detailsOut_select_C1-3&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p_pds.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=c5.025297191.1325870951:1:C1-3"/>
+        </Overview>
+        <ConSectionList>
+          <ConSection>
+            <Departure>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                  <StAttr code="KANTON" text="ZH" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="8000" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Zürich" priority="3"/>
+                  <StAttr code="WG" text="43" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                <Dep getIn="YES">
+                  <Time>00d19:44:00</Time>
+                  <Platform>
+                    <Text>21/22   </Text>
+                  </Platform>
+                </Dep>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                  <Capacity1st>1</Capacity1st>
+                  <Capacity2nd>2</Capacity2nd>
+                </StopPrognosis>
+              </BasicStop>
+            </Departure>
+            <Journey>
+              <JHandle tNr="2580" cycle="0" puic="85"/>
+              <JourneyAttributeList>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="NAME">
+                    <AttributeVariant type="NORMAL">
+                      <Text>S1219280</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="CATEGORY" code="5">
+                    <AttributeVariant type="SHORT">
+                      <Text>S12</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>S12     </Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>Urban train line 12</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="NUMBER">
+                    <AttributeVariant type="NORMAL">
+                      <Text>19280</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="9">
+                  <Attribute type="ADMINISTRATION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>000011</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+              </JourneyAttributeList>
+              <PassList>
+                <BasicStop index="7" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#85" externalStationNr="008503000"/>
+                  <Dep getIn="YES">
+                    <Time>00d19:44:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="8" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Hardbrücke" x="8517108" y="47385188" type="WGS84" externalId="008503020#85" externalStationNr="008503020"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:46:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:46:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="9" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Zürich" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Altstetten" x="8488936" y="47391481" type="WGS84" externalId="008503001#85" externalStationNr="008503001"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:50:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:51:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="10" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="8952" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Schlieren" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Schlieren" x="8447226" y="47399166" type="WGS84" externalId="008503509#85" externalStationNr="008503509"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:53:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:53:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="11" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="4" priority="3"/>
+                    <StAttr code="PLZ" text="8953" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Dietikon" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Glanzenberg" x="8420420" y="47398870" type="WGS84" externalId="008503512#85" externalStationNr="008503512"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:56:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d19:56:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>2</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="12" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Dietikon" priority="3"/>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="4" priority="3"/>
+                    <StAttr code="PLZ" text="8953" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Dietikon" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Dietikon" x="8404968" y="47405774" type="WGS84" externalId="008503508#85" externalStationNr="008503508"/>
+                  <Arr getOut="YES">
+                    <Time>00d19:59:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d20:00:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="13" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="8" priority="3"/>
+                    <StAttr code="PLZ" text="8956" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Killwangen" priority="3"/>
+                    <StAttr code="WG" text="43" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Killwangen-Spreitenbach" x="8354196" y="47433326" type="WGS84" externalId="008503506#85" externalStationNr="008503506"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:04:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d20:04:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="14" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Zürich" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="6" priority="3"/>
+                    <StAttr code="PLZ" text="5432" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Neuenhof" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Neuenhof" x="8331229" y="47450657" type="WGS84" externalId="008503511#85" externalStationNr="008503511"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:06:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d20:06:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="15" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5430" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Wettingen" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Wettingen" x="8315983" y="47459637" type="WGS84" externalId="008503505#85" externalStationNr="008503505"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:09:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d20:10:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="16" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="AGGLO" text="Baden" priority="3"/>
+                    <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="5" priority="3"/>
+                    <StAttr code="PLZ" text="5400" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Baden" priority="3"/>
+                    <StAttr code="WG" text="41" priority="3"/>
+                    <StAttr code="WR" text="4" priority="3"/>
+                    <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                  <Arr getOut="YES">
+                    <Time>00d20:12:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="0"/>
+                    <Dep handicappedAccess="0"/>
+                    <Status>SCHEDULED</Status>
+                  </StopPrognosis>
+                </BasicStop>
+              </PassList>
+              <JProg>
+                <JStatus>SCHEDULED</JStatus>
+              </JProg>
+            </Journey>
+            <Arrival>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="AGGLO" text="Baden" priority="3"/>
+                  <StAttr code="BEZIRK" text="Bezirk Baden" priority="3"/>
+                  <StAttr code="KANTON" text="AG" priority="3"/>
+                  <StAttr code="ORTGR" text="5" priority="3"/>
+                  <StAttr code="PLZ" text="5400" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Baden" priority="3"/>
+                  <StAttr code="WG" text="41" priority="3"/>
+                  <StAttr code="WR" text="4" priority="3"/>
+                  <StAttr code="KB" text="Kursbuchhalt" priority="0" type="attr"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#85" externalStationNr="008503504"/>
+                <Arr getOut="YES">
+                  <Time>00d20:12:00</Time>
+                  <Platform>
+                    <Text>3       </Text>
+                  </Platform>
+                </Arr>
+                <StopPrognosis>
+                  <Arr handicappedAccess="0"/>
+                  <Dep handicappedAccess="0"/>
+                  <Status>SCHEDULED</Status>
+                </StopPrognosis>
+              </BasicStop>
+            </Arrival>
+          </ConSection>
+        </ConSectionList>
+      </Connection>
+    </ConnectionList>
+  </ConRes>
+</ResC>
