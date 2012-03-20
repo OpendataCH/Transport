@@ -11,9 +11,6 @@
 
     <link rel="stylesheet" href="media/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="media/css/layout.css" />
-
-    <script src="media/js/jquery-1.7.1.min.js"></script>
-    <script src="media/bootstrap/js/bootstrap-tabs.js"></script>
 </head>
 <body lang="en">
 
@@ -32,25 +29,210 @@
 
             <p>The Transport API builds on REST style resources which respond in JSON. Individual resources are detailed below.</p>
 
-            <ul class="tabs">
-              <li class="active"><a href="#stations">/stations</a></li>
+            <ul>
+              <li><a href="#stations">/stations</a></li>
               <li><a href="#connections">/connections</a></li>
               <li><a href="#stationboard">/stationboard</a></li>
             </ul>
 
-            <div class="pill-content">
-              <div class="active" id="stations">
+            <div>
+              <hr/>
+              <div id="objects">
+
+                  <h3>API objects</h3>
+
+                  <p>API responses are composites of the following objects:</p>
+
+                  <ul>
+                    <li><a href="#location">location</a></li>
+                    <li><a href="#coordinates">coordinates</a></li>
+                    <li><a href="#connection">connection</a></li>
+                    <li><a href="#checkpoint">checkpoint</a></li>
+                    <li><a href="#prognosis">prognosis</a></li>
+                  </ul>
+
+                  <h4 id="location">Location Object</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>id</code></td>
+                              <td>The id of the location</td>
+                          </tr>
+                          <tr>
+                              <td><code>type</code></td>
+                              <td>
+                                  Type of the location, can contain:
+                                  <ul>
+                                      <li>station: Location is a train station, bus station</li>
+                                      <li>poi: Location is a point of interest (Clock tower, China garden)</li>
+                                      <li>address: Location is an address</li>
+                                      <li>refine: Location is not defined, the user has to relocate</li>
+                                  </ul>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td><code>name</code></td>
+                              <td>The location name</td>
+                          </tr>
+                          <tr>
+                              <td><code>score</code></td>
+                              <td>The accuracy of fire</td>
+                          </tr>
+                          <tr>
+                              <td><code>coordinates</code></td>
+                              <td>The location <a href="#coordinates">coordinates</a></td>
+                          </tr>
+                      </tbody>
+                    </table>
+
+                  <h4 id="coordinates">Coordinates Object</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>type</code></td>
+                              <td>The type of the given coordinate</td>
+                          </tr>
+                          <tr>
+                              <td><code>x</code></td>
+                              <td>Latitude</td>
+                          </tr>
+                          <tr>
+                              <td><code>y</code></td>
+                              <td>Longitude</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h4 id="connection">Connection Object</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Example</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>date</code></td>
+                              <td>The connection date</td>
+                              <td>2012-03-19</td>
+                          </tr>
+                          <tr>
+                              <td><code>from</code></td>
+                              <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                          </tr>
+                          <tr>
+                              <td><code>y</code></td>
+                              <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h4 id="checkpoint">Checkpoint Object</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Example</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>station</code></td>
+                              <td colspan="2">The <a href="#location">location</a> of the checkpoint</td>
+                          </tr>
+                          <tr>
+                              <td><code>arrival</code></td>
+                              <td>The arrival time to the checkpoint</td>
+                              <td>14:58:00</td>
+                          </tr>
+                          <tr>
+                              <td><code>departure</code></td>
+                              <td>The departure time from the checkpoint</td>
+                              <td>null</td>
+                          </tr>
+                          <tr>
+                              <td><code>platform</code></td>
+                              <td>The arrival/departure platform </td>
+                              <td>8</td>
+                          </tr>
+                          <tr>
+                              <td><code>prognosis</code></td>
+                              <td colspan="2">The checkpoint <a href="#prognosis">prognosis</a></td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h4 id="prognosis">Prognosis Object</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Example</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>platform</code></td>
+                              <td>The estimated arrival/departure platform</td>
+                              <td>8</td>
+                          </tr>
+                          <tr>
+                              <td><code>time</code></td>
+                              <td>The estimated arrival/departure time to/from the checkpoint</td>
+                              <td>14:58:00</td>
+                          </tr>
+                          <tr>
+                              <td><code>capacity1st</code></td>
+                              <td>The estimated occupation load of 1st class coaches</td>
+                              <td>1</td>
+                          </tr>
+                          <tr>
+                              <td><code>capacity2st</code></td>
+                              <td>The estimated occupation load of 2nd class coaches</td>
+                              <td>2</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+
+              </div>
+              <hr/>
+              <div id="stations">
+
+                  <h3>/stations</h3>
+
                   <p>Returns the matching locations for the given parameters.</p>
 
                   <p>The locations in the response are scored to determine which is the most exact location.</p>
 
                   <p>This method can return a refine response, what means that the request has to be redone.</p>
 
-                  <h3>Resource URL</h3>
+                  <h4>Resource URL</h4>
 
                   <p><pre>http://transport.opendata.ch/v1/locations</pre></p>
 
-                  <h3>Request Parameters</h3>
+                  <h4>Request Parameters</h4>
 
                   <table class="bordered-table">
                       <thead>
@@ -85,63 +267,28 @@
                       </tbody>
                   </table>
 
-                  <h3>Response parameters</h3>
+                  <h4>Response parameters</h4>
 
                   <table class="bordered-table">
                       <thead>
                           <tr>
-                              <th colspan="2">Name</th>
+                              <th>Name</th>
                               <th>Description</th>
                           </tr>
                       </thead>
                       <tbody>
                           <tr>
-                              <td colspan="2"><code>id</code></td>
-                              <td>The id of the location</td>
-                          </tr>
-                          <tr>
-                              <td colspan="2"><code>type</code></td>
-                              <td>
-                                  Type of the location, can contain:
-                                  <ul>
-                                      <li>station: Location is a train station, bus station</li>
-                                      <li>poi: Location is a point of interest (Clock tower, China garden)</li>
-                                      <li>address: Location is an address</li>
-                                      <li>refine: Location is not defined, the user has to relocate</li>
-                                  </ul>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td colspan="2"><code>name</code></td>
-                              <td>The location name</td>
-                          </tr>
-                          <tr>
-                              <td colspan="2"><code>score</code></td>
-                              <td>The accuracy of fire</td>
-                          </tr>
-                          <tr>
-                              <td rowspan="4"><code>coordinates</code></td>
-                          </tr>
-                          <tr>
-                              <td><code>type</code></td>
-                              <td>The type of the given coordinate</td>
-                          </tr>
-                          <tr>
-                              <td><code>x</code></td>
-                              <td>Latitude</td>
-                          </tr>
-                          <tr>
-                              <td><code>y</code></td>
-                              <td>Longitude</td>
+                              <td><code>stations</code></td>
+                              <td>A list of <a href="#location">locations</a></td>
                           </tr>
                       </tbody>
                   </table>
 
-                  <h3>Example Request</h3>
+                  <h4>Example Request</h4>
 
                   <p><pre>GET http://transport.opendata.ch/v1/locations?query=Basel</pre></p>
 
-                  <h3>Example response</h3>
+                  <h4>Example response</h4>
 
                   <p><pre>
 {
@@ -170,15 +317,132 @@
 }
 </pre></p>
               </div>
-              <div id="connections">...</div>
-              <div id="stationboard">...</div>
+              <div id="connections">
+
+                  <hr/>
+
+                  <h3>/connections</h3>
+
+                  <p>Returns the next connections from a location to another.</p>
+
+                  <h4>Resource URL</h4>
+
+                  <p><pre>http://transport.opendata.ch/v1/connections</pre></p>
+
+                  <h4>Request Parameters</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Required</th>
+                              <th>Description</th>
+                              <th>Example</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>from</code></td>
+                              <td>required</td>
+                              <td>Specifies the departure location of the connection</td>
+                              <td>Lausanne</td>
+                          </tr>
+                          <tr>
+                              <td><code>to</code></td>
+                              <td>required</td>
+                              <td>Specifies the arrival location of the connection</td>
+                              <td>Genève</td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h4>Response parameters</h4>
+
+                  <table class="bordered-table">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>connections</code></td>
+                              <td>A list of <a href="#connection">connections</a></td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                  <h4>Example Requests</h4>
+
+                  <p><pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&to=Genève</pre></p>
+                  <p>aka</p>
+                  <p><pre>GET http://transport.opendata.ch/v1/connections?from=008501120&to=008501008</pre></p>
+
+                  <h4>Example response</h4>
+
+                  <p><pre>
+{
+    "connections" : [
+        {
+            "date" : "2012-03-20",
+            "from" : {
+                "arrival" : null,
+                "departure" : "08:58:00",
+                "platform" : "7",
+                "prognosis" : {
+                    "capacity1st" : "-1",
+                    "capacity2nd" : "-1",
+                    "platform" : null,
+                    "time" : null
+                },
+                "station" : {
+                    "coordinate" : {
+                        "type" : "WGS84",
+                        "x" : "6629086",
+                        "y" : "46516785"
+                    },
+                    "id" : "008501120",
+                    "name" : "Lausanne",
+                    "score" : null
+                }
+            },
+            "to" : {
+                "arrival" : "09:46:00",
+                "departure" : null,
+                "platform" : "2",
+                "prognosis" : {
+                    "capacity1st" : null,
+                    "capacity2nd" : null,
+                    "platform" : null,
+                    "time" : null
+                },
+                "station" : {
+                    "coordinate" : {
+                        "type" : "WGS84",
+                        "x" : "6142437",
+                        "y" : "46210217"
+                    },
+                    "id" : "008501008",
+                    "name" : "Genève",
+                    "score" : null
+                }
+            }
+        },
+    ],
+    // ...
+}
+                  </pre></p>
+              </div>
+              <div id="stationboard">
+                <hr/>
+
+                <h3>/stationboard</h3>
+
+                <p>TODO</p>
+              </div>
             </div>
 
-            <script>
-              $(function () {
-                $('.tabs').tabs()
-              })
-            </script>
         </article>
 
         <footer>
