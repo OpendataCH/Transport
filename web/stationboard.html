@@ -2,11 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8">
-    
-    <title>Transport API</title>
-    
+
+    <title>Stationboard Example - Transport API</title>
+
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="media/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="media/css/layout.css" />
+
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
-    
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <script>
@@ -59,27 +66,17 @@
 
     </script>
     <style>
+        h3 {
+             margin: 40px 0 20px;
+        }
 
-        body,
-        .ui-widget,
         .ui-widget input {
             font-family: Arial, sans-serif;
             font-size: 13px;
         }
 
-        body {
-            text-align: center;
-            margin: 50px;
-        }
-        
         .ui-autocomplete {
             text-align: left;
-        }
-
-        .container {
-            width: 700px;
-            text-align: left;
-            margin: 0 auto;
         }
 
         strong {
@@ -107,40 +104,39 @@
 
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="column">
+<div class="wrapper">
+    <header>
+        <h1>Transport</h1>
+        <p>Swiss public transport API</p>
+    </header>
+
+    <article>
+        <h3>Stationboard Example</h3>
         <div class="ui-widget station">
             <input id="station" value="Lausanne" placeholder="Station" autofocus />
         </div>
         <div class="media">
-            <p>Werbung</p>
-            <a class="img" href="/freizeit-ferien/tagesausfluege/snownrail.html" title="Snow'n'Rail" id="textimageteaser-snow-n-rail">
-                <img src="http://sbb.ch/content/sbb/de/desktop/teaser/snow-n-rail/_jcr_content/image.spooler.spoolimage.161.jpg/1328028500076.jpg" alt="Snow'n'Rail" title="" width="161" height="133">
-            </a>
-            <div class="bd">
-                <h2>Snow'n'Rail.</h2>
-                <p>Auf die Piste, fertig, los! </p>
-            </div>
         </div>
-    </div>
 
-    <table id="stationboard">
-        <colgroup>
-            <col width="120">
-            <col width="140">
-            <col width="230">
-        </colgroup>
-        <thead>
-            <tr>
-                <th align="left">Zeit</th>
-                <th>&nbsp;</th>
-                <th align="left">Nach</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <table id="stationboard">
+            <colgroup>
+                <col width="120">
+                <col width="140">
+                <col width="230">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th align="left">Zeit</th>
+                    <th>&nbsp;</th>
+                    <th align="left">Nach</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </article>
 </div>
 
 </body>
