@@ -60,28 +60,28 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
 // connections
 $app->get('/v1/connections', function(Request $request) use ($app) {
 
-   // validate
-   $from = $request->get('from');
-   $to = $request->get('to');
-   $dateTime = $request->get('dateTime') ?: null;
+    // validate
+    $from = $request->get('from');
+    $to = $request->get('to');
+    $dateTime = $request->get('dateTime') ?: null;
 
-   // get stations
-   $stations = array('from' => array(), 'to' => array());
-   if ($from && $to) {
-       $query = new LocationQuery(array('from' => $from, 'to' => $to));
-       $stations = $app['api']->findLocations($query);
-   }
+    // get stations
+    $stations = array('from' => array(), 'to' => array());
+    if ($from && $to) {
+        $query = new LocationQuery(array('from' => $from, 'to' => $to));
+        $stations = $app['api']->findLocations($query);
+    }
 
-   // get connections
-   $connections = array();
-   $from = reset($stations['from']) ?: null;
-   $to = reset($stations['to']) ?: null;
-   if ($from && $to) {
-       $query = new ConnectionQuery($from, $to, $dateTime);
-       $connections = $app['api']->findConnections($query);
-   }
+    // get connections
+    $connections = array();
+    $from = reset($stations['from']) ?: null;
+    $to = reset($stations['to']) ?: null;
+    if ($from && $to) {
+        $query = new ConnectionQuery($from, $to, $dateTime);
+        $connections = $app['api']->findConnections($query);
+    }
 
-   return json_encode(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
+    return json_encode(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
 });
 
 
