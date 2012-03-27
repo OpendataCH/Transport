@@ -26,7 +26,7 @@ class ConnectionQuery extends Query
 
     public $searchMode = \Transport\API::SEARCH_MODE_NORMAL;
 
-    public  $changeCount = -1;
+    public $changeCount = -1;
 
     public $changeExtensionPercent = 0;
 
