@@ -16,6 +16,8 @@ class ConnectionQuery extends Query
 
     public $date;
 
+    public $time;
+
     public $dateType = \Transport\API::DATE_TYPE_DEPARTURE;
 
     public $transportations = array('all');
@@ -30,12 +32,13 @@ class ConnectionQuery extends Query
 
     public $changeExtensionPercent = 0;
 
-    public function __construct(Location $srcLocation, Location $dstLocation, $date = null)
+    public function __construct(Location $srcLocation, Location $dstLocation, $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
         $this->dstLocation = $dstLocation;
 
-        $this->date = $date ?: date('c');
+        $this->date = $date ?: date('Y-m-d');
+        $this->time = $time ?: date('H:i');
     }
 
     public function toXml()
@@ -71,7 +74,7 @@ class ConnectionQuery extends Query
         $reqt = $con->addChild('ReqT');
         $reqt['a'] = $this->dateType;
         $reqt['date'] = date('Ymd', strtotime($this->date));
-        $reqt['time'] = date('H:i', strtotime($this->date));
+        $reqt['time'] = date('H:i', strtotime($this->time));
 
         $rflags = $con->addChild('RFlags');
         $rflags['b'] = $backwardCount;

@@ -63,7 +63,8 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     // validate
     $from = $request->get('from');
     $to = $request->get('to');
-    $dateTime = $request->get('dateTime') ?: null;
+    $date = $request->get('date') ?: null;
+    $time = $request->get('time') ?: null;
 
     // get stations
     $stations = array('from' => array(), 'to' => array());
@@ -77,7 +78,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $from = reset($stations['from']) ?: null;
     $to = reset($stations['to']) ?: null;
     if ($from && $to) {
-        $query = new ConnectionQuery($from, $to, $dateTime);
+        $query = new ConnectionQuery($from, $to, $date, $time);
         $connections = $app['api']->findConnections($query);
     }
 
