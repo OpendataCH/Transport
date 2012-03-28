@@ -1,0 +1,5 @@
+# Transport API
+
+The Transport API allows interested developers to build their own applications using public timetable data, whether they're on the web, the desktop or mobile devices.
+
+Feel free to fork this project implement your own ideas or send pull requests.
