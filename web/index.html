@@ -290,7 +290,143 @@
 
             <h3 id="stationboard">/stationboard</h3>
 
-            <p>TODO</p>
+            <p>Returns the next connections leaving from a specific location.</p>
+
+            <h4>Resource URL</h4>
+
+            <pre>http://transport.opendata.ch/v1/stationboard</pre>
+
+            <h4>Request Parameters</h4>
+
+            <table class="bordered-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>station</code></td>
+                    <td>required</td>
+                    <td>Specifies the location of which a stationboard should be returned</td>
+                    <td>Aarau</td>
+                </tr>
+                <tr>
+                    <td><code>id</code></td>
+                    <td>optional</td>
+                    <td>The id of the station who's stationboard should be returned.
+                        <br />Alternative to the station parameter, one of these two are required.
+                        <br />If both an id and a station are specified the id is preferred.
+                    </td>
+                    <td>8503059 <em>(for Zurich Stadelhofen)</em></td>
+                </tr>
+                <tr>
+                    <td><code>limit</code></td>
+                    <td>optional</td>
+                    <td>Number of departing connections to return.</td>
+                    <td>15</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4>Response parameters</h4>
+
+            <table class="bordered-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>stationboard</code></td>
+                    <td>A list of <a href="#stop">stops</a>, showing the last stop of the line leaving that station.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4>Example Requests</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/stationboard?station=Aarau&limit=10</pre>
+            <p>aka</p>
+            <pre>GET http://transport.opendata.ch/v1/stationboard?id=008502113&limit=10</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "stationboard" : [
+    {
+        "stop":
+        {
+            "station":
+            {
+                "id": "8502996",
+                "name": "Aarau, Bahnhof",
+                "score": null,
+                "coordinate":
+                {
+                    "type" : "WGS84",
+                    "x": "8050864",
+                    "y": "47392020"
+                }
+            },
+            "arrival": null,
+            "departure": "14:39",
+            "platform": "",
+            "prognosis":
+            {
+                "platform": null,
+                "time": null,
+                "capacity1st": "-1",
+                "capacity2nd": "-1"
+            }
+        },
+        "name": "BUS13543",
+        "category": "BUS",
+        "number": "13543",
+        "operator": null,
+        "to": "Frick, Bahnhof"
+    },{
+        "stop":
+        {
+            "station":
+            {
+                "id": "8502996",
+                "name": "Aarau, Bahnhof",
+                "score": null,
+                "coordinate":
+                {
+                    "type": "WGS84",
+                    "x": "8050864",
+                    "y": "47392020"
+                }
+            },
+            "arrival": null,
+            "departure": "14:39",
+            "platform": "",
+            "prognosis":
+            {
+                "platform": null,
+                "time": null,
+                "capacity1st": "-1",
+                "capacity2nd": "-1"
+            }
+        },
+        "name": "Bus 2",
+        "category": "Bus",
+        "number": "2",
+        "operator": "BBA",
+        "to": "Aarau Rohr, Unterdorf"
+    },
+    // ...
+    ]
+}
+            </pre>
 
             <hr/>
 
@@ -467,6 +603,50 @@
                     </tr>
                 </tbody>
             </table>
+        
+            <h4 id="stop">Stop Object</h4>
+
+            <table class="bordered-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>station</code></td>
+                    <td colspan="2">A <a href="#location">location</a> object showing this line's stop at the requested station.</td>
+                </tr>
+                <tr>
+                    <td><code>name</code></td>
+                    <td>The name of the connection</td>
+                    <td>Bus 2</td>
+                </tr>
+                <tr>
+                    <td><code>category</code></td>
+                    <td>The type of connection this is</td>
+                    <td>Bus</td>
+                </tr>
+                <tr>
+                    <td><code>number</code></td>
+                    <td>The number of the connection's line, e.g. Bus line 2</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td><code>operator</code></td>
+                    <td>The operator of the connection's line</td>
+                    <td>BBA</td>
+                </tr>
+                <tr>
+                    <td><code>to</code></td>
+                    <td>The final destination of this line</td>
+                    <td>Aarau Rohr, Unterdorf</td>
+                </tr>
+                </tbody>
+            </table>
+
         </article>
 
         <footer>
