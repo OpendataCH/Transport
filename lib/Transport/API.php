@@ -93,7 +93,11 @@ class API
 
             $locations[$id] = array();
             foreach ($part->children() as $location) {
-                $locations[$id][] = Entity\LocationFactory::createFromXml($location);
+
+                $location = Entity\LocationFactory::createFromXml($location);
+                if ($location) {
+                    $locations[$id][] = $location;
+                }
             }
         }
 
