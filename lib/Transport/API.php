@@ -146,8 +146,12 @@ class API
         // send request
         $response = $this->sendQuery($query);
 
+        // fix wrong XML encoding information
+        $content = $response->getContent();
+        $content = str_replace('encoding="iso-8859-1"', 'encoding="UTF-8"', $content);
+
         // parse result
-        $result = simplexml_load_string($response->getContent());
+        $result = simplexml_load_string($content);
 
         $journeys = array();
         if ($result->STBRes->JourneyList->STBJourney) {

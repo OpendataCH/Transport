@@ -62,7 +62,7 @@ class StationBoardJourney
                     $obj->operator = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                     break;
                 case 'DIRECTION':
-                    $obj->to = utf8_decode((string) $journeyAttribute->Attribute->AttributeVariant->Text);
+                    $obj->to = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                     break;
             }
         }
