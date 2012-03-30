@@ -11,7 +11,6 @@ $app['debug'] = true;
 
 
 // autoload
-$app['autoloader']->registerNamespace('SBB', __DIR__.'/../lib');
 $app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
 
