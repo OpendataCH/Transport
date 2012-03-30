@@ -26,9 +26,10 @@ $app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
 $app['api'] = new Transport\API();
 
 
-// allow cross-domain requests
+// allow cross-domain requests, enable cache
 $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
+    $response->headers->set('Cache-Control', 's-maxage=30');
 });
 
 
