@@ -60,8 +60,6 @@ class API
     {
         // send request
         $response = $this->sendQuery($query);
-        //header('Content-Type: application/xml');
-        //echo $response->getContent();exit;
 
         // parse result
         $result = simplexml_load_string($response->getContent());
