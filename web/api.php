@@ -41,7 +41,7 @@ $app->get('/', function(Request $request) use ($app) {
 // home
 $app->get('/v1/', function(Request $request) use ($app) {
 
-    return json_encode(array(
+    return $app->json(array(
         'date' => date('c'),
         'author' => 'Opendata.ch',
         'version' => '1.0',
@@ -55,7 +55,7 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
     $query = new LocationQuery($request->get('query'), $request->get('type'));
     $stations = $app['api']->findLocations($query);
 
-    return json_encode(array('stations' => $stations));
+    return $app->json(array('stations' => $stations));
 });
 
 
@@ -84,7 +84,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $connections = $app['api']->findConnections($query);
     }
 
-    return json_encode(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
+    return $app->json(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
 });
 
 
@@ -116,7 +116,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
         $stationboard = $app['api']->getStationBoard($query);
     }
 
-    return json_encode(array('stationboard' => $stationboard));
+    return $app->json(array('stationboard' => $stationboard));
 });
 
 
