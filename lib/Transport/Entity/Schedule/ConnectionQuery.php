@@ -12,7 +12,7 @@ class ConnectionQuery extends Query
 
     public $dstLocation;
 
-    public $viaLocations = array();
+    public $viaLocations;
 
     public $date;
 
@@ -32,10 +32,11 @@ class ConnectionQuery extends Query
 
     public $changeExtensionPercent = 0;
 
-    public function __construct(Location $srcLocation, Location $dstLocation, $date = null, $time = null)
+    public function __construct(Location $srcLocation, Location $dstLocation, $viaLocations = array(), $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
         $this->dstLocation = $dstLocation;
+        $this->viaLocations = $viaLocations;
 
         $this->date = $date ?: date('Y-m-d');
         $this->time = $time ?: date('H:i');
@@ -69,6 +70,8 @@ class ConnectionQuery extends Query
         foreach ($this->viaLocations as $location) {
             $via = $con->addChild('Via');
             $location->toXml($via);
+            $prod = $via->addChild('Prod');
+            $prod['prod'] = $transportationsBinary;
         }
 
         $reqt = $con->addChild('ReqT');
