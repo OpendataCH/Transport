@@ -21,6 +21,7 @@ $app['debug'] = true;
 // autoload
 $app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
 $app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
+$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
 
 // create Transport API
@@ -32,6 +33,22 @@ $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
     $response->headers->set('Cache-Control', 's-maxage=30');
 });
+
+
+// count API calls
+$app['redis'] = new Predis\Client(array('host' => 'tetra.redistogo.com', 'port' => 9464, 'password' => '7cd7bdf5a51d601547da3c96d6bae1a2'));
+try {
+    $app['redis']->connect();
+    $app->after(function (Request $request, Response $response) use ($app) {
+
+        $date = date('Y-m-d');
+        $key = "stats:calls:$date";
+
+        $app['redis']->incr($key);
+    });
+} catch (Predis\ServerException $e) {
+    // ignore connection error
+}
 
 
 // index
