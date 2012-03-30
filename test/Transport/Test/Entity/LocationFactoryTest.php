@@ -24,14 +24,10 @@ class LocationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Transport\Entity\Location\Address', LocationFactory::createFromXml($xml));
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testCreateFromXml_Unknown()
     {
         $xml = new \SimpleXMLElement('<YouDontKnowMe />');
-        LocationFactory::createFromXml($xml);
-        $this->assertInstanceOf('Transport\Entity\Location\Address', LocationFactory::createFromXml($xml));
+        $this->assertNull(LocationFactory::createFromXml($xml));
     }
 }
 

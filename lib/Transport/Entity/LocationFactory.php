@@ -15,10 +15,8 @@ class LocationFactory
             return Location\Address::createFromXml($xml);
         case 'ReqLoc':
         case 'Err':
-            return null;
         default:
+            return null;
         }
-
-        throw new \Exception('Unknown entity type: '.$xml->getName());
     }
 }
