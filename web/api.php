@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
+use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
@@ -53,8 +54,20 @@ $app->get('/v1/', function(Request $request) use ($app) {
 // locations
 $app->get('/v1/locations', function(Request $request) use ($app) {
 
-    $query = new LocationQuery($request->get('query'), $request->get('type'));
-    $stations = $app['api']->findLocations($query);
+    $stations = array();
+
+    $x = $request->get('x') ?: null;
+    $y = $request->get('y') ?: null;
+    if ($x && $y) {
+        $query = new NearbyQuery($x, $y);
+        $stations = $app['api']->findNearbyLocations($query);
+    }
+
+    $query = $request->get('query');
+    if ($query) {
+        $query = new LocationQuery($query, $request->get('type'));
+        $stations = $app['api']->findLocations($query);
+    }
 
     return $app->json(array('stations' => $stations));
 });
