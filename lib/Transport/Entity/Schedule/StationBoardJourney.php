@@ -3,43 +3,8 @@
 namespace Transport\Entity\Schedule;
 
 /**
- * Request for a station board Journey
- *
-    <STBJourney>
-        <JHandle tNr="3121" puic="095" cycle="00" />
-        <MainStop>
-            <BasicStop>
-                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#95" externalStationNr="8503000" />
-                <Arr>
-                    <Time>16:37</Time>
-                    <Platform>
-                        <Text>23/24</Text>
-                    </Platform>
-                </Arr>
-                <StopPrognosis>
-                    <Arr>
-                        <Platform>
-                            <Text>24</Text>
-                        </Platform>
-                    </Arr>
-                    <Capacity1st>-1</Capacity1st>
-                    <Capacity2nd>-1</Capacity2nd>
-                </StopPrognosis>
-            </BasicStop>
-        </MainStop>
-        <JourneyAttributeList>
-            <JourneyAttribute from="7" to="8">
-                <Attribute type="NAME">
-                    <AttributeVariant type="NORMAL">
-                        <Text>S1519565</Text>
-                    </AttributeVariant>
-                </Attribute>
-            </JourneyAttribute>
-            [... more <JourneyAttribute>'s]
-        </JourneyAttributeList>
-    </STBJourney>
+ * Request for a station board journey
  */
-
 class StationBoardJourney
 {
     /**
