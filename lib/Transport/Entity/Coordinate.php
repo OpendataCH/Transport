@@ -34,4 +34,14 @@ class Coordinate
 
         return $coordinate;
     }
+
+    static public function createFromJson($json)
+    {
+        $coordinate = new Coordinate();
+        $coordinate->type = 'WGS84'; // best guess
+        $coordinate->x = $json->x;
+        $coordinate->y = $json->y;
+
+        return $coordinate;
+    }
 }
