@@ -10,6 +10,8 @@ use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
+date_default_timezone_set('Europe/Zurich');
+
 // init
 $app = new Silex\Application();
 $app['debug'] = true;
