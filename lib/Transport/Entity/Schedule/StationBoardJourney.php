@@ -25,6 +25,11 @@ class StationBoardJourney
     /**
      * @var string
      */
+    public $number;
+
+    /**
+     * @var string
+     */
     public $operator;
 
     /**
@@ -49,6 +54,9 @@ class StationBoardJourney
                     break;
                 case 'CATEGORY':
                     $obj->category = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                    break;
+                case 'NUMBER':
+                    $obj->number = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                     break;
                 case 'OPERATOR':
                     $obj->operator = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
