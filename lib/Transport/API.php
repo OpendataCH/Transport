@@ -102,7 +102,7 @@ class API
         }
         return reset($locations);
     }
-//http://fahrplan.sbb.ch/bin/query.exe/dny?performLocating=2&tpl=stop2json&look_maxno=200&look_stopclass=1023&look_maxdist=5000&look_y=52525589&look_x=13369548
+
     /**
      * @return array
      */
