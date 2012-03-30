@@ -67,4 +67,18 @@ class Location
 
         return $obj;
     }
+
+    static public function createFromJson($json, Location $obj = null)
+    {
+        if (!is_object($obj)) {
+            throw new \InvalidArgumentException('Argument must be an object');
+        }
+
+        if ($json->name) {
+            $obj->name = $json->name;
+        }
+        $obj->coordinate = Coordinate::createFromJson($json);
+
+        return $obj;
+    }
 }

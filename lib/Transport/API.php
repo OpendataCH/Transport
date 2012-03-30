@@ -6,12 +6,14 @@ use Buzz\Browser;
 use Transport\Entity\Location\Location;
 use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
+use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
     const URL = 'http://xmlfahrplan.sbb.ch/bin/extxml.exe/';
+    const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
 
     const SBB_PROD = 'iPhone3.1';
     const SBB_VERSION = '2.3';
@@ -99,6 +101,35 @@ class API
             return $locations;
         }
         return reset($locations);
+    }
+//http://fahrplan.sbb.ch/bin/query.exe/dny?performLocating=2&tpl=stop2json&look_maxno=200&look_stopclass=1023&look_maxdist=5000&look_y=52525589&look_x=13369548
+    /**
+     * @return array
+     */
+    public function findNearbyLocations(NearbyQuery $query)
+    {
+        $url = self::URL_QUERY . '?' . http_build_query($query->toArray());
+
+        // send request
+        $response = $this->browser->get($url);
+
+        // fix broken JSON
+        $content = $response->getContent();
+        $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
+               
+        // parse result
+        $result = json_decode($content);
+
+        $locations = array();
+        foreach ($result->stops as $stop) {
+
+            $location = Entity\LocationFactory::createFromJson($stop);
+            if ($location) {
+                $locations[] = $location;
+            }
+        }
+
+        return $locations;
     }
 
     /**

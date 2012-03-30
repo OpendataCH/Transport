@@ -49,4 +49,19 @@ class Station extends Location
 
         return $obj;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    static public function createFromJson($json, Location $obj = null)
+    {
+        if (!$obj) {
+            $obj = new Station();
+        }
+        parent::createFromJson($json, $obj);
+
+        $obj->id = $json->extId;
+
+        return $obj;
+    }
 }
