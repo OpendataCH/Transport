@@ -68,6 +68,13 @@ class Location
         return $obj;
     }
 
+    /**
+     * Factory method to create an instance and extract the data from the given JSON object
+     *
+     * @param   object     $json  The item JSON
+     * @param   Location   $obj    An object or null to create it
+     * @return  Location           The created instance
+     */
     static public function createFromJson($json, Location $obj = null)
     {
         if (!is_object($obj)) {
