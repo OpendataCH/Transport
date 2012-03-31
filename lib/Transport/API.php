@@ -155,14 +155,13 @@ class API
 
         // since the stationboard always lists all connections starting from now we just use the current date
         // and wrap it accordingly if time goes over midnight
-        $prevTime = null;
         $journeys = array();
+        $prevTime = time();
+        $date = date('Y-m-d');
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
-                $curTime = (string) $journey->MainStop->BasicStop->Dep->Time;
-                if ($prevTime === null) {
-                    $date = date('Y-m-d');
-                } elseif (strtotime($prevTime) > strtotime($curTime)) { // we passed midnight
+                $curTime = strtotime((string) $journey->MainStop->BasicStop->Dep->Time);
+                if ($prevTime > $curTime) { // we passed midnight
                     $date = date('Y-m-d', strtotime("$date +1day"));
                 }
                 $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date);
