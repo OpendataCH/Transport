@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Redirect any request that's not a directory, file or symlink
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule ^ api.php [L]
