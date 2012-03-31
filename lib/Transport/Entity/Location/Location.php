@@ -24,27 +24,6 @@ class Location
     public $coordinate;
 
     /**
-     * @param   \SimpleXmlElement   $parent     The parent element or null to create a new one
-     * @return  \SimpleXMLElement
-     */
-    public function toXml(\SimpleXMLElement $parent = null)
-    {
-        // could be improved :)
-        $className = substr(get_class($this), strlen(__NAMESPACE__) + 1);
-
-        if (null !== $parent) {
-            $xml = $parent->addChild($className);
-        } else {
-            $xml = new \SimpleXMLElement(sprintf('<%s />', $className));
-        }
-
-        $xml->addAttribute('name', $this->name);
-        $xml->addAttribute('x', $this->coordinate->x);
-        $xml->addAttribute('y', $this->coordinate->y);
-        return $xml;
-    }
-
-    /**
      * Factory method to create an instance and extract the data from the given xml
      *
      * @param   \SimpleXMLElement   $xml    The item xml

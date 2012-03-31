@@ -41,10 +41,10 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(34, count($locations['from']));
         $this->assertEquals('Zuerich', $locations['from'][0]->name);
         $this->assertEquals('Zürich HB', $locations['from'][3]->name);
-        $this->assertEquals('47450378', $locations['from'][4]->coordinate->y);
+        $this->assertEquals(47.450378, $locations['from'][4]->coordinate->y);
         $this->assertEquals(1, count($locations['to']));
         $this->assertEquals('Bern', $locations['to'][0]->name);
         $this->assertEquals('008507000', $locations['to'][0]->id);
-        $this->assertEquals('46948825', $locations['to'][0]->coordinate->y);
+        $this->assertEquals(46.948825, $locations['to'][0]->coordinate->y);
     }
 }

@@ -13,16 +13,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $address->name = '3011 Bern, Bollwerk 19';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = '7440803';
-        $coordinate->y ='46949607';
+        $coordinate->x = 7.440803;
+        $coordinate->y = 46.949607;
         $address->coordinate = $coordinate;
 
         return $address;
-    }
-
-    public function testToXml()
-    {
-        $this->assertXmlStringEqualsXmlString('<Address name="3011 Bern, Bollwerk 19" x="7440803" y="46949607" />', $this->getAddress()->toXml()->asXml());
     }
 
     public function testCreateFromXml()
