@@ -1,2388 +1,2388 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://demo.hafas.de/hafas-res/sbb/xml/47r/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.30.SBB.4.7v5" lang="EN">
-<STBRes>
-<JourneyList>
-<STBJourney>
-<JHandle tNr="2433" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:25</Time>
-<Platform>
-<Text>23/24</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Platform>
-<Text>23</Text>
-</Platform>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>2</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="11" to="18">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S5 18593</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="18">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S5</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="18">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S5</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="18">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18593</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="18">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Rapperswil</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="190934" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:26</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="20">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Klusplatz</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="191488" puic="085" cycle="11"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:26</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="19" to="26">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Bus 31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Bus</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Nbu</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Hegibachplatz</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="192707" puic="085" cycle="11"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:26</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="17">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tro 46</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Tro</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tro</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>46</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Rütihof</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="193823" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:26</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="21">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Milchbuck</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2333" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:27</Time>
-<Platform>
-<Text>52</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="14" to="19">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S2 18292</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="19">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S2</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="19">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S2</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="19">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18292</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="19">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Effretikon</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="190044" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:27</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="15" to="26">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Triemli</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2605" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:28</Time>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Platform>
-<Text>24</Text>
-</Platform>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="12" to="18">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S9 18993</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="18">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S9</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="18">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S9</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="18">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18993</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="18">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Uster</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="189580" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:28</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="16" to="33">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 11</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="16" to="33">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="16" to="33">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="16" to="33">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="16" to="33">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>11</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="16" to="33">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Auzelg</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="193004" puic="085" cycle="14"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:28</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="10">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Zoo</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="192486" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
-<Dep>
-<Time>22:29</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="25">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Altstetten, Bahnhof N</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2378" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:30</Time>
-<Platform>
-<Text>21/22</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Platform>
-<Text>22</Text>
-</Platform>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="9" to="14">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S3 18392</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="14">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="14">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="14">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18392</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="14">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Dietikon</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2473" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:30</Time>
-<Platform>
-<Text>23/24</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Time>22:35</Time>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="11" to="13">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S6 18693</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="13">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="13">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="13">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18693</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="11" to="13">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Tiefenbrunnen</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="189784" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:30</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="17" to="29">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 13</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="17" to="29">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="17" to="29">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="17" to="29">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="17" to="29">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>13</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="17" to="29">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Albisgütli</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="189316" puic="085" cycle="08"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:31</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="1" to="27">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 10</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="1" to="27">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="1" to="27">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="1" to="27">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="1" to="27">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>10</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="1" to="27">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Flughafen, Fracht</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="185" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:32</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="7" to="10">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>IC 744</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="10">
-<Attribute type="CATEGORY" code="1">
-<AttributeVariant type="NORMAL">
-<Text>IC</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="10">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>IC</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="10">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>744</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute priority="4" type="NORMAL" code="WR">
-<AttributeVariant type="NORMAL">
-<Text>Restaurant</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute priority="4" type="NORMAL" code="FA">
-<AttributeVariant type="NORMAL">
-<Text>Family Coach with play area</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute priority="4" type="NORMAL" code="BZ">
-<AttributeVariant type="NORMAL">
-<Text>Business zone in 1st class: Reservation possible</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute priority="4" type="NORMAL" code="RZ">
-<AttributeVariant type="NORMAL">
-<Text>Quiet zone in 1st class</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="10">
-<Attribute priority="8" type="NORMAL" code="R ">
-<AttributeVariant type="NORMAL">
-<Text>Reservation possible</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="10">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Bern</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2475" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:32</Time>
-<Platform>
-<Text>21/22</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>2</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="2" to="13">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S6 18692</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="2" to="13">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="2" to="13">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S6</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="2" to="13">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18692</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="2" to="13">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Baden</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="191531" puic="085" cycle="12"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:32</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="7" to="27">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Bus 31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="27">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Bus</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="27">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Nbu</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="27">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="27">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="27">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Schlieren, Zentrum</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="193678" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:32</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="8" to="21">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="8" to="21">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="8" to="21">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="8" to="21">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="8" to="21">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="8" to="21">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Wollishofen</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2375" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:33</Time>
-<Platform>
-<Text>23/24</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="5" to="14">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S3 18393</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="14">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="14">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="14">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18393</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="14">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Wetzikon</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="189888" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
-<Dep>
-<Time>22:33</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="14" to="29">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 13</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="29">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="29">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="29">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="29">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>13</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="14" to="29">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Frankental</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="191033" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:33</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="7" to="20">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="20">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="20">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="20">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="20">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="7" to="20">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Albisrieden</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="192321" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:33</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="25">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="25">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Tiefenbrunnen, Bahnhof</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2599" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:34</Time>
-<Platform>
-<Text>21/22</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="6" to="17">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S9 18992</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="6" to="17">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S9</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="6" to="17">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S9</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="6" to="17">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18992</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="6" to="17">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Steinhausen</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="189441" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:34</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="18" to="33">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 11</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="18" to="33">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="18" to="33">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="18" to="33">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="18" to="33">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>11</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="18" to="33">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Rehalp</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="190180" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:34</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="12" to="26">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="26">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="26">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="26">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="26">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="26">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Seebach</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="223492" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
-<Dep>
-<Time>22:34</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="3" to="17">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 17</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="3" to="17">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="3" to="17">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="3" to="17">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="3" to="17">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>17</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="3" to="17">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Werdhölzli</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="586" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:35</Time>
-<Platform>
-<Text>4</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="5">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>IR 2387</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="5">
-<Attribute type="CATEGORY" code="2">
-<AttributeVariant type="NORMAL">
-<Text>IR</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="5">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>IR</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="5">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>2387</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="5">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Luzern</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="3525" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB SZU" x="8540192" y="47378177" type="WGS84" externalId="8503088#85" externalStationNr="8503088"/>
-<Dep>
-<Time>22:35</Time>
-<Platform>
-<Text>2</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="8">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S1024923</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="8">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S10</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="8">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S10</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="8">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>24923</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="8">
-<Attribute priority="1" type="NORMAL" code="2 ">
-<AttributeVariant type="NORMAL">
-<Text>2nd class only</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="6" to="8">
-<Attribute priority="6" type="NORMAL" code="VN">
-<AttributeVariant type="NORMAL">
-<Text>BICYCLES: No self-service loading by sender</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="8">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Uetliberg</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="449" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:36</Time>
-<Platform>
-<Text>18</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Platform>
-<Text>14</Text>
-</Platform>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>2</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="6">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>IR 1994</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="6">
-<Attribute type="CATEGORY" code="2">
-<AttributeVariant type="NORMAL">
-<Text>IR</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="6">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>IR</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="6">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>1994</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="6">
-<Attribute priority="4" type="NORMAL" code="PA">
-<AttributeVariant type="NORMAL">
-<Text>Panorama coach</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="6">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Basel SBB</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="191488" puic="085" cycle="12"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:36</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="19" to="26">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Bus 31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Bus</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Nbu</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="19" to="26">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich Hegibachplatz</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="193821" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
-<Dep>
-<Time>22:36</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="21">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>7</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="21">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Milchbuck</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="223436" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:36</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="15" to="16">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 17</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="16">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="16">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="16">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="16">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>17</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="16">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Bahnhofplatz/HB</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2431" puic="085" cycle="02"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:37</Time>
-<Platform>
-<Text>21/22</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>2</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="9" to="20">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S5 18592</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="20">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S5</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="20">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S5</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="20">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18592</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="9" to="20">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Rafz</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="190051" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:37</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="15" to="26">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>NTr</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>14</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="15" to="26">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Triemli</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="190900" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
-<Dep>
-<Time>22:37</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="13" to="20">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tram 3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="CATEGORY" code="9">
-<AttributeVariant type="NORMAL">
-<Text>Tram</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tra</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>3</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="13" to="20">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Klusplatz</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="894" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:38</Time>
-<Platform>
-<Text>16</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Dep>
-<Platform>
-<Text>16</Text>
-</Platform>
-</Dep>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="2">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>RE 3744</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="2">
-<Attribute type="CATEGORY" code="3">
-<AttributeVariant type="NORMAL">
-<Text>RE</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="2">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>RE</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="2">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>3744</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="2">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Aarau</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="2331" puic="085" cycle="03"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
-<Dep>
-<Time>22:38</Time>
-<Platform>
-<Text>53</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>1</Capacity1st> 
-<Capacity2nd>1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="5" to="19">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S2 18293</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="19">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S2</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="19">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S2</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="19">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>18293</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="5" to="19">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Ziegelbrücke</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="3465" puic="085" cycle="04"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich HB SZU" x="8540192" y="47378177" type="WGS84" externalId="8503088#85" externalStationNr="8503088"/>
-<Dep>
-<Time>22:38</Time>
-<Platform>
-<Text>1</Text>
-</Platform>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="11">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>S4 24623</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="11">
-<Attribute type="CATEGORY" code="5">
-<AttributeVariant type="NORMAL">
-<Text>S4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="11">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>S4</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="11">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>24623</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="11">
-<Attribute priority="1" type="NORMAL" code="2 ">
-<AttributeVariant type="NORMAL">
-<Text>2nd class only</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="11">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Langnau-Gattikon</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-<STBJourney>
-<JHandle tNr="192710" puic="085" cycle="00"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
-<Dep>
-<Time>22:38</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="0" to="17">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Tro 46</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Tro</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Tro</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>46</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="0" to="17">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Zürich, Rütihof</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-</JourneyList>
-</STBRes>
+    <STBRes>
+        <JourneyList>
+            <STBJourney>
+                <JHandle tNr="2433" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:25</Time>
+                            <Platform>
+                                <Text>23/24</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Platform>
+                                    <Text>23</Text>
+                                </Platform>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>2</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="11" to="18">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5 18593</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="18">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="18">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="18">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18593</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="18">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Rapperswil</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="190934" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:26</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Klusplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="191488" puic="085" cycle="11"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:26</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus 31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Nbu</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Hegibachplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="192707" puic="085" cycle="11"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:26</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro 46</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>46</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Rütihof</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="193823" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:26</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Milchbuck</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2333" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:27</Time>
+                            <Platform>
+                                <Text>52</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="14" to="19">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2 18292</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="19">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="19">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="19">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18292</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="19">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Effretikon</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="190044" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:27</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Triemli</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2605" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:28</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Platform>
+                                    <Text>24</Text>
+                                </Platform>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="12" to="18">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9 18993</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="18">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="18">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="18">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18993</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="18">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Uster</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="189580" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:28</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 11</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>11</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="16" to="33">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Auzelg</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="193004" puic="085" cycle="14"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:28</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Zoo</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="192486" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
+                        <Dep>
+                            <Time>22:29</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Altstetten, Bahnhof N</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2378" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:30</Time>
+                            <Platform>
+                                <Text>21/22</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Platform>
+                                    <Text>22</Text>
+                                </Platform>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="9" to="14">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3 18392</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="14">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="14">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="14">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18392</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="14">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Dietikon</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2473" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:30</Time>
+                            <Platform>
+                                <Text>23/24</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Time>22:35</Time>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="11" to="13">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6 18693</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="13">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="13">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="13">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18693</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="11" to="13">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Tiefenbrunnen</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="189784" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:30</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 13</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>13</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="17" to="29">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Albisgütli</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="189316" puic="085" cycle="08"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:31</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 10</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>10</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="1" to="27">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Flughafen, Fracht</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="185" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:32</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="7" to="10">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IC 744</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="10">
+                        <Attribute type="CATEGORY" code="1">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IC</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="10">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IC</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="10">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>744</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute priority="4" type="NORMAL" code="WR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Restaurant</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute priority="4" type="NORMAL" code="FA">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Family Coach with play area</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute priority="4" type="NORMAL" code="BZ">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Business zone in 1st class: Reservation possible</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute priority="4" type="NORMAL" code="RZ">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Quiet zone in 1st class</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="10">
+                        <Attribute priority="8" type="NORMAL" code="R ">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Reservation possible</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="10">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bern</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2475" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:32</Time>
+                            <Platform>
+                                <Text>21/22</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>2</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="2" to="13">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6 18692</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="2" to="13">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="2" to="13">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S6</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="2" to="13">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18692</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="2" to="13">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Baden</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="191531" puic="085" cycle="12"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:32</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus 31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Nbu</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="27">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Schlieren, Zentrum</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="193678" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:32</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="8" to="21">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Wollishofen</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2375" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:33</Time>
+                            <Platform>
+                                <Text>23/24</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="5" to="14">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3 18393</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="14">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="14">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="14">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18393</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="14">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Wetzikon</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="189888" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
+                        <Dep>
+                            <Time>22:33</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 13</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>13</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="29">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Frankental</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="191033" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:33</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="7" to="20">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Albisrieden</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="192321" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:33</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="25">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Tiefenbrunnen, Bahnhof</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2599" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:34</Time>
+                            <Platform>
+                                <Text>21/22</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="6" to="17">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9 18992</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="6" to="17">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="6" to="17">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S9</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="6" to="17">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18992</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="6" to="17">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Steinhausen</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="189441" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:34</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 11</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>11</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="18" to="33">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Rehalp</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="190180" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:34</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Seebach</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="223492" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Sihlquai/HB" x="8537603" y="47379867" type="WGS84" externalId="8591368#85" externalStationNr="8591368"/>
+                        <Dep>
+                            <Time>22:34</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 17</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>17</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="17">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Werdhölzli</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="586" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:35</Time>
+                            <Platform>
+                                <Text>4</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="5">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR 2387</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="5">
+                        <Attribute type="CATEGORY" code="2">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="5">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="5">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>2387</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="5">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Luzern</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="3525" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB SZU" x="8540192" y="47378177" type="WGS84" externalId="8503088#85" externalStationNr="8503088"/>
+                        <Dep>
+                            <Time>22:35</Time>
+                            <Platform>
+                                <Text>2</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S1024923</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S10</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S10</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>24923</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute priority="1" type="NORMAL" code="2 ">
+                            <AttributeVariant type="NORMAL">
+                                <Text>2nd class only</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="6" to="8">
+                        <Attribute priority="6" type="NORMAL" code="VN">
+                            <AttributeVariant type="NORMAL">
+                                <Text>BICYCLES: No self-service loading by sender</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="8">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Uetliberg</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="449" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:36</Time>
+                            <Platform>
+                                <Text>18</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Platform>
+                                    <Text>14</Text>
+                                </Platform>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>2</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR 1994</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute type="CATEGORY" code="2">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>IR</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>1994</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute priority="4" type="NORMAL" code="PA">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Panorama coach</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="6">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Basel SBB</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="191488" puic="085" cycle="12"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:36</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus 31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Nbu</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="19" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Hegibachplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="193821" puic="085" cycle="01"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofstrasse/HB" x="8539950" y="47376559" type="WGS84" externalId="8591067#85" externalStationNr="8591067"/>
+                        <Dep>
+                            <Time>22:36</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>7</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="21">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Milchbuck</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="223436" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:36</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 17</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>17</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="16">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Bahnhofplatz/HB</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2431" puic="085" cycle="02"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:37</Time>
+                            <Platform>
+                                <Text>21/22</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>2</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="9" to="20">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5 18592</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="20">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="20">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S5</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="20">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18592</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="9" to="20">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Rafz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="190051" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:37</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>NTr</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>14</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="15" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Triemli</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="190900" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377233" type="WGS84" externalId="8587348#85" externalStationNr="8587348"/>
+                        <Dep>
+                            <Time>22:37</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram 3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="CATEGORY" code="9">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tram</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tra</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>3</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="13" to="20">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Klusplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="894" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:38</Time>
+                            <Platform>
+                                <Text>16</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Dep>
+                                <Platform>
+                                    <Text>16</Text>
+                                </Platform>
+                            </Dep>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="2">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>RE 3744</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="2">
+                        <Attribute type="CATEGORY" code="3">
+                            <AttributeVariant type="NORMAL">
+                                <Text>RE</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="2">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>RE</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="2">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>3744</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="2">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Aarau</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="2331" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#85" externalStationNr="8503000"/>
+                        <Dep>
+                            <Time>22:38</Time>
+                            <Platform>
+                                <Text>53</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>1</Capacity1st>
+                            <Capacity2nd>1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="5" to="19">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2 18293</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="19">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="19">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S2</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="19">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>18293</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="5" to="19">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Ziegelbrücke</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="3465" puic="085" cycle="04"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich HB SZU" x="8540192" y="47378177" type="WGS84" externalId="8503088#85" externalStationNr="8503088"/>
+                        <Dep>
+                            <Time>22:38</Time>
+                            <Platform>
+                                <Text>1</Text>
+                            </Platform>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S4 24623</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute type="CATEGORY" code="5">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>S4</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>24623</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute priority="1" type="NORMAL" code="2 ">
+                            <AttributeVariant type="NORMAL">
+                                <Text>2nd class only</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="11">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Langnau-Gattikon</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="192710" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#85" externalStationNr="8587349"/>
+                        <Dep>
+                            <Time>22:38</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro 46</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>46</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="0" to="17">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Rütihof</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+        </JourneyList>
+    </STBRes>
 </ResC>
