@@ -37,8 +37,8 @@ class Connection
 
         foreach ($xml->ConSectionList->ConSection AS $section) {
             $obj->sections[] = array(
-                'departure' => Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop),
-                'arrival' => Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop)
+                'departure' => Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop, $date),
+                'arrival' => Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop, $date)
             );
         }
 
