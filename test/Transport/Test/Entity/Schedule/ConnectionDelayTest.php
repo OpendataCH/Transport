@@ -10,6 +10,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
     protected function getConnection()
     {   
         $from = new Entity\Schedule\Stop();
+        $from->date = '2012-01-16';
         $from->departure = '16:10:00';
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
@@ -28,6 +29,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $from->station = $station;
 
         $to = new Entity\Schedule\Stop();
+        $to->date = '2012-01-16';
         $to->arrival = '16:49:00';
         $to->platform = '7';
         $station = new Entity\Location\Station();
@@ -98,7 +100,6 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         
         $connection = new Entity\Schedule\Connection();
-        $connection->date = '2012-01-16';
         $connection->from = $from;
         $connection->to = $to;
         $connection->sections = array(

@@ -10,6 +10,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     protected function getConnection()
     {   
         $from = new Entity\Schedule\Stop();
+        $from->date = '2012-01-31';
         $from->departure = '19:14:00';
         $from->platform = '21/22';
         $prognosis = new Entity\Schedule\Prognosis();
@@ -27,6 +28,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $from->station = $station;
 
         $to = new Entity\Schedule\Stop();
+        $to->date = '2012-01-31';
         $to->arrival = '19:42:00';
         $to->platform = '3';
         $station = new Entity\Location\Station();
@@ -42,7 +44,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $sections[] = array('departure' => $from, 'arrival' => $to);
 
         $connection = new Entity\Schedule\Connection();
-        $connection->date = '2012-01-31';
         $connection->from = $from;
         $connection->to = $to;
         $connection->sections = $sections;
