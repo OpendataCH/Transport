@@ -1,4 +1,5 @@
 @font-color: #383a3d;
+@header-color: #a20d0d;
 
 body {
     color: @font-color;
@@ -30,7 +31,12 @@ h1 {
     margin: 40px 0 5px 0;
     font-size: 8em;
     line-height: 1;
-    color: #a20d0d;
+    color: @header-color;
+    
+    a, a:hover {
+        color: @header-color;
+        text-decoration: none;
+    }
 }
 
 h1 .second {
