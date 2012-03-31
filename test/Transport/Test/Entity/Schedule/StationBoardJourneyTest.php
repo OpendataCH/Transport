@@ -19,8 +19,8 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
             $station->name = 'ZÃ¼rich, BÃ¤ckeranlage';
             $station->id = '8591052';
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = '8525342';
-                $coordinates->y = '47378473';
+                $coordinates->x = 8.525342;
+                $coordinates->y = 47.378473;
                 $coordinates->type = 'WGS84';
             $station->coordinate = $coordinates;
         $stop->station = $station;
