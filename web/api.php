@@ -95,10 +95,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $connections = array();
     $from = reset($stations['from']) ?: null;
     $to = reset($stations['to']) ?: null;
-    $via = array();
-    if (array_key_exists('via', $stations) && reset($stations['via'])) {
-        $via = array($stations['via']);
-    }
+    $via = array_key_exists('via', $stations) ? $stations['via'] : array();
     if ($from && $to) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $connections = $app['api']->findConnections($query);
