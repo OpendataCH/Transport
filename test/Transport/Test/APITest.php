@@ -5,6 +5,8 @@ namespace Transport\Test;
 use Buzz\Message\Response;
 
 use Transport\Entity\Location\LocationQuery;
+use Transport\Entity\Location\Station;
+use Transport\Entity\Schedule\StationBoardQuery;
 
 class APITest extends \PHPUnit_Framework_TestCase
 {
@@ -46,5 +48,34 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Bern', $locations['to'][0]->name);
         $this->assertEquals('008507000', $locations['to'][0]->id);
         $this->assertEquals(46.948825, $locations['to'][0]->coordinate->y);
+    }
+
+    public function testGetStationBoard()
+    {
+        $response = new Response();
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard.xml'));
+
+        $this->browser->expects($this->once())
+            ->method('post')
+            ->with(
+                $this->equalTo('http://xmlfahrplan.sbb.ch/bin/extxml.exe/'),
+                $this->equalTo(array(
+                    'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
+                    'Accept: application/xml',
+                    'Content-Type: application/xml'
+                )),
+                $this->equalTo('<?xml version="1.0" encoding="utf-8"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
+')
+            )
+            ->will($this->returnValue($response));
+
+        $station = new Station('008591052'); // Zürich, Bäckeranlage
+        $journeys = $this->api->getStationBoard(new StationBoardQuery($station, '2012-02-13T23:55:00+01:00'));
+
+        $this->assertEquals(3, count($journeys));
+        $this->assertEquals('2012-03-31T23:57:00+02:00', $journeys[0]->stop->departure);
+        $this->assertEquals('2012-03-31T23:58:00+02:00', $journeys[1]->stop->departure);
+        $this->assertEquals('2012-04-01T04:41:00+02:00', $journeys[2]->stop->departure);
     }
 }

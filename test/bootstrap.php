@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set('Europe/Zurich');
 spl_autoload_register(function($class)
 {
     if (0 === strpos($class, 'Transport\\')) {

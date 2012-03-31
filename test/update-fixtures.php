@@ -36,7 +36,7 @@ download($query, 'connection.xml');
 
 // Station Board
 $station = new Station('008591052'); // Zürich, Bäckeranlage
-$query = new StationBoardQuery($station, '2012-02-13T19:10:00+01:00');
-$query->maxJourneys = 1;
+$query = new StationBoardQuery($station, '2012-02-13T23:55:00+01:00');
+$query->maxJourneys = 3;
 download($query, 'stationboard.xml');
 
