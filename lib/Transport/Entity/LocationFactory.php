@@ -22,11 +22,6 @@ class LocationFactory
 
     static public function createFromJson($json)
     {
-        switch ($json->prodclass) {
-        case '64':
-            return Location\Station::createFromJson($json);
-        default:
-            return null;
-        }
+        return Location\Station::createFromJson($json);
     }
 }
