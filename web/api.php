@@ -96,13 +96,15 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     // validate
     $from = $request->get('from');
     $to = $request->get('to');
+    $via = $request->get('via') ?: null; // TODO support multiple via
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
 
     // get stations
-    $stations = array('from' => array(), 'to' => array());
+    $stations = array('from' => array(), 'to' => array(), 'via' => array());
     if ($from && $to) {
-        $query = new LocationQuery(array('from' => $from, 'to' => $to));
+        $queryarray = array_filter(array('from' => $from, 'to' => $to, 'via' => $via));
+        $query = new LocationQuery($queryarray);
         $stations = $app['api']->findLocations($query);
     }
 
@@ -110,8 +112,9 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $connections = array();
     $from = reset($stations['from']) ?: null;
     $to = reset($stations['to']) ?: null;
+    $via = array_key_exists('via', $stations) ? $stations['via'] : array();
     if ($from && $to) {
-        $query = new ConnectionQuery($from, $to, $date, $time);
+        $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $connections = $app['api']->findConnections($query);
     }
 
