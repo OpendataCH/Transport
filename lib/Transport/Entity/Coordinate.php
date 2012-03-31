@@ -29,8 +29,8 @@ class Coordinate
     {
         $coordinate = new Coordinate();
         $coordinate->type = (string) $xml['type'];
-        $coordinate->x = (string) $xml['x'];
-        $coordinate->y = (string) $xml['y'];
+        $coordinate->x = self::intToFloat((string) $xml['x']);
+        $coordinate->y = self::intToFloat((string) $xml['y']);
 
         return $coordinate;
     }
@@ -39,8 +39,8 @@ class Coordinate
     {
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84'; // best guess
-        $coordinate->x = $json->x;
-        $coordinate->y = $json->y;
+        $coordinate->x = self::intToFloat($json->x);
+        $coordinate->y = self::intToFloat($json->y);
 
         return $coordinate;
     }

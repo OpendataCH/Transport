@@ -20,8 +20,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zürich HB";
             $station->id = "008503000";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = "8540192";
-                $coordinates->y = "47378177";
+                $coordinates->x = 8.540192;
+                $coordinates->y = 47.378177;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $from->station = $station;
@@ -33,8 +33,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $station->name = "Baden";
             $station->id = "008503504";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = "8307695";
-                $coordinates->y = "47476420";
+                $coordinates->x = 8.307695;
+                $coordinates->y = 47.47642;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;

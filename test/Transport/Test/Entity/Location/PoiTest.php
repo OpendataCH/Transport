@@ -14,16 +14,11 @@ class PoiTest extends \PHPUnit_Framework_TestCase
         $poi->score = '100';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = '7478189';
-        $coordinate->y ='46976494';
+        $coordinate->x = 7.478189;
+        $coordinate->y = 46.976494;
         $poi->coordinate = $coordinate;
 
         return $poi;
-    }
-
-    public function testToXml()
-    {
-        $this->assertXmlStringEqualsXmlString('<Poi name="Ittigen, Bahnhof" x="7478189" y="46976494" />', $this->getPoi()->toXml()->asXml());
     }
 
     public function testCreateFromXml()
