@@ -44,4 +44,14 @@ class Coordinate
 
         return $coordinate;
     }
+
+    static public function floatToInt($float)
+    {
+        return sprintf('%01.6f', $float) * 1000000;
+    }
+
+    static public function intToFloat($int)
+    {
+        return $int / 1000000;
+    }
 }
