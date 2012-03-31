@@ -38,11 +38,14 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;
-        
+
+        $sections[] = array('departure' => $from, 'arrival' => $to);
+
         $connection = new Entity\Schedule\Connection();
         $connection->date = '2012-01-31';
         $connection->from = $from;
         $connection->to = $to;
+        $connection->sections = $sections;
 
         return $connection;
     }
