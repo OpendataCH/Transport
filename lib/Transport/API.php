@@ -162,7 +162,7 @@ class API
                 $curTime = (string) $journey->MainStop->BasicStop->Dep->Time;
                 if ($prevTime === null) {
                     $date = date('Y-m-d');
-                } elseif ($prevTime > $curTime) { // we passed midnight
+                } elseif (strtotime($prevTime) > strtotime($curTime)) { // we passed midnight
                     $date = date('Y-m-d', strtotime("$date +1day"));
                 }
                 $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date);
