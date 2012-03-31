@@ -37,13 +37,19 @@ class StationBoardJourney
      */
     public $to;
 
-    static public function createFromXml(\SimpleXMLElement $xml, StationBoardJourney $obj = null)
+    /**
+     * @param   \SimpleXMLElement   $xml
+     * @param   string              $date   The date that will be assigned to this journey
+     * @param   StationBoardJourney $obj    An optional existing journey to overwrite
+     * @return  StationBoardJourney
+     */
+    static public function createFromXml(\SimpleXMLElement $xml, $date, StationBoardJourney $obj = null)
     {
         if (!$obj) {
             $obj = new StationBoardJourney();
         }
 
-        $obj->stop = Stop::createFromXml($xml->MainStop->BasicStop);
+        $obj->stop = Stop::createFromXml($xml->MainStop->BasicStop, $date);
 
         // TODO: get attributes
         foreach ($xml->JourneyAttributeList->JourneyAttribute AS $journeyAttribute) {

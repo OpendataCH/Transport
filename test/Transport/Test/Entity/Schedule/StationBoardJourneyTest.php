@@ -10,7 +10,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
     protected function getJourney()
     {   
         $stop = new Entity\Schedule\Stop();
-        $stop->departure = '19:00';
+        $stop->departure = '2012-03-31T23:57:00+02:00';
         $prognosis = new Entity\Schedule\Prognosis();
         $prognosis->capacity1st = '-1';
         $prognosis->capacity2nd = '-1';
@@ -40,7 +40,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
     {
         $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/stationboard.xml');
 
-        $this->assertEquals($this->getJourney(), StationBoardJourney::createFromXml($xml->STBRes->JourneyList->STBJourney));
+        $this->assertEquals($this->getJourney(), StationBoardJourney::createFromXml($xml->STBRes->JourneyList->STBJourney[0], '2012-03-31'));
     }
 }
 
