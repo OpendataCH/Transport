@@ -2,8 +2,8 @@
 
 namespace Transport\Entity;
 
-class Transportations {
-
+class Transportations
+{
     private static $transportationBits = array(
         'all' => 65535, // 1<<16 - 1
         'ice_tgv_rj' => 32768, // 1<<15
