@@ -52,7 +52,11 @@ class ConnectionQuery extends Query
                 $forwardCount = 0;
                 $backwardCount = 4;
             }
+        } else {
+            $forwardCount = $this->forwardCount;
+            $backwardCount = $this->backwardCount;
         }
+
         $transportationsBinary = Transportations::reduceTransportations($this->transportations);
 
         $request = $this->createRequest();
