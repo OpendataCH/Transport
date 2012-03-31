@@ -46,6 +46,8 @@ try {
 
         $app['redis']->incr($key);
     });
+} catch (Predis\Network\ConnectionException $e) {
+    // ignore connection error
 } catch (Predis\ServerException $e) {
     // ignore connection error
 }
