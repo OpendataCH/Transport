@@ -101,6 +101,11 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $via = $request->get('via') ?: null; // TODO support multiple via
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
+    $limit = $request->get('limit') ?: 4;
+
+    if ($limit > 6) {
+        return new Response('Invalid value for Parameter `limit`.', 400);
+    }
 
     // get stations
     $stations = array('from' => array(), 'to' => array(), 'via' => array());
@@ -117,6 +122,8 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $via = array_key_exists('via', $stations) ? $stations['via'] : array();
     if ($from && $to) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
+        $query->forwardCount = $limit;
+        $query->backwardCount = 0;
         $connections = $app['api']->findConnections($query);
     }
 
@@ -136,6 +143,9 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $limit = $request->get('limit');
+    if ($limit > 420) {
+        return new Response('Invalid value for Parameter `limit`.', 400);
+    }
 
     if (!$station) {
 
