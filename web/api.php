@@ -143,6 +143,9 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $limit = $request->get('limit');
+    if ($limit > 420) {
+        return new Response('Invalid value for Parameter `limit`.', 400);
+    }
 
     if (!$station) {
 
