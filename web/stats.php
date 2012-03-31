@@ -28,7 +28,7 @@ $app->get('/', function(Request $request) use ($app) {
     // read last 30 days
     $dates = array();
     $keys = array();
-    for ($i = 30; $i >= 0; $i--) {
+    for ($i = 1; $i >= 0; $i--) {
         $date = date('Y-m-d', strtotime("-$i days"));
         $keys[] = "stats:calls:$date";
         $dates[] = $date;
