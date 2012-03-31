@@ -2,6 +2,8 @@
 
 namespace Transport\Entity\Location;
 
+use Transport\Entity\Coordinate;
+
 class NearbyQuery
 {
     public $lat;
@@ -25,8 +27,8 @@ class NearbyQuery
             'look_maxno' => $this->limit,
             'look_stopclass' => 1023,
             'look_maxdist' => 5000,
-            'look_y' => sprintf('%01.6f', $this->lat) * 1000000,
-            'look_x' => sprintf('%01.6f', $this->lon) * 1000000
+            'look_y' => Coordinate::floatToInt($this->lat),
+            'look_x' => Coordinate::floatToInt($this->lon),
         );
     }
 }

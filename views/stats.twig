@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Transport API - Statistics</title>
+
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="media/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="media/css/layout.css" />
+
+    <script src="media/js/jquery-1.7.1.min.js"></script>
+    <script src="media/bootstrap/js/bootstrap-tabs.js"></script>
+    <script type="text/javascript" src="media/js/dygraph-combined.js"></script>
+
+    <script type="text/javascript">
+    $(function () {
+        var g = new Dygraph(document.getElementById("graphdiv"), "Date,API calls\n" + "{{ data }}", {
+            width: 595,
+            fillGraph: true,
+            includeZero: true,
+            colors: ['#008000'],
+            yAxisLabelWidth: 20,
+            axisLabelFontSize: 13,
+            labelsDiv: document.getElementById("labels"),
+            axes: {
+                x: {
+                    valueFormatter: function(ms) {
+                        return new Date(ms).strftime('%Y-%m-%d');
+                    },
+                    axisLabelFormatter: function(d) {
+                        return d.strftime('%e. %b');
+                    },
+                    pixelsPerLabel: 100,
+                }
+            }
+        });
+    });
+    </script>
+</head>
+<body lang="en">
+
+    <div class="wrapper">
+        <header>
+            <h1><a href="./">Transport</a></h1>
+            <p>Swiss public transport API</p>
+        </header>
+
+        <article>
+            <h2>Statistics <small id="labels"></small></h2>
+            <div id="graphdiv"></div>
+        </article>
+    </div>
+</body>
+</html>

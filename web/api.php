@@ -21,6 +21,7 @@ $app['debug'] = true;
 // autoload
 $app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
 $app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
+$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
 
 // create Transport API
@@ -32,6 +33,22 @@ $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
     $response->headers->set('Cache-Control', 's-maxage=30');
 });
+
+
+// count API calls
+$app['redis'] = new Predis\Client(array('host' => 'tetra.redistogo.com', 'port' => 9464, 'password' => '7cd7bdf5a51d601547da3c96d6bae1a2'));
+try {
+    $app['redis']->connect();
+    $app->after(function (Request $request, Response $response) use ($app) {
+
+        $date = date('Y-m-d');
+        $key = "stats:calls:$date";
+
+        $app['redis']->incr($key);
+    });
+} catch (Predis\ServerException $e) {
+    // ignore connection error
+}
 
 
 // index
@@ -79,13 +96,15 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     // validate
     $from = $request->get('from');
     $to = $request->get('to');
+    $via = $request->get('via') ?: null; // TODO support multiple via
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
 
     // get stations
-    $stations = array('from' => array(), 'to' => array());
+    $stations = array('from' => array(), 'to' => array(), 'via' => array());
     if ($from && $to) {
-        $query = new LocationQuery(array('from' => $from, 'to' => $to));
+        $queryarray = array_filter(array('from' => $from, 'to' => $to, 'via' => $via));
+        $query = new LocationQuery($queryarray);
         $stations = $app['api']->findLocations($query);
     }
 
@@ -93,8 +112,9 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $connections = array();
     $from = reset($stations['from']) ?: null;
     $to = reset($stations['to']) ?: null;
+    $via = array_key_exists('via', $stations) ? $stations['via'] : array();
     if ($from && $to) {
-        $query = new ConnectionQuery($from, $to, $date, $time);
+        $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $connections = $app['api']->findConnections($query);
     }
 
