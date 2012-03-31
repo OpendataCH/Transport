@@ -6,34 +6,19 @@ use Transport\Entity\Schedule\Stop;
 
 class StopTest extends \PHPUnit_Framework_TestCase
 {
-    public function testParseTimePrefix()
+    public function testParseDateTimeOffset()
     {
-        $this->assertEquals('13:03:59', Stop::parseTime('00d13:03:59'));
+        $this->assertEquals('2012-03-31T13:03:59+02:00', Stop::calculateDateTime('01d13:03:59', '2012-03-30'));
     }
 
-    public function testParseTimePrefixOffset()
+    public function testParseDateTimeNoOffset()
     {
-        $this->assertEquals('13:03:59', Stop::parseTime('01d13:03:59'));
+        $this->assertEquals('2012-03-30T13:03:59+02:00', Stop::calculateDateTime('00d13:03:59', '2012-03-30'));
     }
 
-    public function testParseTimeNoPrefix()
+    public function testParseDateTimeNoPrefix()
     {
-        $this->assertEquals('13:03:59', Stop::parseTime('13:03:59'));
-    }
-
-    public function testParseDateOffset()
-    {
-        $this->assertEquals('2012-03-31', Stop::parseDate('01d13:03:59', '2012-03-30'));
-    }
-
-    public function testParseDateNoOffset()
-    {
-        $this->assertEquals('2012-03-30', Stop::parseDate('00d13:03:59', '2012-03-30'));
-    }
-
-    public function testParseDateNoPrefix()
-    {
-        $this->assertEquals('2012-03-30', Stop::parseDate('13:03:59', '2012-03-30'));
+        $this->assertEquals('2012-03-30T13:03:59+02:00', Stop::calculateDateTime('13:03:59', '2012-03-30'));
     }
 }
 

@@ -1,66 +1,184 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://demo.hafas.de/hafas-res/sbb/xml/47r/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.30.SBB.4.7v5" lang="EN">
-<STBRes>
-<JourneyList>
-<STBJourney>
-<JHandle tNr="191542" puic="085" cycle="01"/>
-<MainStop>
-<BasicStop>
-<Station name="Zürich, Bäckeranlage" x="8525342" y="47378473" type="WGS84" externalId="8591052#85" externalStationNr="8591052"/>
-<Dep>
-<Time>19:00</Time>
-</Dep>
-<StopPrognosis>
-<Capacity1st>-1</Capacity1st> 
-<Capacity2nd>-1</Capacity2nd> 
-</StopPrognosis>
-</BasicStop>
-</MainStop>
-<JourneyAttributeList>
-<JourneyAttribute from="12" to="27">
-<Attribute type="NAME">
-<AttributeVariant type="NORMAL">
-<Text>Bus 31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="27">
-<Attribute type="CATEGORY" code="6">
-<AttributeVariant type="NORMAL">
-<Text>Bus</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="27">
-<Attribute type="INTERNALCATEGORY">
-<AttributeVariant type="NORMAL">
-<Text>Nbu</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="27">
-<Attribute type="OPERATOR">
-<AttributeVariant type="NORMAL">
-<Text>VBZ</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="27">
-<Attribute type="NUMBER">
-<AttributeVariant type="NORMAL">
-<Text>31</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-<JourneyAttribute from="12" to="27">
-<Attribute type="DIRECTION">
-<AttributeVariant type="NORMAL">
-<Text>Schlieren, Zentrum</Text>
-</AttributeVariant>
-</Attribute>
-</JourneyAttribute>
-</JourneyAttributeList>
-</STBJourney>
-</JourneyList>
-</STBRes>
+    <STBRes>
+        <JourneyList>
+            <STBJourney>
+                <JHandle tNr="202971" puic="085" cycle="03"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bäckeranlage" x="8525342" y="47378473" type="WGS84" externalId="8591052#85" externalStationNr="8591052"/>
+                        <Dep>
+                            <Time>23:57</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus 31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Nbu</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="12" to="27">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Schlieren, Zentrum</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="202900" puic="085" cycle="05"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bäckeranlage" x="8525342" y="47378473" type="WGS84" externalId="8591052#85" externalStationNr="8591052"/>
+                        <Dep>
+                            <Time>23:58</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus 31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Bus</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Nbu</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>31</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="14" to="26">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich Hegibachplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+            <STBJourney>
+                <JHandle tNr="203557" puic="085" cycle="00"/>
+                <MainStop>
+                    <BasicStop>
+                        <Station name="Zürich, Bäckeranlage" x="8525342" y="47378473" type="WGS84" externalId="8591052#85" externalStationNr="8591052"/>
+                        <Dep>
+                            <Time>04:41</Time>
+                        </Dep>
+                        <StopPrognosis>
+                            <Capacity1st>-1</Capacity1st>
+                            <Capacity2nd>-1</Capacity2nd>
+                        </StopPrognosis>
+                    </BasicStop>
+                </MainStop>
+                <JourneyAttributeList>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="NAME">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro 34</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="CATEGORY" code="6">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="INTERNALCATEGORY">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Tro</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="OPERATOR">
+                            <AttributeVariant type="NORMAL">
+                                <Text>VBZ</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="NUMBER">
+                            <AttributeVariant type="NORMAL">
+                                <Text>34</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                    <JourneyAttribute from="3" to="16">
+                        <Attribute type="DIRECTION">
+                            <AttributeVariant type="NORMAL">
+                                <Text>Zürich, Klusplatz</Text>
+                            </AttributeVariant>
+                        </Attribute>
+                    </JourneyAttribute>
+                </JourneyAttributeList>
+            </STBJourney>
+        </JourneyList>
+    </STBRes>
 </ResC>
