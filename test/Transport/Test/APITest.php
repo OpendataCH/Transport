@@ -74,8 +74,8 @@ class APITest extends \PHPUnit_Framework_TestCase
         $journeys = $this->api->getStationBoard(new StationBoardQuery($station, '2012-02-13T23:55:00+01:00'));
 
         $this->assertEquals(3, count($journeys));
-        $this->assertEquals('2012-03-31T23:57:00+02:00', $journeys[0]->stop->departure);
-        $this->assertEquals('2012-03-31T23:58:00+02:00', $journeys[1]->stop->departure);
-        $this->assertEquals('2012-04-01T04:41:00+02:00', $journeys[2]->stop->departure);
+        $this->assertEquals('2012-02-13T23:57:00+01:00', $journeys[0]->stop->departure);
+        $this->assertEquals('2012-02-13T23:58:00+01:00', $journeys[1]->stop->departure);
+        $this->assertEquals('2012-02-14T04:41:00+01:00', $journeys[2]->stop->departure);
     }
 }
