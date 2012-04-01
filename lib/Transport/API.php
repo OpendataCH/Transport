@@ -153,11 +153,11 @@ class API
         // parse result
         $result = simplexml_load_string($content);
 
-        // since the stationboard always lists all connections starting from now we just use the current date
+        // since the stationboard always lists all connections starting from now we just use the date
         // and wrap it accordingly if time goes over midnight
         $journeys = array();
         $prevTime = time();
-        $date = date('Y-m-d');
+        $date = date('Y-m-d', strtotime($query->date));
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
                 $curTime = strtotime((string) $journey->MainStop->BasicStop->Dep->Time);
