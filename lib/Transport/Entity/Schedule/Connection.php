@@ -9,8 +9,6 @@ use Transport\Entity;
  */
 class Connection
 {
-    public $date;
-
     /**
      * @var Transport\Entity\Schedule\Stop
      */
