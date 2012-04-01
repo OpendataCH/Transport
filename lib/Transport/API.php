@@ -35,7 +35,8 @@ class API
      */
     protected $lang;
 
-    public function __construct(Browser $browser = null, $lang = 'EN') {
+    public function __construct(Browser $browser = null, $lang = 'EN')
+    {
         $this->browser = $browser ?: new Browser();
         $this->lang = $lang;
     }
@@ -43,7 +44,8 @@ class API
     /**
      * @return Buzz\Message\Response
      */
-    public function sendQuery(Query $query) {
+    public function sendQuery(Query $query)
+    {
 
         $headers = array();
         $headers[] = 'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0';
@@ -118,7 +120,7 @@ class API
         // fix broken JSON
         $content = $response->getContent();
         $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
-               
+
         // parse result
         $result = json_decode($content);
 
@@ -157,12 +159,12 @@ class API
         // and wrap it accordingly if time goes over midnight
         $journeys = array();
         $prevTime = time();
-        $date = date('Y-m-d', strtotime($query->date));
+        $date = $query->date;
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
                 $curTime = strtotime((string) $journey->MainStop->BasicStop->Dep->Time);
                 if ($prevTime > $curTime) { // we passed midnight
-                    $date = date('Y-m-d', strtotime("$date +1day"));
+                    $date->add(new \DateInterval('P1D'));
                 }
                 $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date);
                 $prevTime = $curTime;

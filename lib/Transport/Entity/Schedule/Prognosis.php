@@ -5,11 +5,12 @@ namespace Transport\Entity\Schedule;
 class Prognosis
 {
     public $platform;
-    public $time;
+    public $arrival;
+    public $departure;
     public $capacity1st;
     public $capacity2nd;
 
-    static public function createFromXml(\SimpleXMLElement $xml, Prognosis $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Prognosis $obj = null)
     {
         if (!$obj) {
             $obj = new Prognosis();
@@ -17,10 +18,10 @@ class Prognosis
 
         if ($xml->Arr) {
             if ($xml->Arr->Platform) {
-                $obj->platform = Stop::parseTime((string) $xml->Arr->Platform->Text);
+                $obj->platform = (string) $xml->Arr->Platform->Text;
             }
             if ($xml->Arr->Time) {
-                $obj->time = (string) $xml->Arr->Time;
+                $obj->arrival = Stop::calculateDateTime((string) $xml->Arr->Time, $date)->format(\DateTime::ISO8601);
             }
         }
 
@@ -29,7 +30,7 @@ class Prognosis
                 $obj->platform = (string) $xml->Dep->Platform->Text;
             }
             if ($xml->Dep->Time) {
-                $obj->time = Stop::parseTime((string) $xml->Dep->Time);
+                $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date)->format(\DateTime::ISO8601);
             }
         }
 
