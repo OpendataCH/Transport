@@ -29,7 +29,10 @@ class Connection
         if (!$obj) {
             $obj = new Connection();
         }
-        $date = date('Y-m-d', strtotime((string) $xml->Overview->Date));
+        $date = \DateTime::createFromFormat('Ymd', (string) $xml->Overview->Date, new \DateTimeZone('Europe/Zurich'));
+        $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
+        $date->setTime(0, 0, 0);
+
         $obj->from = Entity\Schedule\Stop::createFromXml($xml->Overview->Departure->BasicStop, $date);
         $obj->to = Entity\Schedule\Stop::createFromXml($xml->Overview->Arrival->BasicStop, $date);
 

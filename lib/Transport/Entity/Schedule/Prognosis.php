@@ -9,7 +9,7 @@ class Prognosis
     public $capacity1st;
     public $capacity2nd;
 
-    static public function createFromXml(\SimpleXMLElement $xml, Prognosis $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Prognosis $obj = null)
     {
         if (!$obj) {
             $obj = new Prognosis();
@@ -17,7 +17,7 @@ class Prognosis
 
         if ($xml->Arr) {
             if ($xml->Arr->Platform) {
-                $obj->platform = Stop::parseTime((string) $xml->Arr->Platform->Text);
+                $obj->platform = $xml->Arr->Platform->Text;
             }
             if ($xml->Arr->Time) {
                 $obj->time = (string) $xml->Arr->Time;
@@ -29,8 +29,14 @@ class Prognosis
                 $obj->platform = (string) $xml->Dep->Platform->Text;
             }
             if ($xml->Dep->Time) {
-                $obj->time = Stop::parseTime((string) $xml->Dep->Time);
+                $obj->time = (string) $xml->Dep->Time;
             }
+        }
+
+        if ($obj->time) {
+            $diffDate = Stop::calculateDateTime($obj->time, $date);
+            $diffSeconds = $diffDate->getTimestamp() - $date->getTimestamp();
+            $obj->time = floor($diffSeconds / 60);
         }
 
         if ($xml->Capacity1st) {
