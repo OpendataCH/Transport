@@ -43,7 +43,7 @@ class StationBoardJourney
      * @param   StationBoardJourney $obj    An optional existing journey to overwrite
      * @return  StationBoardJourney
      */
-    static public function createFromXml(\SimpleXMLElement $xml, $date, StationBoardJourney $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, StationBoardJourney $obj = null)
     {
         if (!$obj) {
             $obj = new StationBoardJourney();
@@ -53,7 +53,7 @@ class StationBoardJourney
 
         // TODO: get attributes
         foreach ($xml->JourneyAttributeList->JourneyAttribute AS $journeyAttribute) {
-        
+
             switch ($journeyAttribute->Attribute['type']) {
                 case 'NAME':
                     $obj->name = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
