@@ -18,52 +18,58 @@ class Stop
 
     public $prognosis;
 
-    public function __construct() {
-        $this->prognosis = new Prognosis(); 
+    public function __construct()
+    {
+        $this->prognosis = new Prognosis();
     }
 
     /**
      * Calculates a datetime by parsing the time and date given
      *
-     * @param   string  $time       The time to parse, can contain an optional offset prefix (e.g., "02d")
-     * @param   string  $date       The date
-     * @return  string  The parsed time in ISO format
+     * @param   string		$time		The time to parse, can contain an optional offset prefix (e.g., "02d")
+     * @param   \DateTime	$date       The date
+     * @return  \DateTime  The parsed time in ISO format
      */
-    static public function calculateDateTime($time, $date)
+    static public function calculateDateTime($time, \DateTime $date)
     {
+        $offset = 0;
         if (substr($time, 2, 1) == 'd') {
             $offset = substr($time, 0, 2);
             $time = substr($time, 3);
-            $date = date('Y-m-d', strtotime("$date +$offset days"));
         }
+        // Prevent changing the reference
+        $date = clone $date;
+        $date->add(new \DateInterval('P' . $offset . 'D'));
+        $timeObj = \DateTime::createFromFormat('H:i:s', $time, $date->getTimezone());
+        if ($timeObj === false) {
+            $timeObj = \DateTime::createFromFormat('H:i', $time, $date->getTimezone());
+        }
+        $date->setTime($timeObj->format('H'), $timeObj->format('i'), $timeObj->format('s'));
 
-        return date('c', strtotime("$date $time"));
+        return $date;
     }
 
-    static public function parseTime($time)
-    {
-        if (substr($time, 2, 1) == 'd') {
-            return substr($time, 3);
-        }
-        return $time;
-    }
-
-    static public function createFromXml(\SimpleXMLElement $xml, $date, Stop $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
     {
         if (!$obj) {
             $obj = new Stop();
         }
 
+        $dateTime = null;
+        $isArrival = false;
         $obj->station = Entity\Location\Station::createFromXml($xml->Station);
         if ($xml->Arr) {
-            $obj->arrival = self::calculateDateTime((string) $xml->Arr->Time, $date);
+            $isArrival = true;
+            $dateTime = self::calculateDateTime((string) $xml->Arr->Time, $date);
+            $obj->arrival = $dateTime->format(\DateTime::ISO8601);
             $obj->platform = trim((string) $xml->Arr->Platform->Text);
         }
         if ($xml->Dep) {
-            $obj->departure = self::calculateDateTime((string) $xml->Dep->Time, $date);
+            $dateTime = self::calculateDateTime((string) $xml->Dep->Time, $date);
+            $obj->departure = $dateTime->format(\DateTime::ISO8601);
             $obj->platform = trim((string) $xml->Dep->Platform->Text);
         }
-        $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis);
+        $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival, null);
 
         return $obj;
     }
