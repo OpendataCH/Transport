@@ -33,11 +33,22 @@ class Connection
         $obj->from = Entity\Schedule\Stop::createFromXml($xml->Overview->Departure->BasicStop, $date);
         $obj->to = Entity\Schedule\Stop::createFromXml($xml->Overview->Arrival->BasicStop, $date);
 
-        foreach ($xml->ConSectionList->ConSection AS $section) {
-            $obj->sections[] = array(
-                'departure' => Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop, $date),
-                'arrival' => Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop, $date)
-            );
+        foreach ($xml->ConSectionList->ConSection as $section) {
+
+            $parts = array();
+
+            if ($section->Journey) {            
+                $parts['journey'] = Entity\Schedule\Journey::createFromXml($section->Journey, $date);
+            }
+
+            if ($section->Walk) {            
+                $parts['walk'] = Entity\Schedule\Walk::createFromXml($section->Walk, $date);
+            }
+
+            $parts['departure'] = Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop, $date);
+            $parts['arrival'] = Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop, $date);
+
+            $obj->sections[] = $parts;
         }
 
         return $obj;

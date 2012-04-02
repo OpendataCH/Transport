@@ -8,7 +8,13 @@ use Transport\Entity\Schedule\Connection;
 class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     protected function getConnection()
-    {   
+    {
+
+        $journey = new Entity\Schedule\Journey();
+        $journey->name = 'S1219278';
+        $journey->category = 'S12';
+        $journey->number = '19278';
+   
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-31T19:14:00+01:00';
         $from->platform = '21/22';
@@ -39,7 +45,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $to->station = $station;
 
-        $sections[] = array('departure' => $from, 'arrival' => $to);
+        $sections[] = array('journey' => $journey, 'departure' => $from, 'arrival' => $to);
 
         $connection = new Entity\Schedule\Connection();
         $connection->from = $from;

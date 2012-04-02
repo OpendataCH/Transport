@@ -41,6 +41,9 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $to->station = $station;
 
 
+        $section1Walk = new Entity\Schedule\Walk();
+        $section1Walk->duration = '00:04:00';
+
         $section1From = new Entity\Schedule\Stop();
         $section1From->departure = '2012-01-16T16:06:00+01:00';
         $station = new Entity\Location\Station();
@@ -64,6 +67,11 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $section1To->station = $station;
+
+        $section2Journey = new Entity\Schedule\Journey();
+        $section2Journey->name = 'S9 18962';
+        $section2Journey->category = 'S9';
+        $section2Journey->number = '18962';
 
         $section2From = new Entity\Schedule\Stop();
         $section2From->departure = '2012-01-16T16:10:00+01:00';
@@ -101,8 +109,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $connection->from = $from;
         $connection->to = $to;
         $connection->sections = array(
-            array('departure' => $section1From, 'arrival' => $section1To),
-            array('departure' => $section2From, 'arrival' => $section2To)
+            array('walk' => $section1Walk, 'departure' => $section1From, 'arrival' => $section1To),
+            array('journey' => $section2Journey, 'departure' => $section2From, 'arrival' => $section2To)
         );
 
         return $connection;
