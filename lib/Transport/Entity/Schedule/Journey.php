@@ -47,6 +47,9 @@ class Journey
                     case 'CATEGORY':
                         $obj->category = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                         break;
+                    case 'INTERNALCATEGORY':
+                        $obj->subcategory = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        break;
                     case 'NUMBER':
                         $obj->number = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                         break;
