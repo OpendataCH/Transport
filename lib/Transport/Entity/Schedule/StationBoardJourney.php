@@ -18,7 +18,7 @@ class StationBoardJourney extends Journey
      * @param   Journey             $obj    An optional existing journey to overwrite
      * @return  Journey
      */
-    static public function createFromXml(\SimpleXMLElement $xml, $date, Journey $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
     {
         if (!$obj) {
             $obj = new StationBoardJourney();

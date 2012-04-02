@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Transport\Entity\Schedule;
 
@@ -21,11 +21,14 @@ class StationBoardQuery extends Query
 
     public $transportations = array('all');
 
-    public function __construct(Station $station, $date = null)
+    public function __construct(Station $station, \DateTime $date = null)
     {
         $this->station = $station;
 
-        $this->date = $date ?: date('c');
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime('now', new \DateTimeZone('Europe/Zurich'));
+        }
+        $this->date = $date;
     }
 
     public function toXml()
@@ -36,13 +39,13 @@ class StationBoardQuery extends Query
 
         $board->addAttribute('boardType', $this->boardType);
         $board->addAttribute('maxJourneys', $this->maxJourneys);
-        $board->addChild('Time', date('H:i', strtotime($this->date)));
+        $board->addChild('Time', $this->date->format('H:i'));
 
         $period = $board->addChild('Period');
         $dateBegin = $period->addChild('DateBegin');
-        $dateBegin->addChild('Date', date('Ymd', strtotime($this->date)));
+        $dateBegin->addChild('Date', $this->date->format('Ymd'));
         $dateEnd = $period->addChild('DateEnd');
-        $dateEnd->addChild('Date', date('Ymd', strtotime($this->date)));
+        $dateEnd->addChild('Date', $this->date->format('Ymd'));
 
         $tableStation = $board->addChild('TableStation');
         $tableStation->addAttribute('externalId', $this->station->id);
@@ -50,4 +53,5 @@ class StationBoardQuery extends Query
 
         return $request->asXML();
     }
+
 }

@@ -21,22 +21,22 @@ class APITest extends \PHPUnit_Framework_TestCase
     {
         $response = new Response();
         $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location.xml'));
-    
+
         $this->browser->expects($this->once())
             ->method('post')
             ->with(
                 $this->equalTo('http://xmlfahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
-                    'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
-                    'Accept: application/xml',
-                    'Content-Type: application/xml'
+                        'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
+                        'Accept: application/xml',
+                        'Content-Type: application/xml'
                 )),
                 $this->equalTo('<?xml version="1.0" encoding="utf-8"?>
 <ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
 ')
             )
             ->will($this->returnValue($response));
-        
+
         $locations = $this->api->findLocations(new LocationQuery(array('from' => 'Zürich', 'to' => 'Bern')));
 
         $this->assertEquals(2, count($locations));
@@ -60,9 +60,9 @@ class APITest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('http://xmlfahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
-                    'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
-                    'Accept: application/xml',
-                    'Content-Type: application/xml'
+                        'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
+                        'Accept: application/xml',
+                        'Content-Type: application/xml'
                 )),
                 $this->equalTo('<?xml version="1.0" encoding="utf-8"?>
 <ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
@@ -71,11 +71,11 @@ class APITest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($response));
 
         $station = new Station('008591052'); // Zürich, Bäckeranlage
-        $journeys = $this->api->getStationBoard(new StationBoardQuery($station, '2012-02-13T23:55:00+01:00'));
+        $journeys = $this->api->getStationBoard(new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00')));
 
         $this->assertEquals(3, count($journeys));
-        $this->assertEquals('2012-02-13T23:57:00+01:00', $journeys[0]->stop->departure);
-        $this->assertEquals('2012-02-13T23:58:00+01:00', $journeys[1]->stop->departure);
-        $this->assertEquals('2012-02-14T04:41:00+01:00', $journeys[2]->stop->departure);
+        $this->assertEquals('2012-02-13T23:57:00+0100', $journeys[0]->stop->departure);
+        $this->assertEquals('2012-02-13T23:58:00+0100', $journeys[1]->stop->departure);
+        $this->assertEquals('2012-02-14T04:41:00+0100', $journeys[2]->stop->departure);
     }
 }

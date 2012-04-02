@@ -10,10 +10,10 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
     protected function getConnection()
     {   
         $from = new Entity\Schedule\Stop();
-        $from->departure = '2012-01-16T16:10:00+01:00';
+        $from->departure = '2012-01-16T16:10:00+0100';
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
-            $prognosis->time = '16:18:00';
+            $prognosis->departure = '2012-01-16T16:18:00+0100';
             $prognosis->capacity1st = '1';
             $prognosis->capacity2nd = '1';
         $from->prognosis = $prognosis;
@@ -28,7 +28,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $from->station = $station;
 
         $to = new Entity\Schedule\Stop();
-        $to->arrival = '2012-01-16T16:49:00+01:00';
+        $to->arrival = '2012-01-16T16:49:00+0100';
         $to->platform = '7';
         $station = new Entity\Location\Station();
             $station->name = "Zug";
@@ -45,7 +45,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $section1Walk->duration = '00:04:00';
 
         $section1From = new Entity\Schedule\Stop();
-        $section1From->departure = '2012-01-16T16:06:00+01:00';
+        $section1From->departure = '2012-01-16T16:06:00+0100';
         $station = new Entity\Location\Station();
             $station->name = "Zürich, Bahnhof Altstetten";
             $station->id = "000103022";
@@ -57,7 +57,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $section1From->station = $station;
 
         $section1To = new Entity\Schedule\Stop();
-        $section1To->arrival = "2012-01-16T16:10:00+01:00";
+        $section1To->arrival = "2012-01-16T16:10:00+0100";
         $station = new Entity\Location\Station();
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
@@ -74,10 +74,10 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $section2Journey->number = '18962';
 
         $section2From = new Entity\Schedule\Stop();
-        $section2From->departure = '2012-01-16T16:10:00+01:00';
+        $section2From->departure = '2012-01-16T16:10:00+0100';
         $section2From->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
-            $prognosis->time = '16:18:00';
+            $prognosis->departure = '2012-01-16T16:18:00+0100';
             $prognosis->capacity1st = '1';
             $prognosis->capacity2nd = '1';
         $section2From->prognosis = $prognosis;
@@ -92,7 +92,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $section2From->station = $station;
 
         $section2To = new Entity\Schedule\Stop();
-        $section2To->arrival = '2012-01-16T16:49:00+01:00';
+        $section2To->arrival = '2012-01-16T16:49:00+0100';
         $section2To->platform = '7';
         $station = new Entity\Location\Station();
             $station->name = "Zug";
