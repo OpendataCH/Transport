@@ -16,6 +16,7 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script src="media/js/moment.min.js"></script>
     <script>
 
     $(function () {
@@ -28,13 +29,13 @@
         		    $('#stationboard tbody').empty();
         			$(data.stationboard).each(function () {
         			    var prognosis, departure, delay, line = '<tr><td>';
-        			    if (this.stop.prognosis.time) {
-        			        prognosis = this.stop.prognosis.time.split(':');
-        			        departure = this.stop.departure.split(':');
-        			        delay = (parseInt(prognosis[0]) * 60 + parseInt(prognosis[1])) - (parseInt(departure[0]) * 60 + parseInt(departure[1]));
-        			        line += this.stop.departure + ' <strong>+' + delay + ' min</strong>';
+        			    departure = moment(this.stop.departure);
+        			    if (this.stop.prognosis.departure) {
+        			        prognosis = moment(this.stop.prognosis.departure);
+        			        delay = (prognosis.valueOf() - departure.valueOf()) / 60000;
+        			        line += departure.format('HH:mm') + ' <strong>+' + delay + ' min</strong>';
         			    } else {
-        			        line += this.stop.departure;
+        			        line += departure.format('HH:mm');
         			    }
         			    line += '</td><td>' + this.name + '</td><td>' + this.to + '</td></tr>';
         			    $('#stationboard tbody').append(line);
