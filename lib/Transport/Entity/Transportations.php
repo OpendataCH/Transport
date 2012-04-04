@@ -15,7 +15,7 @@ class Transportations
         'bus' => 512, // 1<<9
         'cableway' => 256, // 1<<8
         'arz_ext' => 128, // 1<<7
-        'tramway_undergroud' => 64, // 1<<6
+        'tramway_underground' => 64, // 1<<6
     );
 
     /**
