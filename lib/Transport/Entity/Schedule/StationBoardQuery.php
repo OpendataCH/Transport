@@ -21,7 +21,7 @@ class StationBoardQuery extends Query
 
     public $transportations = array('all');
 
-    public function __construct(Station $station, \DateTime $date = null, $transportations = null)
+    public function __construct(Station $station, \DateTime $date = null)
     {
         $this->station = $station;
 
@@ -29,7 +29,6 @@ class StationBoardQuery extends Query
             $date = new \DateTime('now', new \DateTimeZone('Europe/Zurich'));
         }
         $this->date = $date;
-        $this->transportations = $transportations;
     }
 
     public function toXml()
