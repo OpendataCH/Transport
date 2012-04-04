@@ -156,9 +156,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
     
     $transportations = $request->get('transportations');
-    if ($transportations) {
-        $transportations = explode(';',$transportations);
-    } else {
+    if (!$transportations) {
         $transportations = null;
     }
 
