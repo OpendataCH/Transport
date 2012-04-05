@@ -102,7 +102,6 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $limit = $request->get('limit') ?: 4;
-    
 
     if ($limit > 6) {
         return new Response('Invalid value for Parameter `limit`.', 400);
@@ -147,12 +146,12 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     if ($limit > 420) {
         return new Response('Invalid value for Parameter `limit`.', 400);
     }
-    
+
     $date = $request->get('date');
-    if($date) {
-        $date = new DateTime($date);
+    if ($date) {
+        $date = new DateTime($date, new DateTimeZone('Europe/Zurich'));
     }
-    
+
     $transportations = $request->get('transportations');
 
     if (!$station) {
@@ -165,7 +164,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     if ($station) {
-        $query = new StationBoardQuery($station,$date,$transportations);
+        $query = new StationBoardQuery($station, $date);
+        $query->transporations = $transporations;
         $query->maxJourneys = $limit;
         $stationboard = $app['api']->getStationBoard($query);
     }
