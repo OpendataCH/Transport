@@ -158,7 +158,8 @@ class API
         // since the stationboard always lists all connections starting from now we just use the date
         // and wrap it accordingly if time goes over midnight
         $journeys = array();
-        $prevTime = time();
+        // subtract one minute because SBB also returns results for one minute in the past
+        $prevTime = time() - 60;
         $date = $query->date;
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
