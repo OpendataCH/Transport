@@ -136,7 +136,6 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query->bike = $bike;
         $connections = $app['api']->findConnections($query);
     }
-    var_dump(count($connections));
     return $app->json(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
 });
 
