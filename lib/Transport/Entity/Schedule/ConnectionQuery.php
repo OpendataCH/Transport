@@ -118,7 +118,6 @@ class ConnectionQuery extends Query
         if ($this->changeExtensionPercent > 0) {
             $rflags['chExtension'] = $this->changeExtensionPercent;
         }
-        var_dump($request->asXML());
         return $request->asXML();
     }
 }
