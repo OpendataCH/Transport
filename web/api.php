@@ -165,7 +165,9 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
     if ($station) {
         $query = new StationBoardQuery($station, $date);
-        $query->transportations = $transportations;
+        if ($transportations) {
+            $query->transportations = $transportations;
+        }
         $query->maxJourneys = $limit;
         $stationboard = $app['api']->getStationBoard($query);
     }
