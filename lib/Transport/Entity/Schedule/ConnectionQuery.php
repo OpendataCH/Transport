@@ -31,7 +31,15 @@ class ConnectionQuery extends Query
     public $changeCount = -1;
 
     public $changeExtensionPercent = 0;
+    
+    public $direct = 0;
+    
+    public $sleeper = 0;
 
+    public $couchette = 0;
+    
+    public $bike = 0;    
+        
     public function __construct(Location $srcLocation, Location $dstLocation, $viaLocations = array(), $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
@@ -65,8 +73,25 @@ class ConnectionQuery extends Query
 
         $start = $con->addChild('Start');
         $this->srcLocation->toXml($start);
+
         $prod = $start->addChild('Prod');
         $prod['prod'] = $transportationsBinary;
+
+        if ($this->direct > 0) {
+            $prod['direct'] = 1;    
+        }
+        
+        if ($this->sleeper > 0) {
+            $prod['sleeper'] = 1;
+        }
+        
+        if ($this->couchette > 0) {
+            $prod['couchette'] = 1;    
+        }
+        
+        if ($this->bike > 0) {
+            $prod['bike'] = 1;    
+        }
 
         $dest = $con->addChild('Dest');
         $this->dstLocation->toXml($dest);
@@ -93,7 +118,6 @@ class ConnectionQuery extends Query
         if ($this->changeExtensionPercent > 0) {
             $rflags['chExtension'] = $this->changeExtensionPercent;
         }
-        
         return $request->asXML();
     }
 }

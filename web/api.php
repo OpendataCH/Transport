@@ -102,6 +102,11 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $limit = $request->get('limit') ?: 4;
+    $transportations = $request->get('transportations') ?: array('all');
+    $direct = $request->get('direct');
+    $sleeper = $request->get('sleeper');
+    $couchette = $request->get('chouchette');
+    $bike = $request->get('bike');
 
     if ($limit > 6) {
         return new Response('Invalid value for Parameter `limit`.', 400);
@@ -124,9 +129,13 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $query->forwardCount = $limit;
         $query->backwardCount = 0;
+        $query->transportations = $transportations;
+        $query->direct = $direct;
+        $query->sleeper = $sleeper;
+        $query->couchette = $couchette;
+        $query->bike = $bike;
         $connections = $app['api']->findConnections($query);
     }
-
     return $app->json(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
 });
 
@@ -152,7 +161,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
         $date = new DateTime($date, new DateTimeZone('Europe/Zurich'));
     }
 
-    $transportations = $request->get('transportations');
+    $transportations = $request->get('transportations') ?: array('all');
 
     if (!$station) {
 
