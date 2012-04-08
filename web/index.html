@@ -221,6 +221,36 @@
                         <td>Time of the connection, in the format hh:mm</td>
                         <td>17:30</td>
                     </tr>
+                    <tr>
+                        <td><code>transportations</code></td>
+                        <td>optional</td>
+                        <td>transportation means, one or more of ice_tgv_rj, ec_ic, ir, re_d, ship, s_sn_r, bus, cableway, arz_ext, tramway_underground</td>
+                        <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
+                    </tr>
+                    <tr>
+                        <td><code>direct</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only direct connections are allowed</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>sleeper</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only night trains containing beds are allowed, implies direct=1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>couchette</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only night trains containing couchettes are allowed, implies direct=1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>bike</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only trains allowing the transport of bicycles are allowed</td>
+                        <td>1</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -349,6 +379,12 @@
                         Because one of the connections leaving at 19:35 is within the limit, all connections leaving at 19:35 are shown.
                     </td>
                     <td>15</td>
+                </tr>
+                <tr>
+                    <td><code>transportations</code></td>
+                    <td>optional</td>
+                    <td>transportation means, one or more of ice_tgv_rj, ec_ic, ir, re_d, ship, s_sn_r, bus, cableway, arz_ext, tramway_underground</td>
+                    <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
                 </tr>
                 </tbody>
             </table>
