@@ -31,15 +31,15 @@ class ConnectionQuery extends Query
     public $changeCount = -1;
 
     public $changeExtensionPercent = 0;
-    
-    public $direct = 0;
-    
-    public $sleeper = 0;
 
-    public $couchette = 0;
-    
-    public $bike = 0;    
-        
+    public $direct = false;
+
+    public $sleeper = false;
+
+    public $couchette = false;
+
+    public $bike = false;
+
     public function __construct(Location $srcLocation, Location $dstLocation, $viaLocations = array(), $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
@@ -77,19 +77,19 @@ class ConnectionQuery extends Query
         $prod = $start->addChild('Prod');
         $prod['prod'] = $transportationsBinary;
 
-        if ($this->direct > 0) {
+        if ($this->direct) {
             $prod['direct'] = 1;    
         }
-        
-        if ($this->sleeper > 0) {
+
+        if ($this->sleeper) {
             $prod['sleeper'] = 1;
         }
-        
-        if ($this->couchette > 0) {
+
+        if ($this->couchette) {
             $prod['couchette'] = 1;    
         }
-        
-        if ($this->bike > 0) {
+
+        if ($this->bike) {
             $prod['bike'] = 1;    
         }
 

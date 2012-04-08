@@ -102,7 +102,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $limit = $request->get('limit') ?: 4;
-    $transportations = $request->get('transportations') ?: array('all');
+    $transportations = $request->get('transportations');
     $direct = $request->get('direct');
     $sleeper = $request->get('sleeper');
     $couchette = $request->get('chouchette');
@@ -129,13 +129,24 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $query->forwardCount = $limit;
         $query->backwardCount = 0;
-        $query->transportations = $transportations;
-        $query->direct = $direct;
-        $query->sleeper = $sleeper;
-        $query->couchette = $couchette;
-        $query->bike = $bike;
+        if ($transportations) {
+            $query->transportations = $transportations;
+        }
+        if ($direct) {
+            $query->direct = $direct;
+        }
+        if ($sleeper) {
+            $query->sleeper = $sleeper;
+        }
+        if ($couchette) {
+            $query->couchette = $couchette;
+        }
+        if ($bike) {
+            $query->bike = $bike;
+        }
         $connections = $app['api']->findConnections($query);
     }
+
     return $app->json(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
 });
 
@@ -161,7 +172,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
         $date = new DateTime($date, new DateTimeZone('Europe/Zurich'));
     }
 
-    $transportations = $request->get('transportations') ?: array('all');
+    $transportations = $request->get('transportations');
 
     if (!$station) {
 
