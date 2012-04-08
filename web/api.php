@@ -109,7 +109,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $bike = $request->get('bike');
 
     if ($limit > 6) {
-        return new Response('Invalid value for Parameter `limit`.', 400);
+        return new Response('Maximal value of argument `limit` is 6.', 400);
     }
 
     // get stations
