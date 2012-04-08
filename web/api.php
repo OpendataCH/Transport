@@ -98,7 +98,16 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     // validate
     $from = $request->get('from');
     $to = $request->get('to');
-    $via = $request->get('via') ?: null; // TODO support multiple via
+    if (is_array($request->get('via'))) {
+        $via = $request->get('via');
+        if (count($via) > 5) {
+            return new Response('Invalid via count (max 5 allowed)', 400);
+        }
+    } else if ($request->get('via')) {
+        $via = array($request->get('via'));
+    } else {
+        $via = array();
+    }
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $limit = $request->get('limit') ?: 4;
@@ -115,16 +124,21 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     // get stations
     $stations = array('from' => array(), 'to' => array(), 'via' => array());
     if ($from && $to) {
-        $queryarray = array_filter(array('from' => $from, 'to' => $to, 'via' => $via));
-        $query = new LocationQuery($queryarray);
+        $query = new LocationQuery(array('from' => $from, 'to' => $to, 'via' => $via));
         $stations = $app['api']->findLocations($query);
     }
-
+    
     // get connections
     $connections = array();
     $from = reset($stations['from']) ?: null;
     $to = reset($stations['to']) ?: null;
-    $via = array_key_exists('via', $stations) ? $stations['via'] : array();
+    $via = array();
+    foreach ($stations as $k => $v) {
+        if (preg_match("/^via[0-9]+$/", $k) && $v) {
+            $via[] = reset($v);
+        }
+    }
+
     if ($from && $to) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $query->forwardCount = $limit;
