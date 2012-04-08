@@ -32,7 +32,7 @@ class ConnectionQuery extends Query
 
     public $changeExtensionPercent = 0;
 
-    public function __construct(Location $srcLocation, Location $dstLocation, $viaLocations = array(), $date = null, $time = null)
+    public function __construct(Location $srcLocation, Location $dstLocation, array $viaLocations = array(), $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
         $this->dstLocation = $dstLocation;

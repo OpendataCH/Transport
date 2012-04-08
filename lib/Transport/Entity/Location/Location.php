@@ -61,7 +61,7 @@ class Location
         }
 
         if ($json->name) {
-            $obj->name = $json->name;
+            $obj->name = html_entity_decode($json->name, null, 'UTF-8');
         }
         $obj->coordinate = Coordinate::createFromJson($json);
 

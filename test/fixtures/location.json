@@ -1,0 +1,25 @@
+{
+    "error": "0", 
+    "numberofstops": "2", 
+    "prods": "1023", 
+    "stops": [
+        {
+            "extId": "8508489", 
+            "name": "Kehrsiten-B&#252;rgenstock", 
+            "prodclass": "16", 
+            "puic": "85", 
+            "urlname": "Kehrsiten-B%FCrgenstock", 
+            "x": "8382324", 
+            "y": "47003057"
+        }, 
+        {
+            "extId": "8579228", 
+            "name": "B&#252;rgenstock, Hotels", 
+            "prodclass": "64", 
+            "puic": "85", 
+            "urlname": "B%FCrgenstock,%20Hotels", 
+            "x": "8386252", 
+            "y": "46997088"
+        }
+    ]
+}
