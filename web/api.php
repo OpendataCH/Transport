@@ -108,8 +108,9 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $couchette = $request->get('chouchette');
     $bike = $request->get('bike');
 
-    if ($limit > 6) {
-        return new Response('Maximal value of argument `limit` is 6.', 400);
+    // Don't stress the SBB with more than 5 request (6 connection each request)
+    if ($limit > 30) {
+        return new Response('Maximal value of argument `limit` is 30.', 400);
     }
 
     // get stations
