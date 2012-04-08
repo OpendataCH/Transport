@@ -47,17 +47,29 @@ class LocationQuery extends Query
 
         foreach ($this->query as $key => $value) {
 
-            $local = $request->addChild('LocValReq');
-            $local['id'] = $key;
-            $local['sMode'] = self::SBB_SEARCH_MODE;
-
-            $location = $local->addChild('ReqLoc');
-            $location['match'] = $value;
-
-            if (!isset(self::$locationTypes[$this->type])) {
-                $this->type = 'all'; // default type
+            // If the key is "via", this is a subarray.
+            if ($key == 'via') {
+                $queryArray = array();
+                foreach ($value as $k => $v) {
+                    $queryArray[$key.($k + 1)] = $v;
+                }
+            } else {
+                $queryArray = array($key => $value);
             }
-            $location['type'] = self::$locationTypes[$this->type];
+
+            foreach ($queryArray as $k => $v) {
+                $local = $request->addChild('LocValReq');
+                $local['id'] = preg_match("/^via[0-9]+$/", $k) ? 'via' : $k;
+                $local['sMode'] = self::SBB_SEARCH_MODE;
+
+                $location = $local->addChild('ReqLoc');
+                $location['match'] = $v;
+
+                if (!isset(self::$locationTypes[$this->type])) {
+                    $this->type = 'all'; // default type
+                }
+                $location['type'] = self::$locationTypes[$this->type];
+            }
         }
 
         return $request->asXML();
