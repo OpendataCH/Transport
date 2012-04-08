@@ -48,7 +48,7 @@ class LocationQuery extends Query
         foreach ($this->query as $key => $value) {
 
             // If the key is "via", this is a subarray.
-            if ($key == 'via') {
+            if ($key === 'via') {
                 $queryArray = array();
                 foreach ($value as $k => $v) {
                     $queryArray[$key.($k + 1)] = $v;
