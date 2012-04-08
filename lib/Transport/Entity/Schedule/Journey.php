@@ -29,7 +29,12 @@ class Journey
      * @var string
      */
     public $to;
-
+    
+    /**
+     * @var array
+     */
+    public $passList = array();
+    
     static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
     {
         if (!$obj) {
@@ -60,6 +65,12 @@ class Journey
                         $obj->to = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                         break;
                 }
+            }
+        }
+        
+        if($xml->PassList->BasicStop) {
+            foreach ($xml->PassList->BasicStop AS $basicStop) {
+                $obj->passList[] = Stop::createFromXml($basicStop, $date);
             }
         }
 
