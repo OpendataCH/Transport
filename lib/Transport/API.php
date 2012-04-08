@@ -67,9 +67,11 @@ class API
         $result = simplexml_load_string($response->getContent());
 
         $connections = array();
-        foreach ($result->ConRes->ConnectionList->Connection as $connection) {
+        if ($result->ConRes->ConnectionList->Connection) {
+            foreach ($result->ConRes->ConnectionList->Connection as $connection) {
 
-            $connections[] = Entity\Schedule\Connection::createFromXml($connection);
+                $connections[] = Entity\Schedule\Connection::createFromXml($connection);
+            }
         }
 
         return $connections;
