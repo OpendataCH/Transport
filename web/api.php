@@ -11,6 +11,8 @@ use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
+use Transport\ResultLimit;
+
 date_default_timezone_set('Europe/Zurich');
 
 // init
@@ -116,6 +118,8 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $sleeper = $request->get('sleeper');
     $couchette = $request->get('chouchette');
     $bike = $request->get('bike');
+
+    ResultLimit::setFields($request->get('fields'));
 
     if ($limit > 6) {
         return new Response('Maximal value of argument `limit` is 6.', 400);
