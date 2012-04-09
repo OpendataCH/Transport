@@ -89,9 +89,15 @@ class API
         $result = simplexml_load_string($response->getContent());
 
         $locations = array();
+        $viaCount = 0;
         foreach ($result->LocValRes as $part) {
 
             $id = (string) $part['id'];
+
+            // A "via" can occur 0-5 times
+            if ($id == "via") {
+                $id = $id.(++$viaCount);
+            }
 
             $locations[$id] = array();
             foreach ($part->children() as $location) {
