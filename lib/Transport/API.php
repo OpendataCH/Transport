@@ -69,7 +69,6 @@ class API
         $connections = array();
         if ($result->ConRes->ConnectionList->Connection) {
             foreach ($result->ConRes->ConnectionList->Connection as $connection) {
-
                 $connections[] = Entity\Schedule\Connection::createFromXml($connection);
             }
         }
