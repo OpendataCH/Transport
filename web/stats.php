@@ -5,6 +5,8 @@ require_once __DIR__.'/../silex.phar';
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+date_default_timezone_set('Europe/Zurich');
+
 // init
 $app = new Silex\Application();
 $app['debug'] = true;
