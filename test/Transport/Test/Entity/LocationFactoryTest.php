@@ -2,10 +2,13 @@
 
 namespace Transport\Test\Entity;
 
+use Transport\Entity\Coordinate;
 use Transport\Entity\LocationFactory;
+use Transport\Entity\Location\Station;
 
 class LocationFactoryTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testCreateFromXml_Poi()
     {
         $xml = new \SimpleXMLElement('<Poi />');
@@ -29,5 +32,52 @@ class LocationFactoryTest extends \PHPUnit_Framework_TestCase
         $xml = new \SimpleXMLElement('<YouDontKnowMe />');
         $this->assertNull(LocationFactory::createFromXml($xml));
     }
-}
 
+    public function testCreateFromJson()
+    {
+        $jsonString = <<<'EOF'
+{
+    "extId": "8508489", 
+    "name": "Nummerland", 
+    "prodclass": "16",
+    "puic": "85", 
+    "urlname": "Nummerland", 
+    "x": "8382324", 
+    "y": "47003057"
+}
+EOF;
+        $station = new Station();
+        $station->name = 'Nummerland';
+        $station->id = 8508489;
+        $coordinate = new Coordinate();
+        $coordinate->type = 'WGS84';
+        $coordinate->x = 8.382324;
+        $coordinate->y = 47.003057;
+        $station->coordinate = $coordinate;
+        $this->assertEquals($station, LocationFactory::createFromJson(json_decode($jsonString)));
+    }
+
+    public function testCreateFromJsonWithUmlaute()
+    {
+        $jsonString = <<<'EOF'
+{
+    "extId": "8508489", 
+    "name": "N&#252;mmerland", 
+    "prodclass": "16",
+    "puic": "85", 
+    "urlname": "N%FCmmerland", 
+    "x": "8382324", 
+    "y": "47003057"
+}
+EOF;
+        $station = new Station();
+        $station->name = 'Nümmerland';
+        $station->id = 8508489;
+        $coordinate = new Coordinate();
+        $coordinate->type = 'WGS84';
+        $coordinate->x = 8.382324;
+        $coordinate->y = 47.003057;
+        $station->coordinate = $coordinate;
+        $this->assertEquals($station, LocationFactory::createFromJson(json_decode($jsonString)));
+    }
+}

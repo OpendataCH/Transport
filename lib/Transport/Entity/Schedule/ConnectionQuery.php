@@ -40,7 +40,7 @@ class ConnectionQuery extends Query
 
     public $bike = false;
 
-    public function __construct(Location $srcLocation, Location $dstLocation, $viaLocations = array(), $date = null, $time = null)
+    public function __construct(Location $srcLocation, Location $dstLocation, array $viaLocations = array(), $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
         $this->dstLocation = $dstLocation;

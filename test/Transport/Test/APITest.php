@@ -3,8 +3,8 @@
 namespace Transport\Test;
 
 use Buzz\Message\Response;
-
 use Transport\Entity\Location\LocationQuery;
+use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Schedule\StationBoardQuery;
 
@@ -12,7 +12,7 @@ class APITest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        $this->browser = $this->getMock('Buzz\\Browser', array('post'));
+        $this->browser = $this->getMock('Buzz\\Browser', array('post', 'get'));
 
         $this->api = new \Transport\API($this->browser);
     }
@@ -50,8 +50,35 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(46.948825, $locations['to'][0]->coordinate->y);
     }
 
-    public function testGetStationBoard()
+    public function testFindNearbyLocationsArray()
     {
+        $response = new Response();
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location.json'));
+
+        $this->browser->expects($this->once())
+                ->method('get')
+                ->with(
+                        $this->equalTo(
+                                'http://fahrplan.sbb.ch/bin/query.exe/dny?performLocating=2&tpl=stop2json&look_maxno=2&look_stopclass=1023&look_maxdist=5000&look_y=47003057&look_x=8382324'
+                        )
+                )
+                ->will($this->returnValue($response));
+
+        $stations = $this->api->findNearbyLocations(new NearbyQuery('47.003057', '8.382324', 2));
+
+        $this->assertEquals(2, count($stations));
+        $this->assertEquals(8508489, $stations[0]->id);
+        $this->assertEquals('Kehrsiten-Bürgenstock', $stations[0]->name);
+        $this->assertEquals(8.382324, $stations[0]->coordinate->x);
+        $this->assertEquals(47.003057, $stations[0]->coordinate->y);
+        $this->assertEquals('WGS84', $stations[0]->coordinate->type);
+        $this->assertEquals('Bürgenstock, Hotels', $stations[1]->name);
+        $this->assertEquals(8.386252, $stations[1]->coordinate->x);
+        $this->assertEquals(46.997088, $stations[1]->coordinate->y);
+        $this->assertEquals('WGS84', $stations[1]->coordinate->type);
+    }
+
+    public function testGetStationBoard() {
         $response = new Response();
         $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard.xml'));
 
