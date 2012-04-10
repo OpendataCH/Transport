@@ -7,35 +7,31 @@ namespace Transport;
  */
 class ResultLimit
 {
-    private $fields = null;
+    private static $fields = null;
     
-    private static $instance = null;
-    
-    // basic singleton pattern
-    private static function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new ResultLimit;
-        }
-        return self::$instance;
+    private function __construct()
+    { 
     }
     
-    public static function setFields($fields) {
+    public static function setFields($fields)
+    {
         if (is_array($fields)) {
-            self::getInstance()->fields = array();
+            self::$fields = array();
             foreach ($fields as $field) {
-                self::getInstance()->fields = array_merge(self::getInstance()->fields,self::getInstance()->getFieldTree($field));
+                self::$fields = array_merge(self::$fields,self::getFieldTree($field));
             }
         }
     }
     
-    public static function includeField($field, $searchBase = null) {
+    public static function includeField($field, $searchBase = null)
+    {
         //if no fields were set, return true, this is the default
-        if (self::getInstance()->fields === null) {
+        if (self::$fields === null) {
             return true;
         }
         //if not yet in a recursive loop, use the top of the tree as the search base
         if ($searchBase === null) {
-            $searchBase = self::getInstance()->fields;
+            $searchBase = self::$fields;
         }
         //if this is not a nested field, we may find it at the top
         if (array_key_exists($field,$searchBase)) {
@@ -56,7 +52,8 @@ class ResultLimit
         }    
     }
     
-    private function getFieldTree($field) {
+    private static function getFieldTree($field) 
+    {
         $remainingField = '';
         //is this field a tree?
         $delimiterPos = strpos($field,'/');
@@ -73,7 +70,7 @@ class ResultLimit
             $remainingField = substr($field,strpos($field,'/')+1);
             //if there is more in this tree, recursively add it to the result
             if (strlen($remainingField)>0) {
-                $result[$fieldTreeElement] = self::getInstance()->getFieldTree($remainingField);
+                $result[$fieldTreeElement] = self::getFieldTree($remainingField);
             } else {
                 $result[$fieldTreeElement] = true;
             }
