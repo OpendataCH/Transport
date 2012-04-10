@@ -22,7 +22,7 @@ class ResultLimit
             }
         }
     }
-    
+
     public static function includeField($field, $searchBase = null)
     {
         //if no fields were set, return true, this is the default
