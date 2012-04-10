@@ -34,10 +34,10 @@ class Connection
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
         $date->setTime(0, 0, 0);
         
-        if (ResultLimit::includeField('from')) {
+        if (ResultLimit::isFieldSet('from')) {
             $obj->from = Entity\Schedule\Stop::createFromXml($xml->Overview->Departure->BasicStop, $date);
         }
-        if (ResultLimit::includeField('to')) {
+        if (ResultLimit::isFieldSet('to')) {
             $obj->to = Entity\Schedule\Stop::createFromXml($xml->Overview->Arrival->BasicStop, $date);
         }
 
@@ -45,7 +45,7 @@ class Connection
 
             $parts = array();
             
-            if (ResultLimit::includeField('journey')) {
+            if (ResultLimit::isFieldSet('journey')) {
                 if ($section->Journey) {
                     $parts['journey'] = Entity\Schedule\Journey::createFromXml($section->Journey, $date);
                 }

@@ -13,17 +13,21 @@ class ResultLimit
     { 
     }
     
-    public static function setFields($fields)
+    public static function setFields(array $fields)
     {
-        if (is_array($fields)) {
-            self::$fields = array();
-            foreach ($fields as $field) {
-                self::$fields = array_merge(self::$fields,self::getFieldTree($field));
-            }
+        self::$fields = array();
+        foreach ($fields as $field) {
+            self::$fields = array_merge(self::$fields, self::getFieldTree($field));
         }
     }
 
-    public static function includeField($field, $searchBase = null)
+    /**
+     * returns true if the given field should be included in the result.
+     *
+     * @param string $field the field (e.g from)
+     * @param array $searchBase an array with given fields in a tree, only needed for recursion
+     */
+    public static function isFieldSet($field, $searchBase = null)
     {
         //if no fields were set, return true, this is the default
         if (self::$fields === null) {
@@ -34,13 +38,13 @@ class ResultLimit
             $searchBase = self::$fields;
         }
         //if this is not a nested field, we may find it at the top
-        if (array_key_exists($field,$searchBase)) {
+        if (array_key_exists($field, $searchBase)) {
             return true;
         //if it's not found, let's dig deeper
         } else {
             foreach ($searchBase as $newSearchBase) {
                 if (is_array($newSearchBase)) {
-                    $result = self::includeField($field,$newSearchBase);    
+                    $result = self::isFieldSet($field, $newSearchBase);    
                 }
                 //if the field is found, return this information to stop crawling at this point
                 if ($result) {
@@ -54,27 +58,10 @@ class ResultLimit
     
     private static function getFieldTree($field) 
     {
-        $remainingField = '';
-        //is this field a tree?
-        $delimiterPos = strpos($field,'/');
-        //no
-        if ($delimiterPos === false) {
-            //then return the array
-            return array($field => true);
-        //yes
-        } else {
-            $result = array();
-            //split up the top most element...
-            $fieldTreeElement = substr($field,0,$delimiterPos);
-            //...and the remaining part
-            $remainingField = substr($field,strpos($field,'/')+1);
-            //if there is more in this tree, recursively add it to the result
-            if (strlen($remainingField)>0) {
-                $result[$fieldTreeElement] = self::getFieldTree($remainingField);
-            } else {
-                $result[$fieldTreeElement] = true;
-            }
-            return $result;
-        }
+        return array_reduce(
+            array_reverse(explode('/', $field)),
+            function ($result, $value) { return array($value => $result); },
+            true
+        );
     }
 }
