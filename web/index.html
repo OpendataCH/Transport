@@ -210,6 +210,12 @@
                         <td>Genève</td>
                     </tr>
                     <tr>
+                        <td><code>via</code></td>
+                        <td>optional</td>
+                        <td class="description">Specifies up to five via locations. When specifying several vias, array notation (<code>via[]=via1&amp;via[]=via2</code>) is required.</td>
+                        <td>Bern</td>
+                    </tr>
+                    <tr>
                         <td><code>date</code></td>
                         <td>optional</td>
                         <td>Date of the connection, in the format YYYY-MM-DD</td>
@@ -226,6 +232,12 @@
                         <td>optional</td>
                         <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
                         <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td>optional</td>
+                        <td>1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.</td>
+                        <td>Bern</td>
                     </tr>
                     <tr>
                         <td><code>direct</code></td>
