@@ -5,6 +5,8 @@ namespace Transport\Test\Entity\Schedule;
 use Transport\Entity;
 use Transport\Entity\Schedule\StationBoardJourney;
 
+use Transport\ResultLimit;
+
 class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
 {
     protected function getJourney()
@@ -44,6 +46,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $date = \DateTime::createFromFormat('Y-m-d', '2012-03-31', new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
         $date->setTime(0, 0, 0);
+        ResultLimit::unsetFields();
         $this->assertEquals($this->getJourney(), StationBoardJourney::createFromXml($xml->STBRes->JourneyList->STBJourney[0], $date));
     }
 }

@@ -11,6 +11,8 @@ use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
+use Transport\ResultLimit;
+
 date_default_timezone_set('Europe/Zurich');
 
 // init
@@ -94,7 +96,6 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
 
 // connections
 $app->get('/v1/connections', function(Request $request) use ($app) {
-
     // validate
     $from = $request->get('from');
     $to = $request->get('to');
@@ -116,6 +117,8 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $sleeper = $request->get('sleeper');
     $couchette = $request->get('chouchette');
     $bike = $request->get('bike');
+
+    ResultLimit::setFields($request->get('fields') ?: array());
 
     if ($limit > 6) {
         return new Response('Maximal value of argument `limit` is 6.', 400);
@@ -158,10 +161,19 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         if ($bike) {
             $query->bike = $bike;
         }
-        $connections = $app['api']->findConnections($query);
+        $connections = $app['api']->findConnections($query, 'connections');
     }
-
-    return $app->json(array('connections' => $connections, 'from' => $from, 'to' => $to, 'stations' => $stations));
+    $result = array('connections' => $connections);
+    if (ResultLimit::isFieldSet('from')) {
+        $result = array_merge($result,array('from' => $from));   
+    }
+    if (ResultLimit::isFieldSet('to')) {
+        $result = array_merge($result,array('to' => $to));   
+    }
+    if (ResultLimit::isFieldSet('stations')) {
+        $result = array_merge($result,array('stations' => $stations));   
+    }
+    return $app->json($result);
 });
 
 
@@ -187,6 +199,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $transportations = $request->get('transportations');
+    
+    ResultLimit::setFields($request->get('fields') ?: array());
 
     if (!$station) {
 
@@ -203,9 +217,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
             $query->transportations = $transportations;
         }
         $query->maxJourneys = $limit;
-        $stationboard = $app['api']->getStationBoard($query);
+        $stationboard = $app['api']->getStationBoard($query, 'stationboard');
     }
-
     return $app->json(array('stationboard' => $stationboard));
 });
 
