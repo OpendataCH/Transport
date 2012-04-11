@@ -10,14 +10,14 @@ class ResultLimit
     private static $fields = null;
     
     private function __construct()
-    { 
+    {
     }
     
     public static function setFields(array $fields)
     {
         self::$fields = array();
         foreach ($fields as $field) {
-            self::$fields = array_merge(self::$fields, self::getFieldTree($field));
+            self::$fields = array_merge_recursive(self::$fields, self::getFieldTree($field));
         }
     }
 
@@ -25,37 +25,46 @@ class ResultLimit
      * returns true if the given field should be included in the result.
      *
      * @param string $field the field (e.g from)
-     * @param array $searchBase an array with given fields in a tree, only needed for recursion
      */
-    public static function isFieldSet($field, $searchBase = null)
+    public static function isFieldSet($field)
     {
         //if no fields were set, return true, this is the default
-        if (self::$fields === null) {
+        if (count(self::$fields) == 0) {
             return true;
         }
-        //if not yet in a recursive loop, use the top of the tree as the search base
-        if ($searchBase === null) {
-            $searchBase = self::$fields;
-        }
-        //if this is not a nested field, we may find it at the top
-        if (array_key_exists($field, $searchBase)) {
-            return true;
-        //if it's not found, let's dig deeper
-        } else {
-            foreach ($searchBase as $newSearchBase) {
-                if (is_array($newSearchBase)) {
-                    $result = self::isFieldSet($field, $newSearchBase);    
-                }
-                //if the field is found, return this information to stop crawling at this point
-                if ($result) {
-                    return $result;    
-                }
+        $fieldParts = explode('/',$field);
+        $fieldFromTree = null;
+        foreach($fieldParts as $fieldPart) {
+            $fieldFromTree = self::getFieldFromTree($fieldPart,$fieldFromTree);
+            //if a part is set to true, all child fields should be included
+            if ($fieldFromTree === true) {
+                return true;    
             }
-            //the field doesn't seem to be set
-            return false;   
-        }    
+            //if a part is not set, no child fields should be included
+            if ($fieldFromTree === false) {
+                return false;
+            }
+        }
+        //if the searched field is an array,
+        //there are more specific fields set,
+        //so their parent should be included
+        if (is_array($fieldFromTree)) {
+            return true;    
+        }
+        return false;
     }
     
+    private static function getFieldFromTree($field, $searchTree)
+    {
+        if ($searchTree === null) {
+            $searchTree = self::$fields;
+        }
+        if (array_key_exists($field, $searchTree)) {
+            return $searchTree[$field];
+        }
+        return false;
+    }
+
     private static function getFieldTree($field) 
     {
         return array_reduce(

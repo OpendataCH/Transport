@@ -30,7 +30,7 @@ class Journey
      */
     public $to;
 
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null, $parentField = '')
     {
         if (!$obj) {
             $obj = new Journey();

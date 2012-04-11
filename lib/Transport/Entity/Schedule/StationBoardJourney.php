@@ -2,6 +2,8 @@
 
 namespace Transport\Entity\Schedule;
 
+use Transport\ResultLimit;
+
 /**
  * Request for a station board journey
  */
@@ -18,7 +20,7 @@ class StationBoardJourney extends Journey
      * @param   Journey             $obj    An optional existing journey to overwrite
      * @return  Journey
      */
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null, $parentField = '')
     {
         if (!$obj) {
             $obj = new StationBoardJourney();
@@ -26,7 +28,10 @@ class StationBoardJourney extends Journey
 
         $obj = Journey::createFromXml($xml, $date, $obj);
 
-        $obj->stop = Stop::createFromXml($xml->MainStop->BasicStop, $date);
+        $field = $parentField.'/stop';
+        if (ResultLimit::isFieldSet($field)) {
+            $obj->stop = Stop::createFromXml($xml->MainStop->BasicStop, $date, null, $field);
+        }
 
         return $obj;
     }

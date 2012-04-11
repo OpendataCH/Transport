@@ -58,7 +58,7 @@ class API
     /**
      * @return array
      */
-    public function findConnections(ConnectionQuery $query)
+    public function findConnections(ConnectionQuery $query, $field)
     {
         // send request
         $response = $this->sendQuery($query);
@@ -67,9 +67,11 @@ class API
         $result = simplexml_load_string($response->getContent());
 
         $connections = array();
-        if ($result->ConRes->ConnectionList->Connection) {
-            foreach ($result->ConRes->ConnectionList->Connection as $connection) {
-                $connections[] = Entity\Schedule\Connection::createFromXml($connection);
+        if (ResultLimit::isFieldSet($field)) {
+            if ($result->ConRes->ConnectionList->Connection) {
+                foreach ($result->ConRes->ConnectionList->Connection as $connection) {
+                    $connections[] = Entity\Schedule\Connection::createFromXml($connection, null, $field);
+                }
             }
         }
 
@@ -150,7 +152,7 @@ class API
      * @param string $dateTime
      * @param array $transportationTypes
      */
-    public function getStationBoard(StationBoardQuery $query)
+    public function getStationBoard(StationBoardQuery $query, $field)
     {
         // send request
         $response = $this->sendQuery($query);
@@ -174,7 +176,7 @@ class API
                 if ($prevTime > $curTime) { // we passed midnight
                     $date->add(new \DateInterval('P1D'));
                 }
-                $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date);
+                $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null, $field);
                 $prevTime = $curTime;
             }
         }

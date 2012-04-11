@@ -3,6 +3,7 @@
 namespace Transport\Entity\Schedule;
 
 use Transport\Entity;
+use Transport\ResultLimit;
 
 /**
  * Basic Stop
@@ -49,7 +50,7 @@ class Stop
         return $date;
     }
 
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null, $parentField = '')
     {
         if (!$obj) {
             $obj = new Stop();
@@ -57,19 +58,37 @@ class Stop
 
         $dateTime = null;
         $isArrival = false;
-        $obj->station = Entity\Location\Station::createFromXml($xml->Station);
+        $field = $parentField.'/station';
+        if (ResultLimit::isFieldSet($field)) {
+            $obj->station = Entity\Location\Station::createFromXml($xml->Station);
+        }
         if ($xml->Arr) {
             $isArrival = true;
-            $dateTime = self::calculateDateTime((string) $xml->Arr->Time, $date);
-            $obj->arrival = $dateTime->format(\DateTime::ISO8601);
-            $obj->platform = trim((string) $xml->Arr->Platform->Text);
+            $field = $parentField.'/arrival';
+            if (ResultLimit::isFieldSet($field)) {
+                $dateTime = self::calculateDateTime((string) $xml->Arr->Time, $date);
+                $obj->arrival = $dateTime->format(\DateTime::ISO8601);
+            }
+            $field = $parentField.'/platform';
+            if (ResultLimit::isFieldSet($field)) {
+                $obj->platform = trim((string) $xml->Arr->Platform->Text);
+            }
         }
         if ($xml->Dep) {
-            $dateTime = self::calculateDateTime((string) $xml->Dep->Time, $date);
-            $obj->departure = $dateTime->format(\DateTime::ISO8601);
-            $obj->platform = trim((string) $xml->Dep->Platform->Text);
+            $field = $parentField.'/departure';
+            if (ResultLimit::isFieldSet($field)) {
+                $dateTime = self::calculateDateTime((string) $xml->Dep->Time, $date);
+                $obj->departure = $dateTime->format(\DateTime::ISO8601);
+            }
+            $field = $parentField.'/platform';
+            if (ResultLimit::isFieldSet($field)) {
+                $obj->platform = trim((string) $xml->Dep->Platform->Text);
+            }
         }
-        $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival, null);
+        $field = $parentField.'/prognosis';
+        if (ResultLimit::isFieldSet($field)) {
+            $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival);
+        }
 
         return $obj;
     }
