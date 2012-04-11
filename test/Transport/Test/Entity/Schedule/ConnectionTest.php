@@ -14,7 +14,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $journey->name = 'S1219278';
         $journey->category = 'S12';
         $journey->number = '19278';
-   
+
+
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-31T19:14:00+0100';
         $from->platform = '21/22';
@@ -44,6 +45,13 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;
+        
+        $passList = array();
+        $passList[0] = clone $from;
+        $passList[0]->platform = '';
+        $passList[1] = clone $to;
+        $passList[1]->platform = '';
+        $journey->passList = $passList;
 
         $sections[] = array('journey' => $journey, 'departure' => $from, 'arrival' => $to);
 
