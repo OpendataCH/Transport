@@ -103,6 +103,13 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $section2To->station = $station;
+        
+        $passList = array();
+        $passList[0] = clone $section2From;
+        $passList[0]->platform = '';
+        $passList[1] = clone $section2To;
+        $passList[1]->platform = '';
+        $section2Journey->passList = $passList;
 
         
         $connection = new Entity\Schedule\Connection();
