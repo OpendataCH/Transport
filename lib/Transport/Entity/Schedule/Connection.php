@@ -25,7 +25,7 @@ class Connection
      */
     public $sections;
 
-    static public function createFromXml(\SimpleXMLElement $xml, Connection $obj = null, $parentField)
+    static public function createFromXml(\SimpleXMLElement $xml, Connection $obj = null, $parentField = '')
     {
         if (!$obj) {
             $obj = new Connection();

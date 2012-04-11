@@ -3,11 +3,11 @@
 namespace Transport;
 
 /**
- * ResultLimit
- */
+* ResultLimit
+*/
 class ResultLimit
 {
-    private static $fields = null;
+    private static $fields = array();
     
     private function __construct()
     {
@@ -15,10 +15,17 @@ class ResultLimit
     
     public static function setFields(array $fields)
     {
-        self::$fields = array();
         foreach ($fields as $field) {
             self::$fields = array_merge_recursive(self::$fields, self::getFieldTree($field));
         }
+    }
+    
+    /**
+     * removes all set fields. Needed for tests.
+     *
+     */
+    public static function unsetFields() {
+        self::$fields = array();
     }
 
     /**
@@ -34,38 +41,31 @@ class ResultLimit
         }
         $fieldParts = explode('/',$field);
         $fieldFromTree = null;
+        $searchTree = self::$fields;
         foreach($fieldParts as $fieldPart) {
-            $fieldFromTree = self::getFieldFromTree($fieldPart,$fieldFromTree);
-            //if a part is set to true, all child fields should be included
-            if ($fieldFromTree === true) {
-                return true;    
-            }
-            //if a part is not set, no child fields should be included
-            if ($fieldFromTree === false) {
+            if (array_key_exists($fieldPart, $searchTree)) {
+                $fieldFromTree = $searchTree[$fieldPart];
+            } else {
+                //if a part is not set, no child fields should be included
                 return false;
             }
+            //if a part is set to true, all child fields should be included
+            if ($fieldFromTree === true) {
+                return true;
+            }
+            //continue the search
+            $searchTree = $fieldFromTree;
         }
-        //if the searched field is an array,
+        //if the found field is an array,
         //there are more specific fields set,
         //so their parent should be included
         if (is_array($fieldFromTree)) {
-            return true;    
-        }
-        return false;
-    }
-    
-    private static function getFieldFromTree($field, $searchTree)
-    {
-        if ($searchTree === null) {
-            $searchTree = self::$fields;
-        }
-        if (array_key_exists($field, $searchTree)) {
-            return $searchTree[$field];
+            return true;
         }
         return false;
     }
 
-    private static function getFieldTree($field) 
+    private static function getFieldTree($field)
     {
         return array_reduce(
             array_reverse(explode('/', $field)),

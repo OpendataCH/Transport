@@ -152,7 +152,7 @@ class API
      * @param string $dateTime
      * @param array $transportationTypes
      */
-    public function getStationBoard(StationBoardQuery $query, $field)
+    public function getStationBoard(StationBoardQuery $query, $field = '')
     {
         // send request
         $response = $this->sendQuery($query);
