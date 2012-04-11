@@ -14,20 +14,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $journey->name = 'S1219278';
         $journey->category = 'S12';
         $journey->number = '19278';
-        
-        
-        /*$passList[0] = new Entity\Schedule\Stop();
-        $passList[0]->departure = '2012-01-31T19:14:00+0100';
-        $passList[0]->platform = '21/22';
-        $passList[0]->prognosis = new Entity\Schedule\Prognosis();
-            $passList[0]->prognosis->capacity1st = '1';
-            $passList[0]->prognosis->capacity2nd = '2';
-        $passList[0]->station = new Entity\Location\Station();
-            $passList[0]->station->name = "Zürich HB";
-            $passList[0]->station->id = "008503000";
-            $passList[0]->station->coordinate = new Entity\Coordinate();
-                $passList[0]->station->coordinate->x = 8.540192;*/
-   
+
+
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-31T19:14:00+0100';
         $from->platform = '21/22';
