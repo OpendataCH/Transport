@@ -70,7 +70,7 @@ class Journey
         
         if($xml->PassList->BasicStop) {
             foreach ($xml->PassList->BasicStop AS $basicStop) {
-                if (substr($basicStop->Station['externalStationNr'],0,4) == '0085') {
+                if ($basicStop->Arr || $basicStop->Dep) {
                     $obj->passList[] = Stop::createFromXml($basicStop, $date);
                 }
             }
