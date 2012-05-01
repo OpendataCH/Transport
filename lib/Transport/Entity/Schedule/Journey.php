@@ -2,6 +2,8 @@
 
 namespace Transport\Entity\Schedule;
 
+use Transport\ResultLimit;
+
 class Journey
 {
 
@@ -29,13 +31,13 @@ class Journey
      * @var string
      */
     public $to;
-    
+
     /**
      * @var array
      */
     public $passList = array();
     
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null, $parentField = '')
     {
         if (!$obj) {
             $obj = new Journey();
@@ -67,11 +69,14 @@ class Journey
                 }
             }
         }
-        
-        if($xml->PassList->BasicStop) {
-            foreach ($xml->PassList->BasicStop AS $basicStop) {
-                if ($basicStop->Arr || $basicStop->Dep) {
-                    $obj->passList[] = Stop::createFromXml($basicStop, $date);
+
+        $field = $parentField.'/passList';
+        if (ResultLimit::isFieldSet($field)) {
+            if ($xml->PassList->BasicStop) {
+                foreach ($xml->PassList->BasicStop AS $basicStop) {
+                    if ($basicStop->Arr || $basicStop->Dep) {
+                        $obj->passList[] = Stop::createFromXml($basicStop, $date, null, $field);
+                    }
                 }
             }
         }
