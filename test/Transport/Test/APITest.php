@@ -31,8 +31,8 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo('<?xml version="1.0" encoding="utf-8"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><LocValReq id="from" sMode="1"><ReqLoc match="ZÃ¼rich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
+                $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
 ')
             )
             ->will($this->returnValue($response));
@@ -91,7 +91,7 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo('<?xml version="1.0" encoding="utf-8"?>
+                $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
 <ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
 ')
             )
