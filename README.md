@@ -13,3 +13,7 @@ $ git clone git://github.com/OpendataCH/Transport.git transport
 $ cd transport
 $ git submodule update --init
 ```
+
+## Development
+
+XSD for the XML Fahrplan API is available here: https://gist.github.com/2309851
