@@ -25,7 +25,7 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->browser->expects($this->once())
             ->method('post')
             ->with(
-                $this->equalTo('http://xmlfahrplan.sbb.ch/bin/extxml.exe/'),
+                $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
                         'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
                         'Accept: application/xml',
@@ -85,7 +85,7 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->browser->expects($this->once())
             ->method('post')
             ->with(
-                $this->equalTo('http://xmlfahrplan.sbb.ch/bin/extxml.exe/'),
+                $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
                         'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
                         'Accept: application/xml',

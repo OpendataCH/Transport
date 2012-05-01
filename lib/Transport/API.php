@@ -8,13 +8,14 @@ use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\MoreConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
-    const URL = 'http://xmlfahrplan.sbb.ch/bin/extxml.exe/';
+    const URL = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
     const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
-
+    
     const SBB_PROD = 'iPhone3.1';
     const SBB_VERSION = '2.3';
     const SBB_ACCESS_ID = 'MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe';
@@ -56,22 +57,57 @@ class API
     }
 
     /**
+     * Extracts the connection details from a given xml string and reassignes
+     * the connection reference
+     *
+     * @param String $connectionsXml      Connection result as XML string
+     * @param String $connectionReference Backreference to the connection reference to do more connection search
+     * @return array
+     */
+    protected function _connectionResultToArray($connectionsXml, &$connectionReference)
+    {
+        $connectionsXml = simplexml_load_string($connectionsXml);
+
+        $connectionReference = (string) $connectionsXml->ConRes->ConResCtxt;
+
+        $connections = array();
+        if ($connectionsXml->ConRes->ConnectionList->Connection) {
+            foreach ($connectionsXml->ConRes->ConnectionList->Connection as $connection) {
+
+                $connections[] = Entity\Schedule\Connection::createFromXml($connection);
+            }
+        }
+        return $connections;
+    }
+
+    /**
      * @return array
      */
     public function findConnections(ConnectionQuery $query)
     {
+        $moreConnectionCount = 0;
+        // @TODO: Allow backwards search in time
+        if ($query->forwardCount > 6) {
+            $moreConnectionCount = $query->forwardCount - 6;
+            $query->forwardCount = 6;
+        }
         // send request
         $response = $this->sendQuery($query);
 
-        // parse result
-        $result = simplexml_load_string($response->getContent());
+        $connections = $this->_connectionResultToArray($response->getContent(), $connectionReference);
 
-        $connections = array();
-        if ($result->ConRes->ConnectionList->Connection) {
-            foreach ($result->ConRes->ConnectionList->Connection as $connection) {
+        // Loop over the missing connections
+        while ($moreConnectionCount > 0) {
+            // The connection limit is 6
+            $forwardCount = $moreConnectionCount > 6 ? 6 : $moreConnectionCount;
+            $moreConnectionCount -= 6;
 
-                $connections[] = Entity\Schedule\Connection::createFromXml($connection);
-            }
+            $conRefQuery = new MoreConnectionQuery($connectionReference, $forwardCount);
+            $moreResponse = $this->sendQuery($conRefQuery);
+
+            // Don't forget to reassign the reference
+            $moreConnections = $this->_connectionResultToArray($moreResponse->getContent(), $connectionReference);
+            $connections = array_merge($connections, $moreConnections);
         }
 
         return $connections;
