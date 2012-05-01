@@ -12,6 +12,22 @@ class Address extends Location
     /**
      * {@inheritDoc}
      */
+    public function toXml(\SimpleXMLElement $parent = null)
+    {
+        if (null !== $parent) {
+            $xml = $parent->addChild('Address');
+        } else {
+            $xml = new \SimpleXMLElement('<Address />');
+        }
+
+        $xml['name'] = $this->name;
+
+        return $xml;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     static public function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
