@@ -58,6 +58,9 @@
                         <li><a href="#stop">stop</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#limit-response">Limit response</a>
+                </li>
             </ul>
 
             <h3 id="api-resources">API Resources</h3>
@@ -722,7 +725,102 @@
                 </tr>
                 </tbody>
             </table>
+            
+        <h3 id="limit-response">Limit response</h3>
+            <p>You can limit the response data with the <code>fields</code> parameter.
+            If any <code>field[]</code> is passed, only the specified fields are in the response.
+            The API is aware of the hierarchy, if you set a field, everything below is in the response unless a more specific (further down in the hierarchy) field is set.
+            </p>
+            <h4>Example Request</h4>
 
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&to=Genève&fields[]=connections/from/departure&fields[]=connections/to/arrival</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "connections":[
+        {
+            "from":{
+                "station":null,
+                "arrival":null,
+                "departure":"2012-05-01T19:42:00+0200",
+                "platform":null,
+                "prognosis":null,
+            },
+            "to":{
+                "station":null,
+                "arrival":"2012-05-01T20:15:00+0200",
+                "departure":null,
+                "platform":null,
+                "prognosis":null,
+            },
+            "sections":null
+        },
+    ],
+    //....
+}
+
+            </pre>
+            
+            
+            <h4>Example Request</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&to=Genève&fields[]=connections/from&fields[]=connections/to/station</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+            
+{
+    "connections":[
+        {
+            "from":{
+                "station":{
+                    "id":"008501120",
+                    "name":"Lausanne",
+                    "score":null,
+                    "coordinate":{
+                        "type":"WGS84",
+                        "x":6.629086,
+                        "y":46.516785
+                    }
+                },
+                "arrival":null,
+                "departure":"2012-05-01T19:42:00+0200",
+                "platform":"5",
+                "prognosis":{
+                    "platform":null,
+                    "arrival":null,
+                    "departure":null,
+                    "capacity1st":"1",
+                    "capacity2nd":"1"
+                }
+            },
+            "to":{
+                "station":{
+                    "id":"008501008",
+                    "name":"Gen\u00e8ve",
+                    "score":null,
+                    "coordinate":{
+                        "type":"WGS84",
+                        "x":6.142437,
+                        "y":46.210217
+                    }
+                },
+                "arrival":null,
+                "departure":null,
+                "platform":null,
+                "prognosis":null,
+            },
+            "sections":null
+        },
+    ],
+    // ...
+}
+            </pre>
+            <p>Currently, the fields which are not requested get returned with <code>null</code> as value.
+            These fields may get removed from the response in the future, don't rely on them being there.</p>
         </article>
 
         <footer>
