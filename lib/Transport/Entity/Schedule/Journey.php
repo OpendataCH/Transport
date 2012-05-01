@@ -70,7 +70,9 @@ class Journey
         
         if($xml->PassList->BasicStop) {
             foreach ($xml->PassList->BasicStop AS $basicStop) {
-                $obj->passList[] = Stop::createFromXml($basicStop, $date);
+                if ($basicStop->Arr || $basicStop->Dep) {
+                    $obj->passList[] = Stop::createFromXml($basicStop, $date);
+                }
             }
         }
 
