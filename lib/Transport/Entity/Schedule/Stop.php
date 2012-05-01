@@ -18,6 +18,11 @@ class Stop
     public $platform;
 
     public $prognosis;
+    
+    public function __construct()
+    {
+        $this->prognosis = new Prognosis();
+    }
 
     /**
      * Calculates a datetime by parsing the time and date given
