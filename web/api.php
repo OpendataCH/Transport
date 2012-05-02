@@ -150,9 +150,11 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         if ($isArrivalTime !== null) {
             switch ($isArrivalTime) {
                 case 0:
+                case "false":
                     $query->isArrivalTime = false;
                     break;
                 case 1:
+                case "true":
                     $query->isArrivalTime = true;
                     break;
                 default:
