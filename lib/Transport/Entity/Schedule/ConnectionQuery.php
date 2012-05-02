@@ -17,8 +17,8 @@ class ConnectionQuery extends Query
     public $date;
 
     public $time;
-
-    public $dateType = \Transport\API::DATE_TYPE_DEPARTURE;
+    
+    public $isArrivalTime = false;
 
     public $transportations = array('all');
 
@@ -53,7 +53,8 @@ class ConnectionQuery extends Query
     public function toXml()
     {
         if ($this->forwardCount === null && $this->backwardCount === null) {
-            if ($this->dateType == \Transport\API::DATE_TYPE_DEPARTURE) {
+            //if ($this->dateType == \Transport\API::DATE_TYPE_DEPARTURE) {
+            if ($this->isArrivalTime == false) {
                 $forwardCount = 4;
                 $backwardCount = 0;
             } else {
@@ -104,7 +105,11 @@ class ConnectionQuery extends Query
         }
 
         $reqt = $con->addChild('ReqT');
-        $reqt['a'] = $this->dateType;
+        if ($this->isArrivalTime) {
+            $reqt['a'] = 1;
+        } else {
+            $reqt['a'] = 0;
+        }
         $reqt['date'] = date('Ymd', strtotime($this->date));
         $reqt['time'] = date('H:i', strtotime($this->time));
 

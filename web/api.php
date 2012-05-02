@@ -111,6 +111,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     }
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
+    $isArrivalTime = $request->get('isArrivalTime') ?: null;
     $limit = $request->get('limit') ?: 4;
     $transportations = $request->get('transportations');
     $direct = $request->get('direct');
@@ -146,6 +147,19 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $query->forwardCount = $limit;
         $query->backwardCount = 0;
+        if ($isArrivalTime !== null) {
+            switch ($isArrivalTime) {
+                case 0:
+                    $query->isArrivalTime = false;
+                    break;
+                case 1:
+                    $query->isArrivalTime = true;
+                    break;
+                default:
+                    //wrong parameter value
+                    break;
+            }
+        }
         if ($transportations) {
             $query->transportations = $transportations;
         }
