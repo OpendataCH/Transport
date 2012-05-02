@@ -53,7 +53,6 @@ class ConnectionQuery extends Query
     public function toXml()
     {
         if ($this->forwardCount === null && $this->backwardCount === null) {
-            //if ($this->dateType == \Transport\API::DATE_TYPE_DEPARTURE) {
             if ($this->isArrivalTime == false) {
                 $forwardCount = 4;
                 $backwardCount = 0;
