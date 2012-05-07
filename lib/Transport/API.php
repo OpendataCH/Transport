@@ -19,9 +19,6 @@ class API
     const SBB_VERSION = '2.3';
     const SBB_ACCESS_ID = 'MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe';
 
-    const DATE_TYPE_DEPARTURE = 0;
-    const DATE_TYPE_ARRIVAL = 1;
-
     const SEARCH_MODE_NORMAL = 'N';
     const SEARCH_MODE_ECONOMIC = 'P';
 
