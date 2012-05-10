@@ -61,9 +61,11 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $connection->from = $from;
         $connection->to = $to;
         $connection->duration = '00d00:28:00';
-        $connection->transfers = '0';
+        $connection->transfers = 0;
         $connection->serviceDays = array('regularService' => 'daily');
         $connection->products = array('S12');
+        $connection->capacity1st = 1;
+        $connection->capacity2nd = 2;
         $connection->sections = $sections;
 
         return $connection;
