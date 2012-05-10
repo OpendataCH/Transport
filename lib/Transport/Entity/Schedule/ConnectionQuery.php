@@ -3,10 +3,11 @@
 namespace Transport\Entity\Schedule;
 
 use Transport\Entity\Query;
+use Transport\Entity\Schedule\IConnectionQuery;
 use Transport\Entity\Transportations;
 use Transport\Entity\Location\Location;
 
-class ConnectionQuery extends Query
+class ConnectionQuery extends Query implements IConnectionQuery
 {
     public $srcLocation;
 
