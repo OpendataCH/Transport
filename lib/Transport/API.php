@@ -134,6 +134,7 @@ class API
         foreach ($result->stops as $stop) {
 
             $location = Entity\LocationFactory::createFromJson($stop);
+            $location->distanceToSearch = $location->coordinate->getDistanceTo($query->lat,$query->lon);
             if ($location) {
                 $locations[] = $location;
             }
