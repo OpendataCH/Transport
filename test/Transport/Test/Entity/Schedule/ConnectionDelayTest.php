@@ -115,6 +115,10 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $connection = new Entity\Schedule\Connection();
         $connection->from = $from;
         $connection->to = $to;
+        $connection->duration = '00d00:43:00';
+        $connection->transfers = '0';
+        $connection->serviceDays = array('regularService' => 'daily', 'irregularService' => 'not 28., 29. Jan 2012, 23., 24. Jun 2012');
+        $connection->products = array('S9');
         $connection->sections = array(
             array('walk' => $section1Walk, 'departure' => $section1From, 'arrival' => $section1To),
             array('journey' => $section2Journey, 'departure' => $section2From, 'arrival' => $section2To)

@@ -19,6 +19,26 @@ class Connection
      * @var Transport\Entity\Schedule\Stop
      */
     public $to;
+    
+    /**
+     * @var String
+     */
+    public $duration;
+    
+    /**
+     * @var int
+     */
+    public $transfers;
+    
+    /**
+     * @var array
+     */
+    public $serviceDays = array();
+    
+    /**
+     * @var array
+     */
+    public $products = array();
 
     /**
      * @var array of Transport\Entity\Schedule\Stop 's
@@ -41,6 +61,31 @@ class Connection
         $field = $parentField.'/to';
         if (ResultLimit::isFieldSet($field)) {
             $obj->to = Entity\Schedule\Stop::createFromXml($xml->Overview->Arrival->BasicStop, $date, null, $field);
+        }
+        $field = $parentField.'/duration';
+        if (ResultLimit::isFieldSet($field)) {
+            $obj->duration = (string)$xml->Overview->Duration->Time;
+        }
+        $field = $parentField.'/transfers';
+        if (ResultLimit::isFieldSet($field)) {
+            $obj->transfers = (int)$xml->Overview->Transfers;
+        }
+        $field = $parentField.'/serviceDays';
+        if (ResultLimit::isFieldSet($field)) {
+            if (isset($xml->Overview->ServiceDays->RegularServiceText)) {
+                $obj->serviceDays['regularService'] = (string)$xml->Overview->ServiceDays->RegularServiceText->Text;
+            }
+            if (isset($xml->Overview->ServiceDays->IrregularServiceText)) {
+                $obj->serviceDays['irregularService'] = (string)$xml->Overview->ServiceDays->IrregularServiceText->Text;
+            }
+        }
+        $field = $parentField.'/products';
+        if (ResultLimit::isFieldSet($field)) {
+            if (isset($xml->Overview->Products->Product)) {
+                foreach ($xml->Overview->Products->Product as $product) {
+                    $obj->products[] = trim((string)$product['cat']);
+                }
+            }
         }
 
         $field = $parentField.'/sections';
