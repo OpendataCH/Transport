@@ -32,7 +32,7 @@ class Connection
         }
         $date = \DateTime::createFromFormat('Ymd', (string) $xml->Overview->Date, new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
-        $date->setTime(0, 0, 0);
+        $date->setTime(0, 0, 0);  
         
         $field = $parentField.'/from';
         if (ResultLimit::isFieldSet($field)) {
