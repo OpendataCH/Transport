@@ -7,12 +7,12 @@ use Transport\Entity\Location\Location;
 use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
-use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\IConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
-    const URL = 'http://xmlfahrplan.sbb.ch/bin/extxml.exe/';
+    const URL = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
     const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
 
     const SBB_PROD = 'iPhone3.1';
@@ -55,7 +55,7 @@ class API
     /**
      * @return array
      */
-    public function findConnections(ConnectionQuery $query, $field)
+    public function findConnections(IConnectionQuery $query, $field)
     {
         // send request
         $response = $this->sendQuery($query);
@@ -71,8 +71,8 @@ class API
                 }
             }
         }
-
-        return $connections;
+        $reference = rawurlencode((string)$result->ConRes->ConResCtxt);
+        return array('reference' => $reference, 'connections' => $connections);
     }
 
     /**
