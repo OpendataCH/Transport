@@ -66,7 +66,7 @@ class Connection
                 if (ResultLimit::isFieldSet($field)) {
                     $parts['departure'] = Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop, $date, null, $field);
                 }
-                $field = $parentField.'/departure';
+                $field = $parentField.'/arrival';
                 if (ResultLimit::isFieldSet($field)) {
                     $parts['arrival'] = Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop, $date, null, $field);
                 }
