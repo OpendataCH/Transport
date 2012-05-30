@@ -216,8 +216,7 @@ $app->get('/v1/moreConnections', function(Request $request) use ($app) {
     }
     $query = new MoreConnectionQuery($reference,$count,$direction);
     $connections = $app['api']->findConnections($query, 'connections');
-    $result = array('connections' => $connections['connections']);
-    $result = array_merge($result,array('reference' => $connections['reference']));
+    $result = array('connections' => $connections['connections'], 'reference' => $connections['reference']);
     return $app->json($result);
 });
 
