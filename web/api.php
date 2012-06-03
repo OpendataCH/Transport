@@ -180,8 +180,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         }
         $connections = $app['api']->findConnections($query, 'connections');
     }
-    $result = array('connections' => $connections['connections']);
-    $result = array_merge($result,array('reference' => $connections['reference']));
+    $result = array('connections' => $connections['connections'], 'reference' => $connections['reference']);
     if (ResultLimit::isFieldSet('from')) {
         $result = array_merge($result,array('from' => $from));   
     }
