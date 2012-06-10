@@ -54,4 +54,18 @@ class Coordinate
     {
         return $int / 1000000;
     }
+    
+    //this is not really accurate as it uses the Haversine Formula
+    public function getDistanceTo($lat, $lon) {
+        $earth_radius = 6371;
+          
+        $dLat = deg2rad($this->y - $lat);
+        $dLon = deg2rad($this->x - $lon);  
+          
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon/2) * sin($dLon/2);  
+        $c = 2 * asin(sqrt($a));  
+        $d = $earth_radius * $c;  
+          
+        return round($d*1000,1);  
+    }  
 }
