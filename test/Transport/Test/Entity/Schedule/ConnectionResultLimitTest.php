@@ -27,6 +27,10 @@ class ConnectionResultLimitTest extends \PHPUnit_Framework_TestCase
         $connection = new Entity\Schedule\Connection();
         $connection->from = $from;
         $connection->to = $to;
+        $connection->duration = null;
+        $connection->transfers = null;
+        $connection->serviceDays = array();
+        $connection->products = array();
         $connection->sections = null;
 
         return $connection;
