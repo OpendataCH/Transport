@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../silex.phar'; 
+require_once 'phar://'.__DIR__.'/../silex.phar'; 
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
