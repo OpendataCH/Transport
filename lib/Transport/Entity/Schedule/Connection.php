@@ -29,12 +29,12 @@ class Connection
      * @var int
      */
     public $transfers;
-    
+
     /**
-     * @var array
+     * @var Transport\EntitySchedule\Service
      */
-    public $service = array('regular' => null, 'irregular' => null);
-    
+    public $service;
+
     /**
      * @var array
      */
@@ -82,11 +82,12 @@ class Connection
         }
         $field = $parentField.'/service';
         if (ResultLimit::isFieldSet($field)) {
+        	$obj->service = new Entity\Schedule\Service();
             if (isset($xml->Overview->ServiceDays->RegularServiceText)) {
-                $obj->service['regular'] = (string) $xml->Overview->ServiceDays->RegularServiceText->Text;
+                $obj->service->regular = (string) $xml->Overview->ServiceDays->RegularServiceText->Text;
             }
             if (isset($xml->Overview->ServiceDays->IrregularServiceText)) {
-                $obj->service['irregular'] = (string) $xml->Overview->ServiceDays->IrregularServiceText->Text;
+                $obj->service->irregular = (string) $xml->Overview->ServiceDays->IrregularServiceText->Text;
             }
         }
         $field = $parentField.'/products';

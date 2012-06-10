@@ -55,6 +55,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $passList[1]->platform = '';
         $journey->passList = $passList;
 
+		$service = new Entity\Schedule\Service();
+		$service->regular = 'daily';
+
         $sections[] = array('journey' => $journey, 'departure' => $from, 'arrival' => $to);
 
         $connection = new Entity\Schedule\Connection();
@@ -62,7 +65,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $connection->to = $to;
         $connection->duration = '00d00:28:00';
         $connection->transfers = 0;
-        $connection->service = array('regular' => 'daily', 'irregular' => null);
+        $connection->service = $service;
         $connection->products = array('S12');
         $connection->capacity1st = 1;
         $connection->capacity2nd = 2;

@@ -29,7 +29,7 @@ class ConnectionResultLimitTest extends \PHPUnit_Framework_TestCase
         $connection->to = $to;
         $connection->duration = null;
         $connection->transfers = null;
-        $connection->service = array('regular' => null, 'irregular' => null);
+        $connection->service = null;
         $connection->products = array();
         $connection->sections = null;
 
