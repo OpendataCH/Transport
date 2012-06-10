@@ -33,7 +33,7 @@ class Connection
     /**
      * @var array
      */
-    public $serviceDays = array();
+    public $service = array('regular' => null, 'irregular' => null);
     
     /**
      * @var array
@@ -74,19 +74,19 @@ class Connection
         }
         $field = $parentField.'/duration';
         if (ResultLimit::isFieldSet($field)) {
-            $obj->duration = (string)$xml->Overview->Duration->Time;
+            $obj->duration = (string) $xml->Overview->Duration->Time;
         }
         $field = $parentField.'/transfers';
         if (ResultLimit::isFieldSet($field)) {
-            $obj->transfers = (int)$xml->Overview->Transfers;
+            $obj->transfers = (int) $xml->Overview->Transfers;
         }
-        $field = $parentField.'/serviceDays';
+        $field = $parentField.'/service';
         if (ResultLimit::isFieldSet($field)) {
             if (isset($xml->Overview->ServiceDays->RegularServiceText)) {
-                $obj->serviceDays['regularService'] = (string)$xml->Overview->ServiceDays->RegularServiceText->Text;
+                $obj->service['regular'] = (string) $xml->Overview->ServiceDays->RegularServiceText->Text;
             }
             if (isset($xml->Overview->ServiceDays->IrregularServiceText)) {
-                $obj->serviceDays['irregularService'] = (string)$xml->Overview->ServiceDays->IrregularServiceText->Text;
+                $obj->service['irregular'] = (string) $xml->Overview->ServiceDays->IrregularServiceText->Text;
             }
         }
         $field = $parentField.'/products';
@@ -98,9 +98,9 @@ class Connection
             }
         }
 
+	    $capacities1st = array();
+	    $capacities2nd = array();
         if (ResultLimit::isFieldSet($parentField.'/capacity1st') || ResultLimit::isFieldSet($parentField.'/capacity2nd')) {
-            $capacities1st = array();
-            $capacities2nd = array();
             foreach ($xml->ConSectionList->ConSection as $section) {
                 if ($section->Journey) {
                     if ($section->Journey->PassList->BasicStop) {
@@ -117,11 +117,11 @@ class Connection
             }
         }
         $field = $parentField.'/capacity1st';
-        if (ResultLimit::isFieldSet($field)) {
+        if (ResultLimit::isFieldSet($field) && count($capacities1st) > 0) {
             $obj->capacity1st = max($capacities1st);   
         }
         $field = $parentField.'/capacity2nd';
-        if (ResultLimit::isFieldSet($field)) {
+        if (ResultLimit::isFieldSet($field) && count($capacities2nd) > 0) {
             $obj->capacity2nd = max($capacities2nd);   
         }
 

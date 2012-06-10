@@ -117,7 +117,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $connection->to = $to;
         $connection->duration = '00d00:43:00';
         $connection->transfers = 0;
-        $connection->serviceDays = array('regularService' => 'daily', 'irregularService' => 'not 28., 29. Jan 2012, 23., 24. Jun 2012');
+        $connection->service = array('regular' => 'daily', 'irregular' => 'not 28., 29. Jan 2012, 23., 24. Jun 2012');
         $connection->products = array('S9');
         $connection->capacity1st = 1;
         $connection->capacity2nd = 1;
