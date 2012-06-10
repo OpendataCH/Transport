@@ -23,6 +23,11 @@ class Location
      */
     public $coordinate;
 
+	/**
+	 * @var int
+	 */
+	public $distance;
+
     /**
      * Factory method to create an instance and extract the data from the given xml
      *
