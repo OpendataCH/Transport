@@ -1,5 +1,10 @@
 # Changelog
 
+## 2012-06-10
+
+- #69 Added connection duration, transfers, products and service information
+- #72 Added distance to nearby search
+
 ## 2012-05-01
 
 - #49 Use iso-8859-1 instead of UTF-8 internally for requests
