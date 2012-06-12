@@ -5,5 +5,5 @@ web1:
     - simplexml
 
 cache1:
-  name: stats
-  type: redis
+  name: stats
+  type: redis
