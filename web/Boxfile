@@ -1,0 +1,9 @@
+web1: 
+  name: transport
+  document_root: web 
+  php_extensions:
+    - simplexml
+
+cache1:
+  name: stats
+  type: redis
