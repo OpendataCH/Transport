@@ -17,8 +17,13 @@ date_default_timezone_set('Europe/Zurich');
 
 // init
 $app = new Silex\Application();
-$app['debug'] = true;
 
+// load config
+require __DIR__.'/../config/default.php';
+$local = __DIR__.'/../config/local.php';
+if (stream_resolve_include_path($local)) {
+	$local = include $local;
+}
 
 // autoload
 $app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
