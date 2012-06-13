@@ -43,7 +43,7 @@ if ($app['redis.config']) {
 
 	    // transform to comma and new line separated list
 	    $data = array();
-	    foreach ($calls as $date => $value) {
+	    foreach (array_slice($calls, -30) as $date => $value) {
 	        $data[] = $date . ',' . ($value ?: 0);
 	    }
 	    $data = implode('\n', $data);
