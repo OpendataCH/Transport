@@ -43,20 +43,22 @@ $app->after(function (Request $request, Response $response) {
 
 
 // count API calls
-$app['redis'] = new Predis\Client(array('host' => 'tetra.redistogo.com', 'port' => 9464, 'password' => '7cd7bdf5a51d601547da3c96d6bae1a2'));
-try {
-    $app['redis']->connect();
-    $app->after(function (Request $request, Response $response) use ($app) {
-
-        $date = date('Y-m-d');
-        $key = "stats:calls:$date";
-
-        $app['redis']->incr($key);
-    });
-} catch (Predis\Network\ConnectionException $e) {
-    // ignore connection error
-} catch (Predis\ServerException $e) {
-    // ignore connection error
+if ($app['redis.config']) {
+	$app['redis'] = new Predis\Client($app['redis.config']);
+	try {
+	    $app['redis']->connect();
+	    $app->after(function (Request $request, Response $response) use ($app) {
+	
+	        $date = date('Y-m-d');
+	        $key = "stats:calls:$date";
+	
+	        $app['redis']->incr($key);
+	    });
+	} catch (Predis\Network\ConnectionException $e) {
+	    // ignore connection error
+	} catch (Predis\ServerException $e) {
+	    // ignore connection error
+	}
 }
 
 
