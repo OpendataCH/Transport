@@ -30,6 +30,12 @@ $app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
 $app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
 $app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
+// HTTP cache
+if (!$app['debug']) {
+	$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
+	    'http_cache.cache_dir' => __DIR__.'/../var/cache/',
+	));
+}
 
 // create Transport API
 $app['api'] = new Transport\API();
@@ -247,4 +253,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
 
 // run
-$app->run(); 
+if ($app['debug']) {
+	$app->run();
+} else {
+	$app['http_cache']->run();
+}

@@ -1,6 +1,8 @@
 web1: 
   name: transport
   document_root: web 
+  shared_writable_dirs:
+  	- var
   php_extensions:
     - simplexml
   after_build:
