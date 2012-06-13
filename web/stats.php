@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../silex.phar'; 
+require_once 'phar://'.__DIR__.'/../silex.phar'; 
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,25 +33,28 @@ if ($app['redis.config']) {
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
-	    // read last 30 days
-	    $dates = array();
-	    $keys = array();
-	    for ($i = 30; $i >= 0; $i--) {
-	        $date = date('Y-m-d', strtotime("-$i days"));
-	        $keys[] = "stats:calls:$date";
-	        $dates[] = $date;
+	    $keys = $app['redis']->keys('stats:calls:*');
+	    $values = $app['redis']->mget($keys);
+	    $calls = array();
+	    foreach ($keys as $i => $key) {
+	        $calls[substr($key, 12, 10)] = $values[$i];
 	    }
-	    $values = array_combine($dates, $app['redis']->mget($keys));
+	    ksort($calls);
 
 	    // transform to comma and new line separated list
 	    $data = array();
-	    foreach ($values as $date => $value) {
+	    foreach ($calls as $date => $value) {
 	        $data[] = $date . ',' . ($value ?: 0);
 	    }
 	    $data = implode('\n', $data);
 
+        // JSON response
+        if ($request->get('format') == 'json') {
+            return json_encode(array('calls' => $calls));
+        }
+
 	    return $app['twig']->render('stats.twig', array(
-	        'values' => $values,
+	        'calls' => $calls,
 	        'data' => $data,
 	    ));
 	});
