@@ -48,9 +48,18 @@ if ($app['redis.config']) {
 	    }
 	    $data = implode('\n', $data);
 
+        // CSV response
+        if ($request->get('format') == 'csv') {
+            $csv = "Date,Calls\n";
+            foreach ($calls as $date => $count) {
+                $csv .= "$date,$count\n";
+            }
+            return new Response($csv, 200, array('Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv'));
+        }
+
         // JSON response
         if ($request->get('format') == 'json') {
-            return json_encode(array('calls' => $calls));
+            return $app->json(array('calls' => $calls));
         }
 
 	    return $app['twig']->render('stats.twig', array(
