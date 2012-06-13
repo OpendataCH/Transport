@@ -31,9 +31,10 @@ $app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
 $app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
 // HTTP cache
-if (!$app['debug']) {
+if ($app['http_cache']) {
 	$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 	    'http_cache.cache_dir' => __DIR__.'/../var/cache/',
+	    'http_cache.options' => array('debug' => $app['debug']),
 	));
 }
 
@@ -253,8 +254,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
 
 // run
-if ($app['debug']) {
-	$app->run();
+if ($app['http_cache']) {
+    $app['http_cache']->run();
 } else {
-	$app['http_cache']->run();
+	$app->run();
 }
