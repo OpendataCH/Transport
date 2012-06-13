@@ -3,6 +3,8 @@ web1:
   document_root: web 
   php_extensions:
     - simplexml
+  after_build:
+  	- "mv /var/www/config/pagodabox.php /var/www/config/local.php"
 
 cache1:
   name: stats
