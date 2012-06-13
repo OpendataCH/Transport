@@ -2,11 +2,11 @@ web1:
   name: transport
   document_root: web 
   shared_writable_dirs:
-  	- var
+    - var
   php_extensions:
     - simplexml
   after_build:
-  	- "mv /var/www/config/pagodabox.php /var/www/config/local.php"
+    - "mv /var/www/config/pagodabox.php /var/www/config/local.php"
 
 cache1:
   name: stats
