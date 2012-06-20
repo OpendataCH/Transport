@@ -1,5 +1,12 @@
 # Changelog
 
+## 2012-06-20
+
+- Use Silex HTTP cache
+- Made Redis, HTTP cache and debugging configurable
+- Added connections search example
+- Use Composer for dependency management
+
 ## 2012-06-10
 
 - #69 Added connection duration, transfers, products and service information
