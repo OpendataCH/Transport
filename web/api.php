@@ -1,6 +1,7 @@
 <?php
 
 require_once 'phar://'.__DIR__.'/../silex.phar'; 
+require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +19,6 @@ date_default_timezone_set('Europe/Zurich');
 // init
 $app = new Silex\Application();
 $app['debug'] = true;
-
-
-// autoload
-$app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
-$app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
-$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
 
 
 // create Transport API
