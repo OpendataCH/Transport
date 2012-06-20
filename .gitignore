@@ -1,2 +1,5 @@
 config/local.php
 var/cache
+composer.phar
+composer.lock
+vendor/

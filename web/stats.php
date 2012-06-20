@@ -1,6 +1,7 @@
 <?php
 
 require_once 'phar://'.__DIR__.'/../silex.phar'; 
+require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,6 @@ $local = __DIR__.'/../config/local.php';
 if (stream_resolve_include_path($local)) {
 	$local = include $local;
 }
-
-// autoload
-$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
-
 
 // twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
