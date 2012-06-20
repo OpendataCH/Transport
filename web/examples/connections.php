@@ -2,9 +2,12 @@
 
 $from = isset($_GET['from']) ? $_GET['from'] : false;
 $to = isset($_GET['to']) ? $_GET['to'] : false;
+$search = $from && $to;
 
-$url = 'http://transport.opendata.ch/v1/connections?' . http_build_query(array('from' => $from, 'to' => $to));
-$response = json_decode(file_get_contents($url));
+if ($search) {
+    $url = 'http://transport.opendata.ch/v1/connections?' . http_build_query(array('from' => $from, 'to' => $to));
+    $response = json_decode(file_get_contents($url));
+}
 
 ?>
 <!doctype html>
@@ -63,6 +66,7 @@ $response = json_decode(file_get_contents($url));
             </div>
         </form>
 
+        <?php if ($search): ?>
         <table class="table table-striped">
             <colgroup>
                 <col width="120">
@@ -89,6 +93,7 @@ $response = json_decode(file_get_contents($url));
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php endif; ?>
     </article>
 </div>
 
