@@ -7,6 +7,8 @@ web1:
     - simplexml
   after_build:
     - "mv /var/www/config/pagodabox.php /var/www/config/local.php"
+    - "curl -s http://getcomposer.org/installer | php"
+    - "php composer.phar install"
 
 cache1:
   name: stats
