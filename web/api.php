@@ -41,6 +41,11 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.name' => 'transport',
 ));
 
+// if hosted behind a reverse proxy
+if ($app['proxy']) {
+    Request::trustProxyData();
+}
+
 // create Transport API
 $app['api'] = new Transport\API();
 
