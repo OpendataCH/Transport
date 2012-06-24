@@ -57,7 +57,7 @@ if ($app['redis.config']) {
 	
 	        $app['redis']->incr($key);
 	    });
-	} catch (Predis\Network\ConnectionException $e) {
+	} catch (Predis\Connection\ConnectionException $e) {
 	    // ignore connection error
 	} catch (Predis\ServerException $e) {
 	    // ignore connection error
