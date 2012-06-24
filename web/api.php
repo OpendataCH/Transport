@@ -41,7 +41,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.name' => 'transport',
 ));
 $app->before(function (Request $request) use ($app) {
-    $app['monolog']->addInfo('- ' . $request->getClientIp() . ' ' . $request->server->get('HTTP_USER_AGENT'));
+    $app['monolog']->addInfo('- ' . $request->getClientIp() . ' ' . $request->headers->get('referer') . ' ' . $request->server->get('HTTP_USER_AGENT'));
 });
 
 // if hosted behind a reverse proxy
