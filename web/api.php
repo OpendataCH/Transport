@@ -23,7 +23,7 @@ $app = new Silex\Application();
 require __DIR__.'/../config/default.php';
 $local = __DIR__.'/../config/local.php';
 if (stream_resolve_include_path($local)) {
-	$local = include $local;
+	include $local;
 }
 
 // HTTP cache
@@ -33,6 +33,13 @@ if ($app['http_cache']) {
 	    'http_cache.options' => array('debug' => $app['debug']),
 	));
 }
+
+// Monolog
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../var/logs/transport.log',
+    'monolog.level' => $app['monolog.level'],
+    'monolog.name' => 'transport',
+));
 
 // create Transport API
 $app['api'] = new Transport\API();
@@ -51,16 +58,15 @@ if ($app['redis.config']) {
 	try {
 	    $app['redis']->connect();
 	    $app->after(function (Request $request, Response $response) use ($app) {
-	
+
 	        $date = date('Y-m-d');
 	        $key = "stats:calls:$date";
-	
+
 	        $app['redis']->incr($key);
 	    });
-	} catch (Predis\Connection\ConnectionException $e) {
+	} catch (Exception $e) {
 	    // ignore connection error
-	} catch (Predis\ServerException $e) {
-	    // ignore connection error
+	    $app['monolog']->addError($e->getMessage());
 	}
 }
 
