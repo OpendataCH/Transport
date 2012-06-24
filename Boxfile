@@ -3,8 +3,6 @@ web1:
   document_root: web 
   shared_writable_dirs:
     - var
-  php_extensions:
-    - simplexml
   after_build:
     - "mv /var/www/config/pagodabox.php /var/www/config/local.php"
     - "curl -s http://getcomposer.org/installer | php"
