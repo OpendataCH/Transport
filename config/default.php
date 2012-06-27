@@ -9,7 +9,7 @@ $app['http_cache'] = false;
 // Log level
 $app['monolog.level'] = Monolog\Logger::ERROR;
 
-// XHProf for profilling
+// XHProf for profiling
 $app['xhprof'] = false;
 
 // Redis for statistics
