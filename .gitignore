@@ -1,0 +1,6 @@
+config/local.php
+var/cache/
+var/logs/
+composer.phar
+composer.lock
+vendor/

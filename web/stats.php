@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__.'/../silex.phar'; 
+require_once 'phar://'.__DIR__.'/../silex.phar'; 
+require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,12 +10,13 @@ date_default_timezone_set('Europe/Zurich');
 
 // init
 $app = new Silex\Application();
-$app['debug'] = true;
 
-
-// autoload
-$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
-
+// load config
+require __DIR__.'/../config/default.php';
+$local = __DIR__.'/../config/local.php';
+if (stream_resolve_include_path($local)) {
+	$local = include $local;
+}
 
 // twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -22,33 +24,47 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.class_path' => __DIR__.'/../vendor/twig/lib',
 ));
 
-$app['redis'] = new Predis\Client(array('host' => 'tetra.redistogo.com', 'port' => 9464, 'password' => '7cd7bdf5a51d601547da3c96d6bae1a2'));
+if ($app['redis.config']) {
+	$app['redis'] = new Predis\Client($app['redis.config']);
 
-// home
-$app->get('/', function(Request $request) use ($app) {
+	// home
+	$app->get('/', function(Request $request) use ($app) {
 
-    // read last 30 days
-    $dates = array();
-    $keys = array();
-    for ($i = 30; $i >= 0; $i--) {
-        $date = date('Y-m-d', strtotime("-$i days"));
-        $keys[] = "stats:calls:$date";
-        $dates[] = $date;
-    }
-    $values = array_combine($dates, $app['redis']->mget($keys));
+	    $keys = $app['redis']->keys('stats:calls:*');
+	    $values = $app['redis']->mget($keys);
+	    $calls = array();
+	    foreach ($keys as $i => $key) {
+	        $calls[substr($key, 12, 10)] = $values[$i];
+	    }
+	    ksort($calls);
 
-    // transform to comma and new line separated list
-    $data = array();
-    foreach ($values as $date => $value) {
-        $data[] = $date . ',' . ($value ?: 0);
-    }
-    $data = implode('\n', $data);
+	    // transform to comma and new line separated list
+	    $data = array();
+	    foreach (array_slice($calls, -30) as $date => $value) {
+	        $data[] = $date . ',' . ($value ?: 0);
+	    }
+	    $data = implode('\n', $data);
 
-    return $app['twig']->render('stats.twig', array(
-        'values' => $values,
-        'data' => $data,
-    ));
-});
+        // CSV response
+        if ($request->get('format') == 'csv') {
+            $csv = "Date,Calls\n";
+            foreach ($calls as $date => $count) {
+                $csv .= "$date,$count\n";
+            }
+            return new Response($csv, 200, array('Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv'));
+        }
+
+        // JSON response
+        if ($request->get('format') == 'json') {
+            return $app->json(array('calls' => $calls));
+        }
+
+	    return $app['twig']->render('stats.twig', array(
+	        'calls' => $calls,
+	        'data' => $data,
+	    ));
+	});
+}
 
 
 // run

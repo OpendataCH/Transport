@@ -1,6 +1,7 @@
 <?php
 
 require_once 'phar://'.__DIR__.'/../silex.phar'; 
+require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,14 +18,36 @@ date_default_timezone_set('Europe/Zurich');
 
 // init
 $app = new Silex\Application();
-$app['debug'] = true;
 
+// load config
+require __DIR__.'/../config/default.php';
+$local = __DIR__.'/../config/local.php';
+if (stream_resolve_include_path($local)) {
+	include $local;
+}
 
-// autoload
-$app['autoloader']->registerNamespace('Transport', __DIR__.'/../lib');
-$app['autoloader']->registerNamespace('Buzz', __DIR__.'/../vendor/buzz/lib');
-$app['autoloader']->registerNamespace('Predis', __DIR__.'/../vendor/predis/lib');
+// HTTP cache
+if ($app['http_cache']) {
+	$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
+	    'http_cache.cache_dir' => __DIR__.'/../var/cache/',
+	    'http_cache.options' => array('debug' => $app['debug']),
+	));
+}
 
+// Monolog
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../var/logs/transport.log',
+    'monolog.level' => $app['monolog.level'],
+    'monolog.name' => 'transport',
+));
+$app->before(function (Request $request) use ($app) {
+    $app['monolog']->addInfo('- ' . $request->getClientIp() . ' ' . $request->headers->get('referer') . ' ' . $request->server->get('HTTP_USER_AGENT'));
+});
+
+// if hosted behind a reverse proxy
+if ($app['proxy']) {
+    Request::trustProxyData();
+}
 
 // create Transport API
 $app['api'] = new Transport\API();
@@ -33,25 +56,26 @@ $app['api'] = new Transport\API();
 // allow cross-domain requests, enable cache
 $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
-    $response->headers->set('Cache-Control', 's-maxage=30');
+    $response->headers->set('Cache-Control', 's-maxage=30, public');
 });
 
 
 // count API calls
-$app['redis'] = new Predis\Client(array('host' => 'tetra.redistogo.com', 'port' => 9464, 'password' => '7cd7bdf5a51d601547da3c96d6bae1a2'));
-try {
-    $app['redis']->connect();
-    $app->after(function (Request $request, Response $response) use ($app) {
+if ($app['redis.config']) {
+	$app['redis'] = new Predis\Client($app['redis.config']);
+	try {
+	    $app['redis']->connect();
+	    $app->after(function (Request $request, Response $response) use ($app) {
 
-        $date = date('Y-m-d');
-        $key = "stats:calls:$date";
+	        $date = date('Y-m-d');
+	        $key = "stats:calls:$date";
 
-        $app['redis']->incr($key);
-    });
-} catch (Predis\Network\ConnectionException $e) {
-    // ignore connection error
-} catch (Predis\ServerException $e) {
-    // ignore connection error
+	        $app['redis']->incr($key);
+	    });
+	} catch (Exception $e) {
+	    // ignore connection error
+	    $app['monolog']->addError($e->getMessage());
+	}
 }
 
 
@@ -240,4 +264,8 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
 
 // run
-$app->run(); 
+if ($app['http_cache']) {
+    $app['http_cache']->run();
+} else {
+	$app->run();
+}
