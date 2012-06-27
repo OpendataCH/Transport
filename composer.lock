@@ -1,0 +1,43 @@
+{
+    "hash": "940918bcdde180353ded05491151c4c8",
+    "packages": [
+        {
+            "package": "kriswallsmith/buzz",
+            "version": "dev-master",
+            "source-reference": "v0.7",
+            "commit-date": "1340650898"
+        },
+        {
+            "package": "monolog/monolog",
+            "version": "dev-master",
+            "source-reference": "6cbdc0410c08fb03d7eee6b69126661fcbb89c41",
+            "commit-date": "1340715384"
+        },
+        {
+            "package": "predis/predis",
+            "version": "dev-master",
+            "source-reference": "a75e52cf5ac0236ccc957f524269cd2c867eef2f",
+            "commit-date": "1338545690"
+        },
+        {
+            "package": "twig/twig",
+            "version": "dev-master",
+            "alias-pretty-version": "1.8.x-dev",
+            "alias-version": "1.8.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/twig",
+            "version": "dev-master",
+            "source-reference": "48a04538659e85e4c89da3787587e1988db9c5e9",
+            "commit-date": "1340790574"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}
