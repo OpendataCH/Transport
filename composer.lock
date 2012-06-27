@@ -1,6 +1,10 @@
 {
-    "hash": "940918bcdde180353ded05491151c4c8",
+    "hash": "b1aa0f75f0eacf53a905a38200f8da17",
     "packages": [
+        {
+            "package": "facebook/xhprof",
+            "version": "0.9.2"
+        },
         {
             "package": "kriswallsmith/buzz",
             "version": "dev-master",
@@ -18,12 +22,6 @@
             "version": "dev-master",
             "source-reference": "a75e52cf5ac0236ccc957f524269cd2c867eef2f",
             "commit-date": "1338545690"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "alias-pretty-version": "1.8.x-dev",
-            "alias-version": "1.8.9999999.9999999-dev"
         },
         {
             "package": "twig/twig",
