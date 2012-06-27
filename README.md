@@ -15,6 +15,8 @@ $ curl -s http://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
+Also make sure, the directory ```transport/var/``` is writable.
+
 If you cloned the repository inside your document root, the API is now accessible at [http://localhost/transport/web/api.php/v1/](http://localhost/transport/web/api.php/v1/locations?query=Basel). However we recommend setting the document root to ```transport/web/``` and using the provided ```.htaccess``` to route API requests to ```api.php```.
 
 ## Development
