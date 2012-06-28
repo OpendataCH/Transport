@@ -4,6 +4,7 @@ web1:
   shared_writable_dirs:
     - var
   php_extensions:
+    - curl
     - xhprof
   after_build:
     - "mv /var/www/config/pagodabox.php /var/www/config/local.php"

@@ -55,7 +55,7 @@ if ($app['proxy']) {
 }
 
 // create Transport API
-$app['api'] = new Transport\API();
+$app['api'] = new Transport\API(new Buzz\Browser($app['buzz.client']));
 
 
 // allow cross-domain requests, enable cache
