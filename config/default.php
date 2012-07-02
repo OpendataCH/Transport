@@ -16,7 +16,7 @@ $app['monolog.level'] = Monolog\Logger::ERROR;
 $app['xhprof'] = false;
 
 // Redis for statistics
-$app['redis.config'] = false; // array('host' => 'localhost', 'port' => 9464);
+$app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 
 // if hosted behind a reverse proxy
 $app['proxy'] = false;
