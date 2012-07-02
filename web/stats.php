@@ -48,8 +48,8 @@ if ($app['redis.config']) {
         // Redis text response
         if ($request->get('format') == 'txt') {
             $txt = "MSET ";
-            foreach ($stats as $date => $count) {
-                $txt .= "stats:calls:$key $count ";
+            foreach ($calls as $date => $count) {
+                $txt .= "stats:calls:$date $count ";
             }
             return new Response($txt, 200, array('Content-Type' => 'text/plain'));
         }
