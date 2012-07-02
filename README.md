@@ -19,6 +19,14 @@ Also make sure, the directory ```transport/var/``` is writable.
 
 If you cloned the repository inside your document root, the API is now accessible at [http://localhost/transport/web/api.php/v1/](http://localhost/transport/web/api.php/v1/locations?query=Basel). However we recommend setting the document root to ```transport/web/``` and using the provided ```.htaccess``` to route API requests to ```api.php```.
 
+### Configuration
+
+By default the API uses the configuration from ```config/default.php```. To define your own configuration copy the file to ```config/local.php``` and override the variables you want to change.
+
+### Statistics
+
+You can get some basic statistics for the API by configuring a Redis server in your configuration (```$redis```) and have a look at [http://localhost/transport/web/stats.php](http://localhost/transport/web/stats.php).
+
 ## Development
 
 XSD for the XML Fahrplan API is available here: https://gist.github.com/2309851
