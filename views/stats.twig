@@ -51,6 +51,17 @@
         <article>
             <h2>Statistics <small id="labels"></small></h2>
             <div id="graphdiv"></div>
+
+            <div class="row">
+                <div class="span3">
+                    <h2>Resources</h2>
+                    <ul class="unstyled">
+                        {% for resource, count in resources %}
+                        <li><span class="value">{{ resource }}</span> <span class="count">{{ count }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </article>
     </div>
 </body>

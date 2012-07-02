@@ -72,10 +72,17 @@ if ($app['redis.config']) {
 	    $app['redis']->connect();
 	    $app->after(function (Request $request, Response $response) use ($app) {
 
+            // calls
 	        $date = date('Y-m-d');
 	        $key = "stats:calls:$date";
-
 	        $app['redis']->incr($key);
+
+            // resources
+            $path = $request->getPathInfo();
+            $key = "stats:resources:$path";
+            $app['redis']->set($key, $path);
+            $app['redis']->sadd('stats:resources', $key);
+            $app['redis']->incr("$key:calls");
 	    });
 	} catch (Exception $e) {
 	    // ignore connection error

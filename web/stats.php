@@ -26,12 +26,15 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 if ($app['redis.config']) {
 	$app['redis'] = new Predis\Client($app['redis.config']);
+	$app['statistics'] = new Transport\Statistics($app['redis']);
 
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
-	    $keys = $app['redis']->keys('stats:calls:*');
-	    $values = $app['redis']->mget($keys);
+        $redis = $app['redis'];
+
+	    $keys = $redis->keys('stats:calls:*');
+	    $values = $redis->mget($keys);
 	    $calls = array();
 	    foreach ($keys as $i => $key) {
 	        $calls[substr($key, 12, 10)] = $values[$i];
@@ -44,6 +47,9 @@ if ($app['redis.config']) {
 	        $data[] = $date . ',' . ($value ?: 0);
 	    }
 	    $data = implode('\n', $data);
+
+        // get top resources
+        $resources = $app['statistics']->getTopResources();
 
         // Redis text response
         if ($request->get('format') == 'txt') {
@@ -71,6 +77,7 @@ if ($app['redis.config']) {
 	    return $app['twig']->render('stats.twig', array(
 	        'calls' => $calls,
 	        'data' => $data,
+	        'resources' => $resources,
 	    ));
 	});
 } else {
