@@ -73,6 +73,10 @@ if ($app['redis.config']) {
 	        'data' => $data,
 	    ));
 	});
+} else {
+    $app->get('/', function(Request $request) use ($app) {
+        return 'No Redis configured. See section "Statistics" in README.md.';
+    });
 }
 
 
