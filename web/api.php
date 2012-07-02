@@ -57,7 +57,6 @@ if ($app['proxy']) {
 // create Transport API
 $app['api'] = new Transport\API(new Buzz\Browser($app['buzz.client']));
 
-
 // allow cross-domain requests, enable cache
 $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -65,30 +64,22 @@ $app->after(function (Request $request, Response $response) {
 });
 
 
-// count API calls
-if ($app['redis.config']) {
-	$app['redis'] = new Predis\Client($app['redis.config']);
-	try {
-	    $app['redis']->connect();
-	    $app->after(function (Request $request, Response $response) use ($app) {
-
-            // calls
-	        $date = date('Y-m-d');
-	        $key = "stats:calls:$date";
-	        $app['redis']->incr($key);
-
-            // resources
-            $path = $request->getPathInfo();
-            $key = "stats:resources:$path";
-            $app['redis']->set($key, $path);
-            $app['redis']->sadd('stats:resources', $key);
-            $app['redis']->incr("$key:calls");
-	    });
-	} catch (Exception $e) {
-	    // ignore connection error
-	    $app['monolog']->addError($e->getMessage());
-	}
+// statistics
+$redis = null;
+try {
+    if ($app['redis.config']) {
+        $redis = new Predis\Client($app['redis.config']);
+        $redis->connect();
+    }
+} catch (Exception $e) {
+    $app['monolog']->addError($e->getMessage());
+    $redis = null;
 }
+$app['stats'] = new Transport\Statistics($redis);
+$app->after(function (Request $request, Response $response) use ($app) {
+    $app['stats']->call();
+    $app['stats']->resource($request->getPathInfo());
+});
 
 
 // index
@@ -180,6 +171,9 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     }
 
     if ($from && $to) {
+        $app['stats']->station($from);
+        $app['stats']->station($to);
+
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
         $query->forwardCount = $limit;
         $query->backwardCount = 0;
@@ -232,13 +226,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
 // station board
 $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
-    $station = null;
     $stationboard = array();
-
-    $id = $request->get('id');
-    if ($id) {
-        $station = new Station($id);
-    }
 
     $limit = $request->get('limit');
     if ($limit > 420) {
@@ -254,16 +242,15 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     
     ResultLimit::setFields($request->get('fields') ?: array());
 
-    if (!$station) {
+    $station = $request->get('station') ?: $request->get('id');
 
-        $station = $request->get('station');
-
-        $query = new LocationQuery($station);
-        $stations = $app['api']->findLocations($query);
-        $station = reset($stations);
-    }
+    $query = new LocationQuery($station);
+    $stations = $app['api']->findLocations($query);
+    $station = reset($stations);
 
     if ($station) {
+        $app['stats']->station($station);
+
         $query = new StationBoardQuery($station, $date);
         if ($transportations) {
             $query->transportations = $transportations;

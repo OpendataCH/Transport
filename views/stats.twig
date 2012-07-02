@@ -53,11 +53,19 @@
             <div id="graphdiv"></div>
 
             <div class="row">
-                <div class="span3">
+                <div class="span4">
                     <h2>Resources</h2>
                     <ul class="unstyled">
                         {% for resource, count in resources %}
                         <li><span class="value">{{ resource }}</span> <span class="count">{{ count }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="span3">
+                    <h2>Stations</h2>
+                    <ul class="unstyled">
+                        {% for station, count in stations %}
+                        <li><span class="value">{{ station }}</span> <span class="count">{{ count }}</span></li>
                         {% endfor %}
                     </ul>
                 </div>

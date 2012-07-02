@@ -26,7 +26,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 if ($app['redis.config']) {
 	$app['redis'] = new Predis\Client($app['redis.config']);
-	$app['statistics'] = new Transport\Statistics($app['redis']);
+	$app['stats'] = new Transport\Statistics($app['redis']);
 
 	// home
 	$app->get('/', function(Request $request) use ($app) {
@@ -48,8 +48,9 @@ if ($app['redis.config']) {
 	    }
 	    $data = implode('\n', $data);
 
-        // get top resources
-        $resources = $app['statistics']->getTopResources();
+        // get top resources and stations
+        $resources = $app['stats']->getTopResources();
+        $stations = $app['stats']->getTopStations();
 
         // Redis text response
         if ($request->get('format') == 'txt') {
@@ -78,6 +79,7 @@ if ($app['redis.config']) {
 	        'calls' => $calls,
 	        'data' => $data,
 	        'resources' => $resources,
+	        'stations' => $stations,
 	    ));
 	});
 } else {
