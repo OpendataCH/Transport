@@ -45,6 +45,15 @@ if ($app['redis.config']) {
 	    }
 	    $data = implode('\n', $data);
 
+        // Redis text response
+        if ($request->get('format') == 'txt') {
+            $txt = "MSET ";
+            foreach ($stats as $date => $count) {
+                $txt .= "stats:calls:$key $count ";
+            }
+            return new Response($txt, 200, array('Content-Type' => 'text/plain'));
+        }
+
         // CSV response
         if ($request->get('format') == 'csv') {
             $csv = "Date,Calls\n";
