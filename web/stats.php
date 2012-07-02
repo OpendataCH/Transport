@@ -31,6 +31,20 @@ if ($app['redis.config']) {
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
+        // Redis text response
+        if ($request->get('format') == 'txt') {
+
+            $keys = $app['redis']->keys('stats:*');
+            $values = $app['redis']->mget($keys);
+            $data = array_combine($keys, $values);
+
+            $txt = "MSET ";
+            foreach ($data as $key => $value) {
+                $txt .= "$key $value ";
+            }
+            return new Response($txt, 200, array('Content-Type' => 'text/plain'));
+        }
+
 	    $calls = $app['stats']->getCalls();
 
 	    // transform to comma and new line separated list
@@ -43,15 +57,6 @@ if ($app['redis.config']) {
         // get top resources and stations
         $resources = $app['stats']->getTopResources();
         $stations = $app['stats']->getTopStations();
-
-        // Redis text response
-        if ($request->get('format') == 'txt') {
-            $txt = "MSET ";
-            foreach ($calls as $date => $count) {
-                $txt .= "stats:calls:$date $count ";
-            }
-            return new Response($txt, 200, array('Content-Type' => 'text/plain'));
-        }
 
         // CSV response
         if ($request->get('format') == 'csv') {
