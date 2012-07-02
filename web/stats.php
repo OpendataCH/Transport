@@ -31,15 +31,7 @@ if ($app['redis.config']) {
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
-        $redis = $app['redis'];
-
-	    $keys = $redis->keys('stats:calls:*');
-	    $values = $redis->mget($keys);
-	    $calls = array();
-	    foreach ($keys as $i => $key) {
-	        $calls[substr($key, 12, 10)] = $values[$i];
-	    }
-	    ksort($calls);
+	    $calls = $app['stats']->getCalls();
 
 	    // transform to comma and new line separated list
 	    $data = array();
@@ -75,9 +67,16 @@ if ($app['redis.config']) {
             return $app->json(array('calls' => $calls));
         }
 
+	    // transform to comma and new line separated list
+	    $data = array();
+	    foreach (array_slice($calls, -30) as $date => $value) {
+	        $data[] = $date . ',' . ($value ?: 0);
+	    }
+	    $data = implode('\n', $data);
+
 	    return $app['twig']->render('stats.twig', array(
-	        'calls' => $calls,
 	        'data' => $data,
+	        'calls' => $calls,
 	        'resources' => $resources,
 	        'stations' => $stations,
 	    ));

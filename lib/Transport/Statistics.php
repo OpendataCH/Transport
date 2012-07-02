@@ -43,6 +43,19 @@ class Statistics {
         }
     }
     
+    public function getCalls()
+    {
+	    $keys = $this->redis->keys('stats:calls:*');
+	    $values = $this->redis->mget($keys);
+	    $calls = array();
+	    foreach ($keys as $i => $key) {
+	        $calls[substr($key, 12, 10)] = $values[$i];
+	    }
+	    ksort($calls);
+
+	    return $calls;
+    }
+
     public function getTopResources()
     {
         return $this->top('stats:resources');
