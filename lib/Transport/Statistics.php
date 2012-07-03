@@ -25,24 +25,24 @@ class Statistics {
 
     public function station(Location $station)
     {
-        $this->count('stats:stations', $station->id, $station->name);
+        $this->count('stats:stations', $station->id, array('name' => $station->name, 'x' => $station->coordinate->x, 'y' => $station->coordinate->y));
     }
 
     public function resource($path)
     {
-        $this->count('stats:resources', $path, $path);
+        $this->count('stats:resources', $path, array('path' => $path));
     }
 
-    protected function count($prefix, $id, $value)
+    protected function count($prefix, $id, $data)
     {
         if ($this->redis) {
             $key = "$prefix:$id";
-            $this->redis->set($key, $value);
+            $this->redis->hmset($key, $data);
             $this->redis->sadd($prefix, $key);
-            $this->redis->incr("$key:calls");
+            $this->redis->hincrby($key, 'calls', 1);
         }
     }
-    
+
     public function getCalls()
     {
 	    $keys = $this->redis->keys('stats:calls:*');
@@ -58,27 +58,27 @@ class Statistics {
 
     public function getTopResources()
     {
-        return $this->top('stats:resources');
+        return $this->top('stats:resources', array('path', 'calls'));
     }
 
     public function getTopStations()
     {
-        return $this->top('stats:stations');
+        return $this->top('stats:stations', array('name', 'x', 'y', 'calls'));
     }
 
-    protected function top($key)
+    protected function top($key, $fields)
     {
         $result = $this->redis->sort($key, array(
-            'by' => '*:calls',
+            'by' => '*->calls',
             'limit' => array(0, 5),
-            'get' => array('*', '*:calls'),
+            'get' => array_map(function ($value) { return "*->$value"; }, $fields),
             'sort'  => 'DESC',
         ));
 
         // regroup
         $data = array();
-        for ($i = 0; $i < count($result); $i += 2) {
-            $data[$result[$i]] = $result[$i + 1];
+        foreach (array_chunk($result, count($fields)) as $values) {
+            $data[] = array_combine($fields, $values);
         }
 
         return $data;
