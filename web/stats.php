@@ -31,6 +31,10 @@ if ($app['redis.config']) {
 	$app->get('/', function(Request $request) use ($app) {
 
 	    $keys = $app['redis']->keys('stats:calls:*');
+	    if (!is_array($keys)) {
+	        $keys = explode(' ', $keys);
+	    }
+
 	    $values = $app['redis']->mget($keys);
 	    $calls = array();
 	    foreach ($keys as $i => $key) {
