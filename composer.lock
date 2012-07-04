@@ -1,5 +1,5 @@
 {
-    "hash": "b1aa0f75f0eacf53a905a38200f8da17",
+    "hash": "722bf11f251482882e918b054fb386c9",
     "packages": [
         {
             "package": "facebook/xhprof",
@@ -8,26 +8,23 @@
         {
             "package": "kriswallsmith/buzz",
             "version": "dev-master",
-            "source-reference": "v0.7",
-            "commit-date": "1340650898"
+            "source-reference": "2ba5da13b1b03590f0164b3fb61578078d671fcc",
+            "commit-date": "1341070218"
         },
         {
             "package": "monolog/monolog",
-            "version": "dev-master",
-            "source-reference": "6cbdc0410c08fb03d7eee6b69126661fcbb89c41",
-            "commit-date": "1340715384"
+            "version": "1.0.2"
         },
         {
             "package": "predis/predis",
-            "version": "dev-master",
-            "source-reference": "a75e52cf5ac0236ccc957f524269cd2c867eef2f",
-            "commit-date": "1338545690"
+            "version": "0.7.x-dev",
+            "source-reference": "v0.7.3",
+            "commit-date": "1338542251"
         },
         {
             "package": "twig/twig",
-            "version": "dev-master",
-            "source-reference": "48a04538659e85e4c89da3787587e1988db9c5e9",
-            "commit-date": "1340790574"
+            "version": "1.6.x-dev",
+            "source-reference": "v1.6.5"
         }
     ],
     "packages-dev": null,
