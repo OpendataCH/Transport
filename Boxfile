@@ -2,15 +2,13 @@ web1:
   name: transport
   document_root: web 
   shared_writable_dirs:
-    - var/cache
-    - var/logs
-    - var/xhprof
+    - var
   php_extensions:
     - curl
     - xhprof
   after_build:
-    - "mkdir /var/www/var/logs"
-    - "mkdir /var/www/var/xhprof"
+    - "mkdir -p /var/www/var/logs"
+    - "mkdir -p /var/www/var/xhprof"
     - "mv /var/www/config/pagodabox.php /var/www/config/local.php"
     - "curl -s http://getcomposer.org/installer | php"
     - "php composer.phar install"
