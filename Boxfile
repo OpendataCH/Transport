@@ -2,7 +2,9 @@ web1:
   name: transport
   document_root: web 
   shared_writable_dirs:
-    - var
+    - var/cache
+    - var/logs
+    - var/xhprof
   php_extensions:
     - curl
     - xhprof
