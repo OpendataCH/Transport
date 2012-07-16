@@ -130,31 +130,8 @@ class Connection
         if (ResultLimit::isFieldSet($field)) {
             $parentField = $field;
             foreach ($xml->ConSectionList->ConSection as $section) {
-    
-                $parts = array();
-                
-                $field = $parentField.'/journey';
-                if (ResultLimit::isFieldSet($field)) {
-                    if ($section->Journey) {
-                        $parts['journey'] = Entity\Schedule\Journey::createFromXml($section->Journey, $date, null, $field);
-                    }
-                }
-                $field = $parentField.'/walk';
-                if (ResultLimit::isFieldSet($field)) {
-                    if ($section->Walk) {
-                        $parts['walk'] = Entity\Schedule\Walk::createFromXml($section->Walk, $date);
-                    }
-                }
-                $field = $parentField.'/departure';
-                if (ResultLimit::isFieldSet($field)) {
-                    $parts['departure'] = Entity\Schedule\Stop::createFromXml($section->Departure->BasicStop, $date, null, $field);
-                }
-                $field = $parentField.'/arrival';
-                if (ResultLimit::isFieldSet($field)) {
-                    $parts['arrival'] = Entity\Schedule\Stop::createFromXml($section->Arrival->BasicStop, $date, null, $field);
-                }
 
-                $obj->sections[] = $parts;
+                $obj->sections[] = Entity\Schedule\Section::createFromXml($section, $date, null, $parentField);
             }
         } 
         return $obj;

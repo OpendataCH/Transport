@@ -41,11 +41,11 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $to->station = $station;
 
 
-        $section1Walk = new Entity\Schedule\Walk();
-        $section1Walk->duration = '00:04:00';
+        $sectionWalk = new Entity\Schedule\Walk();
+        $sectionWalk->duration = '00:04:00';
 
-        $section1From = new Entity\Schedule\Stop();
-        $section1From->departure = '2012-01-16T16:06:00+0100';
+        $sectionFrom = new Entity\Schedule\Stop();
+        $sectionFrom->departure = '2012-01-16T16:06:00+0100';
         $station = new Entity\Location\Station();
             $station->name = "Zürich, Bahnhof Altstetten";
             $station->id = "000103022";
@@ -54,10 +54,10 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->y = 47.391103;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
-        $section1From->station = $station;
+        $sectionFrom->station = $station;
 
-        $section1To = new Entity\Schedule\Stop();
-        $section1To->arrival = "2012-01-16T16:10:00+0100";
+        $sectionTo = new Entity\Schedule\Stop();
+        $sectionTo->arrival = "2012-01-16T16:10:00+0100";
         $station = new Entity\Location\Station();
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
@@ -66,21 +66,26 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->y = 47.391481;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
-        $section1To->station = $station;
+        $sectionTo->station = $station;
 
-        $section2Journey = new Entity\Schedule\Journey();
-        $section2Journey->name = 'S9 18962';
-        $section2Journey->category = 'S9';
-        $section2Journey->number = '18962';
+        $section1 = new Entity\Schedule\Section();
+        $section1->walk = $sectionWalk;
+        $section1->departure = $sectionFrom;
+        $section1->arrival = $sectionTo;
 
-        $section2From = new Entity\Schedule\Stop();
-        $section2From->departure = '2012-01-16T16:10:00+0100';
-        $section2From->platform = '3';
+        $sectionJourney = new Entity\Schedule\Journey();
+        $sectionJourney->name = 'S9 18962';
+        $sectionJourney->category = 'S9';
+        $sectionJourney->number = '18962';
+
+        $sectionFrom = new Entity\Schedule\Stop();
+        $sectionFrom->departure = '2012-01-16T16:10:00+0100';
+        $sectionFrom->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
             $prognosis->departure = '2012-01-16T16:18:00+0100';
             $prognosis->capacity1st = '1';
             $prognosis->capacity2nd = '1';
-        $section2From->prognosis = $prognosis;
+        $sectionFrom->prognosis = $prognosis;
         $station = new Entity\Location\Station();
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
@@ -89,11 +94,11 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->y = 47.391481;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
-        $section2From->station = $station;
+        $sectionFrom->station = $station;
 
-        $section2To = new Entity\Schedule\Stop();
-        $section2To->arrival = '2012-01-16T16:49:00+0100';
-        $section2To->platform = '7';
+        $sectionTo = new Entity\Schedule\Stop();
+        $sectionTo->arrival = '2012-01-16T16:49:00+0100';
+        $sectionTo->platform = '7';
         $station = new Entity\Location\Station();
             $station->name = "Zug";
             $station->id = "008502204";
@@ -102,15 +107,20 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->y = 47.173618;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
-        $section2To->station = $station;
-        
+        $sectionTo->station = $station;
+
         $passList = array();
-        $passList[0] = clone $section2From;
+        $passList[0] = clone $sectionFrom;
         $passList[0]->platform = '';
-        $passList[1] = clone $section2To;
+        $passList[1] = clone $sectionTo;
         $passList[1]->platform = '';
-        $section2Journey->passList = $passList;
-        
+        $sectionJourney->passList = $passList;
+
+        $section2 = new Entity\Schedule\Section();
+        $section2->journey = $sectionJourney;
+        $section2->departure = $sectionFrom;
+        $section2->arrival = $sectionTo;
+
 		$service = new Entity\Schedule\Service();
 		$service->regular = 'daily';
 		$service->irregular = 'not 28., 29. Jan 2012, 23., 24. Jun 2012';
@@ -125,8 +135,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $connection->capacity1st = 1;
         $connection->capacity2nd = 1;
         $connection->sections = array(
-            array('walk' => $section1Walk, 'departure' => $section1From, 'arrival' => $section1To),
-            array('journey' => $section2Journey, 'departure' => $section2From, 'arrival' => $section2To)
+            $section1,
+            $section2,
         );
 
         return $connection;

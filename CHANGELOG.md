@@ -3,7 +3,7 @@
 ## 2012-07-16
 
 - Refactored default config
-- 
+- Added class Transport\Entity\ScheduleSection
 
 ## 2012-07-09
 
