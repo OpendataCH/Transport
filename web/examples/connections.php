@@ -46,6 +46,10 @@ if ($search) {
             width: 92%;
         }
 
+        .table tbody + tbody {
+            border-top: 0;
+        }
+
         .table tbody tr:hover td {
             background-color: inherit;
         }
@@ -54,7 +58,7 @@ if ($search) {
             font-weight: normal;
         }
 
-        .table td {
+        .table tbody {
             cursor: pointer;
         }
 
@@ -64,7 +68,7 @@ if ($search) {
     </style>
     <script>
         $(function () {
-        
+
             function reset() {
                 $('table.connections tr.connection').show();
                 $('table.connections tr.section').hide();
@@ -72,13 +76,15 @@ if ($search) {
 
             reset();
 
-            $('table.connections tr.section').click(reset);
-
-            $('table.connections tr.connection').click(function () {
+            $('table.connections tbody').toggle(function () {
 
                 reset();
 
-                $(this).hide().nextUntil('.connection').show();
+                $('tr.connection', this).hide();
+                $('tr.section', this).show();
+
+            }, function () {
+                reset();
             });
         });
     </script>
@@ -131,8 +137,8 @@ if ($search) {
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($response->connections as $connection): ?>
+            <?php foreach ($response->connections as $connection): ?>
+                <tbody>
                     <tr class="connection">
                         <td><?php echo date('H:i', strtotime($connection->from->departure)); ?><br/><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
                         <td>
@@ -169,8 +175,8 @@ if ($search) {
                             <td style="border-top: 0;"><?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                     <?php endforeach; ?>
-                <?php endforeach; ?>
-            </tbody>
+                </tbody>
+            <?php endforeach; ?>
         </table>
         <?php endif; ?>
         
