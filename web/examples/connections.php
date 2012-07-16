@@ -46,10 +46,6 @@ if ($search) {
             width: 92%;
         }
 
-        .sections td {
-            padding: 4px 8px;
-        }
-
         .table tbody tr:hover td {
             background-color: inherit;
         }
@@ -60,16 +56,19 @@ if ($search) {
     </style>
     <script>
         $(function () {
-            if (!('ontouchstart' in window)) {
-
-                $('table.connections > tbody > tr:nth-child(even)').hide();
-
-                $('table.connections > tbody > tr:nth-child(odd)').each(function () {
-                    $(this).css('cursor', 'pointer').click(function () {
-                        $(this).next().toggle();
-                    });
+            $('table.connections > tbody > tr:nth-child(even)').each(function () {
+                $(this).hide().css('cursor', 'pointer').click(function () {
+                    $(this).hide();
+                    $(this).prev().show();
                 });
-            }
+            });
+
+            $('table.connections > tbody > tr:nth-child(odd)').each(function () {
+                $(this).css('cursor', 'pointer').click(function () {
+                    $(this).hide();
+                    $(this).next().show();
+                });
+            });
         });
     </script>
 </head>
@@ -107,15 +106,13 @@ if ($search) {
         <?php if ($search): ?>
         <table class="table connections">
             <colgroup>
-                <col width="27%">
-                <col width="27%">
-                <col width="27%">
-                <col width="19%">
+                <col width="25%">
+                <col width="50%">
+                <col width="25%">
             </colgroup>
             <thead>
                 <tr>
-                    <th>Departure</th>
-                    <th>Arrival</th>
+                    <th>Travel</th>
                     <th>Duration</th>
                     <th>
                         <span class="visible-phone">Pl.</span>
@@ -125,22 +122,21 @@ if ($search) {
             </thead>
             <tbody>
                 <?php foreach ($response->connections as $connection): ?>
-                    <tr style="background-color: #F9F9F9">
-                        <td><?php echo date('H:i', strtotime($connection->from->departure)); ?></td>
-                        <td><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
+                    <tr>
+                        <td><?php echo date('H:i', strtotime($connection->from->departure)); ?> – <?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
                         <td><?php echo htmlentities(substr($connection->duration, 3, 5)); ?></td>
                         <td><?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?></td>
                     </tr>
-                    <tr>
+                    <tr style="background-color: #F9F9F9">
                         <td colspan="5" style="padding: 0; border-top: 0;">
                             <table class="table sections">
                                 <colgroup>
-                                    <col width="27%">
-                                    <col width="54%">
-                                    <col width="19%">
+                                    <col width="25%">
+                                    <col width="50%">
+                                    <col width="25%">
                                 </colgroup>
                                 <tbody>
-                                    <?php foreach ($connection->sections as $section): ?>
+                                    <?php $i = 0; foreach ($connection->sections as $section): ?>
                                         <tr>
                                             <td rowspan="2"><?php echo date('H:i', strtotime($section->departure->departure)); ?></td>
                                             <td>
@@ -149,7 +145,7 @@ if ($search) {
                                             <td><?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?></td>
                                         </tr>
                                         <tr>
-                                            <td style="border-top: 0;">
+                                            <td style="border-top: 0; padding: 4px 8px;" colspan="2">
                                                 <span class="muted">
                                                 <?php if ($section->journey): ?>
                                                     <?php echo htmlentities($section->journey->category, ENT_QUOTES, 'UTF-8'); ?>
