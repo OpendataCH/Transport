@@ -1,13 +1,13 @@
 <?php
 
 // Debug
-$app['debug'] = true;
+$app['debug'] = false;
 
 // HTTP Cache
-$app['http_cache'] = false;
+$app['http_cache'] = true;
 
 // Buzz client, null uses Buzz\Client\FileGetContents
-$app['buzz.client'] = null;
+$app['buzz.client'] = null; // new Buzz\Client\Curl();
 
 // Log level
 $app['monolog.level'] = Monolog\Logger::ERROR;

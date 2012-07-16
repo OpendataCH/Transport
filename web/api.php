@@ -19,11 +19,19 @@ date_default_timezone_set('Europe/Zurich');
 // init
 $app = new Silex\Application();
 
-// load config
-require __DIR__.'/../config/default.php';
-$local = __DIR__.'/../config/local.php';
-if (stream_resolve_include_path($local)) {
-	include $local;
+// default config
+$app['debug'] = true;
+$app['http_cache'] = false;
+$app['buzz.client'] = null;
+$app['monolog.level'] = Monolog\Logger::ERROR;
+$app['xhprof'] = false;
+$app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
+$app['proxy'] = false;
+
+/// load config
+$config = __DIR__.'/../config/transport.php';
+if (stream_resolve_include_path($config)) {
+	include $config;
 }
 
 // HTTP cache

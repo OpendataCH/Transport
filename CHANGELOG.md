@@ -1,5 +1,14 @@
 # Changelog
 
+## 2012-07-16
+
+- Refactored default config
+- 
+
+## 2012-07-09
+
+- #74 Added missing toXml method for POI
+
 ## 2012-06-20
 
 - Use Silex HTTP cache
