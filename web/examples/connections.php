@@ -107,17 +107,17 @@ if ($search) {
         <?php if ($search): ?>
         <table class="table connections">
             <colgroup>
-                <col width="29%">
-                <col width="29%">
-                <col width="29%">
-                <col width="13%">
+                <col width="27%">
+                <col width="27%">
+                <col width="27%">
+                <col width="19%">
             </colgroup>
             <thead>
                 <tr>
-                    <th align="left">Departure</th>
-                    <th align="left">Arrival</th>
-                    <th align="left">Duration</th>
-                    <th align="left">
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Duration</th>
+                    <th>
                         <span class="visible-phone">Pl.</span>
                         <span class="hidden-phone">Platform</span>
                     </th>
@@ -135,9 +135,9 @@ if ($search) {
                         <td colspan="5" style="padding: 0; border-top: 0;">
                             <table class="table sections">
                                 <colgroup>
-                                    <col width="29%">
-                                    <col width="58%">
-                                    <col width="13%">
+                                    <col width="27%">
+                                    <col width="54%">
+                                    <col width="19%">
                                 </colgroup>
                                 <tbody>
                                     <?php foreach ($connection->sections as $section): ?>
