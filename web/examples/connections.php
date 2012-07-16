@@ -136,7 +136,7 @@ if ($search) {
                     <tr class="connection">
                         <td><?php echo date('H:i', strtotime($connection->from->departure)); ?><br/><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
                         <td>
-                            <?php echo htmlentities(substr($connection->duration, 3, 5)); ?><br/>
+                            <?php echo htmlentities(substr($connection->duration, 4, 4)); ?>′<br/>
                             <?php echo htmlentities(implode(', ', $connection->products)); ?>
                         </td>
                         <td><?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?></td>
