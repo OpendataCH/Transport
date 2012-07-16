@@ -49,25 +49,36 @@ if ($search) {
         .table tbody tr:hover td {
             background-color: inherit;
         }
-        
+
         .table th {
             font-weight: normal;
+        }
+
+        .table td {
+            cursor: pointer;
+        }
+
+        .table tr.section {
+            background-color: #F9F9F9;
         }
     </style>
     <script>
         $(function () {
-            $('table.connections > tbody > tr:nth-child(even)').each(function () {
-                $(this).hide().css('cursor', 'pointer').click(function () {
-                    $(this).hide();
-                    $(this).prev().show();
-                });
-            });
+        
+            function reset() {
+                $('table.connections tr.connection').show();
+                $('table.connections tr.section').hide();
+            }
 
-            $('table.connections > tbody > tr:nth-child(odd)').each(function () {
-                $(this).css('cursor', 'pointer').click(function () {
-                    $(this).hide();
-                    $(this).next().show();
-                });
+            reset();
+
+            $('table.connections tr.section').click(reset);
+
+            $('table.connections tr.connection').click(function () {
+
+                reset();
+
+                $(this).hide().nextUntil('.connection').show();
             });
         });
     </script>
@@ -106,14 +117,14 @@ if ($search) {
         <?php if ($search): ?>
         <table class="table connections">
             <colgroup>
-                <col width="25%">
+                <col width="20%">
                 <col width="50%">
-                <col width="25%">
+                <col width="30%">
             </colgroup>
             <thead>
                 <tr>
-                    <th>Travel</th>
-                    <th>Duration</th>
+                    <th>Time</th>
+                    <th>Journey</th>
                     <th>
                         <span class="visible-phone">Pl.</span>
                         <span class="hidden-phone">Platform</span>
@@ -122,52 +133,42 @@ if ($search) {
             </thead>
             <tbody>
                 <?php foreach ($response->connections as $connection): ?>
-                    <tr>
-                        <td><?php echo date('H:i', strtotime($connection->from->departure)); ?> – <?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
-                        <td><?php echo htmlentities(substr($connection->duration, 3, 5)); ?></td>
+                    <tr class="connection">
+                        <td><?php echo date('H:i', strtotime($connection->from->departure)); ?><br/><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
+                        <td>
+                            <?php echo htmlentities(substr($connection->duration, 3, 5)); ?><br/>
+                            <?php echo htmlentities(implode(', ', $connection->products)); ?>
+                        </td>
                         <td><?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?></td>
                     </tr>
-                    <tr style="background-color: #F9F9F9">
-                        <td colspan="5" style="padding: 0; border-top: 0;">
-                            <table class="table sections">
-                                <colgroup>
-                                    <col width="25%">
-                                    <col width="50%">
-                                    <col width="25%">
-                                </colgroup>
-                                <tbody>
-                                    <?php $i = 0; foreach ($connection->sections as $section): ?>
-                                        <tr>
-                                            <td rowspan="2"><?php echo date('H:i', strtotime($section->departure->departure)); ?></td>
-                                            <td>
-                                                <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td><?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border-top: 0; padding: 4px 8px;" colspan="2">
-                                                <span class="muted">
-                                                <?php if ($section->journey): ?>
-                                                    <?php echo htmlentities($section->journey->category, ENT_QUOTES, 'UTF-8'); ?>
-                                                    <?php echo htmlentities($section->journey->number, ENT_QUOTES, 'UTF-8'); ?>
-                                                <?php else: ?>
-                                                    Walk
-                                                <?php endif; ?>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border-top: 0;"><?php echo date('H:i', strtotime($section->arrival->arrival)); ?></td>
-                                            <td style="border-top: 0;">
-                                                <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
-                                            </td>
-                                            <td style="border-top: 0;"><?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+                    <?php $i = 0; foreach ($connection->sections as $section): ?>
+                        <tr class="section">
+                            <td rowspan="2"><?php echo date('H:i', strtotime($section->departure->departure)); ?></td>
+                            <td>
+                                <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
+                            <td><?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <tr class="section">
+                            <td style="border-top: 0; padding: 4px 8px;" colspan="2">
+                                <span class="muted">
+                                <?php if ($section->journey): ?>
+                                    <?php echo htmlentities($section->journey->category, ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php echo htmlentities($section->journey->number, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php else: ?>
+                                    Walk
+                                <?php endif; ?>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="section">
+                            <td style="border-top: 0;"><?php echo date('H:i', strtotime($section->arrival->arrival)); ?></td>
+                            <td style="border-top: 0;">
+                                <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
+                            <td style="border-top: 0;"><?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
                 <?php endforeach; ?>
             </tbody>
         </table>
