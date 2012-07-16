@@ -118,8 +118,8 @@ if ($search) {
         <table class="table connections">
             <colgroup>
                 <col width="20%">
-                <col width="50%">
-                <col width="30%">
+                <col width="57%">
+                <col width="23%">
             </colgroup>
             <thead>
                 <tr>
