@@ -26,7 +26,7 @@ if ($search) {
 
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
     <link rel="stylesheet" href="../media/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/bootstrap/css/bootstrap-responsive.min.css" />
