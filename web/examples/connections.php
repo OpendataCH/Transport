@@ -35,7 +35,6 @@ if ($search) {
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <script src="../media/js/moment.min.js"></script>
     <style>
         h1 {
@@ -95,7 +94,7 @@ if ($search) {
             // faster touch response
             var touch = {target: false, moved: false, down: false};
             $(document.body).bind('touchstart', function(e) {
-                touch.target = $(e.touches[0].target);
+                touch.target = $(e.originalEvent.touches[0].target);
                 touch.down = true;
             });
             $(document.body).bind('touchmove', function(e) {
@@ -104,11 +103,7 @@ if ($search) {
             $(document.body).bind('touchend', function(e) {
                 if (!touch.moved) {
                     e.preventDefault();
-
-                    // timeout to prevent slide before active background is set
-                    setTimeout(function () {
-                        touch.target.trigger('click');
-                    }, 10);
+                    touch.target.trigger('click');
                 }
                 touch.moved = false;
                 touch.down = false;
