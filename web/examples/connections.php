@@ -77,7 +77,17 @@ if ($search) {
         
         @media (max-width: 480px) {
             body {
-                padding-top: 18px;
+                padding-top: 20px;
+            }
+            
+            form {
+                margin-bottom: 8px;
+            }
+
+            .row-fluid .station {
+                float: left;
+                width: 48%;
+                margin-left: 12px;
             }
         }
     </style>
@@ -91,39 +101,29 @@ if ($search) {
 
             reset();
 
-            // faster touch response
-            var touch = {target: false, moved: false, down: false};
-            $(document.body).bind('touchstart', function(e) {
-                touch.target = $(e.originalEvent.touches[0].target);
-                touch.down = true;
-            });
-            $(document.body).bind('touchmove', function(e) {
-                touch.moved = true;
-            });
-            $(document.body).bind('touchend', function(e) {
-                if (!touch.moved) {
-                    e.preventDefault();
-                    touch.target.trigger('click');
-                }
-                touch.moved = false;
-                touch.down = false;
-            });
-
             $('table.connections tbody').bind('click', function (e) {
+
+                var $this = $(this);
 
                 reset();
 
-                $this = $(this);
                 if ($this.data('open')) {
 
                     $this.data('open', false);
 
                 } else {
 
-                    $('tr.connection', this).hide();
-                    $('tr.section', this).show();
+                    $this.find('tr.connection').hide();
+                    $this.find('tr.section').show();
                     $this.data('open', true);
                 }
+            });
+            
+            $('.station input').bind('focus', function () {
+                var that = this;
+                setTimeout(function () {
+                    that.setSelectionRange(0, 9999);
+                }, 10);
             });
         });
     </script>
@@ -149,8 +149,8 @@ if ($search) {
                     <label for="to">To:</label>
                     <input type="text" id="to" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
                 </div>
-                <input type="submit" value="S" class="submit" />
             </div>
+            <input type="submit" value="S" class="submit" />
         </form>
         
         </div>
