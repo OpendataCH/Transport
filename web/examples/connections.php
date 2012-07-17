@@ -92,12 +92,39 @@ if ($search) {
 
             reset();
 
-            $('table.connections tbody').bind('touchstart click', function () {
+            // faster touch response
+            var touch = {target: false, moved: false, down: false};
+            $(document.body).bind('touchstart', function(e) {
+                touch.target = $(e.touches[0].target);
+                touch.down = true;
+            });
+            $(document.body).bind('touchmove', function(e) {
+                touch.moved = true;
+            });
+            $(document.body).bind('touchend', function(e) {
+                if (!touch.moved) {
+                    e.preventDefault();
+
+                    // timeout to prevent slide before active background is set
+                    setTimeout(function () {
+                        touch.target.trigger('click');
+                    }, 10);
+                }
+                touch.moved = false;
+                touch.down = false;
+            });
+
+            $('table.connections tbody').bind('click', function (e) {
+
                 reset();
+
                 $this = $(this);
                 if ($this.data('open')) {
+
                     $this.data('open', false);
+
                 } else {
+
                     $('tr.connection', this).hide();
                     $('tr.section', this).show();
                     $this.data('open', true);
