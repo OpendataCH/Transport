@@ -46,6 +46,16 @@ if ($search) {
             width: 92%;
         }
 
+        input.submit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            width: 1px;
+            height: 1px;
+            visibility: hidden;
+        }
+
         .table tbody + tbody {
             border-top: 0;
         }
@@ -64,6 +74,12 @@ if ($search) {
 
         .table tr.section {
             background-color: #F9F9F9;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding-top: 18px;
+            }
         }
     </style>
     <script>
@@ -94,7 +110,7 @@ if ($search) {
 <body>
 
 <div class="container">
-    <div class="page-header">
+    <div class="page-header hidden-phone">
         <h1><a href="../">Transport</a> <small>Swiss public transport API</small></h1>
     </div>
 
@@ -103,18 +119,15 @@ if ($search) {
         
         <form method="get" action="">
             <div class="row-fluid">
-                <div class="span4 station">
+                <div class="span5 station">
                     <label for="from">From:</label>
                     <input type="text" id="from" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" autofocus />
                 </div>
-                <div class="span4 station">
+                <div class="span5 station">
                     <label for="to">To:</label>
                     <input type="text" id="to" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
                 </div>
-                <div class="span1">
-                    <label>&nbsp;</label>
-                    <input type="submit" value="Search" class="btn" />
-                </div>
+                <input type="submit" value="S" class="submit" />
             </div>
         </form>
         
