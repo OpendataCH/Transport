@@ -76,15 +76,16 @@ if ($search) {
 
             reset();
 
-            $('table.connections tbody').toggle(function () {
-
+            $('table.connections tbody').bind('touchstart click', function () {
                 reset();
-
-                $('tr.connection', this).hide();
-                $('tr.section', this).show();
-
-            }, function () {
-                reset();
+                $this = $(this);
+                if ($this.data('open')) {
+                    $this.data('open', false);
+                } else {
+                    $('tr.connection', this).hide();
+                    $('tr.section', this).show();
+                    $this.data('open', true);
+                }
             });
         });
     </script>
