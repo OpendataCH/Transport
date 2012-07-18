@@ -29,7 +29,7 @@ $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 $app['proxy'] = false;
 
 /// load config
-$config = __DIR__.'/../config/transport.php';
+$config = __DIR__.'/../config/local.php';
 if (stream_resolve_include_path($config)) {
 	include $config;
 }
