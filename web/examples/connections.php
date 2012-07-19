@@ -142,12 +142,10 @@ if ($search) {
         <form method="get" action="">
             <div class="row-fluid">
                 <div class="span5 station">
-                    <label for="from">From:</label>
-                    <input type="text" id="from" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" autofocus />
+                    <input type="text" id="from" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autofocus />
                 </div>
                 <div class="span5 station">
-                    <label for="to">To:</label>
-                    <input type="text" id="to" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
+                    <input type="text" id="to" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" />
                 </div>
             </div>
             <input type="submit" value="S" class="submit" />
