@@ -2,10 +2,24 @@
 
 $from = isset($_GET['from']) ? $_GET['from'] : false;
 $to = isset($_GET['to']) ? $_GET['to'] : false;
-$search = $from && $to;
+$datetime = isset($_GET['datetime']) ? $_GET['datetime'] : false;
+$page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
 
+$search = $from && $to;
 if ($search) {
-    $url = 'http://transport.opendata.ch/v1/connections?' . http_build_query(array('from' => $from, 'to' => $to));
+
+    $query = array(
+        'from' => $from,
+        'to' => $to,
+        'page' => $page,
+    );
+
+    if ($datetime) {
+        $query['date'] = date('Y-m-d', strtotime($datetime));
+        $query['time'] = date('H:i', strtotime($datetime));
+    }
+
+    $url = 'http://transport.opendata.ch/v1/connections?' . http_build_query($query);
     $response = json_decode(file_get_contents($url));
 
     if ($response->from) {
@@ -45,6 +59,18 @@ if ($search) {
             width: 92%;
         }
 
+        .row-fluid + .row-fluid {
+            padding-top: 3px;
+        }
+
+        .date {
+            padding-top: 5px;
+        }
+
+        .date input {
+            width: 92%;
+        }
+
         input.submit {
             position: absolute;
             top: 0;
@@ -78,16 +104,17 @@ if ($search) {
         @media (max-width: 480px) {
             body {
                 padding-top: 20px;
+                padding-bottom: 30px;
             }
             
             form {
                 margin-bottom: 8px;
             }
 
-            .row-fluid .station {
+            .row-fluid .fluid {
                 float: left;
-                width: 48%;
                 margin-left: 12px;
+                width: 48%;
             }
         }
     </style>
@@ -138,17 +165,24 @@ if ($search) {
 
     <div class="row-fluid">
         <div class="span5">
-        
+
         <form method="get" action="">
             <div class="row-fluid">
-                <div class="span5 station">
-                    <input type="text" id="from" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autofocus />
+                <div class="span5 fluid station">
+                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autofocus />
                 </div>
-                <div class="span5 station">
-                    <input type="text" id="to" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" />
+                <div class="span5 fluid station">
+                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" />
                 </div>
             </div>
-            <input type="submit" value="S" class="submit" />
+            <div class="row-fluid">
+                <div class="span5 fluid date">
+                    <input type="datetime-local" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time" step="300" />
+                </div>
+                <div class="span2 fluid apply">
+                    <input type="submit" class="btn" value="Search" />
+                </div>
+            </div>
         </form>
         
         </div>
@@ -228,7 +262,8 @@ if ($search) {
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
-        
+
+        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections…</a>
     </div>
 </div>
 
