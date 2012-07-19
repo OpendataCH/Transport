@@ -217,9 +217,11 @@ if ($search) {
                         </td>
                         <td>
                             <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?><br/>
-                            <span class="muted">
-                                <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
-                            </span>
+                            <?php if ($connection->capacity2nd > 0): ?>
+                                <span class="muted">
+                                    <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
+                                </span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php $i = 0; foreach ($connection->sections as $section): ?>
