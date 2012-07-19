@@ -177,9 +177,16 @@ if ($search) {
                         <td><?php echo date('H:i', strtotime($connection->from->departure)); ?><br/><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
                         <td>
                             <?php echo htmlentities(substr($connection->duration, 4, 4)); ?>′<br/>
+                            <span class="muted">
                             <?php echo htmlentities(implode(', ', $connection->products)); ?>
+                            </span>
                         </td>
-                        <td><?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td>
+                            <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?><br/>
+                            <span class="muted">
+                                <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
+                            </span>
+                        </td>
                     </tr>
                     <?php $i = 0; foreach ($connection->sections as $section): ?>
                         <tr class="section">
@@ -187,17 +194,25 @@ if ($search) {
                             <td>
                                 <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
-                            <td><?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td>
+                                <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
                         </tr>
                         <tr class="section">
-                            <td style="border-top: 0; padding: 4px 8px;" colspan="2">
+                            <td style="border-top: 0; padding: 4px 8px;">
                                 <span class="muted">
                                 <?php if ($section->journey): ?>
-                                    <?php echo htmlentities($section->journey->category, ENT_QUOTES, 'UTF-8'); ?>
-                                    <?php echo htmlentities($section->journey->number, ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php echo htmlentities($section->journey->name, ENT_QUOTES, 'UTF-8'); ?>
                                 <?php else: ?>
                                     Walk
                                 <?php endif; ?>
+                                </span>
+                            </td>
+                            <td style="border-top: 0; padding: 4px 8px;">
+                                <span class="muted">
+                                    <?php if ($section->departure->prognosis->capacity2nd): ?>
+                                        <?php for ($i = 0; $i < 3; $i++) { echo $i < $section->departure->prognosis->capacity2nd ? '●' : '○'; } ?>
+                                    <?php endif; ?>
                                 </span>
                             </td>
                         </tr>
