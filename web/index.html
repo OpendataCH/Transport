@@ -237,19 +237,25 @@
                         <td><code>isArrivalTime</code></td>
                         <td>optional</td>
                         <td>defaults to <code>0</code>, if set to <code>1</code> the passed <code>date</code> and <code>time</code> is the arrival time</td>
-                        <td>?isArrivalTime=1</td>
+                        <td>1</td>
                     </tr>
                     <tr>
                         <td><code>transportations</code></td>
                         <td>optional</td>
                         <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
-                        <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
+                        <td>transportations[]=ec_ic&amp;transportations[]=bus</td>
                     </tr>
                     <tr>
                         <td><code>limit</code></td>
                         <td>optional</td>
                         <td>1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.</td>
                         <td>Bern</td>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>optional</td>
+                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
+                        <td>3</td>
                     </tr>
                     <tr>
                         <td><code>direct</code></td>
