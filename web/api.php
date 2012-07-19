@@ -10,6 +10,7 @@ use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\MoreConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 use Transport\ResultLimit;
@@ -216,7 +217,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         }
         $connections = $app['api']->findConnections($query, 'connections');
     }
-    $result = array('connections' => $connections);
+    $result = array('connections' => $connections['connections'], 'reference' => $connections['reference']);
     if (ResultLimit::isFieldSet('from')) {
         $result = array_merge($result,array('from' => $from));   
     }
@@ -226,6 +227,32 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     if (ResultLimit::isFieldSet('stations')) {
         $result = array_merge($result,array('stations' => $stations));   
     }
+    return $app->json($result);
+});
+
+//more connections
+$app->get('/v1/moreConnections', function(Request $request) use ($app) {
+    ResultLimit::setFields($request->get('fields') ?: array());
+    $reference = $request->get('reference');
+    $forwardCount = $request->get('forwardCount');
+    $backwardCount = $request->get('backwardCount');
+    if ($forwardCount && $backwardCount) {
+        return new Response('Only set one of forwardCount and backwardCount', 400);
+    }
+    if ($forwardCount > 6 || $backwardCount > 6) {
+        return new Response('forwardCount and backwardCount shall not be > 6', 400);
+    }
+    if ($forwardCount != null) {
+        $count = $forwardCount;
+        $direction = 'F'; 
+    }
+    if ($backwardCount != null) {
+        $count = $backwardCount;
+        $direction = 'B'; 
+    }
+    $query = new MoreConnectionQuery($reference,$count,$direction);
+    $connections = $app['api']->findConnections($query, 'connections');
+    $result = array('connections' => $connections['connections'], 'reference' => $connections['reference']);
     return $app->json($result);
 });
 
