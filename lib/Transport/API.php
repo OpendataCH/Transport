@@ -12,7 +12,7 @@ use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
-    const URL = 'http://xmlfahrplan.sbb.ch/bin/extxml.exe/';
+    const URL = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
     const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
 
     const SBB_PROD = 'iPhone3.1';
