@@ -149,7 +149,8 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $isArrivalTime = $request->get('isArrivalTime') ?: null;
-    $limit = $request->get('limit') ?: 4;
+    $limit = $request->get('limit') ?: null;
+    $page = $request->get('page') ?: null;
     $transportations = $request->get('transportations');
     $direct = $request->get('direct');
     $sleeper = $request->get('sleeper');
@@ -161,6 +162,9 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     if ($limit > 6) {
         return new Response('Maximal value of argument `limit` is 6.', 400);
     }
+    if ($page > 10) {
+        return new Response('Maximal value of argument `page` is 10.', 400);
+    }
 
     // get stations
     $stations = array('from' => array(), 'to' => array(), 'via' => array());
@@ -168,7 +172,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query = new LocationQuery(array('from' => $from, 'to' => $to, 'via' => $via));
         $stations = $app['api']->findLocations($query);
     }
-    
+
     // get connections
     $connections = array();
     $from = reset($stations['from']) ?: null;
@@ -182,8 +186,6 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
 
     if ($from && $to) {
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
-        $query->forwardCount = $limit;
-        $query->backwardCount = 0;
         if ($isArrivalTime !== null) {
             switch ($isArrivalTime) {
                 case 0:
@@ -198,6 +200,12 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
                     //wrong parameter value
                     break;
             }
+        }
+        if ($limit) {
+            $query->page = $limit;
+        }
+        if ($page) {
+            $query->page = $page;
         }
         if ($transportations) {
             $query->transportations = $transportations;

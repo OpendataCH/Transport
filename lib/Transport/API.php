@@ -8,6 +8,7 @@ use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\ConnectionPageQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
@@ -62,6 +63,17 @@ class API
 
         // parse result
         $result = simplexml_load_string($response->getContent());
+
+        // load pages
+        for ($i = 0; $i < $query->page; $i++) {
+
+            // load next page
+            $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
+
+            $response = $this->sendQuery($pageQuery);
+
+            $result = simplexml_load_string($response->getContent());
+        }
 
         $connections = array();
         if (ResultLimit::isFieldSet($field)) {
