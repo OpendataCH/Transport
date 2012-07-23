@@ -202,7 +202,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
             }
         }
         if ($limit) {
-            $query->page = $limit;
+            $query->limit = $limit;
         }
         if ($page) {
             $query->page = $page;
