@@ -11,6 +11,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
     {   
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-16T16:10:00+0100';
+        $from->delay = '8';
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
             $prognosis->departure = '2012-01-16T16:18:00+0100';
@@ -80,6 +81,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $sectionFrom = new Entity\Schedule\Stop();
         $sectionFrom->departure = '2012-01-16T16:10:00+0100';
+        $sectionFrom->delay = '8';
         $sectionFrom->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
             $prognosis->departure = '2012-01-16T16:18:00+0100';

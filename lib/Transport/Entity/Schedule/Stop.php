@@ -15,6 +15,8 @@ class Stop
     public $arrival;
     public $departure;
 
+    public $delay;
+
     public $platform;
 
     public $prognosis;
@@ -88,6 +90,16 @@ class Stop
         $field = $parentField.'/prognosis';
         if (ResultLimit::isFieldSet($field)) {
             $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival);
+        }
+
+        $field = $parentField.'/delay';
+        if (ResultLimit::isFieldSet($field) && $obj->prognosis) {
+            if ($obj->prognosis->arrival && $obj->arrival) {
+                $obj->delay = (strtotime($obj->prognosis->arrival) - strtotime($obj->arrival)) / 60;
+            }
+            if ($obj->prognosis->departure && $obj->departure) {
+                $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
+            }
         }
 
         return $obj;
