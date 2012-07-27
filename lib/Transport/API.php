@@ -42,7 +42,7 @@ class API
     /**
      * @return Buzz\Message\Response
      */
-    public function sendQuery(Query $query)
+    public function sendQuery(Query $query, $url = self::URL)
     {
 
         $headers = array();
@@ -50,7 +50,7 @@ class API
         $headers[] = 'Accept: application/xml';
         $headers[] = 'Content-Type: application/xml';
 
-        return $this->browser->post(self::URL, $headers, $query->toXml());
+        return $this->browser->post($url, $headers, $query->toXml());
     }
 
     /**
