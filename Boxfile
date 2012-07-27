@@ -9,7 +9,7 @@ web1:
   after_build:
     - "mkdir -p /var/www/var/logs"
     - "mkdir -p /var/www/var/xhprof"
-    - "mv /var/www/config/pagodabox.php /var/www/config/local.php"
+    - "mv /var/www/pagodabox.php /var/www/config.php"
     - "curl -s http://getcomposer.org/installer | php"
     - "php composer.phar install"
 

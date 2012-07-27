@@ -15,7 +15,7 @@ $app = new Silex\Application();
 $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 
 /// load config
-$config = __DIR__.'/../config/local.php';
+$config = __DIR__.'/../config.php';
 if (stream_resolve_include_path($config)) {
 	include $config;
 }
