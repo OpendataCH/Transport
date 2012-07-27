@@ -264,7 +264,7 @@ if ($search) {
                             </td>
                             <td style="border-top: 0; padding: 4px 8px;">
                                 <span class="muted">
-                                    <?php if ($section->departure->prognosis->capacity2nd): ?>
+                                    <?php if ($section->departure->prognosis->capacity2nd > 0): ?>
                                         <?php for ($i = 0; $i < 3; $i++) { echo $i < $section->departure->prognosis->capacity2nd ? '●' : '○'; } ?>
                                     <?php endif; ?>
                                 </span>
