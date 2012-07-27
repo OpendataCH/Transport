@@ -76,6 +76,16 @@ if ($search) {
         .date input {
             width: 92%;
         }
+        
+        .apply input {
+            float: left;
+        }
+
+        .apply a {
+            display: block;
+            float: left;
+            padding: 6px 10px;
+        }
 
         input.submit {
             position: absolute;
@@ -128,7 +138,6 @@ if ($search) {
         $(function () {
 
             if (navigator.geolocation) {
-
 
                 if (!$('input[name=from]').val()) {
 
@@ -227,6 +236,7 @@ if ($search) {
                 </div>
                 <div class="span5 fluid apply">
                     <input type="submit" class="btn" value="Search" />
+                    <a href="connections.php">Clear</a>
                 </div>
             </div>
         </form>
