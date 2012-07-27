@@ -12,6 +12,7 @@ if ($search) {
         'from' => $from,
         'to' => $to,
         'page' => $page,
+        'limit' => 6,
     );
 
     if ($datetime) {
