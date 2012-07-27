@@ -68,7 +68,8 @@ if ($search) {
             padding-top: 3px;
         }
 
-        .date {
+        .date,
+        .apply {
             padding-top: 5px;
         }
 
@@ -126,6 +127,48 @@ if ($search) {
     <script>
         $(function () {
 
+            if (navigator.geolocation) {
+
+
+                if (!$('input[name=from]').val()) {
+
+                    $('input[name=from]').attr('placeholder', 'Locating...');
+
+                    var i = 0;
+                    var interval = setInterval(function () {
+                        i = (i + 1) % 4;
+                        var message = 'Locating';
+                        for (var j = 0; j < i; j++) {
+                            message += '.';
+                        }
+                        $('input[name=from]').attr('placeholder', message);
+                    }, 400);
+
+                    // get location for from
+                    navigator.geolocation.getCurrentPosition(function (position) {
+
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+
+                        $.get('http://transport.opendata.ch/v1/locations', {x: lat, y: lng}, function(data) {
+
+                            clearInterval(interval);
+                            $('input[name=from]').attr('placeholder', 'From');
+
+                            $(data.stations).each(function (i, station) {
+
+                                $('input[name=from]').val(station.name);
+
+                                return false;
+                            });
+                        });
+    
+                    }, function(error) {
+                        // ignore
+                    });
+                }
+            }
+
             function reset() {
                 $('table.connections tr.connection').show();
                 $('table.connections tr.section').hide();
@@ -172,17 +215,17 @@ if ($search) {
         <form method="get" action="">
             <div class="row-fluid">
                 <div class="span5 fluid station">
-                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" autofocus />
+                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" />
                 </div>
                 <div class="span5 fluid station">
-                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" />
+                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" autofocus />
                 </div>
             </div>
             <div class="row-fluid">
                 <div class="span5 fluid date">
                     <input type="datetime-local" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time" step="300" />
                 </div>
-                <div class="span2 fluid apply">
+                <div class="span5 fluid apply">
                     <input type="submit" class="btn" value="Search" />
                 </div>
             </div>
