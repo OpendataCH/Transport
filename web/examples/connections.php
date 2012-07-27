@@ -2,7 +2,7 @@
 
 $from = isset($_GET['from']) ? $_GET['from'] : false;
 $to = isset($_GET['to']) ? $_GET['to'] : false;
-$datetime = isset($_GET['datetime']) ? $_GET['datetime'] : false;
+$datetime = isset($_GET['datetime']) ? $_GET['datetime'] : '';
 $page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
 
 $search = $from && $to;
@@ -281,16 +281,16 @@ if ($search) {
                 </tbody>
             <?php endforeach; ?>
         </table>
-        <?php endif; ?>
 
-    <div class="row-fluid">
-        <div class="span9 fluid">
-            <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
+        <div class="row-fluid">
+            <div class="span9 fluid">
+                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
+            </div>
+            <div class="span3 fluid station">
+                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
+            </div>
         </div>
-        <div class="span3 fluid station">
-            <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
-        </div>
-    </div>
+        <?php endif; ?>
     </div>
 </div>
 
