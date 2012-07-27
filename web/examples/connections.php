@@ -126,8 +126,6 @@ if ($search) {
                 $('table.connections tr.section').hide();
             }
 
-            reset();
-
             $('table.connections tbody').bind('click', function (e) {
 
                 var $this = $(this);
@@ -169,10 +167,10 @@ if ($search) {
         <form method="get" action="">
             <div class="row-fluid">
                 <div class="span5 fluid station">
-                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autofocus />
+                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" autofocus />
                 </div>
                 <div class="span5 fluid station">
-                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" />
+                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" />
                 </div>
             </div>
             <div class="row-fluid">
@@ -208,7 +206,17 @@ if ($search) {
             <?php foreach ($response->connections as $connection): ?>
                 <tbody>
                     <tr class="connection">
-                        <td><?php echo date('H:i', strtotime($connection->from->departure)); ?><br/><?php echo date('H:i', strtotime($connection->to->arrival)); ?></td>
+                        <td>
+                            <?php echo date('H:i', strtotime($connection->from->departure)); ?>
+                            <?php if ($connection->from->delay): ?>
+                                <span style="color: #a20d0d;"><?php echo '+' . $connection->from->delay; ?></span>
+                            <?php endif; ?>
+                            <br/>
+                            <?php echo date('H:i', strtotime($connection->to->arrival)); ?>
+                            <?php if ($connection->to->delay): ?>
+                                <span style="color: #a20d0d;"><?php echo '+' . $connection->to->delay; ?></span>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <?php echo htmlentities(substr($connection->duration, 4, 4)); ?>′<br/>
                             <span class="muted">
@@ -225,8 +233,13 @@ if ($search) {
                         </td>
                     </tr>
                     <?php $i = 0; foreach ($connection->sections as $section): ?>
-                        <tr class="section">
-                            <td rowspan="2"><?php echo date('H:i', strtotime($section->departure->departure)); ?></td>
+                        <tr class="section" style="display: none;">
+                            <td rowspan="2">
+                                <?php echo date('H:i', strtotime($section->departure->departure)); ?>
+                                <?php if ($section->departure->delay): ?>
+                                    <span style="color: #a20d0d;"><?php echo '+' . $section->departure->delay; ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
@@ -234,7 +247,7 @@ if ($search) {
                                 <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
                         </tr>
-                        <tr class="section">
+                        <tr class="section" style="display: none;">
                             <td style="border-top: 0; padding: 4px 8px;">
                                 <span class="muted">
                                 <?php if ($section->journey): ?>
@@ -252,8 +265,13 @@ if ($search) {
                                 </span>
                             </td>
                         </tr>
-                        <tr class="section">
-                            <td style="border-top: 0;"><?php echo date('H:i', strtotime($section->arrival->arrival)); ?></td>
+                        <tr class="section" style="display: none;">
+                            <td style="border-top: 0;">
+                                <?php echo date('H:i', strtotime($section->arrival->arrival)); ?>
+                                <?php if ($section->arrival->delay): ?>
+                                    <span style="color: #a20d0d;"><?php echo '+' . $section->arrival->delay; ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td style="border-top: 0;">
                                 <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
@@ -265,7 +283,14 @@ if ($search) {
         </table>
         <?php endif; ?>
 
-        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections…</a>
+    <div class="row-fluid">
+        <div class="span9 fluid">
+            <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
+        </div>
+        <div class="span3 fluid station">
+            <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
+        </div>
+    </div>
     </div>
 </div>
 
