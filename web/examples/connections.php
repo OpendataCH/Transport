@@ -59,6 +59,10 @@ if ($search) {
         .station input {
             width: 92%;
         }
+        
+        .later {
+            text-align: right;
+        }
 
         .row-fluid + .row-fluid {
             padding-top: 3px;
@@ -102,7 +106,7 @@ if ($search) {
             background-color: #F9F9F9;
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 767px) {
             body {
                 padding-top: 20px;
                 padding-bottom: 30px;
@@ -284,10 +288,10 @@ if ($search) {
         </table>
 
         <div class="row-fluid">
-            <div class="span9 fluid">
+            <div class="span6 fluid">
                 <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
             </div>
-            <div class="span3 fluid station">
+            <div class="span6 fluid later">
                 <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
             </div>
         </div>
