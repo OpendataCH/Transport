@@ -65,7 +65,7 @@ class API
         $result = simplexml_load_string($response->getContent());
 
         // load pages
-        for ($i = 0; $i < $query->page; $i++) {
+        for ($i = 0; $i < abs($query->page); $i++) {
 
             // load next page
             $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
