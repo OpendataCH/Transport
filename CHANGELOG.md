@@ -1,9 +1,19 @@
 # Changelog
 
+## 2012-07-27
+
+- Added easier delay information
+- Moved config/local.php to config.php
+
+## 2012-07-19
+
+- Switched to fahrplan.sbb.ch
+- #68 Implemented pagination for connections
+
 ## 2012-07-16
 
 - Refactored default config
-- Added class Transport\Entity\ScheduleSection
+- Added class Transport\Entity\Schedule\Section
 
 ## 2012-07-09
 
