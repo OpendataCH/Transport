@@ -2,6 +2,7 @@
 
 $from = isset($_GET['from']) ? $_GET['from'] : false;
 $to = isset($_GET['to']) ? $_GET['to'] : false;
+$via = isset($_GET['via']) ? $_GET['via'] : false;
 $datetime = isset($_GET['datetime']) ? $_GET['datetime'] : '';
 $page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
 
@@ -18,6 +19,10 @@ if ($search) {
     if ($datetime) {
         $query['date'] = date('Y-m-d', strtotime($datetime));
         $query['time'] = date('H:i', strtotime($datetime));
+    }
+    
+    if ($via) {
+        $query['via'] = $via;
     }
 
     $url = 'http://transport.opendata.ch/v1/connections?' . http_build_query($query);
