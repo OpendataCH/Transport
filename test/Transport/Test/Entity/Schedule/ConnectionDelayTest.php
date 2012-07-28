@@ -78,6 +78,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $sectionJourney->name = 'S9 18962';
         $sectionJourney->category = 'S9';
         $sectionJourney->number = '18962';
+        $sectionJourney->capacity1st = 1;
+        $sectionJourney->capacity2nd = 1;
 
         $sectionFrom = new Entity\Schedule\Stop();
         $sectionFrom->departure = '2012-01-16T16:10:00+0100';
