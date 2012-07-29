@@ -1,5 +1,5 @@
 {
-    "hash": "6b6e9bcad5c53d5c7e8e32070605aee0",
+    "hash": "8720a1c830cd39f4f3ab514b14f34ce4",
     "packages": [
         {
             "package": "facebook/xhprof",
@@ -7,9 +7,7 @@
         },
         {
             "package": "kriswallsmith/buzz",
-            "version": "dev-master",
-            "source-reference": "2ba5da13b1b03590f0164b3fb61578078d671fcc",
-            "commit-date": "1341070218"
+            "version": "v0.6"
         },
         {
             "package": "monolog/monolog",
@@ -17,9 +15,7 @@
         },
         {
             "package": "predis/predis",
-            "version": "0.7.x-dev",
-            "source-reference": "6e9db69e729119b17510ee86e2a4d1ce3c6a1ad7",
-            "commit-date": "1342872780"
+            "version": "v0.7.3"
         },
         {
             "package": "symfony/serializer",
@@ -27,9 +23,7 @@
         },
         {
             "package": "twig/twig",
-            "version": "1.6.x-dev",
-            "source-reference": "v1.6.5",
-            "commit-date": "1334134838"
+            "version": "1.6.5"
         }
     ],
     "packages-dev": null,
