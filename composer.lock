@@ -1,5 +1,5 @@
 {
-    "hash": "722bf11f251482882e918b054fb386c9",
+    "hash": "6b6e9bcad5c53d5c7e8e32070605aee0",
     "packages": [
         {
             "package": "facebook/xhprof",
@@ -18,20 +18,25 @@
         {
             "package": "predis/predis",
             "version": "0.7.x-dev",
-            "source-reference": "v0.7.3",
-            "commit-date": "1338542251"
+            "source-reference": "6e9db69e729119b17510ee86e2a4d1ce3c6a1ad7",
+            "commit-date": "1342872780"
+        },
+        {
+            "package": "symfony/serializer",
+            "version": "v2.0.16"
         },
         {
             "package": "twig/twig",
             "version": "1.6.x-dev",
-            "source-reference": "v1.6.5"
+            "source-reference": "v1.6.5",
+            "commit-date": "1334134838"
         }
     ],
     "packages-dev": null,
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [
 
     ]

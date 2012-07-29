@@ -5,8 +5,6 @@ namespace Transport\Test\Entity\Schedule;
 use Transport\Entity;
 use Transport\Entity\Schedule\Connection;
 
-use Transport\ResultLimit;
-
 class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     protected function getConnection()
@@ -83,7 +81,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testCreateFromXml()
     {
         $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/connection.xml');
-        ResultLimit::unsetFields();
         $this->assertEquals($this->getConnection(), Connection::createFromXml($xml->ConRes->ConnectionList->Connection));
     }
 }

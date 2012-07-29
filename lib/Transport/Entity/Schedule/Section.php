@@ -3,7 +3,6 @@
 namespace Transport\Entity\Schedule;
 
 use Transport\Entity;
-use Transport\ResultLimit;
 
 class Section
 {
@@ -27,32 +26,22 @@ class Section
      */
     public $arrival;
     
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null, $parentField = '')
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null)
     {
         if (!$obj) {
             $obj = new Section();
         }
 
-        $field = $parentField.'/journey';
-        if (ResultLimit::isFieldSet($field)) {
-            if ($xml->Journey) {
-                $obj->journey = Entity\Schedule\Journey::createFromXml($xml->Journey, $date, null, $field);
-            }
+        if ($xml->Journey) {
+            $obj->journey = Entity\Schedule\Journey::createFromXml($xml->Journey, $date, null);
         }
-        $field = $parentField.'/walk';
-        if (ResultLimit::isFieldSet($field)) {
-            if ($xml->Walk) {
-                $obj->walk = Entity\Schedule\Walk::createFromXml($xml->Walk, $date);
-            }
+
+        if ($xml->Walk) {
+            $obj->walk = Entity\Schedule\Walk::createFromXml($xml->Walk, $date);
         }
-        $field = $parentField.'/departure';
-        if (ResultLimit::isFieldSet($field)) {
-            $obj->departure = Entity\Schedule\Stop::createFromXml($xml->Departure->BasicStop, $date, null, $field);
-        }
-        $field = $parentField.'/arrival';
-        if (ResultLimit::isFieldSet($field)) {
-            $obj->arrival = Entity\Schedule\Stop::createFromXml($xml->Arrival->BasicStop, $date, null, $field);
-        }
+
+        $obj->departure = Entity\Schedule\Stop::createFromXml($xml->Departure->BasicStop, $date, null);
+        $obj->arrival = Entity\Schedule\Stop::createFromXml($xml->Arrival->BasicStop, $date, null);
 
         return $obj;
     }

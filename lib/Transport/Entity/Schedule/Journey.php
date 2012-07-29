@@ -2,8 +2,6 @@
 
 namespace Transport\Entity\Schedule;
 
-use Transport\ResultLimit;
-
 class Journey
 {
 
@@ -47,7 +45,7 @@ class Journey
      */
     public $capacity2nd = null;
 
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null, $parentField = '')
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
     {
         if (!$obj) {
             $obj = new Journey();
@@ -83,30 +81,25 @@ class Journey
         $capacities1st = array();
         $capacities2nd = array();
 
-        $field = $parentField.'/passList';
-        if (ResultLimit::isFieldSet($field)) {
-            if ($xml->PassList->BasicStop) {
-                foreach ($xml->PassList->BasicStop AS $basicStop) {
-                    if ($basicStop->Arr || $basicStop->Dep) {
-                        $stop = Stop::createFromXml($basicStop, $date, null, $field);
-                        if ($stop->prognosis->capacity1st) {
-                            $capacities1st[] = (int) $stop->prognosis->capacity1st;
-                        }
-                        if ($stop->prognosis->capacity2nd) {
-                            $capacities2nd[] = (int) $stop->prognosis->capacity2nd;
-                        }
-                        $obj->passList[] = $stop;
+        if ($xml->PassList->BasicStop) {
+            foreach ($xml->PassList->BasicStop AS $basicStop) {
+                if ($basicStop->Arr || $basicStop->Dep) {
+                    $stop = Stop::createFromXml($basicStop, $date, null);
+                    if ($stop->prognosis->capacity1st) {
+                        $capacities1st[] = (int) $stop->prognosis->capacity1st;
                     }
+                    if ($stop->prognosis->capacity2nd) {
+                        $capacities2nd[] = (int) $stop->prognosis->capacity2nd;
+                    }
+                    $obj->passList[] = $stop;
                 }
             }
         }
 
-        $field = $parentField.'/capacity1st';
-        if (ResultLimit::isFieldSet($field) && count($capacities1st) > 0) {
+        if (count($capacities1st) > 0) {
             $obj->capacity1st = max($capacities1st);   
         }
-        $field = $parentField.'/capacity2nd';
-        if (ResultLimit::isFieldSet($field) && count($capacities2nd) > 0) {
+        if (count($capacities2nd) > 0) {
             $obj->capacity2nd = max($capacities2nd);   
         }
 

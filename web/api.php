@@ -5,14 +5,15 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
-
-use Transport\ResultLimit;
+use Transport\Normalizer\FieldsNormalizer;
 
 date_default_timezone_set('Europe/Zurich');
 
@@ -72,6 +73,12 @@ $app->after(function (Request $request, Response $response) {
     $response->headers->set('Cache-Control', 's-maxage=30, public');
 });
 
+// Serializer
+$app['serializer'] = $app->share(function () use ($app) {
+    $fields = $app['request']->get('fields') ?: array();
+    return new Serializer(array(new FieldsNormalizer($fields)), array('json' => new JsonEncoder()));
+});
+
 
 // count API calls
 if ($app['redis.config']) {
@@ -127,7 +134,10 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
         $stations = $app['api']->findLocations($query);
     }
 
-    return $app->json(array('stations' => $stations));
+    $result = array('stations' => $stations);
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 
@@ -156,8 +166,6 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $sleeper = $request->get('sleeper');
     $couchette = $request->get('chouchette');
     $bike = $request->get('bike');
-
-    ResultLimit::setFields($request->get('fields') ?: array());
 
     if ($limit > 6) {
         return new Response('Maximal value of argument `limit` is 6.', 400);
@@ -222,19 +230,18 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         if ($bike) {
             $query->bike = $bike;
         }
-        $connections = $app['api']->findConnections($query, 'connections');
+        $connections = $app['api']->findConnections($query);
     }
-    $result = array('connections' => $connections);
-    if (ResultLimit::isFieldSet('from')) {
-        $result = array_merge($result,array('from' => $from));   
-    }
-    if (ResultLimit::isFieldSet('to')) {
-        $result = array_merge($result,array('to' => $to));   
-    }
-    if (ResultLimit::isFieldSet('stations')) {
-        $result = array_merge($result,array('stations' => $stations));   
-    }
-    return $app->json($result);
+
+    $result = array(
+        'connections' => $connections,
+        'from' => $from,
+        'to' => $to,
+        'stations' => $stations,
+    );
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 
@@ -260,8 +267,6 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $transportations = $request->get('transportations');
-    
-    ResultLimit::setFields($request->get('fields') ?: array());
 
     if (!$station) {
 
@@ -278,9 +283,13 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
             $query->transportations = $transportations;
         }
         $query->maxJourneys = $limit;
-        $stationboard = $app['api']->getStationBoard($query, 'stationboard');
+        $stationboard = $app['api']->getStationBoard($query);
     }
-    return $app->json(array('stationboard' => $stationboard));
+
+    $result = array('stationboard' => $stationboard);
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 
