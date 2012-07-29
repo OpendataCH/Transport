@@ -1,5 +1,12 @@
 # Changelog
 
+## 2012-07-29
+
+- Added capacity to journey
+- Always use integer for capacity
+- Replaced ResultLimit with Normalizer\FieldNormalizer
+- Removed filtered fields from response
+
 ## 2012-07-27
 
 - Added easier delay information
