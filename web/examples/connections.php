@@ -193,17 +193,16 @@ if ($search) {
                 $('table.connections tr.section').hide();
             }
 
-            $('table.connections tbody').bind('click', function (e) {
+            $('table.connections tr.connection').bind('click', function (e) {
 
                 reset();
 
                 var $this = $(this);
-                var connection = $this.find('tr.connection');
-                connection.hide();
-                $this.find('tr.section').show();
-                
+                $this.hide();
+                $this.nextAll('tr.section').show();
+
                 if ('replaceState' in window.history) {
-                    history.replaceState({}, '', '?' + $('.pager').serialize() + '#' + connection.attr('id'));
+                    history.replaceState({}, '', '?' + $('.pager').serialize() + '#' + $this.attr('id'));
                 }
             });
 
