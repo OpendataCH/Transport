@@ -120,6 +120,11 @@ if ($search) {
 
         .table tr.section {
             background-color: #F9F9F9;
+            cursor: default;
+        }
+        
+        .pager {
+            display: none;
         }
         
         @media (max-width: 767px) {
@@ -190,22 +195,24 @@ if ($search) {
 
             $('table.connections tbody').bind('click', function (e) {
 
-                var $this = $(this);
-
                 reset();
 
-                if ($this.data('open')) {
-
-                    $this.data('open', false);
-
-                } else {
-
-                    $this.find('tr.connection').hide();
-                    $this.find('tr.section').show();
-                    $this.data('open', true);
+                var $this = $(this);
+                var connection = $this.find('tr.connection');
+                connection.hide();
+                $this.find('tr.section').show();
+                
+                if ('replaceState' in window.history) {
+                    history.replaceState({}, '', '?' + $('.pager').serialize() + '#' + connection.attr('id'));
                 }
             });
-            
+
+
+            // open current connection
+            var hash = window.location.hash;
+            hash = hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&" ) : ''; // _sanitizeSelector
+            $(hash).click();
+
             $('.station input').bind('focus', function () {
                 var that = this;
                 setTimeout(function () {
@@ -266,9 +273,10 @@ if ($search) {
                     </th>
                 </tr>
             </thead>
+            <?php $c = 1; ?>
             <?php foreach ($response->connections as $connection): ?>
                 <tbody>
-                    <tr class="connection">
+                    <tr class="connection" id="c<?php echo $c++; ?>">
                         <td>
                             <?php echo date('H:i', strtotime($connection->from->departure)); ?>
                             <?php if ($connection->from->delay): ?>
@@ -345,6 +353,13 @@ if ($search) {
             <?php endforeach; ?>
         </table>
 
+        <?php $datetime = $datetime ?: date('Y-m-d H:i:s'); ?>
+        <form class="pager">
+            <input type="hidden" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" />
+            <input type="hidden" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
+            <input type="hidden" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" />
+            <input type="hidden" name="page" value="<?php echo htmlentities($page + 1, ENT_QUOTES, 'UTF-8'); ?>" />
+        </form>
         <div class="row-fluid">
             <div class="span6 fluid">
                 <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
