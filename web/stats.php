@@ -33,20 +33,6 @@ if ($app['redis.config']) {
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
-        // Redis text response
-        if ($request->get('format') == 'txt') {
-
-            $keys = $app['redis']->keys('stats:*');
-            $values = $app['redis']->mget($keys);
-            $data = array_combine($keys, $values);
-
-            $txt = "MSET ";
-            foreach ($data as $key => $value) {
-                $txt .= "$key $value ";
-            }
-            return new Response($txt, 200, array('Content-Type' => 'text/plain'));
-        }
-
 	    $calls = $app['stats']->getCalls();
 
 	    // transform to comma and new line separated list
