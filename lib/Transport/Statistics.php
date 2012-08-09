@@ -18,7 +18,9 @@ class Statistics {
     {
         if ($this->redis) {
             $date = date('Y-m-d');
-            $key = "stats:calls:$date";
+            $prefix = "stats:calls";
+            $key = "$prefix:$date";
+            $this->redis->sadd($prefix, $key);
             $this->redis->incr($key);
         }
     }
