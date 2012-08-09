@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Europe/Zurich');
+
 $from = isset($_GET['from']) ? $_GET['from'] : false;
 $to = isset($_GET['to']) ? $_GET['to'] : false;
 $via = isset($_GET['via']) ? $_GET['via'] : false;
