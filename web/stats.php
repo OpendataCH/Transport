@@ -11,11 +11,13 @@ date_default_timezone_set('Europe/Zurich');
 // init
 $app = new Silex\Application();
 
-// load config
-require __DIR__.'/../config/default.php';
-$local = __DIR__.'/../config/local.php';
-if (stream_resolve_include_path($local)) {
-	$local = include $local;
+// default config
+$app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
+
+/// load config
+$config = __DIR__.'/../config.php';
+if (stream_resolve_include_path($config)) {
+	include $config;
 }
 
 // twig

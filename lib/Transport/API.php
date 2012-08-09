@@ -8,11 +8,12 @@ use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\ConnectionPageQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
-    const URL = 'http://xmlfahrplan.sbb.ch/bin/extxml.exe/';
+    const URL = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
     const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
 
     const SBB_PROD = 'iPhone3.1';
@@ -41,7 +42,7 @@ class API
     /**
      * @return Buzz\Message\Response
      */
-    public function sendQuery(Query $query)
+    public function sendQuery(Query $query, $url = self::URL)
     {
 
         $headers = array();
@@ -49,13 +50,13 @@ class API
         $headers[] = 'Accept: application/xml';
         $headers[] = 'Content-Type: application/xml';
 
-        return $this->browser->post(self::URL, $headers, $query->toXml());
+        return $this->browser->post($url, $headers, $query->toXml());
     }
 
     /**
      * @return array
      */
-    public function findConnections(ConnectionQuery $query, $field)
+    public function findConnections(ConnectionQuery $query)
     {
         // send request
         $response = $this->sendQuery($query);
@@ -63,12 +64,21 @@ class API
         // parse result
         $result = simplexml_load_string($response->getContent());
 
+        // load pages
+        for ($i = 0; $i < abs($query->page); $i++) {
+
+            // load next page
+            $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
+
+            $response = $this->sendQuery($pageQuery);
+
+            $result = simplexml_load_string($response->getContent());
+        }
+
         $connections = array();
-        if (ResultLimit::isFieldSet($field)) {
-            if ($result->ConRes->ConnectionList->Connection) {
-                foreach ($result->ConRes->ConnectionList->Connection as $connection) {
-                    $connections[] = Entity\Schedule\Connection::createFromXml($connection, null, $field);
-                }
+        if ($result->ConRes->ConnectionList->Connection) {
+            foreach ($result->ConRes->ConnectionList->Connection as $connection) {
+                $connections[] = Entity\Schedule\Connection::createFromXml($connection, null);
             }
         }
 
@@ -150,7 +160,7 @@ class API
      * @param string $dateTime
      * @param array $transportationTypes
      */
-    public function getStationBoard(StationBoardQuery $query, $field = '')
+    public function getStationBoard(StationBoardQuery $query)
     {
         // send request
         $response = $this->sendQuery($query);
@@ -170,7 +180,7 @@ class API
                 if ($prevTime > $curTime) { // we passed midnight
                     $date->add(new \DateInterval('P1D'));
                 }
-                $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null, $field);
+                $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
                 $prevTime = $curTime;
             }
         }

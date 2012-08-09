@@ -5,25 +5,34 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
-
-use Transport\ResultLimit;
+use Transport\Normalizer\FieldsNormalizer;
 
 date_default_timezone_set('Europe/Zurich');
 
 // init
 $app = new Silex\Application();
 
-// load config
-require __DIR__.'/../config/default.php';
-$local = __DIR__.'/../config/local.php';
-if (stream_resolve_include_path($local)) {
-	include $local;
+// default config
+$app['debug'] = true;
+$app['http_cache'] = false;
+$app['buzz.client'] = null;
+$app['monolog.level'] = Monolog\Logger::ERROR;
+$app['xhprof'] = false;
+$app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
+$app['proxy'] = false;
+
+/// load config
+$config = __DIR__.'/../config.php';
+if (stream_resolve_include_path($config)) {
+	include $config;
 }
 
 // HTTP cache
@@ -61,6 +70,12 @@ $app['api'] = new Transport\API(new Buzz\Browser($app['buzz.client']));
 $app->after(function (Request $request, Response $response) {
     $response->headers->set('Access-Control-Allow-Origin', '*');
     $response->headers->set('Cache-Control', 's-maxage=30, public');
+});
+
+// Serializer
+$app['serializer'] = $app->share(function () use ($app) {
+    $fields = $app['request']->get('fields') ?: array();
+    return new Serializer(array(new FieldsNormalizer($fields)), array('json' => new JsonEncoder()));
 });
 
 
@@ -117,7 +132,10 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
         $stations = $app['api']->findLocations($query);
     }
 
-    return $app->json(array('stations' => $stations));
+    $result = array('stations' => $stations);
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 
@@ -139,17 +157,19 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
     $date = $request->get('date') ?: null;
     $time = $request->get('time') ?: null;
     $isArrivalTime = $request->get('isArrivalTime') ?: null;
-    $limit = $request->get('limit') ?: 4;
+    $limit = $request->get('limit') ?: null;
+    $page = $request->get('page') ?: null;
     $transportations = $request->get('transportations');
     $direct = $request->get('direct');
     $sleeper = $request->get('sleeper');
     $couchette = $request->get('chouchette');
     $bike = $request->get('bike');
 
-    ResultLimit::setFields($request->get('fields') ?: array());
-
     if ($limit > 6) {
         return new Response('Maximal value of argument `limit` is 6.', 400);
+    }
+    if ($page > 10) {
+        return new Response('Maximal value of argument `page` is 10.', 400);
     }
 
     // get stations
@@ -158,7 +178,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $query = new LocationQuery(array('from' => $from, 'to' => $to, 'via' => $via));
         $stations = $app['api']->findLocations($query);
     }
-    
+
     // get connections
     $connections = array();
     $from = reset($stations['from']) ?: null;
@@ -175,8 +195,6 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $app['stats']->station($to);
 
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
-        $query->forwardCount = $limit;
-        $query->backwardCount = 0;
         if ($isArrivalTime !== null) {
             switch ($isArrivalTime) {
                 case 0:
@@ -191,6 +209,12 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
                     //wrong parameter value
                     break;
             }
+        }
+        if ($limit) {
+            $query->limit = $limit;
+        }
+        if ($page) {
+            $query->page = $page;
         }
         if ($transportations) {
             $query->transportations = $transportations;
@@ -207,19 +231,18 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         if ($bike) {
             $query->bike = $bike;
         }
-        $connections = $app['api']->findConnections($query, 'connections');
+        $connections = $app['api']->findConnections($query);
     }
-    $result = array('connections' => $connections);
-    if (ResultLimit::isFieldSet('from')) {
-        $result = array_merge($result,array('from' => $from));   
-    }
-    if (ResultLimit::isFieldSet('to')) {
-        $result = array_merge($result,array('to' => $to));   
-    }
-    if (ResultLimit::isFieldSet('stations')) {
-        $result = array_merge($result,array('stations' => $stations));   
-    }
-    return $app->json($result);
+
+    $result = array(
+        'connections' => $connections,
+        'from' => $from,
+        'to' => $to,
+        'stations' => $stations,
+    );
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 
@@ -239,8 +262,6 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $transportations = $request->get('transportations');
-    
-    ResultLimit::setFields($request->get('fields') ?: array());
 
     $station = $request->get('station') ?: $request->get('id');
 
@@ -256,9 +277,13 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
             $query->transportations = $transportations;
         }
         $query->maxJourneys = $limit;
-        $stationboard = $app['api']->getStationBoard($query, 'stationboard');
+        $stationboard = $app['api']->getStationBoard($query);
     }
-    return $app->json(array('stationboard' => $stationboard));
+
+    $result = array('stationboard' => $stationboard);
+
+    $json = $app['serializer']->serialize((object) $result, 'json');
+    return new Response($json, 200, array('Content-Type' => 'application/json'));
 });
 
 

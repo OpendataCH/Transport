@@ -237,19 +237,25 @@
                         <td><code>isArrivalTime</code></td>
                         <td>optional</td>
                         <td>defaults to <code>0</code>, if set to <code>1</code> the passed <code>date</code> and <code>time</code> is the arrival time</td>
-                        <td>?isArrivalTime=1</td>
+                        <td>1</td>
                     </tr>
                     <tr>
                         <td><code>transportations</code></td>
                         <td>optional</td>
                         <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
-                        <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
+                        <td>transportations[]=ec_ic&amp;transportations[]=bus</td>
                     </tr>
                     <tr>
                         <td><code>limit</code></td>
                         <td>optional</td>
                         <td>1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.</td>
                         <td>Bern</td>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>optional</td>
+                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
+                        <td>3</td>
                     </tr>
                     <tr>
                         <td><code>direct</code></td>
@@ -549,7 +555,7 @@
                     </tr>
                     <tr>
                         <td><code>score</code></td>
-                        <td>The accuracy of fire</td>
+                        <td>The accuracy of the result</td>
                     </tr>
                     <tr>
                         <td><code>coordinates</code></td>
@@ -601,11 +607,6 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>date</code></td>
-                        <td>The connection date</td>
-                        <td>2012-03-19</td>
-                    </tr>
-                    <tr>
                         <td><code>from</code></td>
                         <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
                     </tr>
@@ -621,11 +622,6 @@
                     <tr>
                         <td><code>service</code></td>
                         <td colspan="2"><a href="#service">Service</a> information about how regular the connection operates</td>
-                    </tr>
-                    <tr>
-                        <td><code>serviceDays</code></td>
-                        <td>Number of transfers within the connection</td>
-                        <td>2</td>
                     </tr>
                     <tr>
                         <td><code>products</code></td>
@@ -796,12 +792,12 @@
             
         <h3 id="limit-response">Limit response</h3>
             <p>You can limit the response data with the <code>fields</code> parameter.
-            If any <code>field[]</code> is passed, only the specified fields are in the response.
+            If any <code>fields[]</code> is passed, only the specified fields are in the response.
             The API is aware of the hierarchy, if you set a field, everything below is in the response unless a more specific (further down in the hierarchy) field is set.
             </p>
             <h4>Example Request</h4>
 
-            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&to=Genève&fields[]=connections/from/departure&fields[]=connections/to/arrival</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from/departure&amp;fields[]=connections/to/arrival</pre>
 
             <h4>Example response</h4>
 
@@ -810,20 +806,11 @@
     "connections":[
         {
             "from":{
-                "station":null,
-                "arrival":null,
                 "departure":"2012-05-01T19:42:00+0200",
-                "platform":null,
-                "prognosis":null,
             },
             "to":{
-                "station":null,
                 "arrival":"2012-05-01T20:15:00+0200",
-                "departure":null,
-                "platform":null,
-                "prognosis":null,
-            },
-            "sections":null
+            }
         },
     ],
     //....
@@ -834,7 +821,7 @@
             
             <h4>Example Request</h4>
 
-            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&to=Genève&fields[]=connections/from&fields[]=connections/to/station</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from&amp;fields[]=connections/to/station</pre>
 
             <h4>Example response</h4>
 
@@ -875,20 +862,13 @@
                         "x":6.142437,
                         "y":46.210217
                     }
-                },
-                "arrival":null,
-                "departure":null,
-                "platform":null,
-                "prognosis":null,
-            },
-            "sections":null
+                }
+            }
         },
     ],
     // ...
 }
             </pre>
-            <p>Currently, the fields which are not requested get returned with <code>null</code> as value.
-            These fields may get removed from the response in the future, don't rely on them being there.</p>
         </article>
 
         <footer>

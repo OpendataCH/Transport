@@ -2,8 +2,6 @@
 
 namespace Transport\Entity\Schedule;
 
-use Transport\ResultLimit;
-
 class Journey
 {
 
@@ -36,8 +34,18 @@ class Journey
      * @var array
      */
     public $passList = array();
-    
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null, $parentField = '')
+
+    /**
+     * @var int
+     */
+    public $capacity1st = null;
+
+    /**
+     * @var int
+     */
+    public $capacity2nd = null;
+
+    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
     {
         if (!$obj) {
             $obj = new Journey();
@@ -70,15 +78,29 @@ class Journey
             }
         }
 
-        $field = $parentField.'/passList';
-        if (ResultLimit::isFieldSet($field)) {
-            if ($xml->PassList->BasicStop) {
-                foreach ($xml->PassList->BasicStop AS $basicStop) {
-                    if ($basicStop->Arr || $basicStop->Dep) {
-                        $obj->passList[] = Stop::createFromXml($basicStop, $date, null, $field);
+        $capacities1st = array();
+        $capacities2nd = array();
+
+        if ($xml->PassList->BasicStop) {
+            foreach ($xml->PassList->BasicStop AS $basicStop) {
+                if ($basicStop->Arr || $basicStop->Dep) {
+                    $stop = Stop::createFromXml($basicStop, $date, null);
+                    if ($stop->prognosis->capacity1st) {
+                        $capacities1st[] = (int) $stop->prognosis->capacity1st;
                     }
+                    if ($stop->prognosis->capacity2nd) {
+                        $capacities2nd[] = (int) $stop->prognosis->capacity2nd;
+                    }
+                    $obj->passList[] = $stop;
                 }
             }
+        }
+
+        if (count($capacities1st) > 0) {
+            $obj->capacity1st = max($capacities1st);   
+        }
+        if (count($capacities2nd) > 0) {
+            $obj->capacity2nd = max($capacities2nd);   
         }
 
         return $obj;

@@ -1,4 +1,4 @@
-config/local.php
+config.php
 var/cache/
 var/logs/
 var/xhprof/

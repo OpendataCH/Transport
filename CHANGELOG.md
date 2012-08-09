@@ -1,5 +1,31 @@
 # Changelog
 
+## 2012-07-29
+
+- Added capacity to journey
+- Always use integer for capacity
+- Replaced ResultLimit with Normalizer\FieldNormalizer
+- Removed filtered fields from response
+
+## 2012-07-27
+
+- Added easier delay information
+- Moved config/local.php to config.php
+
+## 2012-07-19
+
+- Switched to fahrplan.sbb.ch
+- #68 Implemented pagination for connections
+
+## 2012-07-16
+
+- Refactored default config
+- Added class Transport\Entity\Schedule\Section
+
+## 2012-07-09
+
+- #74 Added missing toXml method for POI
+
 ## 2012-06-20
 
 - Use Silex HTTP cache

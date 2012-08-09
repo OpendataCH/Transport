@@ -22,9 +22,9 @@ class ConnectionQuery extends Query
 
     public $transportations = array('all');
 
-    public $forwardCount= null;
+    public $limit = 4;
 
-    public $backwardCount = null;
+    public $page = 0;
 
     public $searchMode = \Transport\API::SEARCH_MODE_NORMAL;
 
@@ -52,17 +52,12 @@ class ConnectionQuery extends Query
 
     public function toXml()
     {
-        if ($this->forwardCount === null && $this->backwardCount === null) {
-            if ($this->isArrivalTime == false) {
-                $forwardCount = 4;
-                $backwardCount = 0;
-            } else {
-                $forwardCount = 0;
-                $backwardCount = 4;
-            }
+        if ($this->isArrivalTime == false) {
+            $forwardCount = $this->limit;
+            $backwardCount = 0;
         } else {
-            $forwardCount = $this->forwardCount;
-            $backwardCount = $this->backwardCount;
+            $forwardCount = 0;
+            $backwardCount = $this->limit;
         }
 
         $transportationsBinary = Transportations::reduceTransportations($this->transportations);
@@ -122,6 +117,7 @@ class ConnectionQuery extends Query
         if ($this->changeExtensionPercent > 0) {
             $rflags['chExtension'] = $this->changeExtensionPercent;
         }
+
         return $request->asXML();
     }
 }

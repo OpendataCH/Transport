@@ -39,10 +39,10 @@ class Prognosis
         }
 
         if ($xml->Capacity1st) {
-            $obj->capacity1st = (string) $xml->Capacity1st;
+            $obj->capacity1st = (int) $xml->Capacity1st;
         }
         if ($xml->Capacity2nd) {
-            $obj->capacity2nd = (string) $xml->Capacity2nd;
+            $obj->capacity2nd = (int) $xml->Capacity2nd;
         }
 
         return $obj;

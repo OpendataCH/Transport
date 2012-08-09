@@ -21,7 +21,7 @@ If you cloned the repository inside your document root, the API is now accessibl
 
 ### Configuration
 
-By default the API uses the configuration from ```config/default.php```. To define your own configuration copy the file to ```config/local.php``` and override the variables you want to change.
+To define your own configuration for the API copy the file ```config.php.sample``` to ```config.php``` and override the variables you want to change.
 
 ### Statistics
 
