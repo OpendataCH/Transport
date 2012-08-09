@@ -205,7 +205,9 @@ if ($search) {
 
                                 $(data.stations).each(function (i, station) {
 
-                                    $('input[name=from]').val(station.name);
+                                    if (!$('input[name=from]').val()) {
+                                        $('input[name=from]').val(station.name);
+                                    }
 
                                     return false;
                                 });
