@@ -138,15 +138,15 @@ if ($search) {
             font-weight: normal;
         }
 
-        .table tbody {
+        .table tr.connection {
             cursor: pointer;
         }
 
         .table tr.section {
-            background-color: #F9F9F9;
+            background-color: #f5f5f5;
             cursor: default;
         }
-        
+
         .pager {
             display: none;
         }
