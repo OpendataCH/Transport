@@ -28,21 +28,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 if ($app['redis.config']) {
 	$app['redis'] = new Predis\Client($app['redis.config']);
+	$app['stats'] = new Transport\Statistics($app['redis']);
 
 	// home
 	$app->get('/', function(Request $request) use ($app) {
 
-	    $keys = $app['redis']->keys('stats:calls:*');
-	    if (!is_array($keys)) {
-	        $keys = explode(' ', $keys);
-	    }
-
-	    $values = $app['redis']->mget($keys);
-	    $calls = array();
-	    foreach ($keys as $i => $key) {
-	        $calls[substr($key, 12, 10)] = $values[$i];
-	    }
-	    ksort($calls);
+	    $calls = $app['stats']->getCalls();
 
 	    // transform to comma and new line separated list
 	    $data = array();
@@ -51,14 +42,9 @@ if ($app['redis.config']) {
 	    }
 	    $data = implode('\n', $data);
 
-        // Redis text response
-        if ($request->get('format') == 'txt') {
-            $txt = "MSET ";
-            foreach ($calls as $date => $count) {
-                $txt .= "stats:calls:$date $count ";
-            }
-            return new Response($txt, 200, array('Content-Type' => 'text/plain'));
-        }
+        // get top resources and stations
+        $resources = $app['stats']->getTopResources();
+        $stations = $app['stats']->getTopStations();
 
         // CSV response
         if ($request->get('format') == 'csv') {
@@ -74,9 +60,18 @@ if ($app['redis.config']) {
             return $app->json(array('calls' => $calls));
         }
 
+	    // transform to comma and new line separated list
+	    $data = array();
+	    foreach (array_slice($calls, -30) as $date => $value) {
+	        $data[] = $date . ',' . ($value ?: 0);
+	    }
+	    $data = implode('\n', $data);
+
 	    return $app['twig']->render('stats.twig', array(
-	        'calls' => $calls,
 	        'data' => $data,
+	        'calls' => $calls,
+	        'resources' => $resources,
+	        'stations' => $stations,
 	    ));
 	});
 } else {
