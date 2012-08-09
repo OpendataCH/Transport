@@ -188,26 +188,36 @@ if ($search) {
                     }, 400);
 
                     // get location for from
-                    navigator.geolocation.getCurrentPosition(function (position) {
+                    var watch = navigator.geolocation.watchPosition(function (position) {
 
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
+                        if (position.coords.accuracy < 100) {
 
-                        $.get('http://transport.opendata.ch/v1/locations', {x: lat, y: lng}, function(data) {
+                            // stop locating
+                            navigator.geolocation.clearWatch(watch);
 
-                            clearInterval(interval);
-                            $('input[name=from]').attr('placeholder', 'From');
+                            var lat = position.coords.latitude;
+                            var lng = position.coords.longitude;
 
-                            $(data.stations).each(function (i, station) {
+                            $.get('http://transport.opendata.ch/v1/locations', {x: lat, y: lng}, function(data) {
 
-                                $('input[name=from]').val(station.name);
+                                clearInterval(interval);
+                                $('input[name=from]').attr('placeholder', 'From');
 
-                                return false;
+                                $(data.stations).each(function (i, station) {
+
+                                    $('input[name=from]').val(station.name);
+
+                                    return false;
+                                });
                             });
-                        });
+                        }
     
                     }, function(error) {
                         // ignore
+                    }, {
+                        enableHighAccuracy:true,
+                        maximumAge: 10000,
+                        timeout: 30000
                     });
                 }
             }
