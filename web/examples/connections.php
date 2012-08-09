@@ -5,6 +5,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : false;
 $via = isset($_GET['via']) ? $_GET['via'] : false;
 $datetime = isset($_GET['datetime']) ? $_GET['datetime'] : '';
 $page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
+$c = isset($_GET['c']) ? (int) $_GET['c'] : false;
 
 $search = $from && $to;
 if ($search) {
@@ -202,15 +203,9 @@ if ($search) {
                 $this.nextAll('tr.section').show();
 
                 if ('replaceState' in window.history) {
-                    history.replaceState({}, '', '?' + $('.pager').serialize() + '#' + $this.attr('id'));
+                    history.replaceState({}, '', '?' + $('.pager').serialize() + '&c=' + $this.data('c'));
                 }
             });
-
-
-            // open current connection
-            var hash = window.location.hash;
-            hash = hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@\[\]\^`{|}~]/g, "\\$&" ) : ''; // _sanitizeSelector
-            $(hash).click();
 
             $('.station input').bind('focus', function () {
                 var that = this;
@@ -272,10 +267,11 @@ if ($search) {
                     </th>
                 </tr>
             </thead>
-            <?php $c = 1; ?>
+            <?php $j = 0; ?>
             <?php foreach ($response->connections as $connection): ?>
+                <?php $j++; ?>
                 <tbody>
-                    <tr class="connection" id="c<?php echo $c++; ?>">
+                    <tr class="connection"<?php if ($j == $c): ?> style="display: none;"<?php endif; ?> data-c="<?php echo $j; ?>">
                         <td>
                             <?php echo date('H:i', strtotime($connection->from->departure)); ?>
                             <?php if ($connection->from->delay): ?>
@@ -303,7 +299,7 @@ if ($search) {
                         </td>
                     </tr>
                     <?php $i = 0; foreach ($connection->sections as $section): ?>
-                        <tr class="section" style="display: none;">
+                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
                             <td rowspan="2">
                                 <?php echo date('H:i', strtotime($section->departure->departure)); ?>
                                 <?php if ($section->departure->delay): ?>
@@ -317,7 +313,7 @@ if ($search) {
                                 <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
                         </tr>
-                        <tr class="section" style="display: none;">
+                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
                             <td style="border-top: 0; padding: 4px 8px;">
                                 <span class="muted">
                                 <?php if ($section->journey): ?>
@@ -335,7 +331,7 @@ if ($search) {
                                 </span>
                             </td>
                         </tr>
-                        <tr class="section" style="display: none;">
+                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
                             <td style="border-top: 0;">
                                 <?php echo date('H:i', strtotime($section->arrival->arrival)); ?>
                                 <?php if ($section->arrival->delay): ?>
