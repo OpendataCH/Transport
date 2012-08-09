@@ -48,12 +48,18 @@ class Statistics {
     public function getCalls()
     {
 	    $keys = $this->redis->keys('stats:calls:*');
-	    $values = $this->redis->mget($keys);
+
+        $result = $this->redis->sort("stats:calls", array(
+            'by' => '*',
+            'get' => array('#', '*'),
+            'sort'  => 'DESC',
+        ));
+
+	    // regroup
 	    $calls = array();
-	    foreach ($keys as $i => $key) {
-	        $calls[substr($key, 12, 10)] = $values[$i];
+	    foreach (array_chunk($result, 2) as $values) {
+	        $calls[substr($values[0], 12, 10)] = $values[1];
 	    }
-	    ksort($calls);
 
 	    return $calls;
     }
