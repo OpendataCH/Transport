@@ -7,6 +7,9 @@ $datetime = isset($_GET['datetime']) ? $_GET['datetime'] : '';
 $page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
 $c = isset($_GET['c']) ? (int) $_GET['c'] : false;
 
+$stationsFrom = array();
+$stationsTo = array();
+
 $search = $from && $to;
 if ($search) {
 
@@ -34,6 +37,26 @@ if ($search) {
     }
     if ($response->to) {
         $to = $response->to->name;
+    }
+
+    if (isset($response->stations->from[0])) {
+        if ($response->stations->from[0]->score < 101) {
+            foreach (array_slice($response->stations->from, 1, 3) as $station) {
+                if ($station->score > 97) {
+                    $stationsFrom[] = $station->name;
+                }
+            }
+        }
+    }
+
+    if (isset($response->stations->to[0])) {
+        if ($response->stations->to[0]->score < 101) {
+            foreach (array_slice($response->stations->to, 1, 3) as $station) {
+                if ($station->score > 97) {
+                    $stationsTo[] = $station->name;
+                }
+            }
+        }
     }
 }
 
@@ -231,9 +254,25 @@ if ($search) {
             <div class="row-fluid">
                 <div class="span5 fluid station">
                     <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" />
+                    <?php $i = count($stationsFrom); if ($i > 0): ?>
+                        <p>
+                            Did you mean:
+                            <?php foreach ($stationsFrom as $station): ?>
+                                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $station, 'to' => $to, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                            <?php endforeach ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
                 <div class="span5 fluid station">
                     <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" autofocus />
+                    <?php $i = count($stationsFrom); if ($i > 0): ?>
+                        <p>
+                            Did you mean:
+                            <?php foreach ($stationsTo as $station): ?>
+                                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $station, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                            <?php endforeach ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="row-fluid">
