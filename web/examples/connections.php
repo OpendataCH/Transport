@@ -156,9 +156,19 @@ if ($search) {
                 padding-top: 20px;
                 padding-bottom: 30px;
             }
-            
+
             form {
                 margin-bottom: 8px;
+            }
+            
+            .date input {
+                height: 26px;
+                padding: 0;
+                border-color: #bbb;
+            }
+            
+            .date input:focus {
+                border-color: #1a81d2;
             }
 
             .row-fluid .fluid {
