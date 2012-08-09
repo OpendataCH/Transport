@@ -50,9 +50,9 @@ class Statistics {
 	    $keys = $this->redis->keys('stats:calls:*');
 
         $result = $this->redis->sort("stats:calls", array(
-            'by' => '*',
             'get' => array('#', '*'),
-            'sort'  => 'DESC',
+            'sort'  => 'ASC',
+            'alpha' => true
         ));
 
 	    // regroup
