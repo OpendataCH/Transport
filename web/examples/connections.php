@@ -66,7 +66,13 @@ if ($search) {
 <head>
     <meta charset="utf-8">
 
-    <title>Connections Example - Transport API</title>
+    <title>
+        <?php if ($search): ?>
+            <?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?> – <?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>
+        <?php else: ?>
+            Transport
+        <?php endif; ?>
+    </title>
 
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
