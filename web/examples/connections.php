@@ -351,7 +351,7 @@ if ($search) {
                             </span>
                         </td>
                         <td>
-                            <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?><br/>
+                            <?php echo htmlentities($connection->from->prognosis->platform ?: $connection->from->platform, ENT_QUOTES, 'UTF-8'); ?><br/>
                             <?php if ($connection->capacity2nd > 0): ?>
                                 <span class="muted">
                                     <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
@@ -371,7 +371,7 @@ if ($search) {
                                 <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
                             <td>
-                                <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php echo htmlentities($section->departure->prognosis->platform ?: $section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
                         </tr>
                         <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
@@ -402,7 +402,7 @@ if ($search) {
                             <td style="border-top: 0;">
                                 <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
-                            <td style="border-top: 0;"><?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td style="border-top: 0;"><?php echo htmlentities($section->arrival->prognosis->platform ?: $section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
