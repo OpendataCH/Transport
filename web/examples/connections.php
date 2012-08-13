@@ -357,7 +357,12 @@ if ($search) {
                             </span>
                         </td>
                         <td>
-                            <?php echo htmlentities($connection->from->prognosis->platform ?: $connection->from->platform, ENT_QUOTES, 'UTF-8'); ?><br/>
+                            <?php if ($connection->from->prognosis->platform): ?>
+                                <span style="color: #a20d0d;"><?php echo htmlentities($connection->from->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                            <?php else: ?>
+                                <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?>
+                            <?php endif; ?>
+                            <br/>
                             <?php if ($connection->capacity2nd > 0): ?>
                                 <span class="muted">
                                     <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
@@ -377,7 +382,11 @@ if ($search) {
                                 <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
                             <td>
-                                <?php echo htmlentities($section->departure->prognosis->platform ?: $section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php if ($section->departure->prognosis->platform): ?>
+                                    <span style="color: #a20d0d;"><?php echo htmlentities($section->departure->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <?php else: ?>
+                                    <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
@@ -408,7 +417,13 @@ if ($search) {
                             <td style="border-top: 0;">
                                 <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
                             </td>
-                            <td style="border-top: 0;"><?php echo htmlentities($section->arrival->prognosis->platform ?: $section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td style="border-top: 0;">
+                                <?php if ($section->arrival->prognosis->platform): ?>
+                                    <span style="color: #a20d0d;"><?php echo htmlentities($section->arrival->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                                <?php else: ?>
+                                    <?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
