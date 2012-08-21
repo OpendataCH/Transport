@@ -269,7 +269,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     $stations = $app['api']->findLocations($query);
     $station = reset($stations);
 
-    if ($station) {
+    if ($station instanceof Station) {
         $app['stats']->station($station);
 
         $query = new StationBoardQuery($station, $date);
@@ -280,7 +280,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
         $stationboard = $app['api']->getStationBoard($query);
     }
 
-    $result = array('stationboard' => $stationboard);
+    $result = array('station' => $station, 'stationboard' => $stationboard);
 
     $json = $app['serializer']->serialize((object) $result, 'json');
     return new Response($json, 200, array('Content-Type' => 'application/json'));
