@@ -33,7 +33,7 @@
         "predis/predis": "0.7.*",
         "twig/twig": "1.6.*",
         "monolog/monolog": "1.0.*",
-        "facebook/xhprof": "0.9.*",
+        "facebook/xhprof": "dev-master",
         "symfony/serializer": "2.0.*"
     },
     "autoload": {
