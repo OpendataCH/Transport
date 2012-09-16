@@ -11,12 +11,18 @@ class ConnectionQueryParser
 {
     public static function create(Request $request, Location $from, Location $to, $via = array())
     {
-        $date = $request->get('date') ?: null;
-        $time = $request->get('time') ?: null;
+        $datetime = $request->get('datetime');
+        if ($datetime) {
+            $date = date('Y-m-d', strtotime($datetime));
+            $time = date('H:i', strtotime($datetime));
+        } else {
+            $date = $request->get('date');
+            $time = $request->get('time');
+        }
 
         $query = new ConnectionQuery($from, $to, $via, $date, $time);
 
-        $isArrivalTime = $request->get('isArrivalTime') ?: null;
+        $isArrivalTime = $request->get('isArrivalTime');
         if ($isArrivalTime !== null) {
             switch ($isArrivalTime) {
                 case 0:
@@ -33,12 +39,12 @@ class ConnectionQueryParser
             }
         }
 
-        $limit = $request->get('limit') ?: null;
+        $limit = $request->get('limit');
         if ($limit) {
             $query->limit = $limit;
         }
 
-        $page = $request->get('page') ?: null;
+        $page = $request->get('page');
         if ($page) {
             $query->page = $page;
         }
