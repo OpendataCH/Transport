@@ -1,6 +1,5 @@
 <?php
 
-require_once 'phar://'.__DIR__.'/../silex.phar'; 
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
