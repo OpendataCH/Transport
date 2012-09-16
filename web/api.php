@@ -10,7 +10,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
-use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Web\ConnectionQueryParser;
+use Transport\Web\LocationQueryParser;
 use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Normalizer\FieldsNormalizer;
 
@@ -140,43 +141,11 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
 
 // connections
 $app->get('/v1/connections', function(Request $request) use ($app) {
-    // validate
-    $from = $request->get('from');
-    $to = $request->get('to');
-    if (is_array($request->get('via'))) {
-        $via = $request->get('via');
-        if (count($via) > 5) {
-            return new Response('Invalid via count (max 5 allowed)', 400);
-        }
-    } else if ($request->get('via')) {
-        $via = array($request->get('via'));
-    } else {
-        $via = array();
-    }
-    $date = $request->get('date') ?: null;
-    $time = $request->get('time') ?: null;
-    $isArrivalTime = $request->get('isArrivalTime') ?: null;
-    $limit = $request->get('limit') ?: null;
-    $page = $request->get('page') ?: null;
-    $transportations = $request->get('transportations');
-    $direct = $request->get('direct');
-    $sleeper = $request->get('sleeper');
-    $couchette = $request->get('chouchette');
-    $bike = $request->get('bike');
 
-    if ($limit > 6) {
-        return new Response('Maximal value of argument `limit` is 6.', 400);
-    }
-    if ($page > 10) {
-        return new Response('Maximal value of argument `page` is 10.', 400);
-    }
+    $query = LocationQueryParser::create($request);
 
     // get stations
-    $stations = array('from' => array(), 'to' => array(), 'via' => array());
-    if ($from && $to) {
-        $query = new LocationQuery(array('from' => $from, 'to' => $to, 'via' => $via));
-        $stations = $app['api']->findLocations($query);
-    }
+    $stations = $app['api']->findLocations($query);
 
     // get connections
     $connections = array();
@@ -193,43 +162,13 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
         $app['stats']->station($from);
         $app['stats']->station($to);
 
-        $query = new ConnectionQuery($from, $to, $via, $date, $time);
-        if ($isArrivalTime !== null) {
-            switch ($isArrivalTime) {
-                case 0:
-                case "false":
-                    $query->isArrivalTime = false;
-                    break;
-                case 1:
-                case "true":
-                    $query->isArrivalTime = true;
-                    break;
-                default:
-                    //wrong parameter value
-                    break;
-            }
+        $query = ConnectionQueryParser::create($request, $from, $to, $via);
+
+        $errors = ConnectionQueryParser::validate($query);
+        if ($errors) {
+            return $app->json(array('errors' => $errors), 400);
         }
-        if ($limit) {
-            $query->limit = $limit;
-        }
-        if ($page) {
-            $query->page = $page;
-        }
-        if ($transportations) {
-            $query->transportations = $transportations;
-        }
-        if ($direct) {
-            $query->direct = $direct;
-        }
-        if ($sleeper) {
-            $query->sleeper = $sleeper;
-        }
-        if ($couchette) {
-            $query->couchette = $couchette;
-        }
-        if ($bike) {
-            $query->bike = $bike;
-        }
+
         $connections = $app['api']->findConnections($query);
     }
 
