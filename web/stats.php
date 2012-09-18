@@ -22,7 +22,6 @@ if (stream_resolve_include_path($config)) {
 // twig
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path'       => __DIR__.'/../views',
-    'twig.class_path' => __DIR__.'/../vendor/twig/lib',
 ));
 
 if ($app['redis.config']) {
