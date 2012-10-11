@@ -195,6 +195,9 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
     }
 
     $date = $request->get('date');
+    if (!$date) {
+        $date = $request->get('datetime');
+    }
     if ($date) {
         $date = new DateTime($date, new DateTimeZone('Europe/Zurich'));
     }
