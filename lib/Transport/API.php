@@ -18,7 +18,7 @@ class API
 
     const SBB_PROD = 'iPhone3.1';
     const SBB_VERSION = '2.3';
-    const SBB_ACCESS_ID = 'MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe';
+    const SBB_ACCESS_ID = 'YJpyuPISerpXNNRTo50fNMP0yVu7L6IMuOaBgS0Xz89l3f6I3WhAjnto4kS9oz1';
 
     const SEARCH_MODE_NORMAL = 'N';
     const SEARCH_MODE_ECONOMIC = 'P';
@@ -46,7 +46,7 @@ class API
     {
 
         $headers = array();
-        $headers[] = 'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0';
+        $headers[] = 'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0';
         $headers[] = 'Accept: application/xml';
         $headers[] = 'Content-Type: application/xml';
 
