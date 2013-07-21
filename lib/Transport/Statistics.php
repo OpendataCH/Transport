@@ -4,6 +4,7 @@ namespace Transport;
 
 use Predis\Client;
 use Transport\Entity\Location\Location;
+use Transport\Entity\Location\Station;
 
 class Statistics {
 
@@ -27,7 +28,9 @@ class Statistics {
 
     public function station(Location $station)
     {
-        $this->count('stats:stations', $station->id, array('name' => $station->name, 'x' => $station->coordinate->x, 'y' => $station->coordinate->y));
+        if ($station instanceof Station) {
+            $this->count('stats:stations', $station->id, array('name' => $station->name, 'x' => $station->coordinate->x, 'y' => $station->coordinate->y));
+        }
     }
 
     public function resource($path)
