@@ -26,5 +26,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->getAddress(), Address::createFromXml($xml));
     }
+
+    public function testToXml()
+    {
+        $this->assertXmlStringEqualsXmlString('<Address name="3011 Bern, Bollwerk 19" x="7440803" y="46949607"/>', $this->getAddress()->toXml()->asXml());
+    }
 }
 

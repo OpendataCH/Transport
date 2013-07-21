@@ -2,6 +2,8 @@
 
 namespace Transport\Entity\Location;
 
+use Transport\Entity\Coordinate;
+
 /**
  * Represents a Address we received as response
  *
@@ -21,6 +23,13 @@ class Address extends Location
         }
 
         $xml['name'] = $this->name;
+
+        if ($this->coordinate->x) {
+            $xml['x'] = Coordinate::floatToInt($this->coordinate->x);
+        }
+        if ($this->coordinate->y) {
+            $xml['y'] = Coordinate::floatToInt($this->coordinate->y);
+        }
 
         return $xml;
     }
