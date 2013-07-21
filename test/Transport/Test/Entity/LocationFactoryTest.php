@@ -51,8 +51,8 @@ EOF;
         $station->id = 8508489;
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = 8.382324;
-        $coordinate->y = 47.003057;
+        $coordinate->x = 47.003057;
+        $coordinate->y = 8.382324;
         $station->coordinate = $coordinate;
         $this->assertEquals($station, LocationFactory::createFromJson(json_decode($jsonString)));
     }
@@ -75,8 +75,8 @@ EOF;
         $station->id = 8508489;
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = 8.382324;
-        $coordinate->y = 47.003057;
+        $coordinate->x = 47.003057;
+        $coordinate->y = 8.382324;
         $station->coordinate = $coordinate;
         $this->assertEquals($station, LocationFactory::createFromJson(json_decode($jsonString)));
     }

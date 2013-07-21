@@ -39,8 +39,17 @@ class Coordinate
     {
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84'; // best guess
-        $coordinate->x = self::intToFloat($json->x);
-        $coordinate->y = self::intToFloat($json->y);
+
+        $x = self::intToFloat($json->x);
+        $y = self::intToFloat($json->y);
+
+        if ($y > $x) { // HAFAS bug, returns inverted lat/long
+          $coordinate->x = $y;
+          $coordinate->y = $x;
+        } else {
+          $coordinate->x = $x;
+          $coordinate->y = $y;
+        }
 
         return $coordinate;
     }

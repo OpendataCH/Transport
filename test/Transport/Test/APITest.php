@@ -69,12 +69,12 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($stations));
         $this->assertEquals(8508489, $stations[0]->id);
         $this->assertEquals('Kehrsiten-Bürgenstock', $stations[0]->name);
-        $this->assertEquals(8.382324, $stations[0]->coordinate->x);
-        $this->assertEquals(47.003057, $stations[0]->coordinate->y);
+        $this->assertEquals(47.003057, $stations[0]->coordinate->x);
+        $this->assertEquals(8.382324, $stations[0]->coordinate->y);
         $this->assertEquals('WGS84', $stations[0]->coordinate->type);
         $this->assertEquals('Bürgenstock, Hotels', $stations[1]->name);
-        $this->assertEquals(8.386252, $stations[1]->coordinate->x);
-        $this->assertEquals(46.997088, $stations[1]->coordinate->y);
+        $this->assertEquals(46.997088, $stations[1]->coordinate->x);
+        $this->assertEquals(8.386252, $stations[1]->coordinate->y);
         $this->assertEquals('WGS84', $stations[1]->coordinate->type);
     }
 
