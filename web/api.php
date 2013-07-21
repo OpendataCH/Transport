@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
@@ -16,6 +17,8 @@ use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Normalizer\FieldsNormalizer;
 
 date_default_timezone_set('Europe/Zurich');
+
+ErrorHandler::register();
 
 // init
 $app = new Silex\Application();
