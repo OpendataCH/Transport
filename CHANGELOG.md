@@ -1,5 +1,12 @@
 # Changelog
 
+## 2013-07-21
+
+- #81 Fixed inverted coordinates in location search
+- Deprecated stop/station, use stop/location which also includes addresses
+- #80 Allow connection search by address
+- Better error handling
+
 ## 2012-07-29
 
 - Added capacity to journey
