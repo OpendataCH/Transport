@@ -27,6 +27,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $from->station = $station;
+        $from->location = $station;
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-16T16:49:00+0100';
@@ -40,6 +41,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;
+        $to->location = $station;
 
 
         $sectionWalk = new Entity\Schedule\Walk();
@@ -56,6 +58,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
+        $sectionFrom->location = $station;
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = "2012-01-16T16:10:00+0100";
@@ -68,6 +71,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
+        $sectionTo->location = $station;
 
         $section1 = new Entity\Schedule\Section();
         $section1->walk = $sectionWalk;
@@ -99,6 +103,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
+        $sectionFrom->location = $station;
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = '2012-01-16T16:49:00+0100';
@@ -112,6 +117,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
+        $sectionTo->location = $station;
 
         $passList = array();
         $passList[0] = clone $sectionFrom;

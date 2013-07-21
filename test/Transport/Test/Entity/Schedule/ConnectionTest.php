@@ -34,6 +34,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $from->station = $station;
+        $from->location = $station;
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-31T19:42:00+0100';
@@ -47,6 +48,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;
+        $to->location = $station;
         
         $passList = array();
         $passList[0] = clone $from;

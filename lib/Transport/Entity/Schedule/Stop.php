@@ -60,7 +60,16 @@ class Stop
         $dateTime = null;
         $isArrival = false;
 
-        $obj->station = Entity\Location\Station::createFromXml($xml->Station);
+        $obj->station = Entity\Location\Station::createFromXml($xml->Station); // deprecated, use location instead
+
+        foreach ($xml->children() as $location) {
+
+            $location = Entity\LocationFactory::createFromXml($location);
+            if ($location) {
+                $obj->location = $location;
+                break;
+            }
+        }
 
         if ($xml->Arr) {
             $isArrival = true;

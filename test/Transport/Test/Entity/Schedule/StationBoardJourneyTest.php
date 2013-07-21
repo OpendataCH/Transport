@@ -24,6 +24,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
                 $coordinates->type = 'WGS84';
             $station->coordinate = $coordinates;
         $stop->station = $station;
+        $stop->location = $station;
         
         $journey = new Entity\Schedule\StationBoardJourney();
         $journey->stop = $stop;
