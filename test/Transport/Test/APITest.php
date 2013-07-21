@@ -27,12 +27,12 @@ class APITest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
-                        'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
+                        'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0',
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
                 $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="YJpyuPISerpXNNRTo50fNMP0yVu7L6IMuOaBgS0Xz89l3f6I3WhAjnto4kS9oz1"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
 ')
             )
             ->will($this->returnValue($response));
@@ -87,12 +87,12 @@ class APITest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
                 $this->equalTo(array(
-                        'User-Agent: SBBMobile/4.2 CFNetwork/485.13.9 Darwin/11.0.0',
+                        'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0',
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
                 $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="MJXZ841ZfsmqqmSymWhBPy5dMNoqoGsHInHbWJQ5PTUZOJ1rLTkn8vVZOZDFfSe"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="YJpyuPISerpXNNRTo50fNMP0yVu7L6IMuOaBgS0Xz89l3f6I3WhAjnto4kS9oz1"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
 ')
             )
             ->will($this->returnValue($response));
