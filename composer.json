@@ -23,6 +23,9 @@
         "facebook/xhprof": "dev-master",
         "symfony/serializer": "2.0.*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "autoload": {
         "psr-0": {"Transport": "lib/"}
     },
