@@ -13,23 +13,9 @@
             "homepage": "https://github.com/OpendataCH/Transport/contributors"
         }
     ],
-    "repositories": {
-        "xhprof": {
-            "type": "package",
-            "package": {
-                "name": "facebook/xhprof",
-                "version": "0.9.2",
-                "source": {
-                    "url": "git://github.com/facebook/xhprof.git",
-                    "type": "git",
-                    "reference": "origin/master"
-                }
-            }
-        }
-    },
     "require": {
         "php": ">= 5.3.2",
-        "silex/silex": "1.0.*",
+        "silex/silex": "1.0.*@dev",
         "kriswallsmith/buzz": "0.6",
         "predis/predis": "0.7.*",
         "twig/twig": "1.6.*",
