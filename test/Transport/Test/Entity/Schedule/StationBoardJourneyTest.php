@@ -30,6 +30,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $journey->stop = $stop;
         $journey->name = 'Bus 31';
         $journey->category = 'Bus';
+        $journey->categoryCode = 6;
         $journey->subcategory = 'Nbu';
         $journey->number = '31';
         $journey->operator = 'VBZ';
