@@ -11,7 +11,6 @@ Feel free to fork this project implement your own ideas or send pull requests.
 ```
 $ git clone git://github.com/OpendataCH/Transport.git transport
 $ cd transport
-$ curl -s http://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
