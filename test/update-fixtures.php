@@ -59,3 +59,8 @@ download($query, 'stationboard.xml');
 $nearBy = new NearbyQuery('47.002347', '8.379934', 2);
 $url = Transport\API::URL_QUERY . '?' . http_build_query($nearBy->toArray());
 downloadJson($url, 'location.json');
+
+// Nyon, rte de l'Etraz
+$nearBy = new NearbyQuery('46.388653', '6.238729', 1);
+$url = Transport\API::URL_QUERY . '?' . http_build_query($nearBy->toArray());
+downloadJson($url, 'location-nyon.json');

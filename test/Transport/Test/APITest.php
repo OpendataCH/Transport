@@ -78,6 +78,30 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('WGS84', $stations[1]->coordinate->type);
     }
 
+    public function testFindNearbyLocationsNyon()
+    {
+        $response = new Response();
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location-nyon.json'));
+
+        $this->browser->expects($this->once())
+            ->method('get')
+            ->with(
+                $this->equalTo(
+                    'http://fahrplan.sbb.ch/bin/query.exe/dny?performLocating=2&tpl=stop2json&look_maxno=1&look_stopclass=1023&look_maxdist=5000&look_y=46388653&look_x=6238729'
+                )
+            )
+            ->will($this->returnValue($response));
+
+        $stations = $this->api->findNearbyLocations(new NearbyQuery('46.388653', '6.238729', 1));
+
+        $this->assertEquals(1, count($stations));
+        $this->assertEquals(8593897, $stations[0]->id);
+        $this->assertEquals("Nyon, rte de l'Etraz", $stations[0]->name);
+        $this->assertEquals(46.388653, $stations[0]->coordinate->x);
+        $this->assertEquals(6.238729, $stations[0]->coordinate->y);
+        $this->assertEquals('WGS84', $stations[0]->coordinate->type);
+    }
+
     public function testGetStationBoard() {
         $response = new Response();
         $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard.xml'));
