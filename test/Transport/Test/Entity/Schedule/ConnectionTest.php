@@ -13,6 +13,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $journey = new Entity\Schedule\Journey();
         $journey->name = 'S1219278';
         $journey->category = 'S12';
+        $journey->categoryCode = 5;
         $journey->number = '19278';
         $journey->capacity1st = 1;
         $journey->capacity2nd = 2;

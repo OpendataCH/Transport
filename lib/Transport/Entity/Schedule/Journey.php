@@ -16,6 +16,19 @@ class Journey
     public $category;
 
     /**
+     * Indicates the type of the public transport vehicle. Possible values:
+     * 
+     * + 0, 1, 2, 3, 5, 8: train
+     * + 4: ship
+     * + 6: bus
+     * + 7: cable car (aerial, big)
+     * + 9: tram
+     *
+     * @var int
+     */
+    public $categoryCode;
+
+    /**
      * @var string
      */
     public $number;
@@ -61,6 +74,7 @@ class Journey
                         break;
                     case 'CATEGORY':
                         $obj->category = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        $obj->categoryCode = (int) $journeyAttribute->Attribute['code'];
                         break;
                     case 'INTERNALCATEGORY':
                         $obj->subcategory = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
