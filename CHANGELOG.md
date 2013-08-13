@@ -4,6 +4,7 @@
 
 - #89 Fixed nearby search for names with apostrophe
 - Added default limit 40 for stationboard
+- #88 Added category code for journeys
 
 ## 2013-07-21
 
