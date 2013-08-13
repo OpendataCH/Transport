@@ -33,28 +33,10 @@ function downloadJson($url, $file) {
     // send request
     $response = $browser->get($url);
 
-    // fix broken JSON
     $content = $response->getContent();
-    $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
 
     $filename = __DIR__ . '/fixtures/' . $file;
     file_put_contents($filename, $content);
-
-    if (function_exists('exec')) {
-        $formatedFilename = $filename . '.formated';
-        exec('python -mjson.tool ' . escapeshellarg($filename) . ' 2>/dev/null > ' . escapeshellarg($formatedFilename));
-
-        if (!file_exists($formatedFilename)) {
-            return;
-        }
-        if (filesize($formatedFilename) !== 0) {
-            unlink($filename);
-            rename($formatedFilename, $filename);
-        } else {
-            // Do cleanup on failure
-            unlink($formatedFilename);
-        }
-    }
 }
 
 // Location
