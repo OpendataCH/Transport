@@ -1,5 +1,10 @@
 # Changelog
 
+## 2013-08-13
+
+- #89 Fixed nearby search for names with apostrophe
+- Added default limit 40 for stationboard
+
 ## 2013-07-21
 
 - #81 Fixed inverted coordinates in location search
