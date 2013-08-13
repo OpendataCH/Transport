@@ -136,6 +136,7 @@ class API
         // fix broken JSON
         $content = $response->getContent();
         $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
+        $content = str_replace("\\'", "'", $content);
 
         // parse result
         $result = json_decode($content);
