@@ -1,5 +1,9 @@
 # Changelog
 
+## 2013-09-05
+
+- Improved stationboard location lookup, only search for stations
+
 ## 2013-08-13
 
 - #89 Fixed nearby search for names with apostrophe

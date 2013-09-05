@@ -209,7 +209,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
     $station = $request->get('station') ?: $request->get('id');
 
-    $query = new LocationQuery($station);
+    $query = new LocationQuery($station, 'station');
     $stations = $app['api']->findLocations($query);
     $station = reset($stations);
 
