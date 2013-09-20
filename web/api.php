@@ -66,8 +66,14 @@ if ($app['proxy']) {
     Request::trustProxyData();
 }
 
+// Initialize buzz client
+$client = $app['buzz.client'] ?: new Buzz\Client\FileGetContents();
+if ($app['proxy_server.address']) {
+    $client->setProxy($app['proxy_server.address']);
+}
+
 // create Transport API
-$app['api'] = new Transport\API(new Buzz\Browser($app['buzz.client']));
+$app['api'] = new Transport\API(new Buzz\Browser($client));
 
 // allow cross-domain requests, enable cache
 $app->after(function (Request $request, Response $response) {

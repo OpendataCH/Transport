@@ -20,3 +20,7 @@ $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 
 // if hosted behind a reverse proxy
 $app['proxy'] = false;
+
+// Address of the proxy server (e.g. 192.168.0.1:8080) to use when connecting
+// to the SBB server (if any). Default is null.
+$app['proxy_server.address'] = null;
