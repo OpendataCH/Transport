@@ -16,7 +16,7 @@
     "require": {
         "php": ">= 5.3.2",
         "silex/silex": "1.0.*@dev",
-        "kriswallsmith/buzz": "0.6",
+        "kriswallsmith/buzz": "0.10",
         "predis/predis": "0.7.*",
         "twig/twig": "1.6.*",
         "monolog/monolog": "1.0.*",
