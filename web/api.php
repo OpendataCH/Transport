@@ -63,7 +63,11 @@ if ($app['xhprof']) {
 
 // if hosted behind a reverse proxy
 if ($app['proxy']) {
-    Request::trustProxyData();
+    $proxies = array($_SERVER['REMOTE_ADDR']);
+    if (is_array($app['proxy'])) {
+        $proxies = $app['proxy'];
+    }
+    Request::setTrustedProxies($proxies);
 }
 
 // Initialize buzz client
