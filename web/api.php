@@ -31,6 +31,7 @@ $app['monolog.level'] = Monolog\Logger::ERROR;
 $app['xhprof'] = false;
 $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 $app['proxy'] = false;
+$app['proxy_server.address'] = null;
 
 /// load config
 $config = __DIR__.'/../config.php';
