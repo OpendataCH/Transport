@@ -24,6 +24,12 @@ class API
     const SEARCH_MODE_ECONOMIC = 'P';
 
     /**
+     * Stationboard journeys with delays within this time frame are 
+     * prevented from causing an unintended day jump.
+     */
+    const STATIONBOARD_DELAY_FRAME = 21600; // 6 hours
+
+    /**
      * @var Buzz\Browser
      */
     protected $browser;
@@ -178,7 +184,8 @@ class API
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
                 $curTime = strtotime((string) $journey->MainStop->BasicStop->Dep->Time);
-                if ($prevTime > $curTime) { // we passed midnight
+                if ($prevTime > $curTime && ($prevTime - $curTime) > self::STATIONBOARD_DELAY_FRAME) {
+                    // we passed midnight and the time jumped more than the delay frame
                     $date->add(new \DateInterval('P1D'));
                 }
                 $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
