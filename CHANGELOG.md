@@ -1,5 +1,11 @@
 # Changelog
 
+## 2013-10-15
+
+- #75 Fix for incorrect date for delays in stationboard
+- #95 Replaced deprecated trustProxyData
+- #93 Added support for proxy servers
+
 ## 2013-09-05
 
 - Improved stationboard location lookup, only search for stations
