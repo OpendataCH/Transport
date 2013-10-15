@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.33.SBB.4.10.2" lang="EN">
+  <STBRes>
+    <JourneyList>
+      <STBJourney>
+        <JHandle tNr="33235" puic="095" cycle="01"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich Altstetten" x="8488936" y="47391481" type="WGS84" externalId="8503001#95" externalStationNr="8503001"/>
+            <Dep>
+              <Time>22:10</Time>
+              <Platform>
+                <Text>3</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Time>22:12</Time>
+              </Dep>
+              <Capacity1st>2</Capacity1st>
+              <Capacity2nd>2</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="8" to="19">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>S9 18990</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="8" to="19">
+            <Attribute type="CATEGORY" code="5">
+              <AttributeVariant type="NORMAL">
+                <Text>S9</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="8" to="19">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>S9</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="8" to="19">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>18990</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="8" to="19">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Zug</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+    </JourneyList>
+  </STBRes>
+</ResC>
