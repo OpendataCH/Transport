@@ -173,7 +173,7 @@ class API
         // and wrap it accordingly if time goes over midnight
         $journeys = array();
         // subtract one minute because SBB also returns results for one minute in the past
-        $prevTime = time() - 60;
+        $prevTime = strtotime($query->date->format('H:i')) - 60;
         $date = $query->date;
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
