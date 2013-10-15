@@ -20,8 +20,9 @@ function download(Query $query, $file) {
 
     // try to format
     $dom = new DOMDocument();
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
     if ($dom->load($filename)) {
-        $dom->formatOutput = true;
         $dom->save($filename);
     }
 }
