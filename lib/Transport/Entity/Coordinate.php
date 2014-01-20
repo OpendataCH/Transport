@@ -72,8 +72,8 @@ class Coordinate
     {
         $earth_radius = 6371;
 
-        $dLat = deg2rad($this->y - $lat);
-        $dLon = deg2rad($this->x - $lon);  
+        $dLat = deg2rad($this->x - $lat);
+        $dLon = deg2rad($this->y - $lon);  
 
         $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon/2) * sin($dLon/2);  
         $c = 2 * asin(sqrt($a));
