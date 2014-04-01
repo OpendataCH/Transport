@@ -59,6 +59,8 @@
                         <li><a href="#checkpoint">checkpoint</a></li>
                         <li><a href="#prognosis">prognosis</a></li>
                         <li><a href="#stop">stop</a></li>
+                        <li><a href="#section">section</a></li>
+                        <li><a href="#journey">journey</a></li>
                     </ul>
                 </li>
                 <li>
@@ -243,7 +245,7 @@
                         <td><code>transportations</code></td>
                         <td>optional</td>
                         <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
-                        <td>transportations[]=ec_ic&amp;transportations[]=bus</td>
+                        <td>transportations[]=ec_ic&amp;<br/>transportations[]=bus</td>
                     </tr>
                     <tr>
                         <td><code>limit</code></td>
@@ -644,6 +646,10 @@
                         <td>The maximum estimated occupation load of 2nd class coaches</td>
                         <td>2</td>
                     </tr>
+                    <tr>
+                        <td><code>sections</code></td>
+                        <td colspan="2">A list of <a href="#section">sections</a></td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -795,7 +801,100 @@
                 </tr>
                 </tbody>
             </table>
-            
+
+            <h4 id="section">Section Object</h4>
+
+            <p>A connection consists of one or multiple sections.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>journey</code></td>
+                        <td colspan="2">A <a href="#journey">journey</a>, the transportation used by this section. Can be null</td>
+                    </tr>
+                    <tr>
+                        <td><code>walk</code></td>
+                        <td>Information about walking distance, if available</td>
+                        <td>null</td>
+                    </tr>
+                    <tr>
+                        <td><code>departure</code></td>
+                        <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                    <tr>
+                        <td><code>arrival</code></td>
+                        <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="journey">Journey Object</h4>
+
+            <p>The actual transportation of a section, e.g. a bus or a train between two stations.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>The name of the transportation</td>
+                        <td>ICN 518</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>Category of the transportation</td>
+                        <td>ICN</td>
+                    </tr>
+                    <tr>
+                        <td><code>categoryCode</code></td>
+                        <td>An internal category code of the transportation</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>number</code></td>
+                        <td>The number of the transportation line</td>
+                        <td>518</td>
+                    </tr>
+                    <tr>
+                        <td><code>operator</code></td>
+                        <td>The company performing the transportation</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><code>to</code></td>
+                        <td>Final destination of the train</td>
+                        <td>Zürich HB</td>
+                    </tr>
+                    <tr>
+                        <td><code>passList</code></td>
+                        <td colspan="2"><a href="#checkpoint">Checkpoints</a> the train passed on the journey</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity1st</code></td>
+                        <td>The maximum estimated occupation load of 1st class coaches</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity2st</code></td>
+                        <td>The maximum estimated occupation load of 2nd class coaches</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+
         <h3 id="limit-response">Limit response</h3>
             <p>You can limit the response data with the <code>fields</code> parameter.
             If any <code>fields[]</code> is passed, only the specified fields are in the response.
