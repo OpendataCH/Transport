@@ -47,6 +47,14 @@ if ($app['http_cache']) {
 	));
 }
 
+// Exception handler
+$app->error(function (\Buzz\Exception\ClientException $e, $code) use ($app) {
+
+    $errors = array($e->getMessage());
+
+    return $app->json(array('errors' => $errors), 500);
+});
+
 // Monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => __DIR__.'/../var/logs/transport.log',
