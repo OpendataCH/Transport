@@ -10,14 +10,17 @@ class Statistics {
 
     protected $redis;
 
-    public function __construct(Client $redis = null)
+    protected $enabled;
+
+    public function __construct(Client $redis = null, $enabled = false)
     {
         $this->redis = $redis;
+        $this->enabled = $enabled;
     }
 
     public function call()
     {
-        if ($this->redis) {
+        if ($this->enabled) {
             $date = date('Y-m-d');
             $prefix = "stats:calls";
             $key = "$prefix:$date";
@@ -40,7 +43,7 @@ class Statistics {
 
     protected function count($prefix, $id, $data)
     {
-        if ($this->redis) {
+        if ($this->enabled) {
             $key = "$prefix:$id";
             $this->redis->hmset($key, $data);
             $this->redis->sadd($prefix, $key);

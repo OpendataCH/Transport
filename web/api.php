@@ -30,6 +30,7 @@ $app['buzz.client'] = null;
 $app['monolog.level'] = Monolog\Logger::ERROR;
 $app['xhprof'] = false;
 $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
+$app['stats.config'] = array('enabled' => false);
 $app['proxy'] = false;
 $app['proxy_server.address'] = null;
 
@@ -101,7 +102,7 @@ $app['serializer'] = $app->share(function () use ($app) {
 });
 
 
-// statistics
+// Redis
 $redis = null;
 try {
     if ($app['redis.config']) {
@@ -112,7 +113,9 @@ try {
     $app['monolog']->addError($e->getMessage());
     $redis = null;
 }
-$app['stats'] = new Transport\Statistics($redis);
+
+// statistics
+$app['stats'] = new Transport\Statistics($redis, $app['stats.config']['enabled']);
 $app->after(function (Request $request, Response $response) use ($app) {
     $app['stats']->call();
     $app['stats']->resource($request->getPathInfo());
