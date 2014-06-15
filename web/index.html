@@ -22,7 +22,7 @@
         </header>
 
         <div class="alert alert-block alert-success">
-            <strong>2014-06-15 20:09</strong> On Friday, 2014-06-13 the IP of our server has been blocked by SSB due to high amount of requests for a certain connection. We found a temporary solution and rerouted the traffic to another server during the weekend. To prevent our server from being blocked again we added a rate limiting of 15 requests per minute per IP address. If you depend on the API you can also install your own version on your own server as described in the <a href="https://github.com/OpendataCH/Transport#installation">installation instructions</a> on GitHub.
+            <strong>2014-06-15 20:09</strong> On Friday, 2014-06-13 the IP of our server has been blocked by SSB due to high amount of requests for a certain connection. We found a temporary solution and rerouted the traffic to another server during the weekend. To prevent our server from being blocked again we added a rate limiting of 150 requests per minute per IP address. If you depend on the API you can also install your own version on your own server as described in the <a href="https://github.com/OpendataCH/Transport#installation">installation instructions</a> on GitHub.
         </div>
 
         <article>
@@ -46,6 +46,7 @@
             <h2 id="documentation">API Documentation</h2>
 
             <ul>
+                <li><a href="#rate-limiting">Rate limiting</a></li>
                 <li>
                     <a href="#api-resources">Resources</a>
                     <ul>
@@ -71,6 +72,10 @@
                     <a href="#limit-response">Limit response</a>
                 </li>
             </ul>
+
+            <h3 id="rate-limiting">Rate Limiting</h3>
+
+            <p>The number of requests you can send to http://transport.opendata.ch is limited to 150 requests per minute per IP address. The number of remaining requests is sent back for your information in the HTTP response header <code>X-Rate-Limit-Remaining</code>.</p>
 
             <h3 id="api-resources">API Resources</h3>
 
