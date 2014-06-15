@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Transport\Entity\Location\Station;
 use Transport\Entity\Location\LocationQuery;
@@ -31,6 +32,7 @@ $app['monolog.level'] = Monolog\Logger::ERROR;
 $app['xhprof'] = false;
 $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 $app['stats.config'] = array('enabled' => false);
+$app['rate_limiting.config'] = array('enabled' => false, 'limit' => 150);
 $app['proxy'] = false;
 $app['proxy_server.address'] = null;
 
@@ -49,11 +51,13 @@ if ($app['http_cache']) {
 }
 
 // Exception handler
-$app->error(function (\Buzz\Exception\ClientException $e, $code) use ($app) {
+$app->error(function (\Exception $e, $code) use ($app) {
 
-    $errors = array($e->getMessage());
+    $errors = array(array('message' => $e->getMessage()));
 
-    return $app->json(array('errors' => $errors), 500);
+    $result = array('errors' => $errors);
+
+    return $app->json($result, $code);
 });
 
 // Monolog
@@ -121,6 +125,32 @@ $app->after(function (Request $request, Response $response) use ($app) {
     $app['stats']->resource($request->getPathInfo());
 });
 
+// rate limiting
+$app['rate_limiting'] = new Transport\RateLimiting($redis, $app['rate_limiting.config']['enabled'], $app['rate_limiting.config']['limit']);
+
+$app->before(function (Request $request) use ($app) {
+
+    if ($app['rate_limiting']->isEnabled()) {
+
+        $ip = $request->getClientIp();
+        if ($app['rate_limiting']->hasReachedLimit($ip)) {
+            throw new HttpException(429, 'Rate limit of ' . $app['rate_limiting']->getLimit() . ' requests per minute exceeded');
+        }
+        $app['rate_limiting']->increment($ip);
+    }
+});
+
+$app->after(function (Request $request, Response $response) use ($app) {
+
+    if ($app['rate_limiting']->isEnabled()) {
+
+        $ip = $request->getClientIp();
+
+        $response->headers->set('X-Rate-Limit-Limit', $app['rate_limiting']->getLimit());
+        $response->headers->set('X-Rate-Limit-Remaining', $app['rate_limiting']->getRemaining($ip));
+        $response->headers->set('X-Rate-Limit-Reset', $app['rate_limiting']->getReset());
+    }
+});
 
 // index
 $app->get('/', function(Request $request) use ($app) {

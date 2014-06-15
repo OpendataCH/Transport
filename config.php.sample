@@ -15,11 +15,14 @@ $app['monolog.level'] = Monolog\Logger::ERROR;
 // XHProf for profiling
 $app['xhprof'] = false;
 
-// Redis for statistics
+// Redis for statistics and rate limiting
 $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
 
 // Statistics
 $app['stats.config'] = array('enabled' => false);
+
+// Rate limiting
+$app['rate_limiting.config'] = array('enabled' => false, 'limit' => 150);
 
 // if hosted behind a reverse proxy
 $app['proxy'] = false;
