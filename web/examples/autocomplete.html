@@ -5,16 +5,16 @@
     
     <title>Transport API</title>
     
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
     
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <script>
     
     $(function () {
         $('#from, #to').autocomplete({
 			source: function (request, response) {
-				$.get('../api.php/v1/locations', {query: request.term, type: 'station'}, function(data) {
+				$.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
 					response($.map(data.stations, function(station) {
 						return {
 							label: station.name,

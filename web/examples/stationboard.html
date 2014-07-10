@@ -5,17 +5,17 @@
 
     <title>Stationboard Example - Transport API</title>
 
-    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="../media/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
     <script src="../media/js/moment.min.js"></script>
     <script>
 
@@ -25,7 +25,7 @@
 
     	function refresh() {
         	if (station) {
-        		$.get('../api.php/v1/stationboard', {id: station, limit: 15}, function(data) {
+        		$.get('../v1/stationboard', {id: station, limit: 15}, function(data) {
         		    $('#stationboard tbody').empty();
         			$(data.stationboard).each(function () {
         			    var prognosis, departure, delay, line = '<tr><td>';
@@ -46,7 +46,7 @@
 
         $('#station').autocomplete({
     		source: function (request, response) {
-    			$.get('../api.php/v1/locations', {query: request.term, type: 'station'}, function(data) {
+    			$.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
     				response($.map(data.stations, function(station) {
     					return {
     						label: station.name,

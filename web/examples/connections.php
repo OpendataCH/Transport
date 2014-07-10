@@ -74,7 +74,7 @@ if ($search) {
         <?php endif; ?>
     </title>
 
-    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
@@ -82,9 +82,9 @@ if ($search) {
     <link rel="stylesheet" href="../media/bootstrap/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="../media/js/moment.min.js"></script>
     <style>
         h1 {
@@ -214,7 +214,7 @@ if ($search) {
                             var lat = position.coords.latitude;
                             var lng = position.coords.longitude;
 
-                            $.get('http://transport.opendata.ch/v1/locations', {x: lat, y: lng}, function(data) {
+                            $.get('../v1/locations', {x: lat, y: lng}, function(data) {
 
                                 clearInterval(interval);
                                 $('input[name=from]').attr('placeholder', 'From');
