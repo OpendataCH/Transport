@@ -8,6 +8,8 @@ Feel free to fork this project implement your own ideas or send pull requests.
 
 ## Installation
 
+You can install the Transport API on your own server, however we recommend the usage of [transport.opendata.ch](http://transport.opendata.ch/).
+
 ```
 $ git clone git://github.com/OpendataCH/Transport.git transport
 $ cd transport
