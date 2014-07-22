@@ -18,7 +18,7 @@ class API
 
     const SBB_PROD = 'iPhone3.1';
     const SBB_VERSION = '2.3';
-    const SBB_ACCESS_ID = 'YJpyuPISerpXNNRTo50fNMP0yVu7L6IMuOaBgS0Xz89l3f6I3WhAjnto4kS9oz1';
+    const SBB_ACCESS_ID = 'vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb';
 
     const SEARCH_MODE_NORMAL = 'N';
     const SEARCH_MODE_ECONOMIC = 'P';
