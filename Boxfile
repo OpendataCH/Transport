@@ -7,9 +7,9 @@ web1:
     - curl
     - xhprof
   after_build:
-    - "mkdir -p /var/www/var/logs"
-    - "mkdir -p /var/www/var/xhprof"
-    - "mv /var/www/pagodabox.php /var/www/config.php"
+    - "mkdir -p var/logs"
+    - "mkdir -p var/xhprof"
+    - "mv pagodabox.php config.php"
     - "curl -s http://getcomposer.org/installer | php"
     - "php composer.phar install"
 
