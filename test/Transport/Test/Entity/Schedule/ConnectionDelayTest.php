@@ -11,6 +11,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
     {   
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-16T16:10:00+0100';
+        $from->departureTimestamp = 1326726600;
         $from->delay = '8';
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
@@ -31,6 +32,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-16T16:49:00+0100';
+        $to->arrivalTimestamp = 1326728940;
         $to->platform = '7';
         $station = new Entity\Location\Station();
             $station->name = "Zug";
@@ -49,6 +51,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $sectionFrom = new Entity\Schedule\Stop();
         $sectionFrom->departure = '2012-01-16T16:06:00+0100';
+        $sectionFrom->departureTimestamp = 1326726360;
         $station = new Entity\Location\Station();
             $station->name = "Zürich, Bahnhof Altstetten";
             $station->id = "000103022";
@@ -62,6 +65,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = "2012-01-16T16:10:00+0100";
+        $sectionTo->arrivalTimestamp = 1326726600;
         $station = new Entity\Location\Station();
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
@@ -88,6 +92,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $sectionFrom = new Entity\Schedule\Stop();
         $sectionFrom->departure = '2012-01-16T16:10:00+0100';
+        $sectionFrom->departureTimestamp = 1326726600;
         $sectionFrom->delay = '8';
         $sectionFrom->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
@@ -108,6 +113,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = '2012-01-16T16:49:00+0100';
+        $sectionTo->arrivalTimestamp = 1326728940;
         $sectionTo->platform = '7';
         $station = new Entity\Location\Station();
             $station->name = "Zug";

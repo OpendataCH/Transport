@@ -12,7 +12,10 @@ class Stop
     public $station;
 
     public $arrival;
+    public $arrivalTimestamp;
+
     public $departure;
+    public $departureTimestamp;
 
     public $delay;
 
@@ -75,11 +78,13 @@ class Stop
             $isArrival = true;
             $dateTime = self::calculateDateTime((string) $xml->Arr->Time, $date);
             $obj->arrival = $dateTime->format(\DateTime::ISO8601);
+            $obj->arrivalTimestamp = $dateTime->getTimestamp();
             $obj->platform = trim((string) $xml->Arr->Platform->Text);
         }
         if ($xml->Dep) {
             $dateTime = self::calculateDateTime((string) $xml->Dep->Time, $date);
             $obj->departure = $dateTime->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $dateTime->getTimestamp();
             $obj->platform = trim((string) $xml->Dep->Platform->Text);
         }
         $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival);

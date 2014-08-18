@@ -21,6 +21,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-31T19:14:00+0100';
+        $from->departureTimestamp = 1328033640;
         $from->platform = '21/22';
         $prognosis = new Entity\Schedule\Prognosis();
         $prognosis->capacity1st = '1';
@@ -39,6 +40,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-31T19:42:00+0100';
+        $to->arrivalTimestamp = 1328035320;
         $to->platform = '3';
         $station = new Entity\Location\Station();
             $station->name = "Baden";
