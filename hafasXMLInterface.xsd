@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by rhu@hacon.de (HaCon Ingenieurges. mbH) -->
+<!-- Mit XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) von Reinhard Hüttermann (HaCon Ingenieurgesellschaft mbH) bearbeitet -->
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (x64) (http://www.altova.com) by XMLSpy 2010 Professional Ed. Release 3, Installed for 3 users (HaCon Ingenieurgesellschaft mbH) -->
 <!-- ======================================================================= -->
 <!-- location validation request/result -->
 <!-- connection request/result -->
@@ -32,6 +33,19 @@
 <!--                             ver 3.0.5 Added Attribute needServiceBitfield to element ConReq (rhu: 2011-07-11) -->
 <!--                             ver 3.0.6 attlist.RFlags removed from xsd; Parameter "unsharp" added to attlist.BasicRFlags; attlist.RFlags exchanged against attlist.BasicRFlags in element RFlags; Parameter "b" and "f" added to element RFlags (rhu: 2011-08-05) -->
 <!--                             ver 3.0.7 Attribute bike removed from attlist.Prod, because bike search is realized via attribute search (rhu: 2011-08-12) -->
+<!--                             ver 3.0.8 Added attribute type EXT_ID for attlist.Attribute (dsc: 2013-07-24) -->
+<!--                             ver 3.0.9 Description of element ConReqAttrFilter  corrected (rhu: 2013-10-29 -->
+<!--                             ver 3.1 Added LINE attribute, description for ADMINISTRATION and three NAMEFORMATA/B/C attributes for the new 5.20.39 timetable data (jf: 2014-01-15) -->
+<!--                             ver 3.2 Added request and response for TrainSearch (mschu: 2014-01-31) ; element JHandle extended-->
+<!--                             ver 3.2.1 Updated status of handicappedAccess values, changed attributes NAMEFORMATA/B/C to NAMEFORMATTED(jf: 2014-03-05) -->
+<!--                             ver 3.2.2 Removed Time element from the StopType element used for the TrainSearch result. The server doesn't return a time for a trainsearch result. (mschu 2014-04-16) -->
+<!--                             ver 3.2.3 Added maxResults parameter to the TrainSearch request and added example error code values for the errorCode attribute in the trainsearch result. (mschu 2014-04-22) -->
+<!--                             ver 3.2.4 Added request aparametr for Bfr search (HandicapProfile)	 (jf: 2014-07-16) -->
+<!--                             ver 3.2.5 Added possible values of StopPrognosis->Status	 (ad: 2014-07-17) -->
+<!--                             ver 3.2.6 Added ctxRecon for the connection reconstruction request data   (jf: 2014-08-14) -->
+<!--                             ver 3.2.7 Added Childelement Date to JourneyRes describing the departure time of the journey (rhu: 2014-09-11) -->
+<!--                             ver 3.2.8 Added new request ConReconstructionReq for connection reconstruction (jf: 2014-09-23) -->
+<!--                             ver 3.2.9 Added maxStops parameter to the StationBoardRequest request	 (ad: 2014-09-25) -->
 <!-- ======================================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="ReqC">
@@ -45,14 +59,24 @@
 				<xs:element ref="ConReq"/>
 				<xs:element ref="ConIntervalReq"/>
 				<xs:element ref="ConScrReq"/>
+				<xs:element ref="ConReconstructionReq">
+					<xs:annotation>
+						<xs:documentation>ConReconstructionReq takes external train data for a connection. The server then performs a reconstruction of this connection and returns a standard connection result, that can be used like normal calculated results.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element ref="JourneyReq"/>
 				<xs:element ref="DirectTrainReq"/>
+				<xs:element ref="TrainSearchReq">
+					<xs:annotation>
+						<xs:documentation>TrainSearch request. Request information about a train number or stations.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 			</xs:choice>
 			<xs:attributeGroup ref="attlist.ReqCResC"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:attributeGroup name="attlist.ReqCResC">
-		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.0">
+		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.2.8">
 			<xs:annotation>
 				<xs:documentation>Current version of the Interface. The version given in the result must match the version specified in the request.</xs:documentation>
 			</xs:annotation>
@@ -318,9 +342,9 @@
 			<xs:sequence>
 				<xs:element ref="ConReqAttrFilter">
 					<xs:annotation>
-						<xs:documentation>The element ConReqAttrFilter is an attribute filter, whcih can be applicated on trains, stations, walks or combined.
-Use the following parameters for carriage of bicycles:  mode="1" type="EXC" value="GN"
-Use the following parameters for group travel:  mode="1" type="EXC" value="VT:VN:aq"</xs:documentation>
+						<xs:documentation>The element ConReqAttrFilter is an attribute filter, which can be applicated on trains, stations, walks or combined.
+Use the following parameters for carriage of bicycles:  mode="1" type="EXC" value="VT:VN:aq"
+Use the following parameters for group travel:  mode="1" type="EXC" value="GN"</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
@@ -402,6 +426,12 @@ Use the following parameters for group travel:  mode="1" type="EXC" value="VT:VN
 			<xs:attribute name="needServiceBitfield" use="optional" default="0">
 				<xs:annotation>
 					<xs:documentation>If this attribute is set to 1, the connection result returns the traffic days in a bitfield. Each position represents a traffic day. A 1 represents the information, that the traffic runs at the corresponding day. A 0 represents the information, that the traffic don't run at the corresponding traffix day. The first position in the bitfield represents the first day of the timetable period. The last position the last day in the timetable period.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="HandicapProfile" use="optional" default="0">
+				<xs:annotation>
+					<xs:documentation>If this attribute is set, the BfR status will be checked during the connection calculation. Possible values are 1:= "Selbstein-/Ausstieg möglich", 2 := " Ein- und Ausstiegshilfe erfolgt durch das Fahrpersonal" and 3 := " Ein-/Ausstieg mit Voranmeldung möglich".
+					</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
@@ -745,6 +775,7 @@ Use the following parameters for group travel:  mode="1" type="EXC" value="VT:VN
 					<xs:element ref="LocValRes" maxOccurs="unbounded"/>
 					<xs:element ref="STBRes"/>
 					<xs:element ref="JourneyRes"/>
+					<xs:element ref="TrainSearchRes"/>
 				</xs:choice>
 			</xs:sequence>
 			<xs:attributeGroup ref="attlist.ReqCResC"/>
@@ -843,6 +874,11 @@ Use the following parameters for group travel:  mode="1" type="EXC" value="VT:VN
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:attributeGroup>
+	<xs:element name="ctxRecon" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>The element ctxRecon is part of a Connection. It contains the string for a connection reconstruction request.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:element name="Date" type="xs:string">
 		<xs:annotation>
 			<xs:documentation>The element date contains the base date for a connection. The base date is the date at which the conection starts. All time elements refer to the base date.
@@ -1056,7 +1092,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="type" default="NORMAL">
 			<xs:annotation>
-				<xs:documentation>There is a variety of different attributetypes, specifying different characteristics of the current consection. Attributes of type NORMAL specify classical train attributes like BordRestaurant, Carriage of Bicycles etc. Attributes of type DIRECTION show the direction of a train, this can either be the name of the destination station or the external Id of the station, depending on the underlying data. Not all means of transportation do have a DIRECTION entry. CATEGORY specifies the the category of the train. Attributevariants of type SHORT show the internally used description of the category and has a maximum length of eight characters. Attributevariants of type NORMAL show the output category of the train and also has a maximum length of eight characters, this should be used for output. Attributevariants of type LONG take a more detailed description (like Intercity Express). Dependant on the data, the Attributevariants of type NORMAL and LONG might not be available, in which case the output of the category should be suppressed. Attributes of type INTERNALCATEGORY... Attributes of type OPERATOR contain a description of the operator of the train. Attributes of type NAME take the name of the means of transport. Please note that in some rare cases the means of transort does not have a name (for example any english trains do not have names in the data), in which case the attribute will not be printed out. Attributes ofvtype NUMBER take the external train number. ICON contains the iconname</xs:documentation>
+				<xs:documentation>There is a variety of different attributetypes, specifying different characteristics of the current consection. Attributes of type NORMAL specify classical train attributes like BordRestaurant, Carriage of Bicycles etc. Attributes of type DIRECTION show the direction of a train, this can either be the name of the destination station or the external Id of the station, depending on the underlying data. Not all means of transportation do have a DIRECTION entry. CATEGORY specifies the the category of the train. Attributevariants of type SHORT show the internally used description of the category and has a maximum length of eight characters. Attributevariants of type NORMAL show the output category of the train and also has a maximum length of eight characters, this should be used for output. Attributevariants of type LONG take a more detailed description (like Intercity Express). Dependant on the data, the Attributevariants of type NORMAL and LONG might not be available, in which case the output of the category should be suppressed. Attributes of type INTERNALCATEGORY... Attributes of type OPERATOR contain a description of the operator of the train. Attributes of type NAME take the name of the means of transport. Attributes of Type NAMEFORMATTED contain the name of the means of transport, defined in the zugart file. The code value contains the index of the formatted name while the attribute variant of type normal contain the actual formatted name. NAMEFORMATTED attributes with code equal to 1 contain the name for the connection overview page (travel with column) in the oFpl. NAMEFORMATTED attribute with a code value of 2 contain the name in the comment column in the oFpl and so on. Please note that some rare cases the means of transport	does not have a name (for example any english trains do not have names in the data), in which case the attribute will	not be printed out. Attributes of type NUMBER take the external train number. ICON contains the iconname. Attributes of type EXT_ID contains the external id of the mean of transport from the data. Attributes of type LINE contains	the line name, if the ride is a line, e. g. a Tram. Attributes of type ADMINISTRATION contains the administration info for the train.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:token">
@@ -1066,13 +1102,16 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 					<xs:enumeration value="INTERNALCATEGORY"/>
 					<xs:enumeration value="OPERATOR"/>
 					<xs:enumeration value="NAME"/>
+					<xs:enumeration value="NAMEFORMATTED"/>
 					<xs:enumeration value="NUMBER"/>
+					<xs:enumeration value="LINE"/>
+					<xs:enumeration value="EXT_ID"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="code">
 			<xs:annotation>
-				<xs:documentation>The attribute code will be available for attributes of type NORMAL and CATEGORY. For Attributes of type NORMAL it represents the internal two-byte code of the ATTRIBUTE.</xs:documentation>
+				<xs:documentation>The attribute code will be available for attributes of type NORMAL and CATEGORY. For Attributes of type NORMAL it represents the internal two-byte code of the ATTRIBUTE. For attributes of type NAMEFORMATTED the code value contains the index of the name format. NAMEFORMATTED attributes with a code value of 1 contain the train name formatted using the first format as defined in the zugart file while a code value of 2 indicate that the second format was used to format the train name.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:token">
@@ -1112,6 +1151,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 				<xs:element ref="IList" minOccurs="0"/>
 				<xs:element ref="CommentList" minOccurs="0"/>
 				<xs:element ref="AltConList" minOccurs="0"/>
+				<xs:element ref="ctxRecon" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attributeGroup ref="attlist.Connection"/>
 		</xs:complexType>
@@ -1154,7 +1194,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 						</xs:enumeration>
 						<xs:enumeration value="IS_ALTERNATIVE">
 							<xs:annotation>
-								<xs:documentation>The value "HAS_ALTERNATVIE" means this connection is the alternative connection to given.</xs:documentation>
+								<xs:documentation>The value "IS_ALTERNATVIE" means this connection is the alternative connection to given.</xs:documentation>
 							</xs:annotation>
 						</xs:enumeration>
 						<xs:enumeration value="NO_RT_INFO">
@@ -1330,7 +1370,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 							<xs:element ref="Dep" minOccurs="0"/>
 							<xs:element name="Status" minOccurs="0">
 								<xs:annotation>
-									<xs:documentation>Possible values are: DISABLED - no messages will be shown. REDIRECTION - the train is redirected, the train passes additional stops or one or some stops can not be served. SCHEDULED - the train is in time. FAILURE - train failure via real time.  PARTIAL_ACTIVATION, REPLACEMENT are reserverd for future use.  PARTIAL_FAILURE - a part of track can not be served.   PARTIAL_FAILURE_AT_DEP - identifies partial failure at departure station. PARTIAL_FAILURE_AT_ARR - identifies partial failure at arrival station. ADDITIONAL or NEW identicates additional train. REPLACEMENT identicates an alternative train </xs:documentation>
+									<xs:documentation>Possible values are: SCHEDULED -	the train is in time. FAILURE - train failure via real time. PARTIAL_ACTIVATION, REPLACEMENT are reserverd for future use. PARTIAL_FAILURE - a part of track can not be served.   PARTIAL_FAILURE_AT_DEP - identifies partial failure at departure station. PARTIAL_FAILURE_AT_ARR - identifies partial failure at arrival station. NEW - exceptional stop, PASSAGE - exceptional passage.</xs:documentation>
 								</xs:annotation>
 							</xs:element>
 							<xs:element name="FreeTextL" minOccurs="0">
@@ -1500,7 +1540,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="handicappedAccess" default="0">
 			<xs:annotation>
-				<xs:documentation>Provides the opportunity for  handicapped transport. Possible values are: 0 := no data available, 1 := indipendent access/exit, 2 := need for help to access/exit, 3:= no wheelchair transport </xs:documentation>
+				<xs:documentation>Provides the opportunity for  handicapped transport. Possible values are: 0 := no data available, 1 := indipendent access/exit, 2 := Boarding/alighting possible upon advance notice, 3 := need for help to access/exit, 4:= no wheelchair transport </xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:token">
@@ -1508,6 +1548,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 					<xs:enumeration value="1"/>
 					<xs:enumeration value="2"/>
 					<xs:enumeration value="3"/>
+					<xs:enumeration value="4"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -1726,6 +1767,11 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 						<xs:enumeration value="DEP"/>
 					</xs:restriction>
 				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="maxStops" type="xs:int" use="optional">
+				<xs:annotation>
+					<xs:documentation>The attribute maxStops describes the number of stopovers in the passlist plus 2 (for departure and arrival stops). If maxStops equals to zero, only 2 stops - departure and arrival are displayed in the passList. If the attribute is absent, all available stops are displayed. </xs:documentation>
+				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
@@ -2133,9 +2179,31 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 			<xs:documentation>A journey handle for subsequent journey requests. Can be taken as is, and placed in the corresponding JourneyReq</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
-			<xs:attribute name="tNr"/>
-			<xs:attribute name="puic"/>
-			<xs:attribute name="cycle"/>
+			<xs:attribute name="tNr">
+				<xs:annotation>
+					<xs:documentation>Internal train number</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="puic">
+				<xs:annotation>
+					<xs:documentation>UIC pool ID</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="cycle">
+				<xs:annotation>
+					<xs:documentation>Optional cycle value if trains runs multiple times a day</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="ptimestamp" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Will only be written if value >= 0.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="operationDate" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Format YYYMMDD. Will only be written if ptimestamp >= 0.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="JourneyReq">
@@ -2163,7 +2231,15 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 			</xs:attribute>
 			<xs:attribute name="time">
 				<xs:annotation>
-					<xs:documentation>Format: hh:mm              The attriibutes above specify  the station, the date and time at which the train has passed the station, and whether the date and time belong to the arrival or the departure at this station. These values only have to be supplied, if the train is requested for a specific date. Only if the values are supplied and the times are within the realtime range, realtime data will be returned, </xs:documentation>
+					<xs:documentation>Format: hh:mm; The attributes above
+						specify the station, the date and time at which the
+						train has passed the station, and whether the date and
+						time belong to the arrival or the departure at this
+						station. These values only have to be supplied, if the
+						train is requested for a specific date. Only if the
+						values are supplied and the times are within the
+						realtime range, realtime data will be returned,
+						</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
@@ -2171,6 +2247,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 	<xs:element name="JourneyRes">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="Date"/>
 				<xs:element ref="ServiceDays" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element ref="Journey"/>
 				<xs:element ref="IList" minOccurs="0"/>
@@ -2194,4 +2271,171 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<!--  Anchor DirectTrainReq - Finish -->
+	<xs:element name="TrainSearchReq">
+		<xs:annotation>
+			<xs:documentation>TrainSearch request. Request information about trains.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The element date contains the base date for a connection. The base date is the date at which the connection starts. All time elements refer to the base date.
+In requests (DirectTrainReq or TrainSearchReq) the format must be: yyyymmdd.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Time" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The format of the Time element is [dd:]hh:mm. dd represents a day offset. All offsets are relative to the base date of the connection. For example a time 01:12:30 in a connection means 12:30 at the first day following the day specified as the base date in the Date element in the Overview section of the connection.
+In a train search, the Time element specifies the departure time of the train at the first stop.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="maxResults">
+				<xs:annotation>
+					<xs:documentation>Limits the number of train search results. For example, if maxResults is set to 10 and the train search would find more than 10 matching trains for the specified search parameters, no trains would be returned and the error code in the train search result would be set to 14 (TrainResult_Too_Complex). </xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="timeInterval" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>Format: hh:mm-hh:mm. Specifies a time interval during which the train is running or all trains passing through a station during that time.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="searchString" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Train name to be searched for.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="stationFilter" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>Filter which stations (specified by UIC) shall be included in the search.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="productClassFilter" type="xs:int" use="optional">
+				<xs:annotation>
+					<xs:documentation>Filter which product classes shall be included in the search. E.g. "Select high speed trains: 100000.....</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TrainSearchRes">
+		<xs:annotation>
+			<xs:documentation>TrainSearch response. Information about trains.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Train" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="errorCode" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Error code returned from the server. For a successful operation, a value of 10 is returned. If more results were found than the maximum number of results allowed, the error code is set to 14. A error value of 16 indicates invalid search parameters. If the server found no matching trains, the error code is set to 17.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="noOfResults" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Number of results for the request</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="StopType">
+		<xs:sequence>
+			<xs:element name="Station" type="StationType"/>
+			<xs:element ref="Date"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Train">
+		<xs:annotation>
+			<xs:documentation>Train information</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="JHandle"/>
+				<xs:element ref="Point" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Current geographical position of the train. Only available in realtime configurations.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FirstStop" type="StopType"/>
+				<xs:element name="LastStop" type="StopType"/>
+				<xs:element ref="ServiceDays"/>
+			</xs:sequence>
+			<xs:attribute name="externalID" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>External ID for the train</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="trainName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the train</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="lineName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the line the train runs on</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="operator" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the operator running the train</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="administration" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the administration responsible for the train</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="category" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Category ID of the train</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="categoryName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Name of the train's category</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="trainsPerRoute" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Number of equivalent trains running on the route</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="averageTrainsPerDay" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Average number of trains running on the route per day</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="tripID" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>ID of the trip</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="resultFlags" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Contains several result flags</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="delay" type="xs:integer">
+				<xs:annotation>
+					<xs:documentation>Current delay of the train in minutes</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ConReconstructionReq">
+		<xs:complexType>
+			<xs:attributeGroup ref="attlist.ConRecReq"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="attlist.ConRecReq">
+		<xs:attribute name="ctxRecon" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Reconstruction context for connection request.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="baseDate" use="required">
+			<xs:annotation>
+				<xs:documentation>start date of the connection</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
 </xs:schema>
