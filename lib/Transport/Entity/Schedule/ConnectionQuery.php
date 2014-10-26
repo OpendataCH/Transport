@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Transport\Entity\Schedule;
 
@@ -8,6 +8,12 @@ use Transport\Entity\Location\Location;
 
 class ConnectionQuery extends Query
 {
+    const ACCESSIBILITY_INDEPENDENT_BOARDING = 'independent_boarding';
+
+    const ACCESSIBILITY_ASSISTED_BOARDING = 'assisted_boarding';
+
+    const ACCESSIBILITY_ADVANCED_NOTICE = 'advanced_notice';
+
     public $srcLocation;
 
     public $dstLocation;
@@ -17,7 +23,7 @@ class ConnectionQuery extends Query
     public $date;
 
     public $time;
-    
+
     public $isArrivalTime = false;
 
     public $transportations = array('all');
@@ -39,6 +45,8 @@ class ConnectionQuery extends Query
     public $couchette = false;
 
     public $bike = false;
+
+    public $accessibility = null;
 
     public function __construct(Location $srcLocation, Location $dstLocation, array $viaLocations = array(), $date = null, $time = null)
     {
@@ -73,7 +81,7 @@ class ConnectionQuery extends Query
         $prod['prod'] = $transportationsBinary;
 
         if ($this->direct) {
-            $prod['direct'] = 1;    
+            $prod['direct'] = 1;
         }
 
         if ($this->sleeper) {
@@ -81,7 +89,7 @@ class ConnectionQuery extends Query
         }
 
         if ($this->couchette) {
-            $prod['couchette'] = 1;    
+            $prod['couchette'] = 1;
         }
 
         if ($this->bike) {
@@ -90,6 +98,16 @@ class ConnectionQuery extends Query
             $attrFilter['mode'] = '1';
             $attrFilter['type'] = 'EXC';
             $attrFilter['value'] = 'VN:VX';
+        }
+
+        if ($this->accessibility === self::ACCESSIBILITY_INDEPENDENT_BOARDING) {
+            $con['HandicapProfile'] = '1';
+        }
+        if ($this->accessibility === self::ACCESSIBILITY_ASSISTED_BOARDING) {
+            $con['HandicapProfile'] = '2';
+        }
+        if ($this->accessibility === self::ACCESSIBILITY_ADVANCED_NOTICE) {
+            $con['HandicapProfile'] = '3';
         }
 
         $dest = $con->addChild('Dest');
