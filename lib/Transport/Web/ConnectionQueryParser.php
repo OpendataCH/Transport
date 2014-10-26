@@ -64,7 +64,7 @@ class ConnectionQueryParser
             $query->sleeper = $sleeper;
         }
 
-        $couchette = $request->get('chouchette');
+        $couchette = $request->get('couchette', $request->get('chouchette'));
         if ($couchette) {
             $query->couchette = $couchette;
         }
