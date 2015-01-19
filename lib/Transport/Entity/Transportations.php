@@ -16,6 +16,12 @@ class Transportations
         'cableway' => 256, // 1<<8
         'arz_ext' => 128, // 1<<7
         'tramway_underground' => 64, // 1<<6
+        'tramway' => 32, // 1<<5
+        'direct' => 16, // 1<<4
+        'direct_sleeper' => 8, // 1<<3
+        'direct_couchette' => 4, // 1<<2
+        'bike' => 2, // 1<<1
+        'groups' => 1, // 1<<0
     );
 
     /**
