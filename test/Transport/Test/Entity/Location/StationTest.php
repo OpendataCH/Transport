@@ -14,8 +14,8 @@ class StationTest extends \PHPUnit_Framework_TestCase
         $station->score = '81';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = 7.444245;
-        $coordinate->y = 46.968493;
+        $coordinate->x = 46.968493;
+        $coordinate->y = 7.444245;
         $station->coordinate = $coordinate;
 
         return $station;

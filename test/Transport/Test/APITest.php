@@ -31,9 +31,9 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb"><LocValReq id="from" sMode="1"><ReqLoc match="Z�rich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
-')
+                $this->equalTo(utf8_decode('<?xml version="1.0" encoding="iso-8859-1"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
+'))
             )
             ->will($this->returnValue($response));
 
@@ -43,11 +43,11 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(34, count($locations['from']));
         $this->assertEquals('Zuerich', $locations['from'][0]->name);
         $this->assertEquals('Zürich HB', $locations['from'][3]->name);
-        $this->assertEquals(47.450378, $locations['from'][4]->coordinate->y);
+        $this->assertEquals(8.562387, $locations['from'][4]->coordinate->y);
         $this->assertEquals(1, count($locations['to']));
         $this->assertEquals('Bern', $locations['to'][0]->name);
         $this->assertEquals('008507000', $locations['to'][0]->id);
-        $this->assertEquals(46.948825, $locations['to'][0]->coordinate->y);
+        $this->assertEquals(7.439122, $locations['to'][0]->coordinate->y);
     }
 
     public function testFindNearbyLocationsArray()
@@ -121,7 +121,7 @@ class APITest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue($response));
 
-        $station = new Station('008591052'); // Zürich, Bäckeranlage
+        $station = new Station('008591052'); // Z√ºrich, B√§ckeranlage
         $journeys = $this->api->getStationBoard(new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00')));
 
         $this->assertEquals(3, count($journeys));
@@ -149,7 +149,7 @@ class APITest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue($response));
 
-        $station = new Station('008591052'); // Zürich, Bäckeranlage
+        $station = new Station('008591052'); // Z√ºrich, B√§ckeranlage
         $journeys = $this->api->getStationBoard(new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2013-10-15T22:20:00+01:00')));
 
         $this->assertEquals(1, count($journeys));

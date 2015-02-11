@@ -29,8 +29,11 @@ class Coordinate
     {
         $coordinate = new Coordinate();
         $coordinate->type = (string) $xml['type'];
-        $coordinate->x = self::intToFloat((string) $xml['x']);
-        $coordinate->y = self::intToFloat((string) $xml['y']);
+
+        $x = self::intToFloat((string) $xml['x']);
+        $y = self::intToFloat((string) $xml['y']);
+
+        $coordinate = self::setHAFAScoordinates($coordinate, $x, $y);
 
         return $coordinate;
     }
@@ -43,6 +46,13 @@ class Coordinate
         $x = self::intToFloat($json->x);
         $y = self::intToFloat($json->y);
 
+        $coordinate = self::setHAFAScoordinates($coordinate, $x, $y);
+
+        return $coordinate;
+    }
+
+    static public function setHAFAScoordinates($coordinate, $x, $y)
+    {
         if ($y > $x) { // HAFAS bug, returns inverted lat/long
           $coordinate->x = $y;
           $coordinate->y = $x;

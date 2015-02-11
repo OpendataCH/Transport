@@ -23,8 +23,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.488936;
-                $coordinates->y = 47.391481;
+                $coordinates->x = 47.391481;
+                $coordinates->y = 8.488936;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $from->station = $station;
@@ -38,8 +38,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zug";
             $station->id = "008502204";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.515292;
-                $coordinates->y = 47.173618;
+                $coordinates->x = 47.173618;
+                $coordinates->y = 8.515292;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $to->station = $station;
@@ -56,8 +56,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zürich, Bahnhof Altstetten";
             $station->id = "000103022";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.488378;
-                $coordinates->y = 47.391103;
+                $coordinates->x = 47.391103;
+                $coordinates->y = 8.488378;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
@@ -70,8 +70,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.488936;
-                $coordinates->y = 47.391481;
+                $coordinates->x = 47.391481;
+                $coordinates->y = 8.488936;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
@@ -104,8 +104,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zürich Altstetten";
             $station->id = "008503001";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.488936;
-                $coordinates->y = 47.391481;
+                $coordinates->x = 47.391481;
+                $coordinates->y = 8.488936;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
@@ -119,8 +119,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->name = "Zug";
             $station->id = "008502204";
             $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.515292;
-                $coordinates->y = 47.173618;
+                $coordinates->x = 47.173618;
+                $coordinates->y = 8.515292;
                 $coordinates->type = "WGS84";
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;

@@ -14,8 +14,8 @@ class PoiTest extends \PHPUnit_Framework_TestCase
         $poi->score = '100';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
-        $coordinate->x = 7.478189;
-        $coordinate->y = 46.976494;
+        $coordinate->x = 46.976494;
+        $coordinate->y = 7.478189;
         $poi->coordinate = $coordinate;
 
         return $poi;
