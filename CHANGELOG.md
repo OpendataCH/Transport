@@ -1,5 +1,24 @@
 # Changelog
 
+## 2015-02-12
+
+- #81 Fixed inverted coordinates
+
+## 2014-10-26
+
+- #100 Fixed couchette parameter naming
+- Fixed journeys in stationboard documentation
+- Added station to stationboard documentation
+
+## 2014-08-17
+
+- #101 Added arrivalTimestamp and departureTimestamp to stop
+
+## 2014-07-22
+
+- Use dedicated Access-ID created by SBB for Opendata.ch
+- Clarified search parameters for /locations
+
 ## 2014-06-15
 
 - Added error handler for JSON error messages
