@@ -24,11 +24,12 @@ class Address extends Location
 
         $xml['name'] = $this->name;
 
+        // x and y inverted for HAFAS
         if ($this->coordinate->x) {
-            $xml['x'] = Coordinate::floatToInt($this->coordinate->x);
+            $xml['y'] = Coordinate::floatToInt($this->coordinate->x);
         }
         if ($this->coordinate->y) {
-            $xml['y'] = Coordinate::floatToInt($this->coordinate->y);
+            $xml['x'] = Coordinate::floatToInt($this->coordinate->y);
         }
 
         return $xml;
