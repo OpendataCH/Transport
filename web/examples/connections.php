@@ -351,7 +351,7 @@ if ($search) {
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php echo htmlentities(substr($connection->duration, 4, 4)); ?>′<br/>
+                            <?php echo htmlentities(trim(substr($connection->duration, 3, 5), '0')); ?>′<br/>
                             <span class="muted">
                             <?php echo htmlentities(implode(', ', $connection->products)); ?>
                             </span>
