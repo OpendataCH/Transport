@@ -446,6 +446,14 @@ if ($search) {
             </div>
         </div>
         <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="footer">
+        <hr />
+        <p class="muted">
+            Powered by <a href="http://transport.opendata.ch/" target="_blank">Transport API</a>
+        </p>
     </div>
 </div>
 
