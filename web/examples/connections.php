@@ -351,6 +351,7 @@ if ($search) {
                             <?php endif; ?>
                         </td>
                         <td>
+                            <?php echo (substr($connection->duration, 0, 2) > 0) ? htmlentities(trim(substr($connection->duration, 0, 2), '0')) . 'd ' : ''; ?>
                             <?php echo htmlentities(trim(substr($connection->duration, 3, 1), '0') . substr($connection->duration, 4, 4)); ?>′<br/>
                             <span class="muted">
                             <?php echo htmlentities(implode(', ', $connection->products)); ?>
