@@ -85,7 +85,11 @@ class ConnectionQuery extends Query
         }
 
         if ($this->bike) {
-            $prod['bike'] = 1;    
+            $filterList = $con->addChild('FilterList');
+            $attrFilter = $filterList->addChild('ConReqAttrFilter');
+            $attrFilter['mode'] = '1';
+            $attrFilter['type'] = 'EXC';
+            $attrFilter['value'] = 'VN:VX';
         }
 
         $dest = $con->addChild('Dest');
