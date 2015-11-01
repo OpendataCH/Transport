@@ -32,9 +32,12 @@ class Prognosis
                 if ($xml->Dep->Platform) {
                     $obj->platform = (string) $xml->Dep->Platform->Text;
                 }
-                if ($xml->Dep->Time) {
-                    $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date)->format(\DateTime::ISO8601);
-                }
+            }
+        }
+        
+        if ($xml->Dep) {
+            if ($xml->Dep->Time) {
+                $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date)->format(\DateTime::ISO8601);
             }
         }
 
