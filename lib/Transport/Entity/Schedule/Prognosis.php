@@ -17,24 +17,25 @@ class Prognosis
         }
 
         if ($isArrival) {
-
             if ($xml->Arr) {
                 if ($xml->Arr->Platform) {
                     $obj->platform = (string) $xml->Arr->Platform->Text;
                 }
-                if ($xml->Arr->Time) {
-                    $obj->arrival = Stop::calculateDateTime((string) $xml->Arr->Time, $date)->format(\DateTime::ISO8601);
-                }
             }
         } else {
-
             if ($xml->Dep) {
                 if ($xml->Dep->Platform) {
                     $obj->platform = (string) $xml->Dep->Platform->Text;
                 }
             }
         }
-        
+
+        if ($xml->Arr) {
+            if ($xml->Arr->Time) {
+                $obj->arrival = Stop::calculateDateTime((string) $xml->Arr->Time, $date)->format(\DateTime::ISO8601);
+            }
+        }
+
         if ($xml->Dep) {
             if ($xml->Dep->Time) {
                 $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date)->format(\DateTime::ISO8601);
