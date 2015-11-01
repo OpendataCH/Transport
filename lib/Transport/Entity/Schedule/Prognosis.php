@@ -9,7 +9,8 @@ class Prognosis
     public $departure;
     public $capacity1st;
     public $capacity2nd;
-
+    public $realtimeProb = 0; //adds a probability for being a realtime info. 0 = no, 25 = maybe not, 75 = maybe, 100 = certainly
+    
     static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, $isArrival, Prognosis $obj = null)
     {
         if (!$obj) {
@@ -47,6 +48,9 @@ class Prognosis
         }
         if ($xml->Capacity2nd) {
             $obj->capacity2nd = (int) $xml->Capacity2nd;
+        }
+        if ($xml->Status) {
+            $obj->realtimeProb = 25;
         }
 
         return $obj;

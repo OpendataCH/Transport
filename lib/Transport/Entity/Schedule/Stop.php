@@ -97,6 +97,16 @@ class Stop
                 $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
             }
         }
+        if ($obj->delay) {
+             $obj->prognosis->realtimeProb = 100; //yes
+        }
+        if ($xml->StAttrList) {
+            foreach ($xml->StAttrList->StAttr as $attr) {
+                if ($attr["code"] == "RA" && $attr['text'] == 'RT_BHF') {
+                    $obj->prognosis->realtimeProb = 75; //maybe
+                }
+            }
+        }
 
         return $obj;
     }
