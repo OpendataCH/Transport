@@ -24,8 +24,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $from->departureTimestamp = 1328033640;
         $from->platform = '21/22';
         $prognosis = new Entity\Schedule\Prognosis();
-        $prognosis->capacity1st = '1';
-        $prognosis->capacity2nd = '2';
+        $prognosis->capacity1st = 1;
+        $prognosis->capacity2nd = 2;
+        $prognosis->realtimeProb = 75;
         $from->prognosis = $prognosis;
         $station = new Entity\Location\Station();
             $station->name = "Zürich HB";
@@ -42,6 +43,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $to->arrival = '2012-01-31T19:42:00+0100';
         $to->arrivalTimestamp = 1328035320;
         $to->platform = '3';
+        $prognosis = new Entity\Schedule\Prognosis();
+        $prognosis->realtimeProb = 75;
+        $to->prognosis = $prognosis;
         $station = new Entity\Location\Station();
             $station->name = "Baden";
             $station->id = "008503504";
