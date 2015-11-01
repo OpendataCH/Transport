@@ -102,7 +102,7 @@ class Stop
         }
         if ($xml->StAttrList) {
             foreach ($xml->StAttrList->StAttr as $attr) {
-                if ($attr["code"] == "RA") {
+                if ($attr["code"] == "RA" && $attr['text'] == 'RT_BHF') {
                     $obj->prognosis->realtimeProb = 75; //maybe
                 }
             }
