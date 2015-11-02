@@ -20,6 +20,14 @@ Also make sure, the directory ```transport/var/``` is writable.
 
 If you cloned the repository inside your document root, the API is now accessible at [http://localhost/transport/web/api.php/v1/](http://localhost/transport/web/api.php/v1/locations?query=Basel). However we recommend setting the document root to ```transport/web/``` and using the provided ```.htaccess``` to route API requests to ```api.php```.
 
+Or you can start it with the php's built-in webserver (not recommended for a production setup, but the easy way to get started locally)
+
+```
+php -S localhost:8000
+```
+
+And then access it with [http://localhost:8000/web/api.php](http://localhost:8000/web/api.php)
+
 ### Configuration
 
 To define your own configuration for the API copy the file ```config.php.sample``` to ```config.php``` and override the variables you want to change.
