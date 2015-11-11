@@ -23,6 +23,8 @@ class Stop
 
     public $prognosis;
     
+    public $realtimeAvailability;
+
     public function __construct()
     {
         $this->prognosis = new Prognosis();
@@ -95,6 +97,14 @@ class Stop
             }
             if ($obj->prognosis->departure && $obj->departure) {
                 $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
+            }
+        }
+        
+        if ($xml->StAttrList) {
+            foreach ($xml->StAttrList->StAttr as $attr) {
+                if ($attr["code"] == "RA" ) {
+                    $obj->realtimeAvailability = (string) $attr['text'];
+                }
             }
         }
 

@@ -12,7 +12,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-16T16:10:00+0100';
         $from->departureTimestamp = 1326726600;
-        $from->delay = '8';
+        $from->delay = 8;
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
             $prognosis->departure = '2012-01-16T16:18:00+0100';
@@ -29,6 +29,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
+        $from->realtimeAvailability = 'RT_BHF';
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-16T16:49:00+0100';
@@ -44,7 +45,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
-
+        $to->realtimeAvailability = 'RT_BHF';
 
         $sectionWalk = new Entity\Schedule\Walk();
         $sectionWalk->duration = '00:04:00';
@@ -76,6 +77,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
+        $sectionTo->realtimeAvailability = 'RT_BHF';
 
         $section1 = new Entity\Schedule\Section();
         $section1->walk = $sectionWalk;
@@ -110,6 +112,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
         $sectionFrom->location = $station;
+        $sectionFrom->realtimeAvailability = 'RT_BHF';
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = '2012-01-16T16:49:00+0100';
@@ -125,6 +128,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
+        $sectionTo->realtimeAvailability = 'RT_BHF';
 
         $passList = array();
         $passList[0] = clone $sectionFrom;
