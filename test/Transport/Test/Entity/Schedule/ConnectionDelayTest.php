@@ -29,7 +29,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
-        $from->RA = 'RT_BHF';
+        $from->realtimeAvailability = 'RT_BHF';
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-16T16:49:00+0100';
@@ -45,7 +45,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
-        $to->RA = 'RT_BHF';
+        $to->realtimeAvailability = 'RT_BHF';
 
         $sectionWalk = new Entity\Schedule\Walk();
         $sectionWalk->duration = '00:04:00';
@@ -77,7 +77,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
-        $sectionTo->RA = 'RT_BHF';
+        $sectionTo->realtimeAvailability = 'RT_BHF';
 
         $section1 = new Entity\Schedule\Section();
         $section1->walk = $sectionWalk;
@@ -112,7 +112,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
         $sectionFrom->location = $station;
-        $sectionFrom->RA = 'RT_BHF';
+        $sectionFrom->realtimeAvailability = 'RT_BHF';
 
         $sectionTo = new Entity\Schedule\Stop();
         $sectionTo->arrival = '2012-01-16T16:49:00+0100';
@@ -128,7 +128,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
-        $sectionTo->RA = 'RT_BHF';
+        $sectionTo->realtimeAvailability = 'RT_BHF';
 
         $passList = array();
         $passList[0] = clone $sectionFrom;

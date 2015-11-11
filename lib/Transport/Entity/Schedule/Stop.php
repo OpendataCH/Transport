@@ -23,8 +23,8 @@ class Stop
 
     public $prognosis;
     
-    public $RA;
-    
+    public $realtimeAvailability;
+
     public function __construct()
     {
         $this->prognosis = new Prognosis();
@@ -103,7 +103,7 @@ class Stop
         if ($xml->StAttrList) {
             foreach ($xml->StAttrList->StAttr as $attr) {
                 if ($attr["code"] == "RA" ) {
-                    $obj->RA = (string) $attr['text'];
+                    $obj->realtimeAvailability = (string) $attr['text'];
                 }
             }
         }

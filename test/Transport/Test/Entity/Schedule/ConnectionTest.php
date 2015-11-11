@@ -37,7 +37,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
-        $from->RA = 'RT_BHF';
+        $from->realtimeAvailability = 'RT_BHF';
 
         $to = new Entity\Schedule\Stop();
         $to->arrival = '2012-01-31T19:42:00+0100';
@@ -53,7 +53,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
-        $to->RA = 'RT_BHF';
+        $to->realtimeAvailability = 'RT_BHF';
 
         $passList = array();
         $passList[0] = clone $from;
