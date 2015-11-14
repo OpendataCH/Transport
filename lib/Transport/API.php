@@ -24,7 +24,7 @@ class API
     const SEARCH_MODE_ECONOMIC = 'P';
 
     /**
-     * Stationboard journeys with delays within this time frame are 
+     * Stationboard journeys with delays within this time frame are
      * prevented from causing an unintended day jump.
      */
     const STATIONBOARD_DELAY_FRAME = 21600; // 6 hours
@@ -45,12 +45,26 @@ class API
         $this->lang = $lang;
     }
 
+    private function sendAndParseQuery(Query $query)
+    {
+        $response = $this->sendQuery($query);
+
+        // parse result
+        $result = simplexml_load_string($response->getContent());
+
+        // check for error
+        if ($result->Err) {
+            throw new \Exception('Error from fahrplan.sbb.ch: ' . $result->Err['code'] . ' - ' . $result->Err['text']);
+        }
+
+        return $result;
+    }
+
     /**
      * @return Buzz\Message\Response
      */
     public function sendQuery(Query $query, $url = self::URL)
     {
-
         $headers = array();
         $headers[] = 'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0';
         $headers[] = 'Accept: application/xml';
@@ -65,10 +79,7 @@ class API
     public function findConnections(ConnectionQuery $query)
     {
         // send request
-        $response = $this->sendQuery($query);
-
-        // parse result
-        $result = simplexml_load_string($response->getContent());
+        $result = $this->sendAndParseQuery($query);
 
         // load pages
         for ($i = 0; $i < abs($query->page); $i++) {
@@ -76,9 +87,7 @@ class API
             // load next page
             $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
 
-            $response = $this->sendQuery($pageQuery);
-
-            $result = simplexml_load_string($response->getContent());
+            $result = $this->sendAndParseQuery($pageQuery);
         }
 
         $connections = array();
@@ -97,10 +106,7 @@ class API
     public function findLocations(LocationQuery $query)
     {
         // send request
-        $response = $this->sendQuery($query);
-
-        // parse result
-        $result = simplexml_load_string($response->getContent());
+        $result = $this->sendAndParseQuery($query);
 
         $locations = array();
         $viaCount = 0;
@@ -170,10 +176,7 @@ class API
     public function getStationBoard(StationBoardQuery $query)
     {
         // send request
-        $response = $this->sendQuery($query);
-
-        // parse result
-        $result = simplexml_load_string($response->getContent());
+        $result = $this->sendAndParseQuery($query);
 
         // since the stationboard always lists all connections starting from now we just use the date
         // and wrap it accordingly if time goes over midnight

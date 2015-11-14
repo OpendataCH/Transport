@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="No path to XML scheme defined" ver="3.3.3" prod="String" lang="EN">
+    <Err code="F2" text="Spool: Error writing the spoolfile." level="E"/>
+</ResC>
