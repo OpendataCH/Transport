@@ -17,13 +17,15 @@
 
     <script type="text/javascript">
     $(function () {
-        var g = new Dygraph(document.getElementById("graphdiv"), "Date,API calls\n" + "{{ data }}", {
+        var g = new Dygraph(document.getElementById("graphdiv"), "Date,API calls,Errors\n" + "{{ data }}", {
             width: 595,
             fillGraph: true,
             includeZero: true,
-            colors: ['#008000'],
+            colors: ['#008000', '#800000'],
             yAxisLabelWidth: 45,
             axisLabelFontSize: 13,
+            drawPoints: true,
+            pointSize: 1.5,
             labelsDiv: document.getElementById("labels"),
             axes: {
                 x: {
@@ -71,6 +73,13 @@
                 </div>
             </div>
         </article>
+
+        <h2 title="Top 5 since 22. November 2015">Errors</h2>
+        <ul class="unstyled">
+            {% for error in errors %}
+                <li><span class="value">{{ error.exception }}</span> <span class="count">{{ error.calls }}</span></li>
+            {% endfor %}
+        </ul>
     </div>
 </body>
 </html>

@@ -41,6 +41,21 @@ class Statistics {
         $this->count('stats:resources', $path, array('path' => $path));
     }
 
+    public function error($e)
+    {
+        $exceptionClass = get_class($e);
+
+        if ($this->enabled) {
+            $date = date('Y-m-d');
+            $prefix = "stats:errors";
+            $key = "$prefix:$date";
+            $this->redis->sadd($prefix, $key);
+            $this->redis->incr($key);
+        }
+
+        $this->count('stats:exceptions', $exceptionClass, array('exception' => $exceptionClass));
+    }
+
     protected function count($prefix, $id, $data)
     {
         if ($this->enabled) {
@@ -70,6 +85,23 @@ class Statistics {
 	    return $calls;
     }
 
+    public function getErrors()
+    {
+        $result = $this->redis->sort("stats:errors", array(
+            'get' => array('#', '*'),
+            'sort'  => 'ASC',
+            'alpha' => true
+        ));
+
+	    // regroup
+	    $errors = array();
+	    foreach (array_chunk($result, 2) as $values) {
+	        $errors[substr($values[0], 13, 10)] = $values[1];
+	    }
+
+	    return $errors;
+    }
+
     public function getTopResources()
     {
         return $this->top('stats:resources', array('path', 'calls'));
@@ -78,6 +110,11 @@ class Statistics {
     public function getTopStations()
     {
         return $this->top('stats:stations', array('name', 'x', 'y', 'calls'));
+    }
+
+    public function getTopExceptions()
+    {
+        return $this->top('stats:exceptions', array('exception', 'calls'));
     }
 
     protected function top($key, $fields)

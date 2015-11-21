@@ -32,17 +32,24 @@ if ($app['redis.config']) {
 	$app->get('/', function(Request $request) use ($app) {
 
 	    $calls = $app['stats']->getCalls();
+	    $errors = $app['stats']->getErrors();
 
 	    // transform to comma and new line separated list
 	    $data = array();
 	    foreach (array_slice($calls, -30) as $date => $value) {
-	        $data[] = $date . ',' . ($value ?: 0);
+	        $data[$date] = $date . ',' . ($value ?: 0);
+	    }
+	    foreach (array_slice($errors, -30) as $date => $value) {
+	        if (isset($data[$date])) {
+	            $data[$date] .= ',' . ($value ?: 0);
+	        }
 	    }
 	    $data = implode('\n', $data);
 
-        // get top resources and stations
+        // get top resources, stations and errors
         $resources = $app['stats']->getTopResources();
         $stations = $app['stats']->getTopStations();
+        $errors = $app['stats']->getTopExceptions();
 
         // CSV response
         if ($request->get('format') == 'csv') {
@@ -58,18 +65,12 @@ if ($app['redis.config']) {
             return $app->json(array('calls' => $calls));
         }
 
-	    // transform to comma and new line separated list
-	    $data = array();
-	    foreach (array_slice($calls, -30) as $date => $value) {
-	        $data[] = $date . ',' . ($value ?: 0);
-	    }
-	    $data = implode('\n', $data);
-
 	    return $app['twig']->render('stats.twig', array(
 	        'data' => $data,
 	        'calls' => $calls,
 	        'resources' => $resources,
 	        'stations' => $stations,
+	        'errors' => $errors,
 	    ));
 	});
 } else {
@@ -80,4 +81,4 @@ if ($app['redis.config']) {
 
 
 // run
-$app->run(); 
+$app->run();
