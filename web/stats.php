@@ -37,12 +37,15 @@ if ($app['redis.config']) {
 	    // transform to comma and new line separated list
 	    $data = array();
 	    foreach (array_slice($calls, -30) as $date => $value) {
-	        $data[$date] = $date . ',' . ($value ?: 0);
+	        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
 	    }
 	    foreach (array_slice($errors, -30) as $date => $value) {
 	        if (isset($data[$date])) {
-	            $data[$date] .= ',' . ($value ?: 0);
+	            $data[$date]['errors'] = ($value ?: 0);
 	        }
+	    }
+	    foreach ($data as $key => $value) {
+	        $data[$key] = implode(',', $value);
 	    }
 	    $data = implode('\n', $data);
 
