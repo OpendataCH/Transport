@@ -53,7 +53,11 @@ if ($app['http_cache']) {
 // Exception handler
 $app->error(function (\Exception $e, $code) use ($app) {
 
-    $app['stats']->error($e);
+    if ($e instanceof HttpException && $e->getStatusCode() == 429) {
+        // don't log rate limiting
+    } else {
+        $app['stats']->error($e);
+    }
 
     $errors = array(array('message' => $e->getMessage()));
 
