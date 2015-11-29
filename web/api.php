@@ -127,8 +127,10 @@ try {
 // statistics
 $app['stats'] = new Transport\Statistics($redis, $app['stats.config']['enabled']);
 $app->after(function (Request $request, Response $response) use ($app) {
-    $app['stats']->call();
-    $app['stats']->resource($request->getPathInfo());
+    if ($response->getStatusCode() !== 429) {
+        $app['stats']->call();
+        $app['stats']->resource($request->getPathInfo());
+    }
 });
 
 // rate limiting
