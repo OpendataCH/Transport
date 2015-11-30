@@ -46,6 +46,10 @@
 <!--                             ver 3.2.7 Added Childelement Date to JourneyRes describing the departure time of the journey (rhu: 2014-09-11) -->
 <!--                             ver 3.2.8 Added new request ConReconstructionReq for connection reconstruction (jf: 2014-09-23) -->
 <!--                             ver 3.2.9 Added maxStops parameter to the StationBoardRequest request	 (ad: 2014-09-25) -->
+<!--                             ver 3.3.0 Added new values REDIRECTION_NEW and REDIRECTION_PASSAGE of JStatus	 (ad: 2014-10-13) -->
+<!--                             ver 3.3.1 Added new value REDIRECTION_PASSAGENEW of JStatus (ad: 2014-10-24) -->
+<!--                             ver 3.3.2 Added attribute stationName for TrainSearch request (mschu: 2014-01-13) -->
+<!--                             ver 3.3.3 Added simple XML structure of train formations SFormation (jf: 2015-04-15) -->
 <!-- ======================================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="ReqC">
@@ -76,7 +80,7 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:attributeGroup name="attlist.ReqCResC">
-		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.2.8">
+		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.3.3">
 			<xs:annotation>
 				<xs:documentation>Current version of the Interface. The version given in the result must match the version specified in the request.</xs:documentation>
 			</xs:annotation>
@@ -1106,6 +1110,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 					<xs:enumeration value="NUMBER"/>
 					<xs:enumeration value="LINE"/>
 					<xs:enumeration value="EXT_ID"/>
+					<xs:enumeration value="ADMINISTRATION"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -1516,6 +1521,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 			<xs:extension base="TimeType">
 				<xs:sequence>
 					<xs:element ref="Platform" minOccurs="0"/>
+					<xs:element ref="SFormation" minOccurs="0"/>
 				</xs:sequence>
 				<xs:attributeGroup ref="attlist.ArrDep"/>
 			</xs:extension>
@@ -2168,7 +2174,21 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 				<xs:element ref="AnnoList" minOccurs="0"/>
 				<xs:element name="JStatus">
 					<xs:annotation>
-						<xs:documentation>Possible values are: FAILURE - train failure via real time.  NEW or  ADDITIONAL - identifies addtional train. REPLACEMENT - identifies alternative train.  REDIRECTION - one or several additional stops and/or contrary some stops can not be served. PARTIAL_FAILURE - a part of a track can not be served.   PARTIAL_ACTIVATION , REDIRECTION_FAILURE,  REPLACEMENT_REDIRECTION are reserverd for future use. SCHEDULED - train is in time.</xs:documentation>
+						<xs:documentation>Possible values are: FAILURE - train
+							failure via real time.  NEW or  ADDITIONAL -
+							identifies addtional train. REPLACEMENT - identifies
+							alternative train.  REDIRECTION - one or several
+							additional stops and contrary some stops can not be
+							served. REDIRECTION_NEW - one or more exceptional
+							stops are part of the journey, REDIRECTION_PASSAGE -
+							one or more exceptional passages are part of the
+							journey, REDIRECTION_PASSAGENEW combination of
+							exceptional stops and exceptional passages. PARTIAL_FAILURE - a part of
+							a track can not be served.   PARTIAL_ACTIVATION ,
+							REDIRECTION_FAILURE,  REPLACEMENT_REDIRECTION are
+							reserverd for future use. SCHEDULED - train is in
+							time.
+						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:sequence>
@@ -2310,6 +2330,11 @@ In a train search, the Time element specifies the departure time of the train at
 					<xs:documentation>Filter which stations (specified by UIC) shall be included in the search.</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
+			<xs:attribute name="stationName" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>Returns only trains which have this station defined by its external ID in their journey. If a time element or timeInterval attribute is specified, the train has to be at this station during that particular time. When defining a time element and a timeInterval attribute, the time element overwrites the starting time of the time interval.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 			<xs:attribute name="productClassFilter" type="xs:int" use="optional">
 				<xs:annotation>
 					<xs:documentation>Filter which product classes shall be included in the search. E.g. "Select high speed trains: 100000.....</xs:documentation>
@@ -2435,6 +2460,143 @@ In a train search, the Time element specifies the departure time of the train at
 		<xs:attribute name="baseDate" use="required">
 			<xs:annotation>
 				<xs:documentation>start date of the connection</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:element name="SFormation">
+		<xs:annotation>
+			<xs:documentation>This element holds the train's composition at a stop (either arrival or departure).</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="TrainGroups" minOccurs="0"/>
+				<xs:element ref="Legend" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="attList.Formation"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="leavingDirectionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:attributeGroup name="attList.Formation">
+		<xs:attribute name="leavingDirection" type="leavingDirectionType" use="optional" default="right">
+			<xs:annotation>
+				<xs:documentation>Leaving direction. Can be left or right, default is right.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:element name="TrainGroups">
+		<xs:annotation>
+			<xs:documentation>Contains all train groups that arriva / depart at this stop.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="TrainGroup" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TrainGroup">
+		<xs:annotation>
+			<xs:documentation>Holds the cars that belong to the same group.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Car" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="attlist.TrainGroup"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="attlist.TrainGroup">
+		<xs:attribute name="destination" type="xs:string" use="optional"/>
+	</xs:attributeGroup>
+	<xs:element name="Car">
+		<xs:annotation>
+			<xs:documentation>Holds all information on the car.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CarAttributes" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="attlist.Car"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="attlist.Car">
+		<xs:attribute name="type" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Car type.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="number" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Public number of the car.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="section" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Train section where car stands.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:element name="CarAttributes">
+		<xs:annotation>
+			<xs:documentation>Contains all service attributes and additional information like group reservations</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Attr" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Attr">
+		<xs:annotation>
+			<xs:documentation>Contains a single attribute</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="attlist.Attr"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="attlist.Attr">
+		<xs:attribute name="code" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:element name="Legend">
+		<xs:annotation>
+			<xs:documentation>Contains explanations for the car types and attributes.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="LegendItem" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="LegendItem">
+		<xs:annotation>
+			<xs:documentation>One item of the legend. The id refers to either to "type" in the Car element or to "code" in the Attr element.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Text"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="attlist.LegendItem"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="refersToType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="type"/>
+			<xs:enumeration value="code"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:attributeGroup name="attlist.LegendItem">
+		<xs:attribute name="id" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>The code or type used in the respective element.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="refersTo" type="refersToType" use="required">
+			<xs:annotation>
+				<xs:documentation>Either "type" or "code".</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>
