@@ -1,5 +1,24 @@
 # Changelog
 
+## 2015-11-30
+
+- #117 Add transportations parameter for /locations with coordinates
+- New implementation for Transportations binary logic
+
+## 2015-11-21
+
+- Added errors to statistics
+- Switch transport.opendata.ch to cURL HTTP client
+
+## 2015-11-02
+
+- #114 Added realtimeAvailability in Stop response
+- #113 Fixed departure prognosis for arrival delay
+
+## 2015-10-04
+
+- #104 Implemented bike parameter
+
 ## 2015-02-12
 
 - #81 Fixed inverted coordinates
