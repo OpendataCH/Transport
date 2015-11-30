@@ -127,6 +127,7 @@
                         <td><code>type</code></td>
                         <td>optional</td>
                         <td>
+                            Only with <code>query</code> parameter.
                             Specifies the location type, possible types are:
                             <ul>
                                 <li>all (default): Looks up for all types of locations</li>
@@ -136,6 +137,14 @@
                             </ul>
                         </td>
                         <td>address</td>
+                    </tr>
+                    <tr>
+                        <td><code>transportations</code></td>
+                        <td>optional</td>
+                        <td>
+                            Only with <code>x</code> and <code>y</code> parameter. Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code>
+                        </td>
+                        <td>transportations[]=ec_ic&amp;<br/>transportations[]=bus</td>
                     </tr>
                 </tbody>
             </table>
@@ -768,7 +777,7 @@
                     </tr>
                 </tbody>
             </table>
-        
+
             <h4 id="stop">Stop Object</h4>
 
             <table class="table table-bordered">
@@ -932,8 +941,8 @@
 }
 
             </pre>
-            
-            
+
+
             <h4>Example Request</h4>
 
             <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from&amp;fields[]=connections/to/station</pre>
@@ -941,7 +950,7 @@
             <h4>Example response</h4>
 
             <pre>
-            
+
 {
     "connections":[
         {

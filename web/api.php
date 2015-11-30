@@ -184,8 +184,12 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
 
     $x = $request->get('x') ?: null;
     $y = $request->get('y') ?: null;
+    $transportations = $request->get('transportations');
     if ($x && $y) {
         $query = new NearbyQuery($x, $y);
+        if ($transportations) {
+            $query->transportations = $transportations;
+        }
         $stations = $app['api']->findNearbyLocations($query);
     }
 
