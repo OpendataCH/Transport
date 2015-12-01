@@ -1,5 +1,9 @@
 # Changelog
 
+## 2015-12-01
+
+- #103 Added accessibility parameter to /connections
+
 ## 2015-11-30
 
 - #117 Add transportations parameter for /locations with coordinates
