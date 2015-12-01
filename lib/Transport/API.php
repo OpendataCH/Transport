@@ -50,9 +50,15 @@ class API
         $response = $this->sendQuery($query);
 
         // parse result
-        $result = simplexml_load_string($response->getContent());
+        $content = $response->getContent();
+        $result = @simplexml_load_string($content);
 
-        // check for error
+        // check for XML error
+        if ($result === false) {
+            throw new \Exception('Invalid XML from fahrplan.sbb.ch: ' . $content);
+        }
+
+        // check for SBB error
         if ($result->Err) {
             throw new \Exception('Error from fahrplan.sbb.ch: ' . $result->Err['code'] . ' - ' . $result->Err['text']);
         }
