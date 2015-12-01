@@ -74,6 +74,11 @@ class ConnectionQueryParser
             $query->bike = $bike;
         }
 
+        $accessibility = $request->get('accessibility');
+        if ($accessibility) {
+            $query->accessibility = $accessibility;
+        }
+
         return $query;
     }
 
