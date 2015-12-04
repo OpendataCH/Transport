@@ -160,13 +160,13 @@ $app->after(function (Request $request, Response $response) use ($app) {
     }
 });
 
-// index
+// home
 $app->get('/', function(Request $request) use ($app) {
     return file_get_contents('index.html');
-});
+})->bind('home');
 
 
-// home
+// api
 $app->get('/v1/', function(Request $request) use ($app) {
 
     return $app->json(array(
@@ -174,7 +174,7 @@ $app->get('/v1/', function(Request $request) use ($app) {
         'author' => 'Opendata.ch',
         'version' => '1.0',
     ));
-});
+})->bind('api');
 
 
 // locations
@@ -203,7 +203,7 @@ $app->get('/v1/locations', function(Request $request) use ($app) {
 
     $json = $app['serializer']->serialize((object) $result, 'json');
     return new Response($json, 200, array('Content-Type' => 'application/json'));
-});
+})->bind('locations');
 
 
 // connections
@@ -248,7 +248,7 @@ $app->get('/v1/connections', function(Request $request) use ($app) {
 
     $json = $app['serializer']->serialize((object) $result, 'json');
     return new Response($json, 200, array('Content-Type' => 'application/json'));
-});
+})->bind('connections');
 
 
 // station board
@@ -292,7 +292,7 @@ $app->get('/v1/stationboard', function(Request $request) use ($app) {
 
     $json = $app['serializer']->serialize((object) $result, 'json');
     return new Response($json, 200, array('Content-Type' => 'application/json'));
-});
+})->bind('stationboard');
 
 
 // run
