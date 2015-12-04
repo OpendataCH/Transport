@@ -49,6 +49,11 @@ class API
     {
         $response = $this->sendQuery($query);
 
+        // check for server error
+        if ($response->isServerError()) {
+            throw new \Exception('Server error from fahrplan.sbb.ch: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+        }
+
         // parse result
         $content = $response->getContent();
         $result = @simplexml_load_string($content);
