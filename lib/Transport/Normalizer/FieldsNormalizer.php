@@ -3,13 +3,12 @@
 namespace Transport\Normalizer;
 
 use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
-class FieldsNormalizer extends SerializerAwareNormalizer
+class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerInterface
 {
     private $fields = array();
-
-    private $parentField = '';
 
     public function __construct(array $fields)
     {
@@ -67,26 +66,35 @@ class FieldsNormalizer extends SerializerAwareNormalizer
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null)
+    public function normalize($data, $format = null, array $context = array())
     {
-        $attributes = array();
-        foreach ($object as $name => $value) {
+        if (is_array($data)) {
 
-            $parentField = $this->parentField;
-            $field = $this->parentField ? $this->parentField . '/' . $name : $name;
+            foreach ($data as $name => $value) {
+                $data[$name] = $this->serializer->normalize($value, $format, $context);
+            }
+
+            return $data;
+        }
+
+        $normalized = array();
+        foreach ($data as $name => $value) {
+
+            $field = isset($context['fields_parent_field']) ? $context['fields_parent_field'] . '/' . $name : $name;
             if ($this->isFieldSet($field)) {
 
                 if (null !== $value && !is_scalar($value)) {
-                    $this->parentField = $field;
-                    $value = $this->serializer->normalize($value, $format);
-                    $this->parentField = $parentField;
+                    $options = array(
+                        'fields_parent_field' => $field,
+                    );
+                    $value = $this->serializer->normalize($value, $format, array_merge($context, $options));
                 }
 
-                $attributes[$name] = $value;
+                $normalized[$name] = $value;
             }
         }
 
-        return $attributes;
+        return $normalized;
     }
 
     /**
@@ -95,21 +103,5 @@ class FieldsNormalizer extends SerializerAwareNormalizer
     public function supportsNormalization($data, $format = null)
     {
         return is_array($data) || is_object($data);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function denormalize($data, $class, $format = null)
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsDenormalization($data, $type, $format = null)
-    {
-        return false;
     }
 }
