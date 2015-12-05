@@ -13,7 +13,7 @@ You can install the Transport API on your own server, however we recommend the u
 ```
 $ git clone git://github.com/OpendataCH/Transport.git transport
 $ cd transport
-$ php composer.phar install
+$ composer install
 ```
 
 Also make sure, the directory ```transport/var/``` is writable.
