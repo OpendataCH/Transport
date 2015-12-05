@@ -24,7 +24,7 @@ if ($search) {
         $query['date'] = date('Y-m-d', strtotime($datetime));
         $query['time'] = date('H:i', strtotime($datetime));
     }
-    
+
     if ($via) {
         $query['via'] = $via;
     }
@@ -94,7 +94,7 @@ if ($search) {
         .station input {
             width: 92%;
         }
-        
+
         .later {
             text-align: right;
         }
@@ -111,7 +111,7 @@ if ($search) {
         .date input {
             width: 92%;
         }
-        
+
         .apply input {
             float: left;
         }
@@ -156,7 +156,7 @@ if ($search) {
         .pager {
             display: none;
         }
-        
+
         @media (max-width: 767px) {
             body {
                 padding-top: 20px;
@@ -166,13 +166,13 @@ if ($search) {
             form {
                 margin-bottom: 8px;
             }
-            
+
             .date input {
                 height: 26px;
                 padding: 0;
                 border-color: #bbb;
             }
-            
+
             .date input:focus {
                 border-color: #1a81d2;
             }
@@ -229,7 +229,7 @@ if ($search) {
                                 });
                             });
                         }
-    
+
                     }, function(error) {
                         // ignore
                     }, {
@@ -313,11 +313,11 @@ if ($search) {
                 </div>
             </div>
         </form>
-        
+
         </div>
         <div class="span7">
 
-        <?php if ($search): ?>
+        <?php if ($response->connections): ?>
         <table class="table connections">
             <colgroup>
                 <col width="20%">
