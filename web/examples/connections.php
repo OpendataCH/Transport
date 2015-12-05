@@ -306,7 +306,7 @@ if ($search) {
             </div>
             <div class="row-fluid">
                 <div class="span5 fluid date">
-                    <input type="datetime-local" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time" step="300" />
+                    <input type="datetime-local" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time (optional)" step="300" />
                 </div>
                 <div class="span5 fluid apply">
                     <input type="submit" class="btn" value="Search" />
