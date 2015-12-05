@@ -156,6 +156,11 @@ class API
         // send request
         $response = $this->browser->get($url);
 
+        // check for server error
+        if ($response->isServerError()) {
+            throw new \Exception('Server error from fahrplan.sbb.ch: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+        }
+
         // fix broken JSON
         $content = $response->getContent();
         $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
@@ -163,6 +168,11 @@ class API
 
         // parse result
         $result = json_decode($content);
+
+        // check for JSON error
+        if ($result === null) {
+            throw new \Exception('Invalid JSON from fahrplan.sbb.ch: ' . $content);
+        }
 
         $locations = array();
         foreach ($result->stops as $stop) {
