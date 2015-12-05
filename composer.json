@@ -29,5 +29,10 @@
     },
     "autoload": {
         "psr-0": {"Transport": "lib/"}
+    },
+    "config": {
+        "platform": {
+            "php": "5.4"
+        }
     }
 }
