@@ -42,6 +42,12 @@ if (stream_resolve_include_path($config)) {
 	include $config;
 }
 
+// New Relic
+$app->register(new Ekino\Bundle\NewRelicBundle\Silex\EkinoNewRelicServiceProvider(), array(
+    'new_relic.application_name' => false,
+    'new_relic.log_exceptions' => true,
+));
+
 // HTTP cache
 if ($app['http_cache']) {
 	$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(

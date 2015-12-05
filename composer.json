@@ -21,7 +21,8 @@
         "twig/twig": "1.6.*",
         "monolog/monolog": "1.0.*",
         "facebook/xhprof": "dev-master",
-        "symfony/serializer": "2.0.*"
+        "symfony/serializer": "2.0.*",
+        "ekino/newrelic-bundle": "^1.3"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
