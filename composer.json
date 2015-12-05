@@ -22,7 +22,9 @@
         "monolog/monolog": "~1.17",
         "facebook/xhprof": "dev-master",
         "symfony/serializer": "~2.3|3.0.*",
-        "ekino/newrelic-bundle": "~1.3"
+        "ekino/newrelic-bundle": "~1.3",
+        "components/bootstrap": "~3.3",
+        "robloach/component-installer": "~0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
@@ -33,6 +35,7 @@
     "config": {
         "platform": {
             "php": "5.4"
-        }
+        },
+        "component-dir": "web/media/vendor"
     }
 }

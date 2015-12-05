@@ -5,11 +5,9 @@
 
     <title>Stationboard Example - Transport API</title>
 
-    <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" href="../media/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../media/vendor/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
@@ -84,20 +82,20 @@
         strong {
             color: #d10505;
         }
-        
+
         .column {
             float: right;
         }
-        
+
         .media {
             padding-top: 30px;
         }
-        
+
         table {
             border-collapse: collapse;
             width: 100%;
         }
-        
+
         td, th {
             padding: 8px;
             line-height: 18px;
@@ -110,7 +108,9 @@
 
 <body>
 
-<div class="wrapper">
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+
     <header>
         <h1><a href="../">Transport</a></h1>
         <p>Swiss public transport API</p>
@@ -140,6 +140,12 @@
             <tbody></tbody>
         </table>
     </article>
+
+    <footer class="footer">
+        <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+    </footer>
+
+    </div>
 </div>
 
 </body>

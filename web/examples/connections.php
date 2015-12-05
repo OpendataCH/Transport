@@ -74,113 +74,15 @@ if ($search) {
         <?php endif; ?>
     </title>
 
-    <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-
-    <link rel="stylesheet" href="../media/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../media/bootstrap/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="../media/vendor/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="../media/js/moment.min.js"></script>
-    <style>
-
-        .station input {
-            width: 92%;
-        }
-
-        .later {
-            text-align: right;
-        }
-
-        .row-fluid + .row-fluid {
-            padding-top: 3px;
-        }
-
-        .date,
-        .apply {
-            padding-top: 5px;
-        }
-
-        .date input {
-            width: 92%;
-        }
-
-        .apply input {
-            float: left;
-        }
-
-        .apply a {
-            display: block;
-            float: left;
-            padding: 6px 10px;
-        }
-
-        input.submit {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            width: 1px;
-            height: 1px;
-            visibility: hidden;
-        }
-
-        .table tbody + tbody {
-            border-top: 0;
-        }
-
-        .table tbody tr:hover td {
-            background-color: inherit;
-        }
-
-        .table th {
-            font-weight: normal;
-        }
-
-        .table tr.connection {
-            cursor: pointer;
-        }
-
-        .table tr.section {
-            background-color: #f5f5f5;
-            cursor: default;
-        }
-
-        .pager {
-            display: none;
-        }
-
-        @media (max-width: 767px) {
-            body {
-                padding-top: 20px;
-                padding-bottom: 30px;
-            }
-
-            form {
-                margin-bottom: 8px;
-            }
-
-            .date input {
-                height: 26px;
-                padding: 0;
-                border-color: #bbb;
-            }
-
-            .date input:focus {
-                border-color: #1a81d2;
-            }
-
-            .row-fluid .fluid {
-                float: left;
-                margin-left: 12px;
-                width: 48%;
-            }
-        }
-    </style>
     <script>
         $(function () {
 
@@ -274,183 +176,211 @@ if ($search) {
     </header>
 
     <h3>Connection Search Example</h3>
-    <br/>
+    <br>
 
-    <div class="row-fluid">
-        <div class="span5">
+    <div class="row">
+        <div class="col-sm-5">
 
-        <form method="get" action="">
-            <div class="row-fluid">
-                <div class="span5 fluid station">
-                    <input type="text" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" />
-                    <?php $i = count($stationsFrom); if ($i > 0): ?>
-                        <p>
-                            Did you mean:
-                            <?php foreach ($stationsFrom as $station): ?>
-                                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $station, 'to' => $to, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
-                            <?php endforeach ?>
-                        </p>
-                    <?php endif; ?>
+            <form method="get" action="">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" placeholder="From" autocapitalize="on" />
+                            <?php $i = count($stationsFrom); if ($i > 0): ?>
+                                <p>
+                                    Did you mean:
+                                    <?php foreach ($stationsFrom as $station): ?>
+                                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $station, 'to' => $to, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                                    <?php endforeach ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="text" name="to" class="form-control" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" autofocus />
+                            <?php $i = count($stationsFrom); if ($i > 0): ?>
+                                <p>
+                                    Did you mean:
+                                    <?php foreach ($stationsTo as $station): ?>
+                                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $station, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                                    <?php endforeach ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-                <div class="span5 fluid station">
-                    <input type="text" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" placeholder="To" autocapitalize="on" autofocus />
-                    <?php $i = count($stationsFrom); if ($i > 0): ?>
-                        <p>
-                            Did you mean:
-                            <?php foreach ($stationsTo as $station): ?>
-                                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $station, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
-                            <?php endforeach ?>
-                        </p>
-                    <?php endif; ?>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="datetime-local" class="form-control" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time (optional)" step="300" />
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Search" />
+                            <a class="btn btn-link" href="connections.php">Clear</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span5 fluid date">
-                    <input type="datetime-local" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" placeholder="Date and time (optional)" step="300" />
-                </div>
-                <div class="span5 fluid apply">
-                    <input type="submit" class="btn" value="Search" />
-                    <a href="connections.php">Clear</a>
-                </div>
-            </div>
-        </form>
+            </form>
 
         </div>
-        <div class="span7">
+        <div class="col-sm-7">
 
-        <?php if ($search && $response->connections): ?>
-        <table class="table connections">
-            <colgroup>
-                <col width="20%">
-                <col width="57%">
-                <col width="23%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Journey</th>
-                    <th>
-                        <span class="visible-phone">Pl.</span>
-                        <span class="hidden-phone">Platform</span>
-                    </th>
-                </tr>
-            </thead>
-            <?php $j = 0; ?>
-            <?php foreach ($response->connections as $connection): ?>
-                <?php $j++; ?>
-                <tbody>
-                    <tr class="connection"<?php if ($j == $c): ?> style="display: none;"<?php endif; ?> data-c="<?php echo $j; ?>">
-                        <td>
-                            <?php echo date('H:i', strtotime($connection->from->departure)); ?>
-                            <?php if ($connection->from->delay): ?>
-                                <span style="color: #a20d0d;"><?php echo '+' . $connection->from->delay; ?></span>
-                            <?php endif; ?>
-                            <br/>
-                            <?php echo date('H:i', strtotime($connection->to->arrival)); ?>
-                            <?php if ($connection->to->delay): ?>
-                                <span style="color: #a20d0d;"><?php echo '+' . $connection->to->delay; ?></span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <?php echo (substr($connection->duration, 0, 2) > 0) ? htmlentities(trim(substr($connection->duration, 0, 2), '0')) . 'd ' : ''; ?>
-                            <?php echo htmlentities(trim(substr($connection->duration, 3, 1), '0') . substr($connection->duration, 4, 4)); ?>′<br/>
-                            <span class="muted">
-                            <?php echo htmlentities(implode(', ', $connection->products)); ?>
-                            </span>
-                        </td>
-                        <td>
-                            <?php if ($connection->from->prognosis->platform): ?>
-                                <span style="color: #a20d0d;"><?php echo htmlentities($connection->from->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
-                            <?php else: ?>
-                                <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?>
-                            <?php endif; ?>
-                            <br/>
-                            <?php if ($connection->capacity2nd > 0): ?>
-                                <span class="muted">
-                                    <?php for ($i = 0; $i < 3; $i++) { echo $i < $connection->capacity2nd ? '●' : '○'; } ?>
-                                </span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <?php $i = 0; foreach ($connection->sections as $section): ?>
-                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
-                            <td rowspan="2">
-                                <?php echo date('H:i', strtotime($section->departure->departure)); ?>
-                                <?php if ($section->departure->delay): ?>
-                                    <span style="color: #a20d0d;"><?php echo '+' . $section->departure->delay; ?></span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
-                            </td>
-                            <td>
-                                <?php if ($section->departure->prognosis->platform): ?>
-                                    <span style="color: #a20d0d;"><?php echo htmlentities($section->departure->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
-                                <?php else: ?>
-                                    <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
-                                <?php endif; ?>
-                            </td>
+            <?php if ($search && $response->connections): ?>
+                <table class="table connections">
+                    <colgroup>
+                        <col width="20%">
+                        <col width="57%">
+                        <col width="23%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Journey</th>
+                            <th>
+                                <span class="visible-xs-inline">Pl.</span>
+                                <span class="hidden-xs">Platform</span>
+                            </th>
                         </tr>
-                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
-                            <td style="border-top: 0; padding: 4px 8px;">
-                                <span class="muted">
-                                <?php if ($section->journey): ?>
-                                    <?php echo htmlentities($section->journey->name, ENT_QUOTES, 'UTF-8'); ?>
-                                <?php else: ?>
-                                    Walk
-                                <?php endif; ?>
-                                </span>
-                            </td>
-                            <td style="border-top: 0; padding: 4px 8px;">
-                                <span class="muted">
-                                    <?php if ($section->journey && $section->journey->capacity2nd > 0): ?>
-                                        <?php for ($i = 0; $i < 3; $i++) { echo $i < $section->journey->capacity2nd ? '●' : '○'; } ?>
+                    </thead>
+                    <?php $j = 0; ?>
+                    <?php foreach ($response->connections as $connection): ?>
+                        <?php $j++; ?>
+                        <tbody>
+                            <tr class="connection"<?php if ($j == $c): ?> style="display: none;"<?php endif; ?> data-c="<?php echo $j; ?>">
+                                <td>
+                                    <?php echo date('H:i', strtotime($connection->from->departure)); ?>
+                                    <?php if ($connection->from->delay): ?>
+                                        <span style="color: #a20d0d;"><?php echo '+' . $connection->from->delay; ?></span>
                                     <?php endif; ?>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
-                            <td style="border-top: 0;">
-                                <?php echo date('H:i', strtotime($section->arrival->arrival)); ?>
-                                <?php if ($section->arrival->delay): ?>
-                                    <span style="color: #a20d0d;"><?php echo '+' . $section->arrival->delay; ?></span>
-                                <?php endif; ?>
-                            </td>
-                            <td style="border-top: 0;">
-                                <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
-                            </td>
-                            <td style="border-top: 0;">
-                                <?php if ($section->arrival->prognosis->platform): ?>
-                                    <span style="color: #a20d0d;"><?php echo htmlentities($section->arrival->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
-                                <?php else: ?>
-                                    <?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
+                                    <br/>
+                                    <?php echo date('H:i', strtotime($connection->to->arrival)); ?>
+                                    <?php if ($connection->to->delay): ?>
+                                        <span style="color: #a20d0d;"><?php echo '+' . $connection->to->delay; ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php echo (substr($connection->duration, 0, 2) > 0) ? htmlentities(trim(substr($connection->duration, 0, 2), '0')) . 'd ' : ''; ?>
+                                    <?php echo htmlentities(trim(substr($connection->duration, 3, 1), '0') . substr($connection->duration, 4, 4)); ?>′<br/>
+                                    <span class="muted">
+                                    <?php echo htmlentities(implode(', ', $connection->products)); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <?php if ($connection->from->prognosis->platform): ?>
+                                        <span style="color: #a20d0d;"><?php echo htmlentities($connection->from->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <?php else: ?>
+                                        <?php echo htmlentities($connection->from->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                    <?php endif; ?>
+                                    <br/>
+                                    <?php if ($connection->capacity2nd > 0): ?>
+                                        <small title="Expected occupancy 2nd class">
+                                            <?php for ($i = 0; $i < 3; $i++): ?>
+                                                <?php if ($i < $connection->capacity2nd): ?>
+                                                    <span class="glyphicon glyphicon-user text-muted"></span>
+                                                <?php else: ?>
+                                                    <span class="glyphicon glyphicon-user text-disabled"></span>
+                                                <?php endif; ?>
+                                            <?php endfor; ?>
+                                        </small>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <?php $i = 0; foreach ($connection->sections as $section): ?>
+                                <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
+                                    <td rowspan="2">
+                                        <?php echo date('H:i', strtotime($section->departure->departure)); ?>
+                                        <?php if ($section->departure->delay): ?>
+                                            <span style="color: #a20d0d;"><?php echo '+' . $section->departure->delay; ?></span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo htmlentities($section->departure->station->name, ENT_QUOTES, 'UTF-8'); ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($section->departure->prognosis->platform): ?>
+                                            <span style="color: #a20d0d;"><?php echo htmlentities($section->departure->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <?php else: ?>
+                                            <?php echo htmlentities($section->departure->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
+                                    <td style="border-top: 0; padding: 4px 8px;">
+                                        <span class="muted">
+                                        <?php if ($section->journey): ?>
+                                            <?php echo htmlentities($section->journey->name, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php else: ?>
+                                            Walk
+                                        <?php endif; ?>
+                                        </span>
+                                    </td>
+                                    <td style="border-top: 0; padding: 4px 8px;">
+                                        <small title="Expected occupancy 2nd class">
+                                            <?php if ($section->journey && $section->journey->capacity2nd > 0): ?>
+                                                <?php for ($i = 0; $i < 3; $i++): ?>
+                                                    <?php if ($i < $section->journey->capacity2nd): ?>
+                                                        <span class="glyphicon glyphicon-user text-muted"></span>
+                                                    <?php else: ?>
+                                                        <span class="glyphicon glyphicon-user text-disabled"></span>
+                                                    <?php endif; ?>
+                                                <?php endfor; ?>
+                                            <?php endif; ?>
+                                        </small>
+                                    </td>
+                                </tr>
+                                <tr class="section"<?php if ($j != $c): ?> style="display: none;"<?php endif; ?>>
+                                    <td style="border-top: 0;">
+                                        <?php echo date('H:i', strtotime($section->arrival->arrival)); ?>
+                                        <?php if ($section->arrival->delay): ?>
+                                            <span style="color: #a20d0d;"><?php echo '+' . $section->arrival->delay; ?></span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td style="border-top: 0;">
+                                        <?php echo htmlentities($section->arrival->station->name, ENT_QUOTES, 'UTF-8'); ?>
+                                    </td>
+                                    <td style="border-top: 0;">
+                                        <?php if ($section->arrival->prognosis->platform): ?>
+                                            <span style="color: #a20d0d;"><?php echo htmlentities($section->arrival->prognosis->platform, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <?php else: ?>
+                                            <?php echo htmlentities($section->arrival->platform, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
                     <?php endforeach; ?>
-                </tbody>
-            <?php endforeach; ?>
-        </table>
+                </table>
 
-        <?php $datetime = $datetime ?: date('Y-m-d H:i:s'); ?>
-        <form class="pager">
-            <input type="hidden" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" />
-            <input type="hidden" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
-            <input type="hidden" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" />
-            <input type="hidden" name="page" value="<?php echo htmlentities($page + 1, ENT_QUOTES, 'UTF-8'); ?>" />
-        </form>
-        <div class="row-fluid">
-            <div class="span6 fluid">
-                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
-            </div>
-            <div class="span6 fluid later">
-                <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
-            </div>
+                <?php $datetime = $datetime ?: date('Y-m-d H:i:s'); ?>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
+                    </div>
+                </div>
+                <form class="pager">
+                    <input type="hidden" name="from" value="<?php echo htmlentities($from, ENT_QUOTES, 'UTF-8'); ?>" />
+                    <input type="hidden" name="to" value="<?php echo htmlentities($to, ENT_QUOTES, 'UTF-8'); ?>" />
+                    <input type="hidden" name="datetime" value="<?php echo htmlentities($datetime, ENT_QUOTES, 'UTF-8'); ?>" />
+                    <input type="hidden" name="page" value="<?php echo htmlentities($page + 1, ENT_QUOTES, 'UTF-8'); ?>" />
+                </form>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
-        </div>
+
     </div>
+
+    <footer class="footer">
+        <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+    </footer>
+
 </div>
+
+<p>&nbsp;</p>
 
 </body>
 </html>
