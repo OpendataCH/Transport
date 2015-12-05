@@ -62,10 +62,10 @@ class RateLimiting
     public function increment($ip)
     {
         $key = $this->key($ip);
-        $multi = $this->redis->multiExec();
-        $multi->incr($key);
-        $multi->expire($key, 120); // expire after two minutes
-        $multi->exec();
+        $this->redis->transaction(function ($tx) use ($key) {
+            $tx->incr($key);
+            $tx->expire($key, 120); // expire after two minutes
+        });
     }
 
     public function getRemaining($ip)
