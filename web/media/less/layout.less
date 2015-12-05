@@ -11,7 +11,7 @@ header {
     margin-bottom:  20px;
     border-bottom: 1px dotted #999;
     position: relative;
-    
+
     .sign-in {
         position: absolute;
         top: 15px;
@@ -34,7 +34,7 @@ h1 {
     font-size: 8em;
     line-height: 1;
     color: @header-color;
-    
+
     a, a:hover {
         color: @header-color;
         text-decoration: none;
@@ -45,6 +45,12 @@ h1 .second {
     color: @font-color;
     position: relative;
     left: -20px;
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 4em;
+    }
 }
 
 h2 {

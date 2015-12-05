@@ -87,9 +87,6 @@ if ($search) {
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="../media/js/moment.min.js"></script>
     <style>
-        h1 {
-            font-size: 5em;
-        }
 
         .station input {
             width: 92%;
@@ -271,9 +268,13 @@ if ($search) {
 <body>
 
 <div class="container">
-    <div class="page-header hidden-phone">
-        <h1><a href="../">Transport</a> <small>Swiss public transport API</small></h1>
-    </div>
+    <header>
+        <h1><a href="../">Transport</a></h1>
+        <p>Swiss public transport API</p>
+    </header>
+
+    <h3>Connection Search Example</h3>
+    <br/>
 
     <div class="row-fluid">
         <div class="span5">
