@@ -317,7 +317,7 @@ if ($search) {
         </div>
         <div class="span7">
 
-        <?php if ($response->connections): ?>
+        <?php if ($search && $response->connections): ?>
         <table class="table connections">
             <colgroup>
                 <col width="20%">
