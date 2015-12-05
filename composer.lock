@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "22ef716cc4062ec238f267aaa28e36da",
-    "content-hash": "1164f1e8d096aecb097c5cc74f701c51",
+    "hash": "36dad5bf6e7299c962f7e50af2e65577",
+    "content-hash": "b47fb5b0f523cd8756206bb9e7e44c08",
     "packages": [
         {
             "name": "ekino/newrelic-bundle",
