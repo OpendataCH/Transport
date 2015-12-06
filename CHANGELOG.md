@@ -1,5 +1,13 @@
 # Changelog
 
+## 2015-12-06
+
+- Moved API documentation to separate webpage
+- Added Showcase page
+- Upgraded dependencies
+- Check for SBB server errors
+- Added New Relic support
+
 ## 2015-12-01
 
 - #103 Added accessibility parameter to /connections
