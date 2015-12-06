@@ -175,6 +175,12 @@ if ($search) {
         <p>Swiss public transport API</p>
     </header>
 
+    <p class="pull-right">
+        <a class="btn btn-link" href="https://github.com/OpendataCH/Transport/blob/master/web/examples/connections.php" target="_blank">
+            <span class="glyphicon glyphicon-new-window"></span>
+            Source Code
+        </a>
+    </p>
     <h3>Connection Search Example</h3>
     <br>
 
