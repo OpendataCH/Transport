@@ -1,0 +1,994 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Documentation - Transport API</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="media/vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="media/css/layout.css" />
+</head>
+
+<body>
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <header>
+            <h1><a href="./">Transport</a></h1>
+            <p>Swiss public transport API</p>
+        </header>
+
+        <article>
+            <h2 id="documentation">API Documentation</h2>
+
+            <ul>
+                <li><a href="#rate-limiting">Rate limiting</a></li>
+                <li>
+                    <a href="#api-resources">Resources</a>
+                    <ul>
+                        <li><a href="#locations">/locations</a></li>
+                        <li><a href="#connections">/connections</a></li>
+                        <li><a href="#stationboard">/stationboard</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#api-objects">Objects</a>
+                    <ul>
+                        <li><a href="#location">location</a></li>
+                        <li><a href="#coordinates">coordinates</a></li>
+                        <li><a href="#connection">connection</a></li>
+                        <li><a href="#checkpoint">checkpoint</a></li>
+                        <li><a href="#prognosis">prognosis</a></li>
+                        <li><a href="#stop">stop</a></li>
+                        <li><a href="#section">section</a></li>
+                        <li><a href="#journey">journey</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#limit-response">Limit response</a>
+                </li>
+            </ul>
+
+            <h3 id="rate-limiting">Rate Limiting</h3>
+
+            <p>The number of HTTP requests you can send to <code>transport.opendata.ch</code> is limited to 300 requests per minute per IP address. The number of remaining requests is sent back for your information in the HTTP response header <code>X-Rate-Limit-Remaining</code>. If you reach the maximum number of requests please <a href="mailto:transport@opendata.ch">contact us</a>, we are eager to hear your use case and discuss a solution.</p>
+
+            <h3 id="api-resources">API Resources</h3>
+
+            <p>The Transport API builds on REST style resources which respond in JSON. Individual resources are detailed below. Cross Origin Resource Sharing (CORS) is enabled, so you can easily use the API on transport.opendata.ch from any website (avoid setting custom headers though).</p>
+
+            <hr/>
+
+            <h3 id="locations">/locations</h3>
+
+            <p>Returns the matching locations for the given parameters. Either <code>query</code> or ( <code>x</code> and <code>y</code> ) are required.</p>
+
+            <p>The locations in the response are scored to determine which is the most exact location.</p>
+
+            <p>This method can return a refine response, what means that the request has to be redone.</p>
+
+            <h4>Resource URL</h4>
+
+            <pre>http://transport.opendata.ch/v1/locations</pre>
+
+            <h4>Request Parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>query</code></td>
+                        <td>optional</td>
+                        <td>Specifies the location name to search for</td>
+                        <td>Basel</td>
+                    </tr>
+                    <tr>
+                        <td><code>x</code></td>
+                        <td>optional</td>
+                        <td>Latitude</td>
+                        <td>47.476001</td>
+                    </tr>
+                    <tr>
+                        <td><code>y</code></td>
+                        <td>optional</td>
+                        <td>Longitude</td>
+                        <td>8.306130</td>
+                    </tr>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>optional</td>
+                        <td>
+                            Only with <code>query</code> parameter.
+                            Specifies the location type, possible types are:
+                            <ul>
+                                <li>all (default): Looks up for all types of locations</li>
+                                <li>station: Looks up for stations (train station, bus station)</li>
+                                <li>poi: Looks up for points of interest (Clock tower, China garden)</li>
+                                <li>address: Looks up for an address (Zurich Bahnhofstrasse 33)</li>
+                            </ul>
+                        </td>
+                        <td>address</td>
+                    </tr>
+                    <tr>
+                        <td><code>transportations</code></td>
+                        <td>optional</td>
+                        <td>
+                            Only with <code>x</code> and <code>y</code> parameter. Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code>
+                        </td>
+                        <td>transportations[]=ec_ic&amp;<br/>transportations[]=bus</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Response parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>stations</code></td>
+                        <td>A list of <a href="#location">locations</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Example Request</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/locations?query=Basel</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "stations": [
+        {
+            "id": "000000022",
+            "name": "Basel",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 47.547408,
+                "y": 7.589547
+            },
+            "distance": null
+        }
+    ]
+}
+            </pre>
+
+            <hr/>
+
+            <h3 id="connections">/connections</h3>
+
+            <p>Returns the next connections from a location to another.</p>
+
+            <h4>Resource URL</h4>
+
+            <pre>http://transport.opendata.ch/v1/connections</pre>
+
+            <h4>Request Parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>from</code></td>
+                        <td>required</td>
+                        <td>Specifies the departure location of the connection</td>
+                        <td>Lausanne</td>
+                    </tr>
+                    <tr>
+                        <td><code>to</code></td>
+                        <td>required</td>
+                        <td>Specifies the arrival location of the connection</td>
+                        <td>Genève</td>
+                    </tr>
+                    <tr>
+                        <td><code>via</code></td>
+                        <td>optional</td>
+                        <td class="description">Specifies up to five via locations. When specifying several vias, array notation (<code>via[]=via1&amp;via[]=via2</code>) is required.</td>
+                        <td>Bern</td>
+                    </tr>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td>optional</td>
+                        <td>Date of the connection, in the format YYYY-MM-DD</td>
+                        <td>2012-03-25</td>
+                    </tr>
+                    <tr>
+                        <td><code>time</code></td>
+                        <td>optional</td>
+                        <td>Time of the connection, in the format hh:mm</td>
+                        <td>17:30</td>
+                    </tr>
+                    <tr>
+                        <td><code>isArrivalTime</code></td>
+                        <td>optional</td>
+                        <td>defaults to <code>0</code>, if set to <code>1</code> the passed <code>date</code> and <code>time</code> is the arrival time</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>transportations</code></td>
+                        <td>optional</td>
+                        <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
+                        <td>transportations[]=ec_ic&amp;<br/>transportations[]=bus</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td>optional</td>
+                        <td>1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>optional</td>
+                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><code>direct</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only direct connections are allowed</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>sleeper</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only night trains containing beds are allowed, implies direct=1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>couchette</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only night trains containing couchettes are allowed, implies direct=1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>bike</code></td>
+                        <td>optional</td>
+                        <td>defaults to 0, if set to 1 only trains allowing the transport of bicycles are allowed</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>accessibility</code></td>
+                        <td>optional</td>
+                        <td class="description">Possible values are <code>independent_boarding</code>, <code>assisted_boarding</code>,  and <code>advanced_notice</code></td>
+                        <td>independent_boarding</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Response parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>connections</code></td>
+                        <td>A list of <a href="#connection">connections</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Example Requests</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève</pre>
+            <p>which is the same as</p>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=008501120&amp;to=008501008</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "connections" : [
+        {
+            "from" : {
+                "arrival" : null,
+                "arrivalTimestamp" : null,
+                "departure" : "2012-03-31T08:58:00+02:00",
+                "departureTimestamp" : 1333177080,
+                "platform" : "7",
+                "prognosis" : {
+                    "platform" : null,
+                    "arrival" : null
+                    "departure" : null
+                    "capacity1st" : "-1",
+                    "capacity2nd" : "-1",
+                },
+                "station" : {
+                    "coordinate" : {
+                        "type" : "WGS84",
+                        "x" : "6629086",
+                        "y" : "46516785"
+                    },
+                    "id" : "008501120",
+                    "name" : "Lausanne",
+                    "score" : null
+                }
+            },
+            "to" : {
+                "arrival" : "2012-03-31T09:46:00+02:00",
+                "arrivalTimestamp" : 1333179960,
+                "departure" : null,
+                "departureTimestamp" : null,
+                "platform" : "2",
+                "prognosis" : {
+                    "platform" : null,
+                    "arrival" : null,
+                    "departure" : null
+                    "capacity1st" : null,
+                    "capacity2nd" : null,
+                },
+                "station" : {
+                    "coordinate" : {
+                        "type" : "WGS84",
+                        "x" : "6142437",
+                        "y" : "46210217"
+                    },
+                    "id" : "008501008",
+                    "name" : "Genève",
+                    "score" : null
+                }
+            }
+        },
+    ],
+    // ...
+}
+            </pre>
+            <hr/>
+
+            <h3 id="stationboard">/stationboard</h3>
+
+            <p>Returns the next connections leaving from a specific location.</p>
+
+            <h4>Resource URL</h4>
+
+            <pre>http://transport.opendata.ch/v1/stationboard</pre>
+
+            <h4>Request Parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>station</code></td>
+                    <td>required</td>
+                    <td>Specifies the location of which a stationboard should be returned</td>
+                    <td>Aarau</td>
+                </tr>
+                <tr>
+                    <td><code>id</code></td>
+                    <td>optional</td>
+                    <td>The id of the station whose stationboard should be returned.
+                        <br />Alternative to the station parameter; one of these two is required.
+                        <br />If both an id and a station are specified the id has precedence.
+                    </td>
+                    <td>8503059 <em>(for Zurich Stadelhofen)</em></td>
+                </tr>
+                <tr>
+                    <td><code>limit</code></td>
+                    <td>optional</td>
+                    <td>Number of departing connections to return.
+                        <br />This is not a hard limit - if multiple connections leave at the same time it'll return any connections that leave at the same time as the last connection within the limit.<br />
+                        For example: limit=4 will return connections leaving at :
+                        <ul><li>19:30</li><li>19:32</li><li>19:32</li><li>19:35</li><li>19:35</li></ul>
+                        Because one of the connections leaving at 19:35 is within the limit, all connections leaving at 19:35 are shown.
+                    </td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td><code>transportations</code></td>
+                    <td>optional</td>
+                    <td class="description">Transportation means; one or more of <code>ice_tgv_rj</code>, <code>ec_ic</code>, <code>ir</code>, <code>re_d</code>, <code>ship</code>, <code>s_sn_r</code>, <code>bus</code>, <code>cableway</code>, <code>arz_ext</code>, <code>tramway_underground</code></td>
+                    <td>?transportations[]=ec_ic&amp;transportations[]=bus</td>
+                </tr>
+                <tr>
+                    <td><code>datetime</code></td>
+                    <td>optional</td>
+                    <td>Date and time of departing connections, in the format <code>YYYY-MM-DD hh:mm</code>.</td>
+                    <td>2012-03-25 17:30</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4>Response parameters</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>station</code></td>
+                    <td>The first matched <a href="#location">location</a> based on the query. The stationboard will be displayed if this is a station.</td>
+                </tr>
+                <tr>
+                    <td><code>stationboard</code></td>
+                    <td>A list of <a href="#journey">journeys</a> with the <a href="#stop">stop</a> of the line leaving from that station.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4>Example Requests</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/stationboard?station=Aarau&amp;limit=10</pre>
+            <p>which is the same as</p>
+            <pre>GET http://transport.opendata.ch/v1/stationboard?id=008502113&amp;limit=10</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "stationboard" : [
+    {
+        "stop":
+        {
+            "station":
+            {
+                "id": "8502996",
+                "name": "Aarau, Bahnhof",
+                "score": null,
+                "coordinate":
+                {
+                    "type" : "WGS84",
+                    "x": "8050864",
+                    "y": "47392020"
+                }
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2012-03-31T14:39:00+02:00",
+            "departureTimestamp": 1333197540,
+            "platform": "",
+            "prognosis":
+            {
+                "platform": null,
+                "arrival": null,
+                "departure": null,
+                "capacity1st": "-1",
+                "capacity2nd": "-1"
+            }
+        },
+        "name": "BUS13543",
+        "category": "BUS",
+        "number": "13543",
+        "operator": null,
+        "to": "Frick, Bahnhof"
+    },{
+        "stop":
+        {
+            "station":
+            {
+                "id": "8502996",
+                "name": "Aarau, Bahnhof",
+                "score": null,
+                "coordinate":
+                {
+                    "type": "WGS84",
+                    "x": "8050864",
+                    "y": "47392020"
+                }
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2012-03-31T14:39:00+02:00",
+            "departureTimestamp": 1333197540,
+            "platform": "",
+            "prognosis":
+            {
+                "platform": null,
+                "arrival": null,
+                "departure": null,
+                "capacity1st": "-1",
+                "capacity2nd": "-1"
+            }
+        },
+        "name": "Bus 2",
+        "category": "Bus",
+        "number": "2",
+        "operator": "BBA",
+        "to": "Aarau Rohr, Unterdorf"
+    },
+    // ...
+    ]
+}
+            </pre>
+
+            <hr/>
+
+            <h3 id="api-objects">API Objects</h3>
+
+            <p>API responses are composites of the following objects:</p>
+
+            <h4 id="location">Location Object</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>id</code></td>
+                        <td>The id of the location</td>
+                    </tr>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>
+                            Type of the location, can contain:
+                            <ul>
+                                <li>station: Location is a train station, bus station</li>
+                                <li>poi: Location is a point of interest (Clock tower, China garden)</li>
+                                <li>address: Location is an address</li>
+                                <li>refine: Location is not defined, the user has to relocate</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>The location name</td>
+                    </tr>
+                    <tr>
+                        <td><code>score</code></td>
+                        <td>The accuracy of the result</td>
+                    </tr>
+                    <tr>
+                        <td><code>coordinates</code></td>
+                        <td>The location <a href="#coordinates">coordinates</a></td>
+                    </tr>
+                    <tr>
+                        <td><code>distance</code></td>
+                        <td>If search has been with coordinates, distance to original point in meters</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="coordinates">Coordinates Object</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>The type of the given coordinate</td>
+                    </tr>
+                    <tr>
+                        <td><code>x</code></td>
+                        <td>Latitude</td>
+                    </tr>
+                    <tr>
+                        <td><code>y</code></td>
+                        <td>Longitude</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="connection">Connection Object</h4>
+
+            <p>A connection represents a possible journey between two locations.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>from</code></td>
+                        <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                    <tr>
+                        <td><code>to</code></td>
+                        <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                    <tr>
+                        <td><code>duration</code></td>
+                        <td>Duration of the journey</td>
+                        <td>00d00:43:00</td>
+                    </tr>
+                    <tr>
+                        <td><code>service</code></td>
+                        <td colspan="2"><a href="#service">Service</a> information about how regular the connection operates</td>
+                    </tr>
+                    <tr>
+                        <td><code>products</code></td>
+                        <td>Array with transport products</td>
+                        <td>IR, S9</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity1st</code></td>
+                        <td>The maximum estimated occupation load of 1st class coaches</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity2st</code></td>
+                        <td>The maximum estimated occupation load of 2nd class coaches</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><code>sections</code></td>
+                        <td colspan="2">A list of <a href="#section">sections</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="checkpoint">Checkpoint Object</h4>
+
+            <p>A checkpoint represents an arrival or a departure point (in time and space) of a connection.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>station</code></td>
+                        <td colspan="2">The <a href="#location">location</a> of the checkpoint</td>
+                    </tr>
+                    <tr>
+                        <td><code>arrival</code></td>
+                        <td>The arrival time to the checkpoint</td>
+                        <td>14:58:00</td>
+                    </tr>
+                    <tr>
+                        <td><code>departure</code></td>
+                        <td>The departure time from the checkpoint</td>
+                        <td>null</td>
+                    </tr>
+                    <tr>
+                        <td><code>platform</code></td>
+                        <td>The arrival/departure platform </td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><code>prognosis</code></td>
+                        <td colspan="2">The checkpoint <a href="#prognosis">prognosis</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="service">Service Object</h4>
+
+			<p>Operation information for a connection.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>regular</code></td>
+                        <td>Information about how regular a connection operates.</td>
+                        <td>daily</td>
+                    </tr>
+                    <tr>
+                        <td><code>irregular</code></td>
+                        <td>Additional information about irregular operation dates.</td>
+                        <td>not 23., 24. Jun 2012</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="prognosis">Prognosis Object</h4>
+
+            <p>A prognosis contains "realtime" informations on the status of a connection checkpoint.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>platform</code></td>
+                        <td>The estimated arrival/departure platform</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><code>departure</code></td>
+                        <td>The departure time prognosis to the checkpoint<br>Date format: <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a></td>
+                        <td>2012-03-31T08:58:00+02:00</td>
+                    </tr>
+                    <tr>
+                        <td><code>arrival</code></td>
+                        <td>The arrival time prognosis to the checkpoint<br>Date format: <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a></td>
+                        <td>2012-03-31T09:35:00+02:00</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity1st</code></td>
+                        <td>The estimated occupation load of 1st class coaches</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity2st</code></td>
+                        <td>The estimated occupation load of 2nd class coaches</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="stop">Stop Object</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>station</code></td>
+                    <td colspan="2">A <a href="#location">location</a> object showing this line's stop at the requested station.</td>
+                </tr>
+                <tr>
+                    <td><code>name</code></td>
+                    <td>The name of the connection</td>
+                    <td>Bus 2</td>
+                </tr>
+                <tr>
+                    <td><code>category</code></td>
+                    <td>The type of connection this is</td>
+                    <td>Bus</td>
+                </tr>
+                <tr>
+                    <td><code>number</code></td>
+                    <td>The number of the connection's line, e.g. Bus line 2</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td><code>operator</code></td>
+                    <td>The operator of the connection's line</td>
+                    <td>BBA</td>
+                </tr>
+                <tr>
+                    <td><code>to</code></td>
+                    <td>The final destination of this line</td>
+                    <td>Aarau Rohr, Unterdorf</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4 id="section">Section Object</h4>
+
+            <p>A connection consists of one or multiple sections.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>journey</code></td>
+                        <td colspan="2">A <a href="#journey">journey</a>, the transportation used by this section. Can be null</td>
+                    </tr>
+                    <tr>
+                        <td><code>walk</code></td>
+                        <td>Information about walking distance, if available</td>
+                        <td>null</td>
+                    </tr>
+                    <tr>
+                        <td><code>departure</code></td>
+                        <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                    <tr>
+                        <td><code>arrival</code></td>
+                        <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 id="journey">Journey Object</h4>
+
+            <p>The actual transportation of a section, e.g. a bus or a train between two stations.</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>The name of the transportation</td>
+                        <td>ICN 518</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>Category of the transportation</td>
+                        <td>ICN</td>
+                    </tr>
+                    <tr>
+                        <td><code>categoryCode</code></td>
+                        <td>An internal category code of the transportation</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>number</code></td>
+                        <td>The number of the transportation line</td>
+                        <td>518</td>
+                    </tr>
+                    <tr>
+                        <td><code>operator</code></td>
+                        <td>The company performing the transportation</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td><code>to</code></td>
+                        <td>Final destination of the train</td>
+                        <td>Zürich HB</td>
+                    </tr>
+                    <tr>
+                        <td><code>passList</code></td>
+                        <td colspan="2"><a href="#checkpoint">Checkpoints</a> the train passed on the journey</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity1st</code></td>
+                        <td>The maximum estimated occupation load of 1st class coaches</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><code>capacity2st</code></td>
+                        <td>The maximum estimated occupation load of 2nd class coaches</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <h3 id="limit-response">Limit response</h3>
+            <p>You can limit the response data with the <code>fields</code> parameter.
+            If any <code>fields[]</code> is passed, only the specified fields are in the response.
+            The API is aware of the hierarchy, if you set a field, everything below is in the response unless a more specific (further down in the hierarchy) field is set.
+            </p>
+            <h4>Example Request</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from/departure&amp;fields[]=connections/to/arrival</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+{
+    "connections":[
+        {
+            "from":{
+                "departure":"2012-05-01T19:42:00+0200",
+            },
+            "to":{
+                "arrival":"2012-05-01T20:15:00+0200",
+            }
+        },
+    ],
+    //....
+}
+
+            </pre>
+
+
+            <h4>Example Request</h4>
+
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from&amp;fields[]=connections/to/station</pre>
+
+            <h4>Example response</h4>
+
+            <pre>
+
+{
+    "connections":[
+        {
+            "from":{
+                "station":{
+                    "id":"008501120",
+                    "name":"Lausanne",
+                    "score":null,
+                    "coordinate":{
+                        "type":"WGS84",
+                        "x":6.629086,
+                        "y":46.516785
+                    }
+                },
+                "arrival":null,
+                "arrivalTimestamp":null,
+                "departure":"2012-05-01T19:42:00+0200",
+                "departureTimestamp":1335894120,
+                "platform":"5",
+                "prognosis":{
+                    "platform":null,
+                    "arrival":null,
+                    "departure":null,
+                    "capacity1st":"1",
+                    "capacity2nd":"1"
+                }
+            },
+            "to":{
+                "station":{
+                    "id":"008501008",
+                    "name":"Gen\u00e8ve",
+                    "score":null,
+                    "coordinate":{
+                        "type":"WGS84",
+                        "x":6.142437,
+                        "y":46.210217
+                    }
+                }
+            }
+        },
+    ],
+    // ...
+}
+            </pre>
+        </article>
+
+        <footer class="footer">
+            <hr>
+            <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+        </footer>
+    </div>
+</div>
+
+</body>
+</html>

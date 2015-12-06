@@ -375,6 +375,7 @@ if ($search) {
     </div>
 
     <footer class="footer">
+        <hr>
         <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
     </footer>
 
