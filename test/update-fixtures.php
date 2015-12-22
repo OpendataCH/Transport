@@ -41,7 +41,7 @@ function downloadJson($url, $file) {
 }
 
 // Location
-$query = new LocationQuery(array('from' => 'Zürich', 'to' => 'Bern'));
+$query = new LocationQuery(array('from' => 'Züri', 'to' => 'Bern'));
 download($query, 'location.xml');
 
 // Connection
