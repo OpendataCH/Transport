@@ -48,7 +48,7 @@ download($query, 'location.xml');
 $from = new Station('008503000');
 $to = new Station('008503504');
 $query = new ConnectionQuery($from, $to, array(), '2012-02-13T23:55:00+01:00');
-download($query, 'connection.xml');
+download($query, 'archive/connection-2012-01-31.xml');
 
 // Station Board
 $station = new Station('008591052'); // Zürich, Bäckeranlage
