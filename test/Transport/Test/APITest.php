@@ -182,4 +182,29 @@ class APITest extends \PHPUnit_Framework_TestCase
 
         $this->api->findConnections($query);
     }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessageRegExp /Invalid XML from fahrplan\.sbb\.ch/
+     */
+    public function testFindConnections500()
+    {
+        $response = new Response();
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/500.xml'));
+
+        $this->browser->expects($this->once())
+            ->method('post')
+            ->with(
+                $this->equalTo(
+                    'http://fahrplan.sbb.ch/bin/extxml.exe/'
+                )
+            )
+            ->will($this->returnValue($response));
+
+        $from = new Station('008503000');
+        $to = new Station('008503504');
+        $query = new ConnectionQuery($from, $to, array(), '2012-02-13T23:55:00+01:00');
+
+        $this->api->findConnections($query);
+    }
 }
