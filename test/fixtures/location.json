@@ -1,25 +1,26 @@
+{ prods:"1023",
+stops:
+[
 {
-    "error": "0", 
-    "numberofstops": "2", 
-    "prods": "1023", 
-    "stops": [
-        {
-            "extId": "8508489", 
-            "name": "Kehrsiten-B&#252;rgenstock", 
-            "prodclass": "16", 
-            "puic": "85", 
-            "urlname": "Kehrsiten-B%FCrgenstock", 
-            "x": "8382324", 
-            "y": "47003057"
-        }, 
-        {
-            "extId": "8579228", 
-            "name": "B&#252;rgenstock, Hotels", 
-            "prodclass": "64", 
-            "puic": "85", 
-            "urlname": "B%FCrgenstock,%20Hotels", 
-            "x": "8386252", 
-            "y": "46997088"
-        }
-    ]
+x : "8382324",
+y : "47003066",
+extId:"8508489",
+puic:"85",
+name : "Kehrsiten-B&#252;rgenstock",
+prodclass : "16",
+urlname : "Kehrsiten-B%FCrgenstock"
+}
+,
+{
+x : "8385892",
+y : "46994616",
+extId:"8579842",
+puic:"85",
+name : "Obb&#252;rgen, Unter-Misli",
+prodclass : "64",
+urlname : "Obb%FCrgen,%20Unter-Misli"
+}
+]
+,error : "0"
+,numberofstops: "2"
 }
