@@ -8,7 +8,7 @@ use Transport\Entity\Schedule\StationBoardJourney;
 class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
 {
     protected function getJourney()
-    {   
+    {
         $stop = new Entity\Schedule\Stop();
         $stop->departure = '2012-03-31T23:57:00+0200';
         $stop->departureTimestamp = 1333231020;
@@ -26,7 +26,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
             $station->coordinate = $coordinates;
         $stop->station = $station;
         $stop->location = $station;
-        
+
         $journey = new Entity\Schedule\StationBoardJourney();
         $journey->stop = $stop;
         $journey->name = 'Bus 31';
@@ -42,7 +42,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/stationboard.xml');
+        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/archive/stationboard-2012-02-13.xml');
 
         $date = \DateTime::createFromFormat('Y-m-d', '2012-03-31', new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
@@ -50,4 +50,3 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getJourney(), StationBoardJourney::createFromXml($xml->STBRes->JourneyList->STBJourney[0], $date));
     }
 }
-

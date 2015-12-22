@@ -54,7 +54,7 @@ download($query, 'archive/connection-2012-01-31.xml');
 $station = new Station('008591052'); // Zürich, Bäckeranlage
 $query = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00', new \DateTimeZone('Europe/Zurich')));
 $query->maxJourneys = 3;
-download($query, 'stationboard.xml');
+download($query, 'archive/stationboard-2012-02-13.xml');
 
 // Close to Kehrsiten-Bürgenstock
 $nearBy = new NearbyQuery('47.002347', '8.379934', 2);
