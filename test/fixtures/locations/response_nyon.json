@@ -1,0 +1,15 @@
+{
+    "stations": [
+        {
+            "id": "8593897",
+            "name": "Nyon, rte de l'Etraz",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.388635,
+                "y": 6.238738
+            },
+            "distance": 2.2
+        }
+    ]
+}
