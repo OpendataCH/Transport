@@ -6,7 +6,6 @@ use Buzz\Message\Response;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Location\Station;
-use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 
 class APITest extends \PHPUnit_Framework_TestCase
@@ -99,63 +98,6 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(46.388635, $stations[0]->coordinate->x);
         $this->assertEquals(6.238738, $stations[0]->coordinate->y);
         $this->assertEquals('WGS84', $stations[0]->coordinate->type);
-    }
-
-    public function testGetStationBoard()
-    {
-        $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2012-02-13.xml'));
-
-        $this->browser->expects($this->once())
-            ->method('post')
-            ->with(
-                $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
-                $this->equalTo(array(
-                        'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0',
-                        'Accept: application/xml',
-                        'Content-Type: application/xml'
-                )),
-                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/stationboard/request_stationboard-2012-02-13.xml'))
-            )
-            ->will($this->returnValue($response));
-
-        $station = new Station('008591052'); // Zürich, Bäckeranlage
-        $stationBoardQuery = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00'));
-        $stationBoardQuery->maxJourneys = 3;
-        $journeys = $this->api->getStationBoard($stationBoardQuery);
-
-        $this->assertEquals(3, count($journeys));
-        $this->assertEquals('2012-02-13T23:57:00+0100', $journeys[0]->stop->departure);
-        $this->assertEquals('2012-02-13T23:58:00+0100', $journeys[1]->stop->departure);
-        $this->assertEquals('2012-02-14T04:41:00+0100', $journeys[2]->stop->departure);
-    }
-
-    public function testGetStationBoardDelay()
-    {
-        $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2013-10-15.xml'));
-
-        $this->browser->expects($this->once())
-            ->method('post')
-            ->with(
-                $this->equalTo('http://fahrplan.sbb.ch/bin/extxml.exe/'),
-                $this->equalTo(array(
-                        'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0',
-                        'Accept: application/xml',
-                        'Content-Type: application/xml'
-                )),
-                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/stationboard/request_stationboard-2012-10-15.xml'))
-            )
-            ->will($this->returnValue($response));
-
-        $station = new Station('008591052'); // Zürich, Bäckeranlage
-        $stationBoardQuery = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2013-10-15T22:20:00+01:00'));
-        $stationBoardQuery->maxJourneys = 3;
-        $journeys = $this->api->getStationBoard($stationBoardQuery);
-
-        $this->assertEquals(1, count($journeys));
-        $this->assertEquals('2013-10-15T22:10:00+0100', $journeys[0]->stop->departure);
-        $this->assertEquals(12, $journeys[0]->stop->delay);
     }
 
     /**

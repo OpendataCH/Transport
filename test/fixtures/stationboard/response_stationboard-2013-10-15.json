@@ -1,0 +1,65 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8503001",
+                    "name": "Z\u00fcrich Altstetten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.391481,
+                        "y": 8.488936
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2013-10-15T22:10:00+0200",
+                "departureTimestamp": 1381867800,
+                "delay": 12,
+                "platform": "3",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": "2013-10-15T22:22:00+0200",
+                    "capacity1st": 2,
+                    "capacity2nd": 2
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503001",
+                    "name": "Z\u00fcrich Altstetten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.391481,
+                        "y": 8.488936
+                    },
+                    "distance": null
+                }
+            },
+            "name": "S9 18990",
+            "category": "S9",
+            "categoryCode": 5,
+            "number": "18990",
+            "operator": null,
+            "to": "Zug",
+            "passList": [],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "S9"
+        }
+    ]
+}
