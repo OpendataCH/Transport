@@ -15,906 +15,10 @@
                 },
                 "arrival": null,
                 "arrivalTimestamp": null,
-                "departure": "2015-12-23T14:31:00+0100",
-                "departureTimestamp": 1450877460,
-                "delay": null,
-                "platform": "41\/42",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": 1,
-                    "capacity2nd": 2
-                },
-                "realtimeAvailability": "RT_BHF",
-                "location": {
-                    "id": "008503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.378177,
-                        "y": 8.540192
-                    },
-                    "distance": null
-                }
-            },
-            "to": {
-                "station": {
-                    "id": "008503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.47642,
-                        "y": 8.307695
-                    },
-                    "distance": null
-                },
-                "arrival": "2015-12-23T15:09:00+0100",
-                "arrivalTimestamp": 1450879740,
-                "departure": null,
-                "departureTimestamp": null,
-                "delay": null,
-                "platform": "5",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": "RT_BHF",
-                "location": {
-                    "id": "008503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.47642,
-                        "y": 8.307695
-                    },
-                    "distance": null
-                }
-            },
-            "duration": "00d00:38:00",
-            "transfers": 0,
-            "service": {
-                "regular": "daily",
-                "irregular": null
-            },
-            "products": [
-                "S"
-            ],
-            "capacity1st": 1,
-            "capacity2nd": 2,
-            "sections": [
-                {
-                    "journey": {
-                        "name": "S 6 18654",
-                        "category": "S",
-                        "categoryCode": 5,
-                        "number": "18654",
-                        "operator": "SBB",
-                        "to": "Baden",
-                        "passList": [
-                            {
-                                "station": {
-                                    "id": "008503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.378177,
-                                        "y": 8.540192
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:29:00+0100",
-                                "arrivalTimestamp": 1450877340,
-                                "departure": "2015-12-23T14:31:00+0100",
-                                "departureTimestamp": 1450877460,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 2
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.378177,
-                                        "y": 8.540192
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503020",
-                                    "name": "Z\u00fcrich Hardbr\u00fccke",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.385197,
-                                        "y": 8.517108
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:33:00+0100",
-                                "arrivalTimestamp": 1450877580,
-                                "departure": "2015-12-23T14:33:00+0100",
-                                "departureTimestamp": 1450877580,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 2
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503020",
-                                    "name": "Z\u00fcrich Hardbr\u00fccke",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.385197,
-                                        "y": 8.517108
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503006",
-                                    "name": "Z\u00fcrich Oerlikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.411527,
-                                        "y": 8.544112
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:38:00+0100",
-                                "arrivalTimestamp": 1450877880,
-                                "departure": "2015-12-23T14:39:00+0100",
-                                "departureTimestamp": 1450877940,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 2
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503006",
-                                    "name": "Z\u00fcrich Oerlikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.411527,
-                                        "y": 8.544112
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503007",
-                                    "name": "Z\u00fcrich Seebach",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.418745,
-                                        "y": 8.544633
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:41:00+0100",
-                                "arrivalTimestamp": 1450878060,
-                                "departure": "2015-12-23T14:41:00+0100",
-                                "departureTimestamp": 1450878060,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 2
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503007",
-                                    "name": "Z\u00fcrich Seebach",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.418745,
-                                        "y": 8.544633
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503008",
-                                    "name": "Z\u00fcrich Affoltern",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.420911,
-                                        "y": 8.508568
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:44:00+0100",
-                                "arrivalTimestamp": 1450878240,
-                                "departure": "2015-12-23T14:44:00+0100",
-                                "departureTimestamp": 1450878240,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503008",
-                                    "name": "Z\u00fcrich Affoltern",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.420911,
-                                        "y": 8.508568
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503526",
-                                    "name": "Regensdorf-Watt",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.436562,
-                                        "y": 8.472063
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:48:00+0100",
-                                "arrivalTimestamp": 1450878480,
-                                "departure": "2015-12-23T14:49:00+0100",
-                                "departureTimestamp": 1450878540,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503526",
-                                    "name": "Regensdorf-Watt",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.436562,
-                                        "y": 8.472063
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503527",
-                                    "name": "Buchs-D\u00e4llikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.453398,
-                                        "y": 8.435576
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:52:00+0100",
-                                "arrivalTimestamp": 1450878720,
-                                "departure": "2015-12-23T14:52:00+0100",
-                                "departureTimestamp": 1450878720,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503527",
-                                    "name": "Buchs-D\u00e4llikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.453398,
-                                        "y": 8.435576
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503525",
-                                    "name": "Otelfingen Golfpark",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.455817,
-                                        "y": 8.4021
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:54:00+0100",
-                                "arrivalTimestamp": 1450878840,
-                                "departure": "2015-12-23T14:54:00+0100",
-                                "departureTimestamp": 1450878840,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503525",
-                                    "name": "Otelfingen Golfpark",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.455817,
-                                        "y": 8.4021
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503528",
-                                    "name": "Otelfingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.454936,
-                                        "y": 8.38751
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:56:00+0100",
-                                "arrivalTimestamp": 1450878960,
-                                "departure": "2015-12-23T14:56:00+0100",
-                                "departureTimestamp": 1450878960,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503528",
-                                    "name": "Otelfingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.454936,
-                                        "y": 8.38751
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503529",
-                                    "name": "W\u00fcrenlos",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.445758,
-                                        "y": 8.357639
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:59:00+0100",
-                                "arrivalTimestamp": 1450879140,
-                                "departure": "2015-12-23T14:59:00+0100",
-                                "departureTimestamp": 1450879140,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503529",
-                                    "name": "W\u00fcrenlos",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.445758,
-                                        "y": 8.357639
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503505",
-                                    "name": "Wettingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.459637,
-                                        "y": 8.315983
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T15:04:00+0100",
-                                "arrivalTimestamp": 1450879440,
-                                "departure": "2015-12-23T15:04:00+0100",
-                                "departureTimestamp": 1450879440,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503505",
-                                    "name": "Wettingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.459637,
-                                        "y": 8.315983
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.47642,
-                                        "y": 8.307695
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T15:09:00+0100",
-                                "arrivalTimestamp": 1450879740,
-                                "departure": null,
-                                "departureTimestamp": null,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.47642,
-                                        "y": 8.307695
-                                    },
-                                    "distance": null
-                                }
-                            }
-                        ],
-                        "capacity1st": 1,
-                        "capacity2nd": 2
-                    },
-                    "walk": null,
-                    "departure": {
-                        "station": {
-                            "id": "008503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.378177,
-                                "y": 8.540192
-                            },
-                            "distance": null
-                        },
-                        "arrival": null,
-                        "arrivalTimestamp": null,
-                        "departure": "2015-12-23T14:31:00+0100",
-                        "departureTimestamp": 1450877460,
-                        "delay": null,
-                        "platform": "41\/42",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": 1,
-                            "capacity2nd": 2
-                        },
-                        "realtimeAvailability": "RT_BHF",
-                        "location": {
-                            "id": "008503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.378177,
-                                "y": 8.540192
-                            },
-                            "distance": null
-                        }
-                    },
-                    "arrival": {
-                        "station": {
-                            "id": "008503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.47642,
-                                "y": 8.307695
-                            },
-                            "distance": null
-                        },
-                        "arrival": "2015-12-23T15:09:00+0100",
-                        "arrivalTimestamp": 1450879740,
-                        "departure": null,
-                        "departureTimestamp": null,
-                        "delay": null,
-                        "platform": "5",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": "RT_BHF",
-                        "location": {
-                            "id": "008503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.47642,
-                                "y": 8.307695
-                            },
-                            "distance": null
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "from": {
-                "station": {
-                    "id": "008503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.378177,
-                        "y": 8.540192
-                    },
-                    "distance": null
-                },
-                "arrival": null,
-                "arrivalTimestamp": null,
-                "departure": "2015-12-23T14:36:00+0100",
-                "departureTimestamp": 1450877760,
-                "delay": null,
-                "platform": "17",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": 1,
-                    "capacity2nd": 1
-                },
-                "realtimeAvailability": "RT_BHF",
-                "location": {
-                    "id": "008503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.378177,
-                        "y": 8.540192
-                    },
-                    "distance": null
-                }
-            },
-            "to": {
-                "station": {
-                    "id": "008503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.47642,
-                        "y": 8.307695
-                    },
-                    "distance": null
-                },
-                "arrival": "2015-12-23T14:51:00+0100",
-                "arrivalTimestamp": 1450878660,
-                "departure": null,
-                "departureTimestamp": null,
-                "delay": null,
-                "platform": "3",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": "RT_BHF",
-                "location": {
-                    "id": "008503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.47642,
-                        "y": 8.307695
-                    },
-                    "distance": null
-                }
-            },
-            "duration": "00d00:15:00",
-            "transfers": 0,
-            "service": {
-                "regular": "daily",
-                "irregular": null
-            },
-            "products": [
-                "IR"
-            ],
-            "capacity1st": 1,
-            "capacity2nd": 1,
-            "sections": [
-                {
-                    "journey": {
-                        "name": "IR 1974",
-                        "category": "IR",
-                        "categoryCode": 2,
-                        "number": "1974",
-                        "operator": "SBB",
-                        "to": "Basel SBB",
-                        "passList": [
-                            {
-                                "station": {
-                                    "id": "008503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.378177,
-                                        "y": 8.540192
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": null,
-                                "arrivalTimestamp": null,
-                                "departure": "2015-12-23T14:36:00+0100",
-                                "departureTimestamp": 1450877760,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": 1,
-                                    "capacity2nd": 1
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.378177,
-                                        "y": 8.540192
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "008503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.47642,
-                                        "y": 8.307695
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2015-12-23T14:51:00+0100",
-                                "arrivalTimestamp": 1450878660,
-                                "departure": "2015-12-23T14:52:00+0100",
-                                "departureTimestamp": 1450878720,
-                                "delay": null,
-                                "platform": "",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": "RT_BHF",
-                                "location": {
-                                    "id": "008503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.47642,
-                                        "y": 8.307695
-                                    },
-                                    "distance": null
-                                }
-                            }
-                        ],
-                        "capacity1st": 1,
-                        "capacity2nd": 1
-                    },
-                    "walk": null,
-                    "departure": {
-                        "station": {
-                            "id": "008503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.378177,
-                                "y": 8.540192
-                            },
-                            "distance": null
-                        },
-                        "arrival": null,
-                        "arrivalTimestamp": null,
-                        "departure": "2015-12-23T14:36:00+0100",
-                        "departureTimestamp": 1450877760,
-                        "delay": null,
-                        "platform": "17",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": 1,
-                            "capacity2nd": 1
-                        },
-                        "realtimeAvailability": "RT_BHF",
-                        "location": {
-                            "id": "008503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.378177,
-                                "y": 8.540192
-                            },
-                            "distance": null
-                        }
-                    },
-                    "arrival": {
-                        "station": {
-                            "id": "008503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.47642,
-                                "y": 8.307695
-                            },
-                            "distance": null
-                        },
-                        "arrival": "2015-12-23T14:51:00+0100",
-                        "arrivalTimestamp": 1450878660,
-                        "departure": null,
-                        "departureTimestamp": null,
-                        "delay": null,
-                        "platform": "3",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": "RT_BHF",
-                        "location": {
-                            "id": "008503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.47642,
-                                "y": 8.307695
-                            },
-                            "distance": null
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "from": {
-                "station": {
-                    "id": "008503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.378177,
-                        "y": 8.540192
-                    },
-                    "distance": null
-                },
-                "arrival": null,
-                "arrivalTimestamp": null,
                 "departure": "2015-12-23T14:44:00+0100",
                 "departureTimestamp": 1450878240,
                 "delay": null,
-                "platform": "41\/42",
+                "platform": "41",
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
@@ -1396,7 +500,7 @@
                         "departure": "2015-12-23T14:44:00+0100",
                         "departureTimestamp": 1450878240,
                         "delay": null,
-                        "platform": "41\/42",
+                        "platform": "41",
                         "prognosis": {
                             "platform": null,
                             "arrival": null,
@@ -2331,6 +1435,340 @@
                         "departureTimestamp": null,
                         "delay": null,
                         "platform": "3",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": "RT_BHF",
+                        "location": {
+                            "id": "008503504",
+                            "name": "Baden",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.47642,
+                                "y": 8.307695
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "008503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T15:09:00+0100",
+                "departureTimestamp": 1450879740,
+                "delay": null,
+                "platform": "31",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": "RT_BHF",
+                "location": {
+                    "id": "008503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "008503504",
+                    "name": "Baden",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.47642,
+                        "y": 8.307695
+                    },
+                    "distance": null
+                },
+                "arrival": "2015-12-23T15:30:00+0100",
+                "arrivalTimestamp": 1450881000,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "2",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": "RT_BHF",
+                "location": {
+                    "id": "008503504",
+                    "name": "Baden",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.47642,
+                        "y": 8.307695
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:21:00",
+            "transfers": 0,
+            "service": {
+                "regular": "daily",
+                "irregular": null
+            },
+            "products": [
+                "IR"
+            ],
+            "capacity1st": 1,
+            "capacity2nd": 1,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IR 2076",
+                        "category": "IR",
+                        "categoryCode": 2,
+                        "number": "2076",
+                        "operator": "SBB",
+                        "to": "Basel SBB",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "008503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.378177,
+                                        "y": 8.540192
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2015-12-23T15:07:00+0100",
+                                "arrivalTimestamp": 1450879620,
+                                "departure": "2015-12-23T15:09:00+0100",
+                                "departureTimestamp": 1450879740,
+                                "delay": null,
+                                "platform": "",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": 1,
+                                    "capacity2nd": 1
+                                },
+                                "realtimeAvailability": "RT_BHF",
+                                "location": {
+                                    "id": "008503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.378177,
+                                        "y": 8.540192
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "008503001",
+                                    "name": "Z\u00fcrich Altstetten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.391481,
+                                        "y": 8.488936
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2015-12-23T15:15:00+0100",
+                                "arrivalTimestamp": 1450880100,
+                                "departure": "2015-12-23T15:16:00+0100",
+                                "departureTimestamp": 1450880160,
+                                "delay": null,
+                                "platform": "",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": 1,
+                                    "capacity2nd": 1
+                                },
+                                "realtimeAvailability": "RT_BHF",
+                                "location": {
+                                    "id": "008503001",
+                                    "name": "Z\u00fcrich Altstetten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.391481,
+                                        "y": 8.488936
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "008503508",
+                                    "name": "Dietikon",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.405774,
+                                        "y": 8.404968
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2015-12-23T15:21:00+0100",
+                                "arrivalTimestamp": 1450880460,
+                                "departure": "2015-12-23T15:23:00+0100",
+                                "departureTimestamp": 1450880580,
+                                "delay": null,
+                                "platform": "",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": 1,
+                                    "capacity2nd": 1
+                                },
+                                "realtimeAvailability": "RT_BHF",
+                                "location": {
+                                    "id": "008503508",
+                                    "name": "Dietikon",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.405774,
+                                        "y": 8.404968
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "008503504",
+                                    "name": "Baden",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.47642,
+                                        "y": 8.307695
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2015-12-23T15:30:00+0100",
+                                "arrivalTimestamp": 1450881000,
+                                "departure": "2015-12-23T15:33:00+0100",
+                                "departureTimestamp": 1450881180,
+                                "delay": null,
+                                "platform": "",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": "RT_BHF",
+                                "location": {
+                                    "id": "008503504",
+                                    "name": "Baden",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.47642,
+                                        "y": 8.307695
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": 1,
+                        "capacity2nd": 1
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "008503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.378177,
+                                "y": 8.540192
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2015-12-23T15:09:00+0100",
+                        "departureTimestamp": 1450879740,
+                        "delay": null,
+                        "platform": "31",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": 1,
+                            "capacity2nd": 1
+                        },
+                        "realtimeAvailability": "RT_BHF",
+                        "location": {
+                            "id": "008503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.378177,
+                                "y": 8.540192
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "008503504",
+                            "name": "Baden",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.47642,
+                                "y": 8.307695
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2015-12-23T15:30:00+0100",
+                        "arrivalTimestamp": 1450881000,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": null,
+                        "platform": "2",
                         "prognosis": {
                             "platform": null,
                             "arrival": null,

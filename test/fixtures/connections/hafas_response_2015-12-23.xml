@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.3.3" prod="5.41.SBB.4.15.7 [Dec  4 2015]" lang="EN">
   <ConRes dir="O">
-    <ConResCtxt>78.02908322.1450876643#1</ConResCtxt>
+    <ConResCtxt>h9.03085221.1450878084#1</ConResCtxt>
     <ConnectionList type="OEV">
       <Connection id="C1-0">
         <Overview>
@@ -20,1432 +20,9 @@
               </StAttrList>
               <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
               <Dep getIn="YES">
-                <Time>00d14:31:00</Time>
-                <Platform>
-                  <Text>41/42</Text>
-                </Platform>
-                <SFormation leavingDirection="left">
-                  <TrainGroups>
-                    <TrainGroup>
-                      <Car type="1" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes/>
-                      </Car>
-                    </TrainGroup>
-                  </TrainGroups>
-                  <Legend>
-                    <LegendItem id="1" refersTo="type">
-                      <Text>1st class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="2" refersTo="type">
-                      <Text>2nd class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="Fahrtrichtung" refersTo="code">
-                      <Text>Direction of travel</Text>
-                    </LegendItem>
-                  </Legend>
-                </SFormation>
-              </Dep>
-              <StopPrognosis>
-                <Arr handicappedAccess="1"/>
-                <Dep handicappedAccess="1"/>
-                <Status>SCHEDULED</Status>
-                <Capacity1st>1</Capacity1st>
-                <Capacity2nd>2</Capacity2nd>
-              </StopPrognosis>
-            </BasicStop>
-          </Departure>
-          <Arrival>
-            <BasicStop type="NORMAL">
-              <StAttrList>
-                <StAttr code="KANTON" text="AG" priority="3"/>
-                <StAttr code="ORTGR" text="1" priority="3"/>
-                <StAttr code="PLZ" text="5400" priority="3"/>
-                <StAttr code="TU" text="0" priority="3"/>
-                <StAttr code="WEMF" text="Baden" priority="3"/>
-                <StAttr code="WG" text="1" priority="3"/>
-                <StAttr code="WR" text="1" priority="3"/>
-                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-              </StAttrList>
-              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-              <Arr getOut="YES">
-                <Time>00d15:09:00</Time>
-                <Platform>
-                  <Text>5</Text>
-                </Platform>
-                <SFormation leavingDirection="right">
-                  <TrainGroups>
-                    <TrainGroup>
-                      <Car type="2" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="C">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="C">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="1" section="D">
-                        <CarAttributes/>
-                      </Car>
-                    </TrainGroup>
-                  </TrainGroups>
-                  <Legend>
-                    <LegendItem id="1" refersTo="type">
-                      <Text>1st class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="2" refersTo="type">
-                      <Text>2nd class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="Fahrtrichtung" refersTo="code">
-                      <Text>Direction of travel</Text>
-                    </LegendItem>
-                  </Legend>
-                </SFormation>
-              </Arr>
-              <StopPrognosis>
-                <Arr handicappedAccess="1"/>
-                <Dep handicappedAccess="1"/>
-                <Status>SCHEDULED</Status>
-              </StopPrognosis>
-            </BasicStop>
-          </Arrival>
-          <Transfers>0</Transfers>
-          <Duration>
-            <Time>00d00:38:00</Time>
-          </Duration>
-          <ServiceDays>
-            <RegularServiceText>
-              <Text>daily</Text>
-            </RegularServiceText>
-          </ServiceDays>
-          <Products>
-            <Product cat="S"/>
-          </Products>
-          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=78.02908322.1450876643&amp;guiVCtrl_connection_detailsOut_select_C1-0&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
-          <XMLHandle url="http://fweb3p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=78.02908322.1450876643:1:C1-0"/>
-        </Overview>
-        <ConSectionList>
-          <ConSection>
-            <Departure>
-              <BasicStop type="NORMAL">
-                <StAttrList>
-                  <StAttr code="KANTON" text="ZH" priority="3"/>
-                  <StAttr code="ORTGR" text="1" priority="3"/>
-                  <StAttr code="PLZ" text="8000" priority="3"/>
-                  <StAttr code="TU" text="0" priority="3"/>
-                  <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                  <StAttr code="WG" text="1" priority="3"/>
-                  <StAttr code="WR" text="1" priority="3"/>
-                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                </StAttrList>
-                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-                <Dep getIn="YES">
-                  <Time>00d14:31:00</Time>
-                  <Platform>
-                    <Text>41/42</Text>
-                  </Platform>
-                  <SFormation leavingDirection="left">
-                    <TrainGroups>
-                      <TrainGroup>
-                        <Car type="1" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes/>
-                        </Car>
-                      </TrainGroup>
-                    </TrainGroups>
-                    <Legend>
-                      <LegendItem id="1" refersTo="type">
-                        <Text>1st class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="2" refersTo="type">
-                        <Text>2nd class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="Fahrtrichtung" refersTo="code">
-                        <Text>Direction of travel</Text>
-                      </LegendItem>
-                    </Legend>
-                  </SFormation>
-                </Dep>
-                <StopPrognosis>
-                  <Arr handicappedAccess="1"/>
-                  <Dep handicappedAccess="1"/>
-                  <Status>SCHEDULED</Status>
-                  <Capacity1st>1</Capacity1st>
-                  <Capacity2nd>2</Capacity2nd>
-                </StopPrognosis>
-              </BasicStop>
-            </Departure>
-            <Journey>
-              <JHandle tNr="19783" cycle="12" puic="95"/>
-              <JourneyAttributeList>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NAME">
-                    <AttributeVariant type="NORMAL">
-                      <Text>S 6 18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="LINE">
-                    <AttributeVariant type="NORMAL">
-                      <Text>6</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="CATEGORY" code="5">
-                    <AttributeVariant type="SHORT">
-                      <Text>S</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>S</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="LONG">
-                      <Text>Urban train</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="OPERATOR">
-                    <AttributeVariant type="SHORT">
-                      <Text>SBB</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>SBB</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="LONG">
-                      <Text>Schweizerische Bundesbahnen SBB</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NUMBER">
-                    <AttributeVariant type="NORMAL">
-                      <Text>18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="EXT_ID">
-                    <AttributeVariant type="NORMAL">
-                      <Text>18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="ADMINISTRATION">
-                    <AttributeVariant type="NORMAL">
-                      <Text>000011</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="DIRECTION">
-                    <AttributeVariant type="NORMAL">
-                      <Text>Baden</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NAMEFORMATTED" code="1">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_1</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>S 6</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NAMEFORMATTED" code="2">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_2</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>Urban train 6 18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NAMEFORMATTED" code="3">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_3</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>S 6 18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="NAMEFORMATTED" code="4">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_4</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>S 6 18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="INFO" code="FD">
-                    <AttributeVariant type="NORMAL">
-                      <Text>18654</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="INFO" code="XC">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;TL&gt;&lt;CT i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" t="2" l="100" /&gt;&lt;CT i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-85286994-a639-45c7-afb2-441d58f74871" t="1" l="100" /&gt;&lt;CT i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" t="2" l="100" /&gt;&lt;/TL&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="INFO" code="XG">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;GL&gt;&lt;G i="g-4151f252-425f-4c49-b0f6-63b6ee572f49"&gt;&lt;C t="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;C t="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;C t="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;C t="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/G&gt;&lt;/GL&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="11">
-                  <Attribute type="INFO" code="XT">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;TC&gt;&lt;GR g="g-4151f252-425f-4c49-b0f6-63b6ee572f49" /&gt;&lt;/TC&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="0">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503000" v="B" a="2015-12-23T14:29:00+01:00" s="714" d="D"&gt;&lt;PS n="D" s="0" e="500" /&gt;&lt;PS n="C" s="500" e="714" /&gt;&lt;PS n="B" s="714" e="1114" /&gt;&lt;PS n="A" s="1114" e="1428" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="1" to="1">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503020" v="B" a="2015-12-23T14:33:00+01:00" s="387" d="D"&gt;&lt;PS n="F" s="0" e="193" /&gt;&lt;PS n="E" s="193" e="387" /&gt;&lt;PS n="D" s="387" e="593" /&gt;&lt;PS n="C" s="593" e="787" /&gt;&lt;PS n="B" s="787" e="980" /&gt;&lt;PS n="A" s="980" e="1290" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="2" to="2">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503006" v="B" a="2015-12-23T14:38:00+01:00" s="613" d="D"&gt;&lt;PS n="D" s="0" e="506" /&gt;&lt;PS n="C" s="506" e="1120" /&gt;&lt;PS n="B" s="1120" e="1333" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="3" to="3">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503007" v="B" a="2015-12-23T14:41:00+01:00" s="400" d="D"&gt;&lt;PS n="B" s="0" e="400" /&gt;&lt;PS n="A" s="400" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="4" to="4">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503008" v="B" a="2015-12-23T14:44:00+01:00" s="0" d="D"&gt;&lt;PS n="B" s="0" e="500" /&gt;&lt;PS n="A" s="500" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="5" to="5">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503526" v="B" a="2015-12-23T14:48:00+01:00" s="400" d="D"&gt;&lt;PS n="B" s="0" e="400" /&gt;&lt;PS n="A" s="400" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="6" to="6">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503527" v="B" a="2015-12-23T14:52:00+01:00" s="400" d="D"&gt;&lt;PS n="B" s="0" e="400" /&gt;&lt;PS n="A" s="400" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="7" to="7">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503525" v="B" a="2015-12-23T14:54:00+01:00" s="400" d="D"&gt;&lt;PS n="C" s="0" e="400" /&gt;&lt;PS n="B" s="400" e="800" /&gt;&lt;PS n="A" s="800" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="8" to="8">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503528" v="B" a="2015-12-23T14:56:00+01:00" s="300" d="D"&gt;&lt;PS n="C" s="0" e="300" /&gt;&lt;PS n="B" s="300" e="700" /&gt;&lt;PS n="A" s="700" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="9" to="9">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503529" v="B" a="2015-12-23T14:59:00+01:00" s="0" d="D"&gt;&lt;PS n="A" s="0" e="400" /&gt;&lt;PS n="B" s="400" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="10" to="10">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503505" v="B" a="2015-12-23T15:04:00+01:00" s="579" d="D"&gt;&lt;PS n="C" s="0" e="579" /&gt;&lt;PS n="B" s="579" e="1075" /&gt;&lt;PS n="A" s="1075" e="1379" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="11" to="11">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503504" v="B" a="2015-12-23T15:09:00+01:00" s="100" d="D"&gt;&lt;PS n="D" s="0" e="200" /&gt;&lt;PS n="C" s="200" e="400" /&gt;&lt;PS n="B" s="400" e="600" /&gt;&lt;PS n="A" s="600" e="909" /&gt;&lt;CA a="offen" i="fz-85286994-a639-45c7-afb2-441d58f74871" /&gt;&lt;CA a="offen" i="fz-3c3b40e5-0ce8-411a-be2c-9f1d55e5f01a" /&gt;&lt;CA a="offen" i="fz-1f2cec97-668f-4a03-a0d1-f665d285a141" /&gt;&lt;CA a="offen" i="fz-9b2dc76c-9b7d-421d-a207-f4c94a559eac" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-              </JourneyAttributeList>
-              <PassList>
-                <BasicStop index="10" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:29:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:31:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>2</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="11" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich Hardbrücke" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich Hardbrücke" x="8517108" y="47385197" type="WGS84" externalId="008503020#95" externalStationNr="008503020"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:33:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:33:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="4"/>
-                    <Dep handicappedAccess="4"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>2</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="12" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich Oerlikon" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich Oerlikon" x="8544112" y="47411527" type="WGS84" externalId="008503006#95" externalStationNr="008503006"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:38:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:39:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>2</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="13" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich Seebach" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich Seebach" x="8544633" y="47418745" type="WGS84" externalId="008503007#95" externalStationNr="008503007"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:41:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:41:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>2</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="14" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich Affoltern" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich Affoltern" x="8508568" y="47420911" type="WGS84" externalId="008503008#95" externalStationNr="008503008"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:44:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:44:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="15" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8105" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Regensdorf-Watt" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Regensdorf-Watt" x="8472063" y="47436562" type="WGS84" externalId="008503526#95" externalStationNr="008503526"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:48:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:49:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="16" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8107" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Buchs-Dällikon" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Buchs-Dällikon" x="8435576" y="47453398" type="WGS84" externalId="008503527#95" externalStationNr="008503527"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:52:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:52:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="17" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8112" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Otelfingen Golfpark" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Otelfingen Golfpark" x="8402100" y="47455817" type="WGS84" externalId="008503525#95" externalStationNr="008503525"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:54:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:54:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="4"/>
-                    <Dep handicappedAccess="4"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="18" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8112" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Otelfingen" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Otelfingen" x="8387510" y="47454936" type="WGS84" externalId="008503528#95" externalStationNr="008503528"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:56:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:56:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="19" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="AG" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="5436" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Würenlos" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Würenlos" x="8357639" y="47445758" type="WGS84" externalId="008503529#95" externalStationNr="008503529"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:59:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:59:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="4"/>
-                    <Dep handicappedAccess="4"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="20" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="AG" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="5430" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Wettingen" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Wettingen" x="8315983" y="47459637" type="WGS84" externalId="008503505#95" externalStationNr="008503505"/>
-                  <Arr getOut="YES">
-                    <Time>00d15:04:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d15:04:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="21" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="AG" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="5400" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Baden" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-                  <Arr getOut="YES">
-                    <Time>00d15:09:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="1"/>
-                    <Dep handicappedAccess="1"/>
-                    <Status>SCHEDULED</Status>
-                  </StopPrognosis>
-                </BasicStop>
-              </PassList>
-              <JProg>
-                <JStatus>DELAY</JStatus>
-              </JProg>
-            </Journey>
-            <Arrival>
-              <BasicStop type="NORMAL">
-                <StAttrList>
-                  <StAttr code="KANTON" text="AG" priority="3"/>
-                  <StAttr code="ORTGR" text="1" priority="3"/>
-                  <StAttr code="PLZ" text="5400" priority="3"/>
-                  <StAttr code="TU" text="0" priority="3"/>
-                  <StAttr code="WEMF" text="Baden" priority="3"/>
-                  <StAttr code="WG" text="1" priority="3"/>
-                  <StAttr code="WR" text="1" priority="3"/>
-                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                </StAttrList>
-                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-                <Arr getOut="YES">
-                  <Time>00d15:09:00</Time>
-                  <Platform>
-                    <Text>5</Text>
-                  </Platform>
-                  <SFormation leavingDirection="right">
-                    <TrainGroups>
-                      <TrainGroup>
-                        <Car type="2" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="C">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="C">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="1" section="D">
-                          <CarAttributes/>
-                        </Car>
-                      </TrainGroup>
-                    </TrainGroups>
-                    <Legend>
-                      <LegendItem id="1" refersTo="type">
-                        <Text>1st class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="2" refersTo="type">
-                        <Text>2nd class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="Fahrtrichtung" refersTo="code">
-                        <Text>Direction of travel</Text>
-                      </LegendItem>
-                    </Legend>
-                  </SFormation>
-                </Arr>
-                <StopPrognosis>
-                  <Arr handicappedAccess="1"/>
-                  <Dep handicappedAccess="1"/>
-                  <Status>SCHEDULED</Status>
-                </StopPrognosis>
-              </BasicStop>
-            </Arrival>
-          </ConSection>
-        </ConSectionList>
-        <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231431$201512231509$S 6 18654$</ctxRecon>
-      </Connection>
-      <Connection id="C1-1">
-        <Overview>
-          <Date>20151223</Date>
-          <Departure>
-            <BasicStop type="NORMAL">
-              <StAttrList>
-                <StAttr code="KANTON" text="ZH" priority="3"/>
-                <StAttr code="ORTGR" text="1" priority="3"/>
-                <StAttr code="PLZ" text="8000" priority="3"/>
-                <StAttr code="TU" text="0" priority="3"/>
-                <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                <StAttr code="WG" text="1" priority="3"/>
-                <StAttr code="WR" text="1" priority="3"/>
-                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-              </StAttrList>
-              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-              <Dep getIn="YES">
-                <Time>00d14:36:00</Time>
-                <Platform>
-                  <Text>17</Text>
-                </Platform>
-                <SFormation leavingDirection="right">
-                  <TrainGroups>
-                    <TrainGroup>
-                      <Car type="LK" section="A">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="1" section="A">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="1" section="A">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="A">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="B">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                    </TrainGroup>
-                  </TrainGroups>
-                  <Legend>
-                    <LegendItem id="LK" refersTo="type">
-                      <Text>Locomotive</Text>
-                    </LegendItem>
-                    <LegendItem id="1" refersTo="type">
-                      <Text>1st class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="2" refersTo="type">
-                      <Text>2nd class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="AbteilVeloPl" refersTo="code">
-                      <Text>Bicycle loading: Without reservation</Text>
-                    </LegendItem>
-                    <LegendItem id="Fahrtrichtung" refersTo="code">
-                      <Text>Direction of travel</Text>
-                    </LegendItem>
-                  </Legend>
-                </SFormation>
-              </Dep>
-              <StopPrognosis>
-                <Arr handicappedAccess="3"/>
-                <Dep handicappedAccess="3"/>
-                <Status>SCHEDULED</Status>
-                <Capacity1st>1</Capacity1st>
-                <Capacity2nd>1</Capacity2nd>
-              </StopPrognosis>
-            </BasicStop>
-          </Departure>
-          <Arrival>
-            <BasicStop type="NORMAL">
-              <StAttrList>
-                <StAttr code="KANTON" text="AG" priority="3"/>
-                <StAttr code="ORTGR" text="1" priority="3"/>
-                <StAttr code="PLZ" text="5400" priority="3"/>
-                <StAttr code="TU" text="0" priority="3"/>
-                <StAttr code="WEMF" text="Baden" priority="3"/>
-                <StAttr code="WG" text="1" priority="3"/>
-                <StAttr code="WR" text="1" priority="3"/>
-                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-              </StAttrList>
-              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-              <Arr getOut="YES">
-                <Time>00d14:51:00</Time>
-                <Platform>
-                  <Text>3</Text>
-                </Platform>
-                <SFormation leavingDirection="right">
-                  <TrainGroups>
-                    <TrainGroup>
-                      <Car type="LK" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="1" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="1" section="B">
-                        <CarAttributes/>
-                      </Car>
-                      <Car type="2" section="C">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="C">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="C">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="D">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                      <Car type="2" section="D">
-                        <CarAttributes>
-                          <Attr code="AbteilVeloPl"/>
-                        </CarAttributes>
-                      </Car>
-                    </TrainGroup>
-                  </TrainGroups>
-                  <Legend>
-                    <LegendItem id="LK" refersTo="type">
-                      <Text>Locomotive</Text>
-                    </LegendItem>
-                    <LegendItem id="1" refersTo="type">
-                      <Text>1st class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="2" refersTo="type">
-                      <Text>2nd class coach</Text>
-                    </LegendItem>
-                    <LegendItem id="AbteilVeloPl" refersTo="code">
-                      <Text>Bicycle loading: Without reservation</Text>
-                    </LegendItem>
-                    <LegendItem id="Fahrtrichtung" refersTo="code">
-                      <Text>Direction of travel</Text>
-                    </LegendItem>
-                  </Legend>
-                </SFormation>
-              </Arr>
-              <StopPrognosis>
-                <Arr handicappedAccess="3"/>
-                <Dep handicappedAccess="3"/>
-                <Status>SCHEDULED</Status>
-              </StopPrognosis>
-            </BasicStop>
-          </Arrival>
-          <Transfers>0</Transfers>
-          <Duration>
-            <Time>00d00:15:00</Time>
-          </Duration>
-          <ServiceDays>
-            <RegularServiceText>
-              <Text>daily</Text>
-            </RegularServiceText>
-          </ServiceDays>
-          <Products>
-            <Product cat="IR"/>
-          </Products>
-          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=78.02908322.1450876643&amp;guiVCtrl_connection_detailsOut_select_C1-1&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
-          <XMLHandle url="http://fweb3p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=78.02908322.1450876643:1:C1-1"/>
-        </Overview>
-        <ConSectionList>
-          <ConSection>
-            <Departure>
-              <BasicStop type="NORMAL">
-                <StAttrList>
-                  <StAttr code="KANTON" text="ZH" priority="3"/>
-                  <StAttr code="ORTGR" text="1" priority="3"/>
-                  <StAttr code="PLZ" text="8000" priority="3"/>
-                  <StAttr code="TU" text="0" priority="3"/>
-                  <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                  <StAttr code="WG" text="1" priority="3"/>
-                  <StAttr code="WR" text="1" priority="3"/>
-                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                </StAttrList>
-                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-                <Dep getIn="YES">
-                  <Time>00d14:36:00</Time>
-                  <Platform>
-                    <Text>17</Text>
-                  </Platform>
-                  <SFormation leavingDirection="right">
-                    <TrainGroups>
-                      <TrainGroup>
-                        <Car type="LK" section="A">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="1" section="A">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="1" section="A">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="A">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="B">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                      </TrainGroup>
-                    </TrainGroups>
-                    <Legend>
-                      <LegendItem id="LK" refersTo="type">
-                        <Text>Locomotive</Text>
-                      </LegendItem>
-                      <LegendItem id="1" refersTo="type">
-                        <Text>1st class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="2" refersTo="type">
-                        <Text>2nd class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="AbteilVeloPl" refersTo="code">
-                        <Text>Bicycle loading: Without reservation</Text>
-                      </LegendItem>
-                      <LegendItem id="Fahrtrichtung" refersTo="code">
-                        <Text>Direction of travel</Text>
-                      </LegendItem>
-                    </Legend>
-                  </SFormation>
-                </Dep>
-                <StopPrognosis>
-                  <Arr handicappedAccess="3"/>
-                  <Dep handicappedAccess="3"/>
-                  <Status>SCHEDULED</Status>
-                  <Capacity1st>1</Capacity1st>
-                  <Capacity2nd>1</Capacity2nd>
-                </StopPrognosis>
-              </BasicStop>
-            </Departure>
-            <Journey>
-              <JHandle tNr="18694" cycle="3" puic="95"/>
-              <JourneyAttributeList>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NAME">
-                    <AttributeVariant type="NORMAL">
-                      <Text>IR 1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="CATEGORY" code="2">
-                    <AttributeVariant type="SHORT">
-                      <Text>IR</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>IR</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="LONG">
-                      <Text>InterRegio</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="OPERATOR">
-                    <AttributeVariant type="SHORT">
-                      <Text>SBB</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>SBB</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="LONG">
-                      <Text>Schweizerische Bundesbahnen SBB</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NUMBER">
-                    <AttributeVariant type="NORMAL">
-                      <Text>1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="EXT_ID">
-                    <AttributeVariant type="NORMAL">
-                      <Text>1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="ADMINISTRATION">
-                    <AttributeVariant type="NORMAL">
-                      <Text>000011</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="DIRECTION">
-                    <AttributeVariant type="NORMAL">
-                      <Text>Basel SBB</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NAMEFORMATTED" code="1">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_1</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>IR</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NAMEFORMATTED" code="2">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_2</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>InterRegio 1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NAMEFORMATTED" code="3">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_3</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>IR 1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="NAMEFORMATTED" code="4">
-                    <AttributeVariant type="SHORT">
-                      <Text>Name_Format_4</Text>
-                    </AttributeVariant>
-                    <AttributeVariant type="NORMAL">
-                      <Text>IR 1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="INFO" code="FD">
-                    <AttributeVariant type="NORMAL">
-                      <Text>1974</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="INFO" code="XC">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;TL&gt;&lt;CT i="fz-1c1f5efe-bf3f-4dbb-b8ab-c9b6885747b3" t="1" l="100" /&gt;&lt;CT i="fz-2a0eadc3-64fe-4391-b5c1-14bd1bd990e9" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;A c="BCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-6c699d2f-59e3-4207-91f8-5ec4d137b019" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;A c="BCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-84c7be70-6bd3-4102-a602-a43963528ea8" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;A c="BCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-887b9042-2c9a-4646-997b-10e7ccd0f2c1" t="1" l="100" /&gt;&lt;CT i="fz-93a2ace2-be2c-4e18-a60e-c566469ef018" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;A c="BCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-b8ae5138-4db7-4ed5-aa7e-6aca9cc80a3a" t="2" l="100"&gt;&lt;A c="WCS" /&gt;&lt;A c="BCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-f1818ba1-b056-48ca-9500-a165ddc3dd1b" t="LK" l="100" /&gt;&lt;/TL&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="INFO" code="XG">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;GL&gt;&lt;G i="g-2dbf8354-cc73-4d5e-a486-d3f14d68fe7a"&gt;&lt;C t="fz-6c699d2f-59e3-4207-91f8-5ec4d137b019" /&gt;&lt;C t="fz-2a0eadc3-64fe-4391-b5c1-14bd1bd990e9" /&gt;&lt;C t="fz-84c7be70-6bd3-4102-a602-a43963528ea8" /&gt;&lt;C t="fz-b8ae5138-4db7-4ed5-aa7e-6aca9cc80a3a" /&gt;&lt;C t="fz-93a2ace2-be2c-4e18-a60e-c566469ef018" /&gt;&lt;C t="fz-1c1f5efe-bf3f-4dbb-b8ab-c9b6885747b3" /&gt;&lt;C t="fz-887b9042-2c9a-4646-997b-10e7ccd0f2c1" /&gt;&lt;C t="fz-f1818ba1-b056-48ca-9500-a165ddc3dd1b" /&gt;&lt;/G&gt;&lt;/GL&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="1">
-                  <Attribute type="INFO" code="XT">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;TC&gt;&lt;GR g="g-2dbf8354-cc73-4d5e-a486-d3f14d68fe7a" /&gt;&lt;/TC&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="0" to="0">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503000" v="B" s="800" d="D"&gt;&lt;PS n="D" s="0" e="400" /&gt;&lt;PS n="C" s="400" e="800" /&gt;&lt;PS n="B" s="800" e="1200" /&gt;&lt;PS n="A" s="1200" e="1600" /&gt;&lt;CA a="offen" i="fz-6c699d2f-59e3-4207-91f8-5ec4d137b019" /&gt;&lt;CA a="offen" i="fz-2a0eadc3-64fe-4391-b5c1-14bd1bd990e9" /&gt;&lt;CA a="offen" i="fz-84c7be70-6bd3-4102-a602-a43963528ea8" /&gt;&lt;CA a="offen" i="fz-b8ae5138-4db7-4ed5-aa7e-6aca9cc80a3a" /&gt;&lt;CA a="offen" i="fz-93a2ace2-be2c-4e18-a60e-c566469ef018" /&gt;&lt;CA a="offen" i="fz-1c1f5efe-bf3f-4dbb-b8ab-c9b6885747b3" /&gt;&lt;CA a="offen" i="fz-887b9042-2c9a-4646-997b-10e7ccd0f2c1" /&gt;&lt;CA a="offen" i="fz-f1818ba1-b056-48ca-9500-a165ddc3dd1b" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-                <JourneyAttribute from="1" to="1">
-                  <Attribute type="INFO" code="XP">
-                    <AttributeVariant type="NORMAL">
-                      <Text>&lt;PD i="8503504" v="B" a="2015-12-23T14:51:00+01:00" s="301" d="D"&gt;&lt;PS n="D" s="0" e="498" /&gt;&lt;PS n="C" s="498" e="800" /&gt;&lt;PS n="B" s="800" e="1101" /&gt;&lt;PS n="A" s="1101" e="1509" /&gt;&lt;CA a="offen" i="fz-6c699d2f-59e3-4207-91f8-5ec4d137b019" /&gt;&lt;CA a="offen" i="fz-2a0eadc3-64fe-4391-b5c1-14bd1bd990e9" /&gt;&lt;CA a="offen" i="fz-84c7be70-6bd3-4102-a602-a43963528ea8" /&gt;&lt;CA a="offen" i="fz-b8ae5138-4db7-4ed5-aa7e-6aca9cc80a3a" /&gt;&lt;CA a="offen" i="fz-93a2ace2-be2c-4e18-a60e-c566469ef018" /&gt;&lt;CA a="offen" i="fz-1c1f5efe-bf3f-4dbb-b8ab-c9b6885747b3" /&gt;&lt;CA a="offen" i="fz-887b9042-2c9a-4646-997b-10e7ccd0f2c1" /&gt;&lt;CA a="offen" i="fz-f1818ba1-b056-48ca-9500-a165ddc3dd1b" /&gt;&lt;/PD&gt;</Text>
-                    </AttributeVariant>
-                  </Attribute>
-                </JourneyAttribute>
-              </JourneyAttributeList>
-              <PassList>
-                <BasicStop index="0" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="ZH" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="8000" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-                  <Dep getIn="YES">
-                    <Time>00d14:36:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="3"/>
-                    <Dep handicappedAccess="3"/>
-                    <Status>SCHEDULED</Status>
-                    <Capacity1st>1</Capacity1st>
-                    <Capacity2nd>1</Capacity2nd>
-                  </StopPrognosis>
-                </BasicStop>
-                <BasicStop index="1" type="NORMAL">
-                  <StAttrList>
-                    <StAttr code="KANTON" text="AG" priority="3"/>
-                    <StAttr code="ORTGR" text="1" priority="3"/>
-                    <StAttr code="PLZ" text="5400" priority="3"/>
-                    <StAttr code="TU" text="0" priority="3"/>
-                    <StAttr code="WEMF" text="Baden" priority="3"/>
-                    <StAttr code="WG" text="1" priority="3"/>
-                    <StAttr code="WR" text="1" priority="3"/>
-                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                  </StAttrList>
-                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-                  <Arr getOut="YES">
-                    <Time>00d14:51:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Arr>
-                  <Dep getIn="YES">
-                    <Time>00d14:52:00</Time>
-                    <Platform>
-                      <Text/>
-                    </Platform>
-                  </Dep>
-                  <StopPrognosis>
-                    <Arr handicappedAccess="3"/>
-                    <Dep handicappedAccess="3"/>
-                    <Status>SCHEDULED</Status>
-                  </StopPrognosis>
-                </BasicStop>
-              </PassList>
-              <JProg>
-                <JStatus>DELAY</JStatus>
-              </JProg>
-            </Journey>
-            <Arrival>
-              <BasicStop type="NORMAL">
-                <StAttrList>
-                  <StAttr code="KANTON" text="AG" priority="3"/>
-                  <StAttr code="ORTGR" text="1" priority="3"/>
-                  <StAttr code="PLZ" text="5400" priority="3"/>
-                  <StAttr code="TU" text="0" priority="3"/>
-                  <StAttr code="WEMF" text="Baden" priority="3"/>
-                  <StAttr code="WG" text="1" priority="3"/>
-                  <StAttr code="WR" text="1" priority="3"/>
-                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-                </StAttrList>
-                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
-                <Arr getOut="YES">
-                  <Time>00d14:51:00</Time>
-                  <Platform>
-                    <Text>3</Text>
-                  </Platform>
-                  <SFormation leavingDirection="right">
-                    <TrainGroups>
-                      <TrainGroup>
-                        <Car type="LK" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="1" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="1" section="B">
-                          <CarAttributes/>
-                        </Car>
-                        <Car type="2" section="C">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="C">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="C">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="D">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                        <Car type="2" section="D">
-                          <CarAttributes>
-                            <Attr code="AbteilVeloPl"/>
-                          </CarAttributes>
-                        </Car>
-                      </TrainGroup>
-                    </TrainGroups>
-                    <Legend>
-                      <LegendItem id="LK" refersTo="type">
-                        <Text>Locomotive</Text>
-                      </LegendItem>
-                      <LegendItem id="1" refersTo="type">
-                        <Text>1st class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="2" refersTo="type">
-                        <Text>2nd class coach</Text>
-                      </LegendItem>
-                      <LegendItem id="AbteilVeloPl" refersTo="code">
-                        <Text>Bicycle loading: Without reservation</Text>
-                      </LegendItem>
-                      <LegendItem id="Fahrtrichtung" refersTo="code">
-                        <Text>Direction of travel</Text>
-                      </LegendItem>
-                    </Legend>
-                  </SFormation>
-                </Arr>
-                <StopPrognosis>
-                  <Arr handicappedAccess="3"/>
-                  <Dep handicappedAccess="3"/>
-                  <Status>SCHEDULED</Status>
-                </StopPrognosis>
-              </BasicStop>
-            </Arrival>
-          </ConSection>
-        </ConSectionList>
-        <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231436$201512231451$IR 1974$</ctxRecon>
-      </Connection>
-      <Connection id="C1-2">
-        <Overview>
-          <Date>20151223</Date>
-          <Departure>
-            <BasicStop type="NORMAL">
-              <StAttrList>
-                <StAttr code="KANTON" text="ZH" priority="3"/>
-                <StAttr code="ORTGR" text="1" priority="3"/>
-                <StAttr code="PLZ" text="8000" priority="3"/>
-                <StAttr code="TU" text="0" priority="3"/>
-                <StAttr code="WEMF" text="Zürich HB" priority="3"/>
-                <StAttr code="WG" text="1" priority="3"/>
-                <StAttr code="WR" text="1" priority="3"/>
-                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
-              </StAttrList>
-              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
-              <Dep getIn="YES">
                 <Time>00d14:44:00</Time>
                 <Platform>
-                  <Text>41/42</Text>
+                  <Text>41</Text>
                 </Platform>
                 <SFormation leavingDirection="right">
                   <TrainGroups>
@@ -1621,8 +198,8 @@
           <Products>
             <Product cat="S"/>
           </Products>
-          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=78.02908322.1450876643&amp;guiVCtrl_connection_detailsOut_select_C1-2&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
-          <XMLHandle url="http://fweb3p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=78.02908322.1450876643:1:C1-2"/>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=h9.03085221.1450878084&amp;guiVCtrl_connection_detailsOut_select_C1-0&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=h9.03085221.1450878084:1:C1-0"/>
         </Overview>
         <ConSectionList>
           <ConSection>
@@ -1642,7 +219,7 @@
                 <Dep getIn="YES">
                   <Time>00d14:44:00</Time>
                   <Platform>
-                    <Text>41/42</Text>
+                    <Text>41</Text>
                   </Platform>
                   <SFormation leavingDirection="right">
                     <TrainGroups>
@@ -2358,7 +935,7 @@
         </ConSectionList>
         <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231444$201512231512$S 12 19254$</ctxRecon>
       </Connection>
-      <Connection id="C1-3">
+      <Connection id="C1-1">
         <Overview>
           <Date>20151223</Date>
           <Departure>
@@ -2485,8 +1062,8 @@
           <Products>
             <Product cat="S"/>
           </Products>
-          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=78.02908322.1450876643&amp;guiVCtrl_connection_detailsOut_select_C1-3&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
-          <XMLHandle url="http://fweb3p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=78.02908322.1450876643:1:C1-3"/>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=h9.03085221.1450878084&amp;guiVCtrl_connection_detailsOut_select_C1-1&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=h9.03085221.1450878084:1:C1-1"/>
         </Overview>
         <ConSectionList>
           <ConSection>
@@ -3212,7 +1789,7 @@
         </ConSectionList>
         <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231501$201512231539$S 6 18656$</ctxRecon>
       </Connection>
-      <Connection id="C1-4">
+      <Connection id="C1-2">
         <Overview>
           <Date>20151223</Date>
           <Departure>
@@ -3369,8 +1946,8 @@
           <Products>
             <Product cat="IR"/>
           </Products>
-          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=78.02908322.1450876643&amp;guiVCtrl_connection_detailsOut_select_C1-4&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
-          <XMLHandle url="http://fweb3p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=78.02908322.1450876643:1:C1-4"/>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=h9.03085221.1450878084&amp;guiVCtrl_connection_detailsOut_select_C1-2&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=h9.03085221.1450878084:1:C1-2"/>
         </Overview>
         <ConSectionList>
           <ConSection>
@@ -3728,6 +2305,659 @@
           </ConSection>
         </ConSectionList>
         <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231506$201512231521$IR 2176$</ctxRecon>
+      </Connection>
+      <Connection id="C1-3">
+        <Overview>
+          <Date>20151223</Date>
+          <Departure>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="KANTON" text="ZH" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="8000" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Zürich HB" priority="3"/>
+                <StAttr code="WG" text="1" priority="3"/>
+                <StAttr code="WR" text="1" priority="3"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
+              <Dep getIn="YES">
+                <Time>00d15:09:00</Time>
+                <Platform>
+                  <Text>31</Text>
+                </Platform>
+                <SFormation leavingDirection="right">
+                  <TrainGroups>
+                    <TrainGroup>
+                      <Car type="LK" section="A">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="1" section="B">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="1" section="B">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="2" section="B">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="B">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="C">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="C">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="C">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                    </TrainGroup>
+                  </TrainGroups>
+                  <Legend>
+                    <LegendItem id="LK" refersTo="type">
+                      <Text>Locomotive</Text>
+                    </LegendItem>
+                    <LegendItem id="1" refersTo="type">
+                      <Text>1st class coach</Text>
+                    </LegendItem>
+                    <LegendItem id="2" refersTo="type">
+                      <Text>2nd class coach</Text>
+                    </LegendItem>
+                    <LegendItem id="AbteilVeloPl" refersTo="code">
+                      <Text>Bicycle loading: Without reservation</Text>
+                    </LegendItem>
+                    <LegendItem id="Fahrtrichtung" refersTo="code">
+                      <Text>Direction of travel</Text>
+                    </LegendItem>
+                  </Legend>
+                </SFormation>
+              </Dep>
+              <StopPrognosis>
+                <Arr handicappedAccess="3"/>
+                <Dep handicappedAccess="3"/>
+                <Status>SCHEDULED</Status>
+                <Capacity1st>1</Capacity1st>
+                <Capacity2nd>1</Capacity2nd>
+              </StopPrognosis>
+            </BasicStop>
+          </Departure>
+          <Arrival>
+            <BasicStop type="NORMAL">
+              <StAttrList>
+                <StAttr code="KANTON" text="AG" priority="3"/>
+                <StAttr code="ORTGR" text="1" priority="3"/>
+                <StAttr code="PLZ" text="5400" priority="3"/>
+                <StAttr code="TU" text="0" priority="3"/>
+                <StAttr code="WEMF" text="Baden" priority="3"/>
+                <StAttr code="WG" text="1" priority="3"/>
+                <StAttr code="WR" text="1" priority="3"/>
+                <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+              </StAttrList>
+              <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
+              <Arr getOut="YES">
+                <Time>00d15:30:00</Time>
+                <Platform>
+                  <Text>2</Text>
+                </Platform>
+                <SFormation leavingDirection="right">
+                  <TrainGroups>
+                    <TrainGroup>
+                      <Car type="LK" section="A">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="1" section="B">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="1" section="B">
+                        <CarAttributes/>
+                      </Car>
+                      <Car type="2" section="B">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="C">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="C">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="D">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                      <Car type="2" section="D">
+                        <CarAttributes>
+                          <Attr code="AbteilVeloPl"/>
+                        </CarAttributes>
+                      </Car>
+                    </TrainGroup>
+                  </TrainGroups>
+                  <Legend>
+                    <LegendItem id="LK" refersTo="type">
+                      <Text>Locomotive</Text>
+                    </LegendItem>
+                    <LegendItem id="1" refersTo="type">
+                      <Text>1st class coach</Text>
+                    </LegendItem>
+                    <LegendItem id="2" refersTo="type">
+                      <Text>2nd class coach</Text>
+                    </LegendItem>
+                    <LegendItem id="AbteilVeloPl" refersTo="code">
+                      <Text>Bicycle loading: Without reservation</Text>
+                    </LegendItem>
+                    <LegendItem id="Fahrtrichtung" refersTo="code">
+                      <Text>Direction of travel</Text>
+                    </LegendItem>
+                  </Legend>
+                </SFormation>
+              </Arr>
+              <StopPrognosis>
+                <Arr handicappedAccess="3"/>
+                <Dep handicappedAccess="3"/>
+                <Status>SCHEDULED</Status>
+              </StopPrognosis>
+            </BasicStop>
+          </Arrival>
+          <Transfers>0</Transfers>
+          <Duration>
+            <Time>00d00:21:00</Time>
+          </Duration>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text>daily</Text>
+            </RegularServiceText>
+          </ServiceDays>
+          <Products>
+            <Product cat="IR"/>
+          </Products>
+          <ContextURL url="http://fahrplan.sbb.ch/bin/query.exe/3ENGn?seqnr=1&amp;ident=h9.03085221.1450878084&amp;guiVCtrl_connection_detailsOut_select_C1-3&amp;jumpToDetails=yes&amp;guiVCtrl_connection_detailsOut_add_selection=yes"/>
+          <XMLHandle url="http://fweb2p.sbb.ch/bin/query.exe/en?showExtXml=1&amp;xmlId=h9.03085221.1450878084:1:C1-3"/>
+        </Overview>
+        <ConSectionList>
+          <ConSection>
+            <Departure>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="KANTON" text="ZH" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="8000" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Zürich HB" priority="3"/>
+                  <StAttr code="WG" text="1" priority="3"/>
+                  <StAttr code="WR" text="1" priority="3"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
+                <Dep getIn="YES">
+                  <Time>00d15:09:00</Time>
+                  <Platform>
+                    <Text>31</Text>
+                  </Platform>
+                  <SFormation leavingDirection="right">
+                    <TrainGroups>
+                      <TrainGroup>
+                        <Car type="LK" section="A">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="1" section="B">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="1" section="B">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="2" section="B">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="B">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="C">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="C">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="C">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                      </TrainGroup>
+                    </TrainGroups>
+                    <Legend>
+                      <LegendItem id="LK" refersTo="type">
+                        <Text>Locomotive</Text>
+                      </LegendItem>
+                      <LegendItem id="1" refersTo="type">
+                        <Text>1st class coach</Text>
+                      </LegendItem>
+                      <LegendItem id="2" refersTo="type">
+                        <Text>2nd class coach</Text>
+                      </LegendItem>
+                      <LegendItem id="AbteilVeloPl" refersTo="code">
+                        <Text>Bicycle loading: Without reservation</Text>
+                      </LegendItem>
+                      <LegendItem id="Fahrtrichtung" refersTo="code">
+                        <Text>Direction of travel</Text>
+                      </LegendItem>
+                    </Legend>
+                  </SFormation>
+                </Dep>
+                <StopPrognosis>
+                  <Arr handicappedAccess="3"/>
+                  <Dep handicappedAccess="3"/>
+                  <Status>SCHEDULED</Status>
+                  <Capacity1st>1</Capacity1st>
+                  <Capacity2nd>1</Capacity2nd>
+                </StopPrognosis>
+              </BasicStop>
+            </Departure>
+            <Journey>
+              <JHandle tNr="18697" cycle="8" puic="95"/>
+              <JourneyAttributeList>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NAME">
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR 2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="CATEGORY" code="2">
+                    <AttributeVariant type="SHORT">
+                      <Text>IR</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>InterRegio</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="OPERATOR">
+                    <AttributeVariant type="SHORT">
+                      <Text>SBB</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>SBB</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="LONG">
+                      <Text>Schweizerische Bundesbahnen SBB</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NUMBER">
+                    <AttributeVariant type="NORMAL">
+                      <Text>2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="EXT_ID">
+                    <AttributeVariant type="NORMAL">
+                      <Text>2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="ADMINISTRATION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>000011</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="DIRECTION">
+                    <AttributeVariant type="NORMAL">
+                      <Text>Basel SBB</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NAMEFORMATTED" code="1">
+                    <AttributeVariant type="SHORT">
+                      <Text>Name_Format_1</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NAMEFORMATTED" code="2">
+                    <AttributeVariant type="SHORT">
+                      <Text>Name_Format_2</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>InterRegio 2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NAMEFORMATTED" code="3">
+                    <AttributeVariant type="SHORT">
+                      <Text>Name_Format_3</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR 2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="NAMEFORMATTED" code="4">
+                    <AttributeVariant type="SHORT">
+                      <Text>Name_Format_4</Text>
+                    </AttributeVariant>
+                    <AttributeVariant type="NORMAL">
+                      <Text>IR 2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="INFO" code="FD">
+                    <AttributeVariant type="NORMAL">
+                      <Text>2076</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="INFO" code="XC">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;TL&gt;&lt;CT i="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" t="2" l="100"&gt;&lt;A c="BCS" /&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" t="2" l="100"&gt;&lt;A c="BCS" /&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-3ef44da1-c78a-48f3-a845-a087681121a4" t="1" l="100" /&gt;&lt;CT i="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" t="2" l="100"&gt;&lt;A c="BCS" /&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" t="2" l="100"&gt;&lt;A c="BCS" /&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" t="1" l="100" /&gt;&lt;CT i="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" t="2" l="100"&gt;&lt;A c="BCS" /&gt;&lt;A c="WCS" /&gt;&lt;/CT&gt;&lt;CT i="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" t="LK" l="100" /&gt;&lt;/TL&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="INFO" code="XG">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;GL&gt;&lt;G i="g-d841914f-e22b-4a88-9939-c0e11ef7cfc2"&gt;&lt;C t="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" /&gt;&lt;C t="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" /&gt;&lt;C t="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" /&gt;&lt;C t="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" /&gt;&lt;C t="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" /&gt;&lt;C t="fz-3ef44da1-c78a-48f3-a845-a087681121a4" /&gt;&lt;C t="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" /&gt;&lt;C t="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" /&gt;&lt;/G&gt;&lt;/GL&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="3">
+                  <Attribute type="INFO" code="XT">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;TC&gt;&lt;GR g="g-d841914f-e22b-4a88-9939-c0e11ef7cfc2" /&gt;&lt;/TC&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="0" to="0">
+                  <Attribute type="INFO" code="XP">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;PD i="8503000" v="B" a="2015-12-23T15:07:00+01:00" s="496" d="D"&gt;&lt;PS n="D" s="0" e="400" /&gt;&lt;PS n="C" s="400" e="800" /&gt;&lt;PS n="B" s="800" e="1200" /&gt;&lt;PS n="A" s="1200" e="1600" /&gt;&lt;CA a="offen" i="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" /&gt;&lt;CA a="offen" i="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" /&gt;&lt;CA a="offen" i="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" /&gt;&lt;CA a="offen" i="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" /&gt;&lt;CA a="offen" i="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" /&gt;&lt;CA a="offen" i="fz-3ef44da1-c78a-48f3-a845-a087681121a4" /&gt;&lt;CA a="offen" i="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" /&gt;&lt;CA a="offen" i="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" /&gt;&lt;/PD&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="1" to="1">
+                  <Attribute type="INFO" code="XP">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;PD i="8503001" v="B" a="2015-12-23T15:15:00+01:00" s="400" d="D"&gt;&lt;PS n="D" s="0" e="592" /&gt;&lt;PS n="C" s="592" e="800" /&gt;&lt;PS n="B" s="800" e="992" /&gt;&lt;PS n="A" s="992" e="1600" /&gt;&lt;CA a="offen" i="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" /&gt;&lt;CA a="offen" i="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" /&gt;&lt;CA a="offen" i="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" /&gt;&lt;CA a="offen" i="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" /&gt;&lt;CA a="offen" i="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" /&gt;&lt;CA a="offen" i="fz-3ef44da1-c78a-48f3-a845-a087681121a4" /&gt;&lt;CA a="offen" i="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" /&gt;&lt;CA a="offen" i="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" /&gt;&lt;/PD&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="2" to="2">
+                  <Attribute type="INFO" code="XP">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;PD i="8503508" v="B" a="2015-12-23T15:21:00+01:00" s="400" d="D"&gt;&lt;PS n="D" s="0" e="400" /&gt;&lt;PS n="C" s="400" e="896" /&gt;&lt;PS n="B" s="896" e="1088" /&gt;&lt;PS n="A" s="1088" e="1600" /&gt;&lt;CA a="offen" i="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" /&gt;&lt;CA a="offen" i="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" /&gt;&lt;CA a="offen" i="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" /&gt;&lt;CA a="offen" i="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" /&gt;&lt;CA a="offen" i="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" /&gt;&lt;CA a="offen" i="fz-3ef44da1-c78a-48f3-a845-a087681121a4" /&gt;&lt;CA a="offen" i="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" /&gt;&lt;CA a="offen" i="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" /&gt;&lt;/PD&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+                <JourneyAttribute from="3" to="3">
+                  <Attribute type="INFO" code="XP">
+                    <AttributeVariant type="NORMAL">
+                      <Text>&lt;PD i="8503504" v="B" a="2015-12-23T15:30:00+01:00" s="385" d="D"&gt;&lt;PS n="D" s="0" e="592" /&gt;&lt;PS n="C" s="592" e="785" /&gt;&lt;PS n="B" s="785" e="1081" /&gt;&lt;PS n="A" s="1081" e="1481" /&gt;&lt;CA a="offen" i="fz-19307ed1-689b-4fb7-8ff9-e88b84204451" /&gt;&lt;CA a="offen" i="fz-7b3f27eb-2bac-45bf-affd-b7e70bc81434" /&gt;&lt;CA a="offen" i="fz-234cba38-9be9-4be7-aaf6-1b9b78106e0f" /&gt;&lt;CA a="offen" i="fz-48214d3e-30d5-4c45-be01-6fef652aa0b9" /&gt;&lt;CA a="offen" i="fz-b902b6b3-30d9-4fb1-a7ff-a284332c5e29" /&gt;&lt;CA a="offen" i="fz-3ef44da1-c78a-48f3-a845-a087681121a4" /&gt;&lt;CA a="offen" i="fz-9bcc9bb2-24a4-4318-ac57-a5b8693470c8" /&gt;&lt;CA a="offen" i="fz-c58fd8c5-2361-42b6-8c4e-88f098f00fda" /&gt;&lt;/PD&gt;</Text>
+                    </AttributeVariant>
+                  </Attribute>
+                </JourneyAttribute>
+              </JourneyAttributeList>
+              <PassList>
+                <BasicStop index="2" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich HB" priority="3"/>
+                    <StAttr code="WG" text="1" priority="3"/>
+                    <StAttr code="WR" text="1" priority="3"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="008503000#95" externalStationNr="008503000"/>
+                  <Arr getOut="YES">
+                    <Time>00d15:07:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d15:09:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="3"/>
+                    <Dep handicappedAccess="3"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="3" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8000" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Zürich Altstetten" priority="3"/>
+                    <StAttr code="WG" text="1" priority="3"/>
+                    <StAttr code="WR" text="1" priority="3"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Zürich Altstetten" x="8488936" y="47391481" type="WGS84" externalId="008503001#95" externalStationNr="008503001"/>
+                  <Arr getOut="YES">
+                    <Time>00d15:15:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d15:16:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="3"/>
+                    <Dep handicappedAccess="3"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="4" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="KANTON" text="ZH" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="8953" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Dietikon" priority="3"/>
+                    <StAttr code="WG" text="1" priority="3"/>
+                    <StAttr code="WR" text="1" priority="3"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Dietikon" x="8404968" y="47405774" type="WGS84" externalId="008503508#95" externalStationNr="008503508"/>
+                  <Arr getOut="YES">
+                    <Time>00d15:21:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d15:23:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="3"/>
+                    <Dep handicappedAccess="3"/>
+                    <Status>SCHEDULED</Status>
+                    <Capacity1st>1</Capacity1st>
+                    <Capacity2nd>1</Capacity2nd>
+                  </StopPrognosis>
+                </BasicStop>
+                <BasicStop index="5" type="NORMAL">
+                  <StAttrList>
+                    <StAttr code="KANTON" text="AG" priority="3"/>
+                    <StAttr code="ORTGR" text="1" priority="3"/>
+                    <StAttr code="PLZ" text="5400" priority="3"/>
+                    <StAttr code="TU" text="0" priority="3"/>
+                    <StAttr code="WEMF" text="Baden" priority="3"/>
+                    <StAttr code="WG" text="1" priority="3"/>
+                    <StAttr code="WR" text="1" priority="3"/>
+                    <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                  </StAttrList>
+                  <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
+                  <Arr getOut="YES">
+                    <Time>00d15:30:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Arr>
+                  <Dep getIn="YES">
+                    <Time>00d15:33:00</Time>
+                    <Platform>
+                      <Text/>
+                    </Platform>
+                  </Dep>
+                  <StopPrognosis>
+                    <Arr handicappedAccess="3"/>
+                    <Dep handicappedAccess="3"/>
+                    <Status>SCHEDULED</Status>
+                  </StopPrognosis>
+                </BasicStop>
+              </PassList>
+              <JProg>
+                <JStatus>SCHEDULED</JStatus>
+              </JProg>
+            </Journey>
+            <Arrival>
+              <BasicStop type="NORMAL">
+                <StAttrList>
+                  <StAttr code="KANTON" text="AG" priority="3"/>
+                  <StAttr code="ORTGR" text="1" priority="3"/>
+                  <StAttr code="PLZ" text="5400" priority="3"/>
+                  <StAttr code="TU" text="0" priority="3"/>
+                  <StAttr code="WEMF" text="Baden" priority="3"/>
+                  <StAttr code="WG" text="1" priority="3"/>
+                  <StAttr code="WR" text="1" priority="3"/>
+                  <StAttr code="RA" text="RT_BHF" priority="999" type="attr"/>
+                </StAttrList>
+                <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="008503504#95" externalStationNr="008503504"/>
+                <Arr getOut="YES">
+                  <Time>00d15:30:00</Time>
+                  <Platform>
+                    <Text>2</Text>
+                  </Platform>
+                  <SFormation leavingDirection="right">
+                    <TrainGroups>
+                      <TrainGroup>
+                        <Car type="LK" section="A">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="1" section="B">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="1" section="B">
+                          <CarAttributes/>
+                        </Car>
+                        <Car type="2" section="B">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="C">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="C">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="D">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                        <Car type="2" section="D">
+                          <CarAttributes>
+                            <Attr code="AbteilVeloPl"/>
+                          </CarAttributes>
+                        </Car>
+                      </TrainGroup>
+                    </TrainGroups>
+                    <Legend>
+                      <LegendItem id="LK" refersTo="type">
+                        <Text>Locomotive</Text>
+                      </LegendItem>
+                      <LegendItem id="1" refersTo="type">
+                        <Text>1st class coach</Text>
+                      </LegendItem>
+                      <LegendItem id="2" refersTo="type">
+                        <Text>2nd class coach</Text>
+                      </LegendItem>
+                      <LegendItem id="AbteilVeloPl" refersTo="code">
+                        <Text>Bicycle loading: Without reservation</Text>
+                      </LegendItem>
+                      <LegendItem id="Fahrtrichtung" refersTo="code">
+                        <Text>Direction of travel</Text>
+                      </LegendItem>
+                    </Legend>
+                  </SFormation>
+                </Arr>
+                <StopPrognosis>
+                  <Arr handicappedAccess="3"/>
+                  <Dep handicappedAccess="3"/>
+                  <Status>SCHEDULED</Status>
+                </StopPrognosis>
+              </BasicStop>
+            </Arrival>
+          </ConSection>
+        </ConSectionList>
+        <ctxRecon>T$A=1@O=Zürich HB@L=8503000@a=128@$A=1@O=Baden@L=8503504@a=128@$201512231509$201512231530$IR 2076$</ctxRecon>
       </Connection>
     </ConnectionList>
   </ConRes>
