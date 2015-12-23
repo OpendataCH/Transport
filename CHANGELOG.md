@@ -1,5 +1,11 @@
 # Changelog
 
+## 2015-12-23
+
+- Refactored Silex application
+- Added integration tests
+- Switched to PSR-4 autoloading
+
 ## 2015-12-06
 
 - Moved API documentation to separate webpage
