@@ -1,0 +1,836 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.41.SBB.4.15.7" lang="EN">
+  <STBRes>
+    <JourneyList>
+      <STBJourney>
+        <JHandle tNr="18605" puic="095" cycle="07"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#95" externalStationNr="8503000"/>
+            <Dep>
+              <Time>14:30</Time>
+              <Platform>
+                <Text>31</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Platform>
+                  <Text>31</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN 1524</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="CATEGORY" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>1524</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Lausanne</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>IC-tilting train 1524</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN 1524</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="15">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>ICN 1524</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="1" type="NORMAL" code="WR">
+              <AttributeVariant type="NORMAL">
+                <Text>Restaurant</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="4" type="NORMAL" code="FZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Family zone without play area</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="4" type="NORMAL" code="BZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Business zone in 1st class: Reservation possible</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="4" type="NORMAL" code="RZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Quiet zone in 1st class</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="6" type="NORMAL" code="VR">
+              <AttributeVariant type="NORMAL">
+                <Text>BICYCLES: Reservation compulsory</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute priority="8" type="NORMAL" code="R ">
+              <AttributeVariant type="NORMAL">
+                <Text>Reservation possible</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#95" externalStationNr="8503000"/>
+            <Arr>
+              <Time>14:30</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Arr>
+              <Time>15:00</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Oensingen" x="7709850" y="47285021" type="WGS84" externalId="8500212#95" externalStationNr="8500212"/>
+            <Arr>
+              <Time>15:12</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Solothurn" x="7542686" y="47204181" type="WGS84" externalId="8500207#95" externalStationNr="8500207"/>
+            <Arr>
+              <Time>15:24</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Grenchen Süd" x="7398176" y="47188765" type="WGS84" externalId="8500202#95" externalStationNr="8500202"/>
+            <Arr>
+              <Time>15:32</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Biel/Bienne" x="7242905" y="47132888" type="WGS84" externalId="8504300#95" externalStationNr="8504300"/>
+            <Arr>
+              <Time>15:43</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Neuchâtel" x="6935708" y="46996719" type="WGS84" externalId="8504221#95" externalStationNr="8504221"/>
+            <Arr>
+              <Time>16:01</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Yverdon-les-Bains" x="6641140" y="46781877" type="WGS84" externalId="8504200#95" externalStationNr="8504200"/>
+            <Arr>
+              <Time>16:20</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Lausanne" x="6629095" y="46516776" type="WGS84" externalId="8501120#95" externalStationNr="8501120"/>
+            <Arr>
+              <Time>16:45</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="19782" puic="095" cycle="12"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#95" externalStationNr="8503000"/>
+            <Dep>
+              <Time>14:30</Time>
+              <Platform>
+                <Text>43/44</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Platform>
+                  <Text>43/44</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>S 6</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="CATEGORY" code="5">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>6</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Uetikon</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>S 6</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Urban train 6 18653</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>S 6 18653</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="11" to="21">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>S 6 18653</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Zürich HB" x="8540192" y="47378177" type="WGS84" externalId="8503000#95" externalStationNr="8503000"/>
+            <Arr>
+              <Time>14:30</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich Stadelhofen" x="8548462" y="47366608" type="WGS84" externalId="8503003#95" externalStationNr="8503003"/>
+            <Arr>
+              <Time>14:32</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich Tiefenbrunnen" x="8561371" y="47350121" type="WGS84" externalId="8503004#95" externalStationNr="8503004"/>
+            <Arr>
+              <Time>14:35</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zollikon" x="8569713" y="47337330" type="WGS84" externalId="8503100#95" externalStationNr="8503100"/>
+            <Arr>
+              <Time>14:38</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Küsnacht Goldbach" x="8575951" y="47326857" type="WGS84" externalId="8503141#95" externalStationNr="8503141"/>
+            <Arr>
+              <Time>14:39</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Küsnacht ZH" x="8580617" y="47319154" type="WGS84" externalId="8503101#95" externalStationNr="8503101"/>
+            <Arr>
+              <Time>14:42</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Erlenbach ZH" x="8591503" y="47305787" type="WGS84" externalId="8503102#95" externalStationNr="8503102"/>
+            <Arr>
+              <Time>14:45</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Winkel am Zürichsee" x="8598973" y="47297202" type="WGS84" externalId="8503111#95" externalStationNr="8503111"/>
+            <Arr>
+              <Time>14:46</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Meilen" x="8644296" y="47269812" type="WGS84" externalId="8503104#95" externalStationNr="8503104"/>
+            <Arr>
+              <Time>14:53</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Uetikon" x="8678770" y="47259034" type="WGS84" externalId="8503105#95" externalStationNr="8503105"/>
+            <Arr>
+              <Time>14:57</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="37422" puic="095" cycle="06"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377242" type="WGS84" externalId="8587348#95" externalStationNr="8587348"/>
+            <Dep>
+              <Time>14:30</Time>
+            </Dep>
+            <StopPrognosis>
+              <Capacity1st>-1</Capacity1st>
+              <Capacity2nd>-1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="CATEGORY" code="9">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>VBZ    F</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Zürich, Albisrieden</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Low-floor tramway 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 3 7742</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="7" to="20">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377242" type="WGS84" externalId="8587348#95" externalStationNr="8587348"/>
+            <Arr>
+              <Time>14:30</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Löwenplatz" x="8537415" y="47375893" type="WGS84" externalId="8591262#95" externalStationNr="8591262"/>
+            <Arr>
+              <Time>14:31</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Sihlpost/HB" x="8534205" y="47376091" type="WGS84" externalId="8591367#95" externalStationNr="8591367"/>
+            <Arr>
+              <Time>14:33</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Stauffacher" x="8529252" y="47373421" type="WGS84" externalId="8591381#95" externalStationNr="8591381"/>
+            <Arr>
+              <Time>14:34</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Bezirksgebäude" x="8525558" y="47374167" type="WGS84" externalId="8591079#95" externalStationNr="8591079"/>
+            <Arr>
+              <Time>14:37</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich,Kalkbreite/Bhf.Wiedikon" x="8521009" y="47374599" type="WGS84" externalId="8591218#95" externalStationNr="8591218"/>
+            <Arr>
+              <Time>14:39</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Lochergut" x="8517908" y="47375345" type="WGS84" externalId="8591259#95" externalStationNr="8591259"/>
+            <Arr>
+              <Time>14:40</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Zypressenstrasse" x="8513773" y="47376693" type="WGS84" externalId="8591448#95" externalStationNr="8591448"/>
+            <Arr>
+              <Time>14:41</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Albisriederplatz" x="8510393" y="47378213" type="WGS84" externalId="8591038#95" externalStationNr="8591038"/>
+            <Arr>
+              <Time>14:42</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Albisrieden" x="8484792" y="47374383" type="WGS84" externalId="8591036#95" externalStationNr="8591036"/>
+            <Arr>
+              <Time>14:49</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text> - </Text>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text>;  31.  2015</Text>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="195915" puic="095" cycle="22"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377242" type="WGS84" externalId="8587348#95" externalStationNr="8587348"/>
+            <Dep>
+              <Time>14:30</Time>
+            </Dep>
+            <StopPrognosis>
+              <Capacity1st>-1</Capacity1st>
+              <Capacity2nd>-1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB 31</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="CATEGORY" code="6">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>VBZ</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>31</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Zürich Hegibachplatz</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB 31</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Low-floor bus 31</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB 31 1384</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="19" to="26">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>NFB 31</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofplatz/HB" x="8539338" y="47377242" type="WGS84" externalId="8587348#95" externalStationNr="8587348"/>
+            <Arr>
+              <Time>14:30</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Central" x="8543941" y="47376846" type="WGS84" externalId="8588078#95" externalStationNr="8588078"/>
+            <Arr>
+              <Time>14:32</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Neumarkt" x="8547348" y="47372774" type="WGS84" externalId="8591287#95" externalStationNr="8591287"/>
+            <Arr>
+              <Time>14:33</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Kunsthaus" x="8549137" y="47370437" type="WGS84" externalId="8591239#95" externalStationNr="8591239"/>
+            <Arr>
+              <Time>14:34</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Sprecherstrasse" x="8552256" y="47367489" type="WGS84" externalId="8591375#95" externalStationNr="8591375"/>
+            <Arr>
+              <Time>14:36</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich Kreuzplatz" x="8554081" y="47364873" type="WGS84" externalId="8530813#95" externalStationNr="8530813"/>
+            <Arr>
+              <Time>14:37</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Signaustrasse" x="8557622" y="47363228" type="WGS84" externalId="8591364#95" externalStationNr="8591364"/>
+            <Arr>
+              <Time>14:39</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich Hegibachplatz" x="8560625" y="47361690" type="WGS84" externalId="8530812#95" externalStationNr="8530812"/>
+            <Arr>
+              <Time>14:39</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text> - </Text>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text/>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="36868" puic="095" cycle="22"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#95" externalStationNr="8587349"/>
+            <Dep>
+              <Time>14:30</Time>
+            </Dep>
+            <StopPrognosis>
+              <Capacity1st>-1</Capacity1st>
+              <Capacity2nd>-1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 14</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="CATEGORY" code="9">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>VBZ    F</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>14</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Zürich, Seebach</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 14</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Low-floor tramway 14</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 14 5149</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="12" to="26">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 14</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Zürich, Bahnhofquai/HB" x="8541738" y="47377556" type="WGS84" externalId="8587349#95" externalStationNr="8587349"/>
+            <Arr>
+              <Time>14:30</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Stampfenbachplatz" x="8542808" y="47379957" type="WGS84" externalId="8591379#95" externalStationNr="8591379"/>
+            <Arr>
+              <Time>14:31</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Beckenhof" x="8540444" y="47384083" type="WGS84" externalId="8591071#95" externalStationNr="8591071"/>
+            <Arr>
+              <Time>14:33</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Kronenstrasse" x="8539123" y="47387957" type="WGS84" externalId="8591237#95" externalStationNr="8591237"/>
+            <Arr>
+              <Time>14:34</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Schaffhauserplatz" x="8538709" y="47391634" type="WGS84" externalId="8591335#95" externalStationNr="8591335"/>
+            <Arr>
+              <Time>14:36</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Milchbuck" x="8541927" y="47397495" type="WGS84" externalId="8591276#95" externalStationNr="8591276"/>
+            <Arr>
+              <Time>14:38</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Sternen Oerlikon" x="8546233" y="47410070" type="WGS84" externalId="8591382#95" externalStationNr="8591382"/>
+            <Arr>
+              <Time>14:44</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich Oerlikon, Bahnhof Ost" x="8545846" y="47413342" type="WGS84" externalId="8591063#95" externalStationNr="8591063"/>
+            <Arr>
+              <Time>14:46</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Seebacherplatz" x="8548372" y="47419860" type="WGS84" externalId="8591355#95" externalStationNr="8591355"/>
+            <Arr>
+              <Time>14:48</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Zürich, Seebach" x="8549775" y="47421864" type="WGS84" externalId="8591354#95" externalStationNr="8591354"/>
+            <Arr>
+              <Time>14:49</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text> - </Text>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text/>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+    </JourneyList>
+  </STBRes>
+</ResC>

@@ -1,0 +1,2056 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T14:30:00+0100",
+                "departureTimestamp": 1450877400,
+                "delay": null,
+                "platform": "31",
+                "prognosis": {
+                    "platform": "31",
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                }
+            },
+            "name": "ICN 1524",
+            "category": "ICN",
+            "categoryCode": 1,
+            "number": "1524",
+            "operator": "SBB",
+            "to": "Lausanne",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8503000",
+                        "name": "Z\u00fcrich HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378177,
+                            "y": 8.540192
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:30:00+0100",
+                    "arrivalTimestamp": 1450877400,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503000",
+                        "name": "Z\u00fcrich HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378177,
+                            "y": 8.540192
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T15:00:00+0100",
+                    "arrivalTimestamp": 1450879200,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500212",
+                        "name": "Oensingen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.285021,
+                            "y": 7.70985
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T15:12:00+0100",
+                    "arrivalTimestamp": 1450879920,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500212",
+                        "name": "Oensingen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.285021,
+                            "y": 7.70985
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500207",
+                        "name": "Solothurn",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.204181,
+                            "y": 7.542686
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T15:24:00+0100",
+                    "arrivalTimestamp": 1450880640,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500207",
+                        "name": "Solothurn",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.204181,
+                            "y": 7.542686
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500202",
+                        "name": "Grenchen S\u00fcd",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.188765,
+                            "y": 7.398176
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T15:32:00+0100",
+                    "arrivalTimestamp": 1450881120,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500202",
+                        "name": "Grenchen S\u00fcd",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.188765,
+                            "y": 7.398176
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8504300",
+                        "name": "Biel\/Bienne",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.132888,
+                            "y": 7.242905
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T15:43:00+0100",
+                    "arrivalTimestamp": 1450881780,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8504300",
+                        "name": "Biel\/Bienne",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.132888,
+                            "y": 7.242905
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8504221",
+                        "name": "Neuch\u00e2tel",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.996719,
+                            "y": 6.935708
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T16:01:00+0100",
+                    "arrivalTimestamp": 1450882860,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8504221",
+                        "name": "Neuch\u00e2tel",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.996719,
+                            "y": 6.935708
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8504200",
+                        "name": "Yverdon-les-Bains",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.781877,
+                            "y": 6.64114
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T16:20:00+0100",
+                    "arrivalTimestamp": 1450884000,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8504200",
+                        "name": "Yverdon-les-Bains",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.781877,
+                            "y": 6.64114
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8501120",
+                        "name": "Lausanne",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.516776,
+                            "y": 6.629095
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T16:45:00+0100",
+                    "arrivalTimestamp": 1450885500,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8501120",
+                        "name": "Lausanne",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.516776,
+                            "y": 6.629095
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "ICN"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T14:30:00+0100",
+                "departureTimestamp": 1450877400,
+                "delay": null,
+                "platform": "43\/44",
+                "prognosis": {
+                    "platform": "43\/44",
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378177,
+                        "y": 8.540192
+                    },
+                    "distance": null
+                }
+            },
+            "name": "S 6",
+            "category": "S",
+            "categoryCode": 5,
+            "number": "6",
+            "operator": "SBB",
+            "to": "Uetikon",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8503000",
+                        "name": "Z\u00fcrich HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378177,
+                            "y": 8.540192
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:30:00+0100",
+                    "arrivalTimestamp": 1450877400,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503000",
+                        "name": "Z\u00fcrich HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378177,
+                            "y": 8.540192
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503003",
+                        "name": "Z\u00fcrich Stadelhofen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.366608,
+                            "y": 8.548462
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:32:00+0100",
+                    "arrivalTimestamp": 1450877520,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503003",
+                        "name": "Z\u00fcrich Stadelhofen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.366608,
+                            "y": 8.548462
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503004",
+                        "name": "Z\u00fcrich Tiefenbrunnen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.350121,
+                            "y": 8.561371
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:35:00+0100",
+                    "arrivalTimestamp": 1450877700,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503004",
+                        "name": "Z\u00fcrich Tiefenbrunnen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.350121,
+                            "y": 8.561371
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503100",
+                        "name": "Zollikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.33733,
+                            "y": 8.569713
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:38:00+0100",
+                    "arrivalTimestamp": 1450877880,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503100",
+                        "name": "Zollikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.33733,
+                            "y": 8.569713
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503141",
+                        "name": "K\u00fcsnacht Goldbach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.326857,
+                            "y": 8.575951
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:39:00+0100",
+                    "arrivalTimestamp": 1450877940,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503141",
+                        "name": "K\u00fcsnacht Goldbach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.326857,
+                            "y": 8.575951
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503101",
+                        "name": "K\u00fcsnacht ZH",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.319154,
+                            "y": 8.580617
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:42:00+0100",
+                    "arrivalTimestamp": 1450878120,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503101",
+                        "name": "K\u00fcsnacht ZH",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.319154,
+                            "y": 8.580617
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503102",
+                        "name": "Erlenbach ZH",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.305787,
+                            "y": 8.591503
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:45:00+0100",
+                    "arrivalTimestamp": 1450878300,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503102",
+                        "name": "Erlenbach ZH",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.305787,
+                            "y": 8.591503
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503111",
+                        "name": "Winkel am Z\u00fcrichsee",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.297202,
+                            "y": 8.598973
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:46:00+0100",
+                    "arrivalTimestamp": 1450878360,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503111",
+                        "name": "Winkel am Z\u00fcrichsee",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.297202,
+                            "y": 8.598973
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503104",
+                        "name": "Meilen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.269812,
+                            "y": 8.644296
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:53:00+0100",
+                    "arrivalTimestamp": 1450878780,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503104",
+                        "name": "Meilen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.269812,
+                            "y": 8.644296
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503105",
+                        "name": "Uetikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.259034,
+                            "y": 8.67877
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:57:00+0100",
+                    "arrivalTimestamp": 1450879020,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503105",
+                        "name": "Uetikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.259034,
+                            "y": 8.67877
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "S"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8587348",
+                    "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377242,
+                        "y": 8.539338
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T14:30:00+0100",
+                "departureTimestamp": 1450877400,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8587348",
+                    "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377242,
+                        "y": 8.539338
+                    },
+                    "distance": null
+                }
+            },
+            "name": "NFT 3",
+            "category": "NFT",
+            "categoryCode": 9,
+            "number": "3",
+            "operator": "VBZ    F",
+            "to": "Z\u00fcrich, Albisrieden",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8587348",
+                        "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377242,
+                            "y": 8.539338
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:30:00+0100",
+                    "arrivalTimestamp": 1450877400,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8587348",
+                        "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377242,
+                            "y": 8.539338
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591262",
+                        "name": "Z\u00fcrich, L\u00f6wenplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.375893,
+                            "y": 8.537415
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:31:00+0100",
+                    "arrivalTimestamp": 1450877460,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591262",
+                        "name": "Z\u00fcrich, L\u00f6wenplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.375893,
+                            "y": 8.537415
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591367",
+                        "name": "Z\u00fcrich, Sihlpost\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376091,
+                            "y": 8.534205
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:33:00+0100",
+                    "arrivalTimestamp": 1450877580,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591367",
+                        "name": "Z\u00fcrich, Sihlpost\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376091,
+                            "y": 8.534205
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591381",
+                        "name": "Z\u00fcrich, Stauffacher",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.373421,
+                            "y": 8.529252
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:34:00+0100",
+                    "arrivalTimestamp": 1450877640,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591381",
+                        "name": "Z\u00fcrich, Stauffacher",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.373421,
+                            "y": 8.529252
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591079",
+                        "name": "Z\u00fcrich, Bezirksgeb\u00e4ude",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374167,
+                            "y": 8.525558
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:37:00+0100",
+                    "arrivalTimestamp": 1450877820,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591079",
+                        "name": "Z\u00fcrich, Bezirksgeb\u00e4ude",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374167,
+                            "y": 8.525558
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591218",
+                        "name": "Z\u00fcrich,Kalkbreite\/Bhf.Wiedikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374599,
+                            "y": 8.521009
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:39:00+0100",
+                    "arrivalTimestamp": 1450877940,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591218",
+                        "name": "Z\u00fcrich,Kalkbreite\/Bhf.Wiedikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374599,
+                            "y": 8.521009
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591259",
+                        "name": "Z\u00fcrich, Lochergut",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.375345,
+                            "y": 8.517908
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:40:00+0100",
+                    "arrivalTimestamp": 1450878000,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591259",
+                        "name": "Z\u00fcrich, Lochergut",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.375345,
+                            "y": 8.517908
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591448",
+                        "name": "Z\u00fcrich, Zypressenstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376693,
+                            "y": 8.513773
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:41:00+0100",
+                    "arrivalTimestamp": 1450878060,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591448",
+                        "name": "Z\u00fcrich, Zypressenstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376693,
+                            "y": 8.513773
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591038",
+                        "name": "Z\u00fcrich, Albisriederplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378213,
+                            "y": 8.510393
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:42:00+0100",
+                    "arrivalTimestamp": 1450878120,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591038",
+                        "name": "Z\u00fcrich, Albisriederplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.378213,
+                            "y": 8.510393
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591036",
+                        "name": "Z\u00fcrich, Albisrieden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374383,
+                            "y": 8.484792
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:49:00+0100",
+                    "arrivalTimestamp": 1450878540,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591036",
+                        "name": "Z\u00fcrich, Albisrieden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.374383,
+                            "y": 8.484792
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "NFT"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8587348",
+                    "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377242,
+                        "y": 8.539338
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T14:30:00+0100",
+                "departureTimestamp": 1450877400,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8587348",
+                    "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377242,
+                        "y": 8.539338
+                    },
+                    "distance": null
+                }
+            },
+            "name": "NFB 31",
+            "category": "NFB",
+            "categoryCode": 6,
+            "number": "31",
+            "operator": "VBZ",
+            "to": "Z\u00fcrich Hegibachplatz",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8587348",
+                        "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377242,
+                            "y": 8.539338
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:30:00+0100",
+                    "arrivalTimestamp": 1450877400,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8587348",
+                        "name": "Z\u00fcrich, Bahnhofplatz\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377242,
+                            "y": 8.539338
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8588078",
+                        "name": "Z\u00fcrich, Central",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376846,
+                            "y": 8.543941
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:32:00+0100",
+                    "arrivalTimestamp": 1450877520,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8588078",
+                        "name": "Z\u00fcrich, Central",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.376846,
+                            "y": 8.543941
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591287",
+                        "name": "Z\u00fcrich, Neumarkt",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.372774,
+                            "y": 8.547348
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:33:00+0100",
+                    "arrivalTimestamp": 1450877580,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591287",
+                        "name": "Z\u00fcrich, Neumarkt",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.372774,
+                            "y": 8.547348
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591239",
+                        "name": "Z\u00fcrich, Kunsthaus",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.370437,
+                            "y": 8.549137
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:34:00+0100",
+                    "arrivalTimestamp": 1450877640,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591239",
+                        "name": "Z\u00fcrich, Kunsthaus",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.370437,
+                            "y": 8.549137
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591375",
+                        "name": "Z\u00fcrich, Sprecherstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.367489,
+                            "y": 8.552256
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:36:00+0100",
+                    "arrivalTimestamp": 1450877760,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591375",
+                        "name": "Z\u00fcrich, Sprecherstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.367489,
+                            "y": 8.552256
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8530813",
+                        "name": "Z\u00fcrich Kreuzplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.364873,
+                            "y": 8.554081
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:37:00+0100",
+                    "arrivalTimestamp": 1450877820,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8530813",
+                        "name": "Z\u00fcrich Kreuzplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.364873,
+                            "y": 8.554081
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591364",
+                        "name": "Z\u00fcrich, Signaustrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.363228,
+                            "y": 8.557622
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:39:00+0100",
+                    "arrivalTimestamp": 1450877940,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591364",
+                        "name": "Z\u00fcrich, Signaustrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.363228,
+                            "y": 8.557622
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8530812",
+                        "name": "Z\u00fcrich Hegibachplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.36169,
+                            "y": 8.560625
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:39:00+0100",
+                    "arrivalTimestamp": 1450877940,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8530812",
+                        "name": "Z\u00fcrich Hegibachplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.36169,
+                            "y": 8.560625
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "NFB"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8587349",
+                    "name": "Z\u00fcrich, Bahnhofquai\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377556,
+                        "y": 8.541738
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2015-12-23T14:30:00+0100",
+                "departureTimestamp": 1450877400,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8587349",
+                    "name": "Z\u00fcrich, Bahnhofquai\/HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377556,
+                        "y": 8.541738
+                    },
+                    "distance": null
+                }
+            },
+            "name": "NFT 14",
+            "category": "NFT",
+            "categoryCode": 9,
+            "number": "14",
+            "operator": "VBZ    F",
+            "to": "Z\u00fcrich, Seebach",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8587349",
+                        "name": "Z\u00fcrich, Bahnhofquai\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377556,
+                            "y": 8.541738
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:30:00+0100",
+                    "arrivalTimestamp": 1450877400,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8587349",
+                        "name": "Z\u00fcrich, Bahnhofquai\/HB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.377556,
+                            "y": 8.541738
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591379",
+                        "name": "Z\u00fcrich, Stampfenbachplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.379957,
+                            "y": 8.542808
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:31:00+0100",
+                    "arrivalTimestamp": 1450877460,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591379",
+                        "name": "Z\u00fcrich, Stampfenbachplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.379957,
+                            "y": 8.542808
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591071",
+                        "name": "Z\u00fcrich, Beckenhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.384083,
+                            "y": 8.540444
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:33:00+0100",
+                    "arrivalTimestamp": 1450877580,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591071",
+                        "name": "Z\u00fcrich, Beckenhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.384083,
+                            "y": 8.540444
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591237",
+                        "name": "Z\u00fcrich, Kronenstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.387957,
+                            "y": 8.539123
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:34:00+0100",
+                    "arrivalTimestamp": 1450877640,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591237",
+                        "name": "Z\u00fcrich, Kronenstrasse",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.387957,
+                            "y": 8.539123
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591335",
+                        "name": "Z\u00fcrich, Schaffhauserplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391634,
+                            "y": 8.538709
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:36:00+0100",
+                    "arrivalTimestamp": 1450877760,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591335",
+                        "name": "Z\u00fcrich, Schaffhauserplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391634,
+                            "y": 8.538709
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591276",
+                        "name": "Z\u00fcrich, Milchbuck",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.397495,
+                            "y": 8.541927
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:38:00+0100",
+                    "arrivalTimestamp": 1450877880,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591276",
+                        "name": "Z\u00fcrich, Milchbuck",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.397495,
+                            "y": 8.541927
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591382",
+                        "name": "Z\u00fcrich, Sternen Oerlikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.41007,
+                            "y": 8.546233
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:44:00+0100",
+                    "arrivalTimestamp": 1450878240,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591382",
+                        "name": "Z\u00fcrich, Sternen Oerlikon",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.41007,
+                            "y": 8.546233
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591063",
+                        "name": "Z\u00fcrich Oerlikon, Bahnhof Ost",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.413342,
+                            "y": 8.545846
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:46:00+0100",
+                    "arrivalTimestamp": 1450878360,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591063",
+                        "name": "Z\u00fcrich Oerlikon, Bahnhof Ost",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.413342,
+                            "y": 8.545846
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591355",
+                        "name": "Z\u00fcrich, Seebacherplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.41986,
+                            "y": 8.548372
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:48:00+0100",
+                    "arrivalTimestamp": 1450878480,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591355",
+                        "name": "Z\u00fcrich, Seebacherplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.41986,
+                            "y": 8.548372
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8591354",
+                        "name": "Z\u00fcrich, Seebach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.421864,
+                            "y": 8.549775
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2015-12-23T14:49:00+0100",
+                    "arrivalTimestamp": 1450878540,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8591354",
+                        "name": "Z\u00fcrich, Seebach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.421864,
+                            "y": 8.549775
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "NFT"
+        }
+    ]
+}
