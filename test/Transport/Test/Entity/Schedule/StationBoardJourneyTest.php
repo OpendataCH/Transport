@@ -42,7 +42,7 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/archive/stationboard-2012-02-13.xml');
+        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/stationboard/response_stationboard-2012-02-13.xml');
 
         $date = \DateTime::createFromFormat('Y-m-d', '2012-03-31', new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));

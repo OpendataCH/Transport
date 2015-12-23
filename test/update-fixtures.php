@@ -58,7 +58,7 @@ $query = new LocationQuery('008591052');
 download($query, 'stationboard/response_location.xml');
 $query = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00', new \DateTimeZone('Europe/Zurich')));
 $query->maxJourneys = 3;
-download($query, 'archive/stationboard-2012-02-13.xml');
+download($query, 'stationboard/response_stationboard-2012-02-13.xml');
 
 // Close to Kehrsiten-Bürgenstock
 $nearBy = new NearbyQuery('47.002347', '8.379934', 2);

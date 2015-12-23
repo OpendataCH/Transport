@@ -12,7 +12,7 @@ class StationBoardTest extends IntegrationTest
         $responseLocation->setContent($this->getFixture('stationboard/response_location.xml'));
 
         $responseStationBoard = new Response();
-        $responseStationBoard->setContent($this->getFixture('archive/stationboard-2012-02-13.xml'));
+        $responseStationBoard->setContent($this->getFixture('stationboard/response_stationboard-2012-02-13.xml'));
 
         $this->getBrowser()->expects($this->any())
             ->method('post')

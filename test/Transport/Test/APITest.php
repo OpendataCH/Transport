@@ -103,7 +103,7 @@ class APITest extends \PHPUnit_Framework_TestCase
 
     public function testGetStationBoard() {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/archive/stationboard-2012-02-13.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2012-02-13.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
@@ -131,7 +131,7 @@ class APITest extends \PHPUnit_Framework_TestCase
 
     public function testGetStationBoardDelay() {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/archive/stationboard-2013-10-15.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2013-10-15.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
