@@ -59,6 +59,10 @@ class Application extends \Silex\Application
         // Exception handler
         $app->error(function (\Exception $e, $code) use ($app) {
 
+            if ($app['debug']) {
+                return;
+            }
+
             if ($e instanceof HttpException && $e->getStatusCode() == 429) {
                 // don't log rate limiting
             } else {
