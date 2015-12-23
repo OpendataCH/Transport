@@ -42,7 +42,7 @@ function downloadJson($url, $file) {
 
 // Location
 $query = new LocationQuery(array('from' => 'Züri', 'to' => 'Bern'));
-download($query, 'location.xml');
+download($query, 'response_location.xml');
 
 // Connection
 $from = new Station('008503000');
@@ -52,6 +52,8 @@ download($query, 'archive/connection-2012-01-31.xml');
 
 // Station Board
 $station = new Station('008591052'); // Zürich, Bäckeranlage
+$query = new LocationQuery('008591052');
+download($query, 'stationboard/response_location.xml');
 $query = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00', new \DateTimeZone('Europe/Zurich')));
 $query->maxJourneys = 3;
 download($query, 'archive/stationboard-2012-02-13.xml');

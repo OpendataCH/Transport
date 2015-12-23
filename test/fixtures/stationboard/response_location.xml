@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.3.3" prod="5.41.SBB.4.15.7 [Dec  4 2015]" lang="EN">
+  <LocValRes flag="FINAL" id="0">
+    <Station name="Zürich, Bäckeranlage" prodclass="576" externalId="008591052#85" externalStationNr="008591052" type="WGS84" x="8522870" y="47378330"/>
+  </LocValRes>
+</ResC>

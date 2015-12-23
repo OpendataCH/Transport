@@ -1,0 +1,165 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2012-02-13T23:57:00+0100",
+                "departureTimestamp": 1329173820,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                }
+            },
+            "name": "Bus 31",
+            "category": "Bus",
+            "categoryCode": 6,
+            "number": "31",
+            "operator": "VBZ",
+            "to": "Schlieren, Zentrum",
+            "passList": [],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "Nbu"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2012-02-13T23:58:00+0100",
+                "departureTimestamp": 1329173880,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                }
+            },
+            "name": "Bus 31",
+            "category": "Bus",
+            "categoryCode": 6,
+            "number": "31",
+            "operator": "VBZ",
+            "to": "Z\u00c3\u00bcrich Hegibachplatz",
+            "passList": [],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "Nbu"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2012-02-14T04:41:00+0100",
+                "departureTimestamp": 1329190860,
+                "delay": null,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8591052",
+                    "name": "Z\u00c3\u00bcrich, B\u00c3\u00a4ckeranlage",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.378473,
+                        "y": 8.525342
+                    },
+                    "distance": null
+                }
+            },
+            "name": "Tro 34",
+            "category": "Tro",
+            "categoryCode": 6,
+            "number": "34",
+            "operator": "VBZ",
+            "to": "Z\u00c3\u00bcrich, Klusplatz",
+            "passList": [],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "Tro"
+        }
+    ]
+}
