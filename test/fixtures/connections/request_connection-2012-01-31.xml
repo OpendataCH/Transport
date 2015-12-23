@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb">
+  <ConReq>
+    <Start>
+      <Station name="Zürich" externalId="008503000"/>
+      <Prod prod="1111111111111111"/>
+    </Start>
+    <Dest>
+      <Station name="Bern" externalId="008507000"/>
+    </Dest>
+    <ReqT a="0" date="20120131" time="23:55"/>
+    <RFlags b="0" f="4" sMode="N"/>
+  </ConReq>
+</ReqC>

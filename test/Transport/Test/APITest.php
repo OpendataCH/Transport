@@ -21,7 +21,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindLocationsArray()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/response_location.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
@@ -32,9 +32,7 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo(utf8_decode('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb"><LocValReq id="from" sMode="1"><ReqLoc match="Zürich" type="ALLTYPE"/></LocValReq><LocValReq id="to" sMode="1"><ReqLoc match="Bern" type="ALLTYPE"/></LocValReq></ReqC>
-'))
+                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/request_location.xml'))
             )
             ->will($this->returnValue($response));
 

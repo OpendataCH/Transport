@@ -43,4 +43,9 @@ abstract class IntegrationTest extends WebTestCase
     {
         return file_get_contents(__DIR__ . '/../../fixtures/' . $filename);
     }
+
+    public function getXmlFixture($filename)
+    {
+        return simplexml_load_string($this->getFixture($filename));
+    }
 }
