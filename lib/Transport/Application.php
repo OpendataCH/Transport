@@ -276,7 +276,7 @@ class Application extends \Silex\Application
                 $date = $request->get('datetime');
             }
             if ($date) {
-                $date = new DateTime($date, new DateTimeZone('Europe/Zurich'));
+                $date = new \DateTime($date, new \DateTimeZone('Europe/Zurich'));
             }
 
             $transportations = $request->get('transportations');
