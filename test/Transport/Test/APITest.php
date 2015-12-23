@@ -101,7 +101,8 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('WGS84', $stations[0]->coordinate->type);
     }
 
-    public function testGetStationBoard() {
+    public function testGetStationBoard()
+    {
         $response = new Response();
         $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2012-02-13.xml'));
 
@@ -114,14 +115,14 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb"><STBReq boardType="DEP" maxJourneys="40"><Time>23:55</Time><Period><DateBegin><Date>20120213</Date></DateBegin><DateEnd><Date>20120213</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
-')
+                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/stationboard/request_stationboard-2012-02-13.xml'))
             )
             ->will($this->returnValue($response));
 
-        $station = new Station('008591052'); // Z√ºrich, B√§ckeranlage
-        $journeys = $this->api->getStationBoard(new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00')));
+        $station = new Station('008591052'); // Zürich, Bäckeranlage
+        $stationBoardQuery = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2012-02-13T23:55:00+01:00'));
+        $stationBoardQuery->maxJourneys = 3;
+        $journeys = $this->api->getStationBoard($stationBoardQuery);
 
         $this->assertEquals(3, count($journeys));
         $this->assertEquals('2012-02-13T23:57:00+0100', $journeys[0]->stop->departure);
@@ -129,7 +130,8 @@ class APITest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2012-02-14T04:41:00+0100', $journeys[2]->stop->departure);
     }
 
-    public function testGetStationBoardDelay() {
+    public function testGetStationBoardDelay()
+    {
         $response = new Response();
         $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/stationboard/response_stationboard-2013-10-15.xml'));
 
@@ -142,14 +144,14 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo('<?xml version="1.0" encoding="iso-8859-1"?>
-<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb"><STBReq boardType="DEP" maxJourneys="40"><Time>22:20</Time><Period><DateBegin><Date>20131015</Date></DateBegin><DateEnd><Date>20131015</Date></DateEnd></Period><TableStation externalId="008591052"/><ProductFilter>1111111111111111</ProductFilter></STBReq></ReqC>
-')
+                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/stationboard/request_stationboard-2012-10-15.xml'))
             )
             ->will($this->returnValue($response));
 
-        $station = new Station('008591052'); // Z√ºrich, B√§ckeranlage
-        $journeys = $this->api->getStationBoard(new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2013-10-15T22:20:00+01:00')));
+        $station = new Station('008591052'); // Zürich, Bäckeranlage
+        $stationBoardQuery = new StationBoardQuery($station, \DateTime::createFromFormat(\DateTime::ISO8601, '2013-10-15T22:20:00+01:00'));
+        $stationBoardQuery->maxJourneys = 3;
+        $journeys = $this->api->getStationBoard($stationBoardQuery);
 
         $this->assertEquals(1, count($journeys));
         $this->assertEquals('2013-10-15T22:10:00+0100', $journeys[0]->stop->departure);
