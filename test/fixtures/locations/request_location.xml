@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb">
+  <LocValReq id="0" sMode="1">
+    <ReqLoc match="Be" type="ALLTYPE"/>
+  </LocValReq>
+</ReqC>

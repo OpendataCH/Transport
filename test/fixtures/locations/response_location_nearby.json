@@ -1,0 +1,26 @@
+{
+    "stations": [
+        {
+            "id": "8508489",
+            "name": "Kehrsiten-B\u00fcrgenstock",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 47.003066,
+                "y": 8.382324
+            },
+            "distance": 232.5
+        },
+        {
+            "id": "8579842",
+            "name": "Obb\u00fcrgen, Unter-Misli",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.994616,
+                "y": 8.385892
+            },
+            "distance": 1017.4
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.3.3" prod="5.41.SBB.4.15.7 [Dec  4 2015]" lang="EN">
+  <LocValRes flag="FINAL" id="0">
+    <Station name="Brügg BE" score="100" prodclass="32" externalId="008504416#95" externalStationNr="008504416" type="WGS84" x="7278206" y="47123629"/>
+    <Station name="Blausee BE" score="98" prodclass="64" externalId="008507507#85" externalStationNr="008507507" type="WGS84" x="7668248" y="46534314"/>
+    <Station name="Brügg BE, Jura" score="97" prodclass="64" externalId="008576420#95" externalStationNr="008576420" type="WGS84" x="7283294" y="47123458"/>
+    <Station name="Brügg BE, Pfeid" score="96" prodclass="64" externalId="008592482#95" externalStationNr="008592482" type="WGS84" x="7278242" y="47121373"/>
+    <Station name="Brienz BE, Engi" score="96" prodclass="64" externalId="008583066#95" externalStationNr="008583066" type="WGS84" x="8036778" y="46737722"/>
+    <Station name="Brügg BE, Bahnhof" score="96" prodclass="64" externalId="008576419#95" externalStationNr="008576419" type="WGS84" x="7278934" y="47123944"/>
+    <Station name="Brienz BE, Gärbi" score="96" prodclass="64" externalId="008576727#95" externalStationNr="008576727" type="WGS84" x="8033093" y="46754172"/>
+    <Station name="Renan BE" score="96" prodclass="104" externalId="008504312#85" externalStationNr="008504312" type="WGS84" x="6925370" y="47125715"/>
+    <Station name="Brienz BE, Bahnhof" score="96" prodclass="64" externalId="008576728#95" externalStationNr="008576728" type="WGS84" x="8038271" y="46754766"/>
+    <Station name="Brügg BE, Möschler" score="96" prodclass="64" externalId="008576447#95" externalStationNr="008576447" type="WGS84" x="7280714" y="47123989"/>
+    <Station name="Brienz BE, Fulbach" score="95" prodclass="64" externalId="008576739#95" externalStationNr="008576739" type="WGS84" x="8056249" y="46746541"/>
+    <Station name="Bargen BE, Bahnhof" score="95" prodclass="64" externalId="008581021#95" externalStationNr="008581021" type="WGS84" x="7260641" y="47040407"/>
+    <Station name="Brienz BE, Lauenen" score="95" prodclass="64" externalId="008576740#95" externalStationNr="008576740" type="WGS84" x="8061930" y="46748878"/>
+    <Station name="Bremgarten BE, Post" score="95" prodclass="64" externalId="008590067#95" externalStationNr="008590067" type="WGS84" x="7437315" y="46975595"/>
+    <Station name="Brügg BE, Bärletweg" score="95" prodclass="64" externalId="008576418#95" externalStationNr="008576418" type="WGS84" x="7277621" y="47125202"/>
+    <Station name="Brügg BE, Brüggfeld" score="95" prodclass="64" externalId="008592478#95" externalStationNr="008592478" type="WGS84" x="7266376" y="47124070"/>
+    <Station name="Brügg BE, Brüggmoos" score="95" prodclass="64" externalId="008592479#95" externalStationNr="008592479" type="WGS84" x="7265504" y="47119224"/>
+    <Station name="Brügg BE, Chaletweg" score="95" prodclass="64" externalId="008576416#95" externalStationNr="008576416" type="WGS84" x="7269720" y="47124510"/>
+    <Station name="Brügg BE, Sonnhalde" score="95" prodclass="64" externalId="008576417#95" externalStationNr="008576417" type="WGS84" x="7273639" y="47125184"/>
+    <Station name="Brienz BE, Lammbach" score="95" prodclass="64" externalId="008576737#85" externalStationNr="008576737" type="WGS84" x="8049201" y="46751629"/>
+    <Station name="Bäriswil BE, Brunnen" score="95" prodclass="64" externalId="008508894#95" externalStationNr="008508894" type="WGS84" x="7527674" y="47018923"/>
+    <Station name="Bäriswil BE, Mätteli" score="95" prodclass="64" externalId="008577030#95" externalStationNr="008577030" type="WGS84" x="7523611" y="47020541"/>
+    <Station name="Brügg BE, Mooswäldli" score="95" prodclass="64" externalId="008592481#95" externalStationNr="008592481" type="WGS84" x="7259095" y="47121337"/>
+    <Station name="Brienz BE, Buscheli" score="95" prodclass="64" externalId="008587231#95" externalStationNr="008587231" type="WGS84" x="8052869" y="46749570"/>
+    <Station name="Bremgarten BE, Chutze" score="95" prodclass="64" externalId="008589020#95" externalStationNr="008589020" type="WGS84" x="7437935" y="46972988"/>
+    <Station name="Bremgarten BE, Ländli" score="95" prodclass="64" externalId="008589023#95" externalStationNr="008589023" type="WGS84" x="7433377" y="46972808"/>
+    <Station name="Bremgarten BE, Seftau" score="95" prodclass="64" externalId="008588551#95" externalStationNr="008588551" type="WGS84" x="7437216" y="46970318"/>
+    <Station name="Brienz BE, Glyssibach" score="95" prodclass="64" externalId="008581559#95" externalStationNr="008581559" type="WGS84" x="8045336" y="46753435"/>
+    <Station name="Buchen BE, Schulhaus" score="95" prodclass="64" externalId="008571720#95" externalStationNr="008571720" type="WGS84" x="7699278" y="46779055"/>
+    <Station name="Brienz BE, Stegmatte" score="95" prodclass="64" externalId="008588413#95" externalStationNr="008588413" type="WGS84" x="8059521" y="46740931"/>
+  </LocValRes>
+</ResC>

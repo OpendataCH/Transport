@@ -43,6 +43,8 @@ function downloadJson($url, $file) {
 // Location
 $query = new LocationQuery(array('from' => 'Züri', 'to' => 'Bern'));
 download($query, 'response_location.xml');
+$query = new LocationQuery('Be');
+download($query, 'locations/response_location.xml');
 
 // Connection
 $from = new Station('008503000');
