@@ -62,7 +62,7 @@ class ConnectionsTest extends IntegrationTest
         $crawler = $client->request('GET', '/v1/connections', array('from' => 'Zürich', 'to' => 'Bern'));
 
         $this->assertEquals($this->getFixture('connections/response_error.json'), $this->json($client->getResponse()));
-        $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals(500, $client->getResponse()->getStatusCode());
     }
 
     public function testFindConnections500()
@@ -79,6 +79,6 @@ class ConnectionsTest extends IntegrationTest
                     $crawler = $client->request('GET', '/v1/connections', array('from' => 'Zürich', 'to' => 'Bern'));
 
         $this->assertEquals($this->getFixture('connections/response_500.json'), $this->json($client->getResponse()));
-        $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals(500, $client->getResponse()->getStatusCode());
     }
 }
