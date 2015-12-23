@@ -8,7 +8,7 @@ use Transport\Entity\Schedule\Connection;
 class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 {
     protected function getConnection()
-    {   
+    {
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-16T16:10:00+0100';
         $from->departureTimestamp = 1326726600;
@@ -165,9 +165,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/archive/connection-2012-01-16.xml');
+        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/connections/hafas_response_2012-01-16.xml');
 
         $this->assertEquals($this->getConnection(), Connection::createFromXml($xml->ConRes->ConnectionList->Connection));
     }
 }
-

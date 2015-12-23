@@ -87,7 +87,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/archive/connection-2012-01-31.xml');
+        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/connections/hafas_response_2012-01-31.xml');
         $this->assertEquals($this->getConnection(), Connection::createFromXml($xml->ConRes->ConnectionList->Connection));
     }
 }

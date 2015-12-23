@@ -17,8 +17,8 @@ class StationBoardTest extends IntegrationTest
     public function stationBoardProvider()
     {
         return array(
-            array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2012-02-13T23:55:00'), 'request_stationboard-2012-02-13.xml', 'response_stationboard-2012-02-13.xml', 'response_stationboard-2012-02-13.json'),
-            array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2013-10-15T22:20:00'), 'request_stationboard-2013-10-15.xml', 'response_stationboard-2013-10-15.xml', 'response_stationboard-2013-10-15.json'),
+            array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2012-02-13T23:55:00'), 'hafas_request_2012-02-13.xml', 'hafas_response_2012-02-13.xml', 'response_2012-02-13.json'),
+            array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2013-10-15T22:20:00'), 'hafas_request_2013-10-15.xml', 'hafas_response_2013-10-15.xml', 'response_2013-10-15.json'),
         );
     }
 
@@ -28,7 +28,7 @@ class StationBoardTest extends IntegrationTest
     public function testGetStationBoard($parameters, $hafasRequest, $hafasResponse, $response)
     {
         $responseLocation = new Response();
-        $responseLocation->setContent($this->getFixture('stationboard/response_location.xml'));
+        $responseLocation->setContent($this->getFixture('stationboard/hafas_response_location.xml'));
 
         $responseStationBoard = new Response();
         $responseStationBoard->setContent($this->getFixture('stationboard/' . $hafasResponse));
@@ -36,7 +36,7 @@ class StationBoardTest extends IntegrationTest
         $this->getBrowser()->expects($this->any())
             ->method('post')
             ->withConsecutive(
-                array($this->equalTo($this->url), $this->equalTo($this->headers), $this->equalTo($this->getXmlFixture('stationboard/request_location.xml'))),
+                array($this->equalTo($this->url), $this->equalTo($this->headers), $this->equalTo($this->getXmlFixture('stationboard/hafas_request_location.xml'))),
                 array($this->equalTo($this->url), $this->equalTo($this->headers), $this->equalTo($this->getXmlFixture('stationboard/' . $hafasRequest)))
             )
             ->will($this->onConsecutiveCalls($responseLocation, $responseStationBoard));

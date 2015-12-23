@@ -9,12 +9,12 @@ class LocationsTest extends IntegrationTest
     public function testGetLocation()
     {
         $response = new Response();
-        $response->setContent($this->getFixture('locations/response_location.xml'));
+        $response->setContent($this->getFixture('locations/hafas_response.xml'));
 
         $this->getBrowser()->expects($this->any())
             ->method('post')
             ->withConsecutive(
-                array($this->anything(), $this->anything(), $this->equalTo($this->getXmlFixture('locations/request_location.xml')))
+                array($this->anything(), $this->anything(), $this->equalTo($this->getXmlFixture('locations/hafas_request.xml')))
             )
             ->will($this->onConsecutiveCalls($response));
 
@@ -23,14 +23,14 @@ class LocationsTest extends IntegrationTest
             'query' => 'Be',
         ));
 
-        $this->assertEquals($this->getFixture('locations/response_location.json'), $this->json($client->getResponse()));
+        $this->assertEquals($this->getFixture('locations/response.json'), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());
     }
 
     public function testGetNearbyLocation()
     {
         $response = new Response();
-        $response->setContent($this->getFixture('location.json'));
+        $response->setContent($this->getFixture('locations/hafas_response_nearby.json'));
 
         $this->getBrowser()->expects($this->any())
             ->method('get')
@@ -45,7 +45,7 @@ class LocationsTest extends IntegrationTest
             'y' => '8.379934',
         ));
 
-        $this->assertEquals($this->getFixture('locations/response_location_nearby.json'), $this->json($client->getResponse()));
+        $this->assertEquals($this->getFixture('locations/response_nearby.json'), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());
     }
 }

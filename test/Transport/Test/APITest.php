@@ -20,7 +20,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindLocationsArray()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/response_location.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/connections/hafas_response_location.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
@@ -31,7 +31,7 @@ class APITest extends \PHPUnit_Framework_TestCase
                         'Accept: application/xml',
                         'Content-Type: application/xml'
                 )),
-                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/request_location.xml'))
+                $this->equalTo(simplexml_load_file(__DIR__ . '/../../fixtures/connections/hafas_request_location.xml'))
             )
             ->will($this->returnValue($response));
 
@@ -51,7 +51,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindNearbyLocationsArray()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location.json'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/locations/hafas_response_nearby.json'));
 
         $this->browser->expects($this->once())
                 ->method('get')
@@ -79,7 +79,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindNearbyLocationsNyon()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/location-nyon.json'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/locations/hafas_response_nyon.json'));
 
         $this->browser->expects($this->once())
             ->method('get')
@@ -107,7 +107,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindConnectionsError()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/error.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/hafas_response_error.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
@@ -132,7 +132,7 @@ class APITest extends \PHPUnit_Framework_TestCase
     public function testFindConnections500()
     {
         $response = new Response();
-        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/500.xml'));
+        $response->setContent(file_get_contents(__DIR__ . '/../../fixtures/hafas_response_500.xml'));
 
         $this->browser->expects($this->once())
             ->method('post')
