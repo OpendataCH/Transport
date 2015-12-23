@@ -1,0 +1,8 @@
+'{
+    "errors": [
+        {
+            "message": "Invalid XML from fahrplan.sbb.ch: <!DOCTYPE HTML PUBLIC \"-\/\/IETF\/\/DTD HTML 2.0\/\/EN\">\n<html><head>\n<title>500 Internal Server Error<\/title>\n<\/head><body>\n<h1>Internal Server Error<\/h1>\n<p>The server encountered an internal error or\nmisconfiguration and was unable to complete\nyour request.<\/p>\n<p>Please contact the server administrator,\ninternetfahrplan@sbb.ch and inform them of the time the error occurred,\nand anything you might have done that may have\ncaused the error.<\/p>\n<p>More information about this error may be available\nin the server error log.<\/p>\n<\/body><\/html>\n"
+        }
+    ]
+}
+'

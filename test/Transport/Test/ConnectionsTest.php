@@ -47,4 +47,38 @@ class ConnectionsTest extends IntegrationTest
         $this->assertEquals($this->getFixture('connections/' . $response), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());
     }
+
+    public function testFindConnectionsError()
+    {
+        $response = new Response();
+        $response->setContent($this->getFixture('connections/hafas_response_error.xml'));
+
+        $this->browser->expects($this->once())
+            ->method('post')
+            ->with($this->equalTo($this->url))
+            ->will($this->returnValue($response));
+
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/v1/connections', array('from' => 'Zürich', 'to' => 'Bern'));
+
+        $this->assertEquals($this->getFixture('connections/response_error.json'), $this->json($client->getResponse()));
+        $this->assertTrue($client->getResponse()->isOk());
+    }
+
+    public function testFindConnections500()
+    {
+        $response = new Response();
+        $response->setContent($this->getFixture('connections/hafas_response_500.xml'));
+
+        $this->browser->expects($this->once())
+            ->method('post')
+            ->with($this->equalTo($this->url))
+            ->will($this->returnValue($response));
+
+                    $client = $this->createClient();
+                    $crawler = $client->request('GET', '/v1/connections', array('from' => 'Zürich', 'to' => 'Bern'));
+
+        $this->assertEquals($this->getFixture('connections/response_500.json'), $this->json($client->getResponse()));
+        $this->assertTrue($client->getResponse()->isOk());
+    }
 }
