@@ -20,6 +20,7 @@ class StationBoardTest extends IntegrationTest
             array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2012-02-13T23:55:00'), 'hafas_request_2012-02-13.xml', 'hafas_response_2012-02-13.xml', 'response_2012-02-13.json'),
             array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2013-10-15T22:20:00'), 'hafas_request_2013-10-15.xml', 'hafas_response_2013-10-15.xml', 'response_2013-10-15.json'), // delay
             array(array('station' => '008591052', 'limit' => '3', 'datetime' => '2015-12-23T14:20:00'), 'hafas_request_2015-12-23.xml', 'hafas_response_2015-12-23.xml', 'response_2015-12-23.json'),
+            array(array('station' => '008591052', 'limit' => '1', 'datetime' => '2016-01-17T23:30:00'), 'hafas_request_2016-01-17.xml', 'hafas_response_2016-01-17.xml', 'response_2016-01-17.json'), // midnight delay
         );
     }
 

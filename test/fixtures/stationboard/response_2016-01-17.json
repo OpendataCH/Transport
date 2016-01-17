@@ -1,0 +1,180 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8507000",
+                    "name": "Bern",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 46.948825,
+                        "y": 7.439122
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2016-01-17T23:02:00+0100",
+                "departureTimestamp": 1453068120,
+                "delay": -1348,
+                "platform": "6",
+                "prognosis": {
+                    "platform": "7",
+                    "arrival": null,
+                    "departure": "2016-01-17T00:34:00+0100",
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8507000",
+                    "name": "Bern",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 46.948825,
+                        "y": 7.439122
+                    },
+                    "distance": null
+                }
+            },
+            "name": "TGV 9225",
+            "category": "TGV",
+            "categoryCode": 0,
+            "number": "9225",
+            "operator": "SBB",
+            "to": "Interlaken Ost",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8507000",
+                        "name": "Bern",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.948825,
+                            "y": 7.439122
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-17T23:02:00+0100",
+                    "arrivalTimestamp": 1453068120,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8507000",
+                        "name": "Bern",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.948825,
+                            "y": 7.439122
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8507493",
+                        "name": "Interlaken West",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.682627,
+                            "y": 7.851439
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-17T23:48:00+0100",
+                    "arrivalTimestamp": 1453070880,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8507493",
+                        "name": "Interlaken West",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.682627,
+                            "y": 7.851439
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8507492",
+                        "name": "Interlaken Ost",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.690502,
+                            "y": 7.869004
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-17T23:53:00+0100",
+                    "arrivalTimestamp": 1453071180,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8507492",
+                        "name": "Interlaken Ost",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.690502,
+                            "y": 7.869004
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "TGV"
+        }
+    ]
+}

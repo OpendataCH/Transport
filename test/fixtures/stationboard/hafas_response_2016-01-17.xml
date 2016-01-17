@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.41.SBB.4.15.7" lang="EN">
+  <STBRes>
+    <JourneyList>
+      <STBJourney>
+        <JHandle tNr="20987" puic="095" cycle="00"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Bern" x="7439122" y="46948825" type="WGS84" externalId="8507000#95" externalStationNr="8507000"/>
+            <Dep>
+              <Time>23:02</Time>
+              <Platform>
+                <Text>6</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Time>00:34</Time>
+                <Platform>
+                  <Text>7</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV 9225</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="CATEGORY" code="0">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>9225</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Interlaken Ost</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Train à grande vit. 9225</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV 9225</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="3" to="5">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>TGV 9225</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="5">
+            <Attribute priority="6" type="NORMAL" code="GN">
+              <AttributeVariant type="NORMAL">
+                <Text>GROUPS: Transport not admitted</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="5">
+            <Attribute priority="6" type="NORMAL" code="VN">
+              <AttributeVariant type="NORMAL">
+                <Text>BICYCLES: No self-service loading by sender</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Bern" x="7439122" y="46948825" type="WGS84" externalId="8507000#95" externalStationNr="8507000"/>
+            <Arr>
+              <Time>23:02</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Interlaken West" x="7851439" y="46682627" type="WGS84" externalId="8507493#95" externalStationNr="8507493"/>
+            <Arr>
+              <Time>23:48</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Interlaken Ost" x="7869004" y="46690502" type="WGS84" externalId="8507492#95" externalStationNr="8507492"/>
+            <Arr>
+              <Time>23:53</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text/>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+        <IList>
+          <I header="Delay: TGV 9225 Paris-Gare de Lyon - Interlaken Ost" lead="TGV 9225 from Paris-Gare de Lyon departure 18:23 to Interlaken Ost arrival 23:53 will be leaving Dijon Ville 1 hour 45 minutes late." text="TGV 9225 from Paris-Gare de Lyon departure 18:23 via Dijon Ville 20:01 - Mulhouse Ville 21:06 - Basel SBB 21:36 - Olten 22:02 - Bern 23:02 - Interlaken West 23:49 to Interlaken Ost arrival 23:53 will be leaving Dijon Ville 1 hour 45 minutes late.&lt;br /&gt;&lt;br /&gt; Passengers travelling from Basel SBB to Bern should take the InterCity (IC) 1091 21:31 to Bern 22:24. &lt;br /&gt;&lt;br /&gt; Reason: Technical fault with the railway Installation" type="" dep="Paris-Gare de Lyon" arr="Interlaken Ost" symbol="3" channel="0" locType="5"/>
+        </IList>
+      </STBJourney>
+    </JourneyList>
+  </STBRes>
+</ResC>
