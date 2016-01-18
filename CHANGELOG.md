@@ -3,6 +3,7 @@
 ## 2016-01-18
 
 - #75 Fixes for delays around midnight in stationboard
+- Added scripts for quick capture of fixtures
 
 ## 2015-12-23
 
