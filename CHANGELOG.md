@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-01-18
+
+- #75 Fixes for delays around midnight in stationboard
+
 ## 2015-12-23
 
 - Refactored Silex application
