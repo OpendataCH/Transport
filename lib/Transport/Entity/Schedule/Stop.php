@@ -22,7 +22,7 @@ class Stop
     public $platform;
 
     public $prognosis;
-    
+
     public $realtimeAvailability;
 
     public function __construct()
@@ -37,7 +37,7 @@ class Stop
      * @param   \DateTime	$date       The date
      * @return  \DateTime  The parsed time in ISO format
      */
-    static public function calculateDateTime($time, \DateTime $date)
+    static public function calculateDateTime($time, \DateTime $date, $relativeDate = false)
     {
         $offset = 0;
         if (substr($time, 2, 1) == 'd') {
@@ -50,6 +50,10 @@ class Stop
         $timeObj = \DateTime::createFromFormat('H:i:s', $time, $date->getTimezone());
         if ($timeObj === false) {
             $timeObj = \DateTime::createFromFormat('H:i', $time, $date->getTimezone());
+        }
+        if ($relativeDate && strtotime($date->format('H:i:s')) > strtotime($timeObj->format('H:i:s'))) {
+            // we passed midnight
+            $date->add(new \DateInterval('P1D'));
         }
         $date->setTime($timeObj->format('H'), $timeObj->format('i'), $timeObj->format('s'));
 
@@ -99,7 +103,7 @@ class Stop
                 $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
             }
         }
-        
+
         if ($xml->StAttrList) {
             foreach ($xml->StAttrList->StAttr as $attr) {
                 if ($attr["code"] == "RA" ) {

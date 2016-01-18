@@ -28,12 +28,12 @@
                 "arrivalTimestamp": null,
                 "departure": "2016-01-17T23:02:00+0100",
                 "departureTimestamp": 1453068120,
-                "delay": -1348,
+                "delay": 92,
                 "platform": "6",
                 "prognosis": {
                     "platform": "7",
                     "arrival": null,
-                    "departure": "2016-01-17T00:34:00+0100",
+                    "departure": "2016-01-18T00:34:00+0100",
                     "capacity1st": 1,
                     "capacity2nd": 1
                 },

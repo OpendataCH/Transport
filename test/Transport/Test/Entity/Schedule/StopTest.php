@@ -15,7 +15,7 @@ class StopTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->date = \DateTime::createFromFormat('Y-m-d', '2012-03-30', new \DateTimeZone('Europe/Zurich'));
-        $this->date->setTime(0, 0, 0);
+        $this->date->setTime(16, 30, 0);
     }
 
     public function testParseDateTimeOffset()
@@ -32,5 +32,14 @@ class StopTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('2012-03-30T13:03:59+0200', Stop::calculateDateTime('13:03:59', $this->date)->format(\DateTime::ISO8601));
     }
-}
 
+    public function testParseDateTimeMidnight()
+    {
+        $this->assertEquals('2012-03-30T00:30:00+0200', Stop::calculateDateTime('00:30', $this->date)->format(\DateTime::ISO8601));
+    }
+
+    public function testParseDateTimeRelativeDateMidnight()
+    {
+        $this->assertEquals('2012-03-31T00:30:00+0200', Stop::calculateDateTime('00:30', $this->date, true)->format(\DateTime::ISO8601));
+    }
+}

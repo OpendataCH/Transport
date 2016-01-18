@@ -32,13 +32,13 @@ class Prognosis
 
         if ($xml->Arr) {
             if ($xml->Arr->Time) {
-                $obj->arrival = Stop::calculateDateTime((string) $xml->Arr->Time, $date)->format(\DateTime::ISO8601);
+                $obj->arrival = Stop::calculateDateTime((string) $xml->Arr->Time, $date, true)->format(\DateTime::ISO8601);
             }
         }
 
         if ($xml->Dep) {
             if ($xml->Dep->Time) {
-                $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date)->format(\DateTime::ISO8601);
+                $obj->departure = Stop::calculateDateTime((string) $xml->Dep->Time, $date, true)->format(\DateTime::ISO8601);
             }
         }
 
