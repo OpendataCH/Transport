@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.0" prod="HAFAS 5.41.SBB.4.15.7" lang="EN">
+  <STBRes>
+    <JourneyList>
+      <STBJourney>
+        <JHandle tNr="21187" puic="095" cycle="00"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Dep>
+              <Time>23:48</Time>
+              <Platform>
+                <Text>11</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Platform>
+                  <Text>11</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>S 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="CATEGORY" code="5">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Del�mont</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>S 3</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Urban train 3 17390</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>S 3 17390</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="19">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>S 3 17390</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Tecknau" x="7887602" y="47445758" type="WGS84" externalId="8500028#95" externalStationNr="8500028"/>
+            <Arr>
+              <Time>23:54</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Gelterkinden" x="7847654" y="47465884" type="WGS84" externalId="8500027#95" externalStationNr="8500027"/>
+            <Arr>
+              <Time>23:59</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Sissach" x="7812021" y="47462747" type="WGS84" externalId="8500026#95" externalStationNr="8500026"/>
+            <Arr>
+              <Time>00:02</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Liestal" x="7731352" y="47484456" type="WGS84" externalId="8500023#95" externalStationNr="8500023"/>
+            <Arr>
+              <Time>00:10</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Pratteln" x="7690802" y="47522660" type="WGS84" externalId="8500021#95" externalStationNr="8500021"/>
+            <Arr>
+              <Time>00:17</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Muttenz" x="7647878" y="47533582" type="WGS84" externalId="8500020#95" externalStationNr="8500020"/>
+            <Arr>
+              <Time>00:20</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Basel SBB" x="7589547" y="47547408" type="WGS84" externalId="8500010#95" externalStationNr="8500010"/>
+            <Arr>
+              <Time>00:26</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Laufen" x="7502630" y="47419338" type="WGS84" externalId="8500113#95" externalStationNr="8500113"/>
+            <Arr>
+              <Time>01:02</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Del�mont" x="7350056" y="47361996" type="WGS84" externalId="8500109#95" externalStationNr="8500109"/>
+            <Arr>
+              <Time>01:17</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+          </ServiceDays>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text/>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="19950" puic="095" cycle="00"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Dep>
+              <Time>00:04</Time>
+              <Platform>
+                <Text>8</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Time>00:14</Time>
+                <Platform>
+                  <Text>8</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>IC 740</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="CATEGORY" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>IC</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>IC</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>740</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Bern</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>IC</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>InterCity 740</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>IC 740</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="1" to="3">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>IC 740</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="3">
+            <Attribute priority="4" type="NORMAL" code="FZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Family zone without play area</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="3">
+            <Attribute priority="4" type="NORMAL" code="BZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Business zone in 1st class: Reservation possible</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="3">
+            <Attribute priority="4" type="NORMAL" code="RZ">
+              <AttributeVariant type="NORMAL">
+                <Text>Quiet zone in 1st class</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Arr>
+              <Time>00:04</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern" x="7439122" y="46948825" type="WGS84" externalId="8507000#95" externalStationNr="8507000"/>
+            <Arr>
+              <Time>00:31</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text>19.   11.  2016  - ;  7.  2016</Text>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+      <STBJourney>
+        <JHandle tNr="20743" puic="095" cycle="00"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Dep>
+              <Time>00:05</Time>
+              <Platform>
+                <Text>9</Text>
+              </Platform>
+            </Dep>
+            <StopPrognosis>
+              <Dep>
+                <Platform>
+                  <Text>9</Text>
+                </Platform>
+              </Dep>
+              <Capacity1st>1</Capacity1st>
+              <Capacity2nd>1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>S 23</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="CATEGORY" code="5">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>S</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SBB</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>23</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Baden</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>S 23</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Urban train 23 8493</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>S 23 8493</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="5" to="17">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>S 23 8493</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Olten" x="7907684" y="47351928" type="WGS84" externalId="8500218#95" externalStationNr="8500218"/>
+            <Arr>
+              <Time>00:05</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Dulliken" x="7946491" y="47354265" type="WGS84" externalId="8502110#95" externalStationNr="8502110"/>
+            <Arr>
+              <Time>00:08</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="D�niken" x="7978753" y="47356387" type="WGS84" externalId="8502111#95" externalStationNr="8502111"/>
+            <Arr>
+              <Time>00:11</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Sch�nenwerd SO" x="8000156" y="47371426" type="WGS84" externalId="8502112#95" externalStationNr="8502112"/>
+            <Arr>
+              <Time>00:14</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Aarau" x="8051251" y="47391355" type="WGS84" externalId="8502113#95" externalStationNr="8502113"/>
+            <Arr>
+              <Time>00:19</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Rupperswil" x="8126940" y="47403284" type="WGS84" externalId="8502114#95" externalStationNr="8502114"/>
+            <Arr>
+              <Time>00:24</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Lenzburg" x="8170376" y="47391193" type="WGS84" externalId="8502119#95" externalStationNr="8502119"/>
+            <Arr>
+              <Time>00:28</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Brugg AG" x="8208823" y="47480851" type="WGS84" externalId="8500309#95" externalStationNr="8500309"/>
+            <Arr>
+              <Time>00:44</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Turgi" x="8253436" y="47491755" type="WGS84" externalId="8503503#95" externalStationNr="8503503"/>
+            <Arr>
+              <Time>00:49</Time>
+            </Arr>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Baden" x="8307695" y="47476420" type="WGS84" externalId="8503504#95" externalStationNr="8503504"/>
+            <Arr>
+              <Time>00:55</Time>
+            </Arr>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+    </JourneyList>
+  </STBRes>
+</ResC>

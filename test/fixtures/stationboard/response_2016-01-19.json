@@ -1,0 +1,966 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2016-01-19T23:48:00+0100",
+                "departureTimestamp": 1453243680,
+                "delay": null,
+                "platform": "11",
+                "prognosis": {
+                    "platform": "11",
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                }
+            },
+            "name": "S 3",
+            "category": "S",
+            "categoryCode": 5,
+            "number": "3",
+            "operator": "SBB",
+            "to": "Del\u00ef\u00bf\u00bdmont",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8500028",
+                        "name": "Tecknau",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.445758,
+                            "y": 7.887602
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T23:54:00+0100",
+                    "arrivalTimestamp": 1453244040,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500028",
+                        "name": "Tecknau",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.445758,
+                            "y": 7.887602
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500027",
+                        "name": "Gelterkinden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.465884,
+                            "y": 7.847654
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T23:59:00+0100",
+                    "arrivalTimestamp": 1453244340,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500027",
+                        "name": "Gelterkinden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.465884,
+                            "y": 7.847654
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500026",
+                        "name": "Sissach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.462747,
+                            "y": 7.812021
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T00:02:00+0100",
+                    "arrivalTimestamp": 1453158120,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500026",
+                        "name": "Sissach",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.462747,
+                            "y": 7.812021
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500023",
+                        "name": "Liestal",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.484456,
+                            "y": 7.731352
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T00:10:00+0100",
+                    "arrivalTimestamp": 1453158600,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500023",
+                        "name": "Liestal",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.484456,
+                            "y": 7.731352
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500021",
+                        "name": "Pratteln",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.52266,
+                            "y": 7.690802
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T00:17:00+0100",
+                    "arrivalTimestamp": 1453159020,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500021",
+                        "name": "Pratteln",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.52266,
+                            "y": 7.690802
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500020",
+                        "name": "Muttenz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.533582,
+                            "y": 7.647878
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T00:20:00+0100",
+                    "arrivalTimestamp": 1453159200,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500020",
+                        "name": "Muttenz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.533582,
+                            "y": 7.647878
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500010",
+                        "name": "Basel SBB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.547408,
+                            "y": 7.589547
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T00:26:00+0100",
+                    "arrivalTimestamp": 1453159560,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500010",
+                        "name": "Basel SBB",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.547408,
+                            "y": 7.589547
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500113",
+                        "name": "Laufen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.419338,
+                            "y": 7.50263
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T01:02:00+0100",
+                    "arrivalTimestamp": 1453161720,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500113",
+                        "name": "Laufen",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.419338,
+                            "y": 7.50263
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500109",
+                        "name": "Del\u00ef\u00bf\u00bdmont",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.361996,
+                            "y": 7.350056
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-19T01:17:00+0100",
+                    "arrivalTimestamp": 1453162620,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500109",
+                        "name": "Del\u00ef\u00bf\u00bdmont",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.361996,
+                            "y": 7.350056
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "S"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2016-01-20T00:04:00+0100",
+                "departureTimestamp": 1453244640,
+                "delay": 10,
+                "platform": "8",
+                "prognosis": {
+                    "platform": "8",
+                    "arrival": null,
+                    "departure": "2016-01-20T00:14:00+0100",
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                }
+            },
+            "name": "IC 740",
+            "category": "IC",
+            "categoryCode": 1,
+            "number": "740",
+            "operator": "SBB",
+            "to": "Bern",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:04:00+0100",
+                    "arrivalTimestamp": 1453244640,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8507000",
+                        "name": "Bern",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.948825,
+                            "y": 7.439122
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:31:00+0100",
+                    "arrivalTimestamp": 1453246260,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8507000",
+                        "name": "Bern",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.948825,
+                            "y": 7.439122
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "IC"
+        },
+        {
+            "stop": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2016-01-20T00:05:00+0100",
+                "departureTimestamp": 1453244700,
+                "delay": null,
+                "platform": "9",
+                "prognosis": {
+                    "platform": "9",
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": 1,
+                    "capacity2nd": 1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351928,
+                        "y": 7.907684
+                    },
+                    "distance": null
+                }
+            },
+            "name": "S 23",
+            "category": "S",
+            "categoryCode": 5,
+            "number": "23",
+            "operator": "SBB",
+            "to": "Baden",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:05:00+0100",
+                    "arrivalTimestamp": 1453244700,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500218",
+                        "name": "Olten",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.351928,
+                            "y": 7.907684
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502110",
+                        "name": "Dulliken",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.354265,
+                            "y": 7.946491
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:08:00+0100",
+                    "arrivalTimestamp": 1453244880,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502110",
+                        "name": "Dulliken",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.354265,
+                            "y": 7.946491
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502111",
+                        "name": "D\u00ef\u00bf\u00bdniken",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.356387,
+                            "y": 7.978753
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:11:00+0100",
+                    "arrivalTimestamp": 1453245060,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502111",
+                        "name": "D\u00ef\u00bf\u00bdniken",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.356387,
+                            "y": 7.978753
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502112",
+                        "name": "Sch\u00ef\u00bf\u00bdnenwerd SO",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.371426,
+                            "y": 8.000156
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:14:00+0100",
+                    "arrivalTimestamp": 1453245240,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502112",
+                        "name": "Sch\u00ef\u00bf\u00bdnenwerd SO",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.371426,
+                            "y": 8.000156
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502113",
+                        "name": "Aarau",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391355,
+                            "y": 8.051251
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:19:00+0100",
+                    "arrivalTimestamp": 1453245540,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502113",
+                        "name": "Aarau",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391355,
+                            "y": 8.051251
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502114",
+                        "name": "Rupperswil",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.403284,
+                            "y": 8.12694
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:24:00+0100",
+                    "arrivalTimestamp": 1453245840,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502114",
+                        "name": "Rupperswil",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.403284,
+                            "y": 8.12694
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8502119",
+                        "name": "Lenzburg",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391193,
+                            "y": 8.170376
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:28:00+0100",
+                    "arrivalTimestamp": 1453246080,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8502119",
+                        "name": "Lenzburg",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.391193,
+                            "y": 8.170376
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8500309",
+                        "name": "Brugg AG",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.480851,
+                            "y": 8.208823
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:44:00+0100",
+                    "arrivalTimestamp": 1453247040,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8500309",
+                        "name": "Brugg AG",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.480851,
+                            "y": 8.208823
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503503",
+                        "name": "Turgi",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.491755,
+                            "y": 8.253436
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:49:00+0100",
+                    "arrivalTimestamp": 1453247340,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503503",
+                        "name": "Turgi",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.491755,
+                            "y": 8.253436
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8503504",
+                        "name": "Baden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.47642,
+                            "y": 8.307695
+                        },
+                        "distance": null
+                    },
+                    "arrival": "2016-01-20T00:55:00+0100",
+                    "arrivalTimestamp": 1453247700,
+                    "departure": null,
+                    "departureTimestamp": null,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8503504",
+                        "name": "Baden",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 47.47642,
+                            "y": 8.307695
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "subcategory": "S"
+        }
+    ]
+}
