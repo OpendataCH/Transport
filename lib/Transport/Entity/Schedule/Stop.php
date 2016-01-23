@@ -34,28 +34,49 @@ class Stop
      * Calculates a datetime by parsing the time and date given
      *
      * @param   string		$time		The time to parse, can contain an optional offset prefix (e.g., "02d")
-     * @param   \DateTime	$date       The date
+     * @param   \DateTime	$referenceDate    The date
      * @return  \DateTime  The parsed time in ISO format
      */
-    static public function calculateDateTime($time, \DateTime $date, $relativeDate = false)
+    static public function calculateDateTime($time, \DateTime $referenceDate, $stopPrognosis = null)
     {
+        // prevent changing the reference
+        $date = clone $referenceDate;
+
         $offset = 0;
+
         if (substr($time, 2, 1) == 'd') {
             $offset = substr($time, 0, 2);
             $time = substr($time, 3);
         }
-        // Prevent changing the reference
-        $date = clone $date;
-        $date->add(new \DateInterval('P' . $offset . 'D'));
+
         $timeObj = \DateTime::createFromFormat('H:i:s', $time, $date->getTimezone());
         if ($timeObj === false) {
             $timeObj = \DateTime::createFromFormat('H:i', $time, $date->getTimezone());
         }
-        if ($relativeDate && strtotime($date->format('H:i:s')) > strtotime($timeObj->format('H:i:s'))) {
-            // we passed midnight
-            $date->add(new \DateInterval('P1D'));
-        }
+
         $date->setTime($timeObj->format('H'), $timeObj->format('i'), $timeObj->format('s'));
+
+        // check for passed midnight
+        $referenceTime = strtotime($referenceDate->format('H:i'));
+        $dateTime = strtotime($date->format('H:i'));
+
+        if (isset($stopPrognosis->Dep->Time)) {
+
+            $prognosisTime = strtotime((string) $stopPrognosis->Dep->Time);
+
+            if ($dateTime < $referenceTime && $prognosisTime < $referenceTime && ($dateTime - $prognosisTime) < 0) {
+
+                // we passed midnight
+                $offset = 1;
+            }
+
+        } elseif ($dateTime < $referenceTime) {
+
+            // we passed midnight
+            $offset = 1;
+        }
+
+        $date->add(new \DateInterval('P' . $offset . 'D'));
 
         return $date;
     }
@@ -65,9 +86,6 @@ class Stop
         if (!$obj) {
             $obj = new Stop();
         }
-
-        $dateTime = null;
-        $isArrival = false;
 
         $obj->station = Entity\Location\Station::createFromXml($xml->Station); // deprecated, use location instead
 
@@ -80,20 +98,22 @@ class Stop
             }
         }
 
+        $isArrival = false;
         if ($xml->Arr) {
             $isArrival = true;
-            $dateTime = self::calculateDateTime((string) $xml->Arr->Time, $date);
-            $obj->arrival = $dateTime->format(\DateTime::ISO8601);
-            $obj->arrivalTimestamp = $dateTime->getTimestamp();
+            $arrivalDate = self::calculateDateTime((string) $xml->Arr->Time, $date, $xml->StopPrognosis);
+            $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
+            $obj->arrivalTimestamp = $arrivalDate->getTimestamp();
             $obj->platform = trim((string) $xml->Arr->Platform->Text);
         }
         if ($xml->Dep) {
-            $dateTime = self::calculateDateTime((string) $xml->Dep->Time, $date);
-            $obj->departure = $dateTime->format(\DateTime::ISO8601);
-            $obj->departureTimestamp = $dateTime->getTimestamp();
+            $departureDate = self::calculateDateTime((string) $xml->Dep->Time, $date, $xml->StopPrognosis);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
             $obj->platform = trim((string) $xml->Dep->Platform->Text);
         }
-        $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $dateTime, $isArrival);
+
+        $obj->prognosis = Prognosis::createFromXml($xml->StopPrognosis, $date, $isArrival);
 
         if ($obj->prognosis) {
             if ($obj->prognosis->arrival && $obj->arrival) {

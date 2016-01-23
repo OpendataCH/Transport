@@ -6,7 +6,6 @@ use Transport\Entity\Schedule\Stop;
 
 class StopTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \DateTime
      */
@@ -14,8 +13,7 @@ class StopTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->date = \DateTime::createFromFormat('Y-m-d', '2012-03-30', new \DateTimeZone('Europe/Zurich'));
-        $this->date->setTime(16, 30, 0);
+        $this->date = new \DateTime('2012-03-30T12:30:00+0200');
     }
 
     public function testParseDateTimeOffset()
@@ -35,11 +33,6 @@ class StopTest extends \PHPUnit_Framework_TestCase
 
     public function testParseDateTimeMidnight()
     {
-        $this->assertEquals('2012-03-30T00:30:00+0200', Stop::calculateDateTime('00:30', $this->date)->format(\DateTime::ISO8601));
-    }
-
-    public function testParseDateTimeRelativeDateMidnight()
-    {
-        $this->assertEquals('2012-03-31T00:30:00+0200', Stop::calculateDateTime('00:30', $this->date, true)->format(\DateTime::ISO8601));
+        $this->assertEquals('2012-03-31T00:30:00+0200', Stop::calculateDateTime('00:30', $this->date)->format(\DateTime::ISO8601));
     }
 }

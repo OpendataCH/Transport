@@ -193,27 +193,13 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        // since the stationboard always lists all connections starting from now we just use the date
-        // and wrap it accordingly if time goes over midnight
-        $journeys = array();
-        // subtract one minute because SBB also returns results for one minute in the past
-        $prevTime = strtotime($query->date->format('H:i')) - 60;
         $date = $query->date;
+
+        $journeys = array();
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
-                $curTime = strtotime((string) $journey->MainStop->BasicStop->Dep->Time);
-                if (isset($journey->MainStop->BasicStop->StopPrognosis->Dep->Time)) {
-                    $prognosis = strtotime((string) $journey->MainStop->BasicStop->StopPrognosis->Dep->Time);
-                    if ($prevTime > $curTime && $prevTime > $prognosis && ($prognosis - $curTime) > 0) {
-                        // we passed midnight
-                        $date->add(new \DateInterval('P1D'));
-                    }
-                } elseif ($prevTime > $curTime) {
-                    // we passed midnight
-                    $date->add(new \DateInterval('P1D'));
-                }
-                $journeys[] = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
-                $prevTime = $curTime;
+                $journey = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
+                $journeys[] = $journey;
             }
         }
 

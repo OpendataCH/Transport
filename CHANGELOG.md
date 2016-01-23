@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-01-23
+
+- #119 Fix for date after midnight in stationboard passlist
+
 ## 2016-01-18
 
 - #75 Fixes for delays around midnight in stationboard
