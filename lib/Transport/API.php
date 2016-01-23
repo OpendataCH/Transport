@@ -197,8 +197,13 @@ class API
 
         $journeys = array();
         if ($result->STBRes->JourneyList->STBJourney) {
+
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
+
                 $journey = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
+
+                $date = new \DateTime($journey->stop->departure);
+
                 $journeys[] = $journey;
             }
         }
