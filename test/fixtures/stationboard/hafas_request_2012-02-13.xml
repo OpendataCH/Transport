@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb">
   <STBReq boardType="DEP" maxJourneys="3">
-    <Time>23:55</Time>
+    <Time>23:57</Time>
     <Period>
       <DateBegin>
         <Date>20120213</Date>
