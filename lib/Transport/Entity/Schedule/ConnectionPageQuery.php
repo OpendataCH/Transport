@@ -3,8 +3,6 @@
 namespace Transport\Entity\Schedule;
 
 use Transport\Entity\Query;
-use Transport\Entity\Transportations;
-use Transport\Entity\Location\Location;
 
 class ConnectionPageQuery extends Query
 {

@@ -4,7 +4,6 @@ namespace Transport\Test\Normalizer;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-
 use Transport\Normalizer\FieldsNormalizer;
 use Transport\Entity;
 
