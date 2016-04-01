@@ -20,7 +20,7 @@ $to = reset($stations['to']) ?: null;
 
 // Connection
 $date = new \DateTime('');
-$query = new ConnectionQuery($from, $to, array(), $date->format('c'));
+$query = new ConnectionQuery($from, $to, array(), $date->format('Y-m-d'), $date->format('H:i'));
 
 $xml = $api->sendQuery($query);
 
