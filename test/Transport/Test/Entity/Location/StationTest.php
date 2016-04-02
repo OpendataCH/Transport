@@ -30,7 +30,7 @@ class StationTest extends \PHPUnit_Framework_TestCase
     {
         $xml = new \SimpleXMLElement('<Station name="Bern Felsenau" score="81" externalId="008508051#95" externalStationNr="008508051" type="WGS84" x="7444245" y="46968493"/>');
 
-        $this->assertEquals($this->getStation(), Station::createFromXml($xml));
+        $this->assertEquals($this->getStation(), Station::createStationFromXml($xml));
     }
 }
 

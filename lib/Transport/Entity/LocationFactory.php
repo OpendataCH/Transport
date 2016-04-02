@@ -10,7 +10,7 @@ class LocationFactory
         case 'Poi':
             return Location\Poi::createFromXml($xml);
         case 'Station':
-            return Location\Station::createFromXml($xml);
+            return Location\Station::createStationFromXml($xml);
         case 'Address':
             return Location\Address::createFromXml($xml);
         case 'ReqLoc':
@@ -22,6 +22,6 @@ class LocationFactory
 
     public static function createFromJson($json)
     {
-        return Location\Station::createFromJson($json);
+        return Location\Station::createStationFromJson($json);
     }
 }
