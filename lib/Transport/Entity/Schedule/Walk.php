@@ -9,6 +9,9 @@ class Walk
      */
     public $duration;
 
+    /**
+     * @param string $time
+     */
     static public function parseTime($time)
     {
         if (substr($time, 2, 1) == 'd') {
@@ -17,6 +20,9 @@ class Walk
         return $time;
     }
 
+    /**
+     * @param \DateTime $date
+     */
     static public function createFromXml(\SimpleXMLElement $xml, $date, Walk $obj = null)
     {
         if (!$obj) {

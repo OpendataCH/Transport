@@ -13,6 +13,9 @@ class ConnectionPageQuery extends Query
 
     public $context;
 
+    /**
+     * @param string $context
+     */
     public function __construct(ConnectionQuery $query, $context)
     {
         $this->query = $query;

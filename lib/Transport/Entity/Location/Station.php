@@ -13,7 +13,10 @@ class Station extends Location
      * @var string
      */
     public $id;
-    
+
+    /**
+     * @param string $id
+     */
     public function __construct($id = null) {
         $this->id = $id;
     }

@@ -36,6 +36,9 @@ class Statistics {
         }
     }
 
+    /**
+     * @param string $path
+     */
     public function resource($path)
     {
         $this->count('stats:resources', $path, array('path' => $path));
@@ -56,6 +59,11 @@ class Statistics {
         $this->count('stats:exceptions', $exceptionClass, array('exception' => $exceptionClass));
     }
 
+    /**
+     * @param string $prefix
+     * @param string $id
+     * @param string $data
+     */
     protected function count($prefix, $id, $data)
     {
         if ($this->enabled) {
@@ -117,6 +125,10 @@ class Statistics {
         return $this->top('stats:exceptions', array('exception', 'calls'));
     }
 
+    /**
+     * @param string $key
+     * @param string[] $fields
+     */
     protected function top($key, $fields)
     {
         $result = $this->redis->sort($key, array(

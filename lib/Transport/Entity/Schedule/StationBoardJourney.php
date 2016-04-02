@@ -14,7 +14,7 @@ class StationBoardJourney extends Journey
 
     /**
      * @param   \SimpleXMLElement   $xml
-     * @param   string              $date   The date that will be assigned to this journey
+     * @param   \DateTime           $date   The date that will be assigned to this journey
      * @param   Journey             $obj    An optional existing journey to overwrite
      * @return  Journey
      */

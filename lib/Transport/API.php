@@ -38,6 +38,9 @@ class API
         $this->lang = $lang;
     }
 
+    /**
+     * @return \SimpleXMLElement
+     */
     private function sendAndParseQuery(Query $query)
     {
         $response = $this->sendQuery($query);
@@ -65,7 +68,7 @@ class API
     }
 
     /**
-     * @return Buzz\Message\Response
+     * @return \Buzz\Message\Response
      */
     public function sendQuery(Query $query, $url = self::URL)
     {
@@ -181,11 +184,7 @@ class API
     }
 
     /**
-     * @param Entity\Station $station
-     * @param string $boardType
-     * @param int $maxJourneys
-     * @param string $dateTime
-     * @param array $transportationTypes
+     * @return array
      */
     public function getStationBoard(StationBoardQuery $query)
     {
