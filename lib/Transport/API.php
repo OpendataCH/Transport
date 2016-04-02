@@ -23,7 +23,7 @@ class API
     const SEARCH_MODE_ECONOMIC = 'P';
 
     /**
-     * @var Buzz\Browser
+     * @var \Buzz\Browser
      */
     protected $browser;
 
