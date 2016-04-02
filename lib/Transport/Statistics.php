@@ -63,7 +63,7 @@ class Statistics
     /**
      * @param string $prefix
      * @param string $id
-     * @param string $data
+     * @param array $data
      */
     protected function count($prefix, $id, $data)
     {
