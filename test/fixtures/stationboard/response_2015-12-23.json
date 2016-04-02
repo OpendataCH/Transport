@@ -52,6 +52,7 @@
             },
             "name": "ICN 1524",
             "category": "ICN",
+            "subcategory": "ICN",
             "categoryCode": 1,
             "number": "1524",
             "operator": "SBB",
@@ -401,8 +402,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "ICN"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -445,6 +445,7 @@
             },
             "name": "S 6",
             "category": "S",
+            "subcategory": "S",
             "categoryCode": 5,
             "number": "6",
             "operator": "SBB",
@@ -832,8 +833,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "S"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -876,6 +876,7 @@
             },
             "name": "NFT 3",
             "category": "NFT",
+            "subcategory": "NFT",
             "categoryCode": 9,
             "number": "3",
             "operator": "VBZ    F",
@@ -1263,8 +1264,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "NFT"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -1307,6 +1307,7 @@
             },
             "name": "NFB 31",
             "category": "NFB",
+            "subcategory": "NFB",
             "categoryCode": 6,
             "number": "31",
             "operator": "VBZ",
@@ -1618,8 +1619,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "NFB"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -1662,6 +1662,7 @@
             },
             "name": "NFT 14",
             "category": "NFT",
+            "subcategory": "NFT",
             "categoryCode": 9,
             "number": "14",
             "operator": "VBZ    F",
@@ -2049,8 +2050,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "NFT"
+            "capacity2nd": null
         }
     ]
 }

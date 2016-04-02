@@ -52,6 +52,7 @@
             },
             "name": "S 3",
             "category": "S",
+            "subcategory": "S",
             "categoryCode": 5,
             "number": "3",
             "operator": "SBB",
@@ -401,8 +402,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "S"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -445,6 +445,7 @@
             },
             "name": "IC 740",
             "category": "IC",
+            "subcategory": "IC",
             "categoryCode": 1,
             "number": "740",
             "operator": "SBB",
@@ -528,8 +529,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "IC"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -572,6 +572,7 @@
             },
             "name": "S 23",
             "category": "S",
+            "subcategory": "S",
             "categoryCode": 5,
             "number": "23",
             "operator": "SBB",
@@ -959,8 +960,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "S"
+            "capacity2nd": null
         }
     ]
 }

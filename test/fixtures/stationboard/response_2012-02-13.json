@@ -52,14 +52,14 @@
             },
             "name": "Bus 31",
             "category": "Bus",
+            "subcategory": "Nbu",
             "categoryCode": 6,
             "number": "31",
             "operator": "VBZ",
             "to": "Schlieren, Zentrum",
             "passList": [],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "Nbu"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -102,14 +102,14 @@
             },
             "name": "Bus 31",
             "category": "Bus",
+            "subcategory": "Nbu",
             "categoryCode": 6,
             "number": "31",
             "operator": "VBZ",
             "to": "Z\u00c3\u00bcrich Hegibachplatz",
             "passList": [],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "Nbu"
+            "capacity2nd": null
         },
         {
             "stop": {
@@ -152,14 +152,14 @@
             },
             "name": "Tro 34",
             "category": "Tro",
+            "subcategory": "Tro",
             "categoryCode": 6,
             "number": "34",
             "operator": "VBZ",
             "to": "Z\u00c3\u00bcrich, Klusplatz",
             "passList": [],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "Tro"
+            "capacity2nd": null
         }
     ]
 }

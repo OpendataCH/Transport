@@ -52,6 +52,7 @@
             },
             "name": "TGV 9225",
             "category": "TGV",
+            "subcategory": "TGV",
             "categoryCode": 0,
             "number": "9225",
             "operator": "SBB",
@@ -173,8 +174,7 @@
                 }
             ],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "TGV"
+            "capacity2nd": null
         }
     ]
 }

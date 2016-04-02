@@ -93,6 +93,7 @@
                     "journey": {
                         "name": "S1219278",
                         "category": "S12",
+                        "subcategory": null,
                         "categoryCode": 5,
                         "number": "19278",
                         "operator": null,
@@ -351,6 +352,7 @@
                     "journey": {
                         "name": "S6 18680",
                         "category": "S6",
+                        "subcategory": null,
                         "categoryCode": 5,
                         "number": "18680",
                         "operator": null,
@@ -989,6 +991,7 @@
                     "journey": {
                         "name": "IR 1988 ",
                         "category": "IR",
+                        "subcategory": null,
                         "categoryCode": 2,
                         "number": "1988",
                         "operator": null,
@@ -1247,6 +1250,7 @@
                     "journey": {
                         "name": "S1219280",
                         "category": "S12",
+                        "subcategory": null,
                         "categoryCode": 5,
                         "number": "19280",
                         "operator": null,

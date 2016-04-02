@@ -52,14 +52,14 @@
             },
             "name": "S9 18990",
             "category": "S9",
+            "subcategory": "S9",
             "categoryCode": 5,
             "number": "18990",
             "operator": null,
             "to": "Zug",
             "passList": [],
             "capacity1st": null,
-            "capacity2nd": null,
-            "subcategory": "S9"
+            "capacity2nd": null
         }
     ]
 }
