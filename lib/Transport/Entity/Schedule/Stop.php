@@ -11,8 +11,6 @@ class Stop
 {
     public $station;
 
-    public $location;
-
     public $arrival;
     public $arrivalTimestamp;
 
@@ -26,6 +24,8 @@ class Stop
     public $prognosis;
 
     public $realtimeAvailability;
+
+    public $location;
 
     public function __construct()
     {
