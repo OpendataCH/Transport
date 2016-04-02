@@ -11,6 +11,8 @@ class Stop
 {
     public $station;
 
+    public $location;
+
     public $arrival;
     public $arrivalTimestamp;
 
