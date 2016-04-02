@@ -4,7 +4,6 @@ namespace Transport\Entity\Schedule;
 
 class Journey
 {
-
     /**
      * @var string
      */
@@ -14,6 +13,11 @@ class Journey
      * @var string
      */
     public $category;
+
+    /**
+     * @var string
+     */
+    public $subcategory;
 
     /**
      * Indicates the type of the public transport vehicle. Possible values:
