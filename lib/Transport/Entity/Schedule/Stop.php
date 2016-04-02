@@ -37,7 +37,7 @@ class Stop
      * @param   \DateTime	$referenceDate    The date
      * @return  \DateTime  The parsed time in ISO format
      */
-    static public function calculateDateTime($time, \DateTime $referenceDate, $stopPrognosis = null)
+    public static function calculateDateTime($time, \DateTime $referenceDate, $stopPrognosis = null)
     {
         // prevent changing the reference
         $date = clone $referenceDate;
@@ -61,7 +61,6 @@ class Stop
         $dateTime = strtotime($date->format('H:i'));
 
         if (isset($stopPrognosis->Dep->Time)) {
-
             $prognosisTime = strtotime((string) $stopPrognosis->Dep->Time);
 
             if ($dateTime < $referenceTime && $prognosisTime < $referenceTime && ($dateTime - $prognosisTime) < 0) {
@@ -69,7 +68,6 @@ class Stop
                 // we passed midnight
                 $offset = 1;
             }
-
         } elseif ($dateTime < $referenceTime) {
 
             // we passed midnight
@@ -81,7 +79,7 @@ class Stop
         return $date;
     }
 
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
     {
         if (!$obj) {
             $obj = new Stop();
@@ -90,7 +88,6 @@ class Stop
         $obj->station = Entity\Location\Station::createFromXml($xml->Station); // deprecated, use location instead
 
         foreach ($xml->children() as $location) {
-
             $location = Entity\LocationFactory::createFromXml($location);
             if ($location) {
                 $obj->location = $location;
@@ -126,7 +123,7 @@ class Stop
 
         if ($xml->StAttrList) {
             foreach ($xml->StAttrList->StAttr as $attr) {
-                if ($attr["code"] == "RA" ) {
+                if ($attr["code"] == "RA") {
                     $obj->realtimeAvailability = (string) $attr['text'];
                 }
             }

@@ -23,10 +23,10 @@ class Location
      */
     public $coordinate;
 
-	/**
-	 * @var int
-	 */
-	public $distance;
+    /**
+     * @var int
+     */
+    public $distance;
 
     /**
      * Factory method to create an instance and extract the data from the given xml
@@ -35,7 +35,7 @@ class Location
      * @param   Location            $obj    An object or null to create it
      * @return  Location            The created instance
      */
-    static public function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');
@@ -59,7 +59,7 @@ class Location
      * @param   Location   $obj    An object or null to create it
      * @return  Location           The created instance
      */
-    static public function createFromJson($json, Location $obj = null)
+    public static function createFromJson($json, Location $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');

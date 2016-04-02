@@ -26,7 +26,7 @@ class Section
      */
     public $arrival;
     
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null)
     {
         if (!$obj) {
             $obj = new Section();

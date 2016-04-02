@@ -118,7 +118,6 @@ class API
         $locations = array();
         $viaCount = 0;
         foreach ($result->LocValRes as $part) {
-
             $id = (string) $part['id'];
 
             // A "via" can occur 0-5 times
@@ -128,7 +127,6 @@ class API
 
             $locations[$id] = array();
             foreach ($part->children() as $location) {
-
                 $location = Entity\LocationFactory::createFromXml($location);
                 if ($location) {
                     $locations[$id][] = $location;
@@ -172,7 +170,6 @@ class API
 
         $locations = array();
         foreach ($result->stops as $stop) {
-
             $location = Entity\LocationFactory::createFromJson($stop);
             if ($location) {
                 $location->distance = $location->coordinate->getDistanceTo($query->lat, $query->lon);
@@ -195,9 +192,7 @@ class API
 
         $journeys = array();
         if ($result->STBRes->JourneyList->STBJourney) {
-
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
-
                 $journey = Entity\Schedule\StationBoardJourney::createFromXml($journey, $date, null);
 
                 $date = new \DateTime($journey->stop->departure);

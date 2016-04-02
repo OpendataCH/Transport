@@ -4,7 +4,7 @@ namespace Transport\Entity;
 
 class LocationFactory
 {
-    static public function createFromXml(\SimpleXMLElement $xml)
+    public static function createFromXml(\SimpleXMLElement $xml)
     {
         switch ($xml->getName()) {
         case 'Poi':
@@ -20,7 +20,7 @@ class LocationFactory
         }
     }
 
-    static public function createFromJson($json)
+    public static function createFromJson($json)
     {
         return Location\Station::createFromJson($json);
     }

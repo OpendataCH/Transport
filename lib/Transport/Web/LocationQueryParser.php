@@ -3,7 +3,6 @@
 namespace Transport\Web;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use Transport\Entity\Location\LocationQuery;
 
 class LocationQueryParser

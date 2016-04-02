@@ -30,7 +30,8 @@ class LocationQuery extends Query
      * @param string|array $query Search query (e.g. Ber)
      * @param string $type  Location types to return (all, station, address, poi)
      */
-    public function __construct($query, $type = null) {
+    public function __construct($query, $type = null)
+    {
 
         // convert query to array
         if (!is_array($query)) {
@@ -41,8 +42,8 @@ class LocationQuery extends Query
         $this->type = $type;
     }
 
-    public function toXml() {
-
+    public function toXml()
+    {
         $request = $this->createRequest();
 
         foreach ($this->query as $key => $value) {

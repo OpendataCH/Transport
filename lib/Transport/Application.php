@@ -148,7 +148,6 @@ class Application extends \Silex\Application
         $app->before(function (Request $request) use ($app) {
 
             if ($app['rate_limiting']->isEnabled()) {
-
                 $ip = $request->getClientIp();
                 if ($app['rate_limiting']->hasReachedLimit($ip)) {
                     throw new HttpException(429, 'Rate limit of ' . $app['rate_limiting']->getLimit() . ' requests per minute exceeded');
@@ -160,7 +159,6 @@ class Application extends \Silex\Application
         $app->after(function (Request $request, Response $response) use ($app) {
 
             if ($app['rate_limiting']->isEnabled()) {
-
                 $ip = $request->getClientIp();
 
                 $response->headers->set('X-Rate-Limit-Limit', $app['rate_limiting']->getLimit());
@@ -170,13 +168,13 @@ class Application extends \Silex\Application
         });
 
         // home
-        $app->get('/', function(Request $request) use ($app) {
+        $app->get('/', function (Request $request) use ($app) {
             return file_get_contents('index.html');
         })->bind('home');
 
 
         // api
-        $app->get('/v1/', function(Request $request) use ($app) {
+        $app->get('/v1/', function (Request $request) use ($app) {
 
             return $app->json(array(
                 'date' => date('c'),
@@ -187,7 +185,7 @@ class Application extends \Silex\Application
 
 
         // locations
-        $app->get('/v1/locations', function(Request $request) use ($app) {
+        $app->get('/v1/locations', function (Request $request) use ($app) {
 
             $stations = array();
 
@@ -216,7 +214,7 @@ class Application extends \Silex\Application
 
 
         // connections
-        $app->get('/v1/connections', function(Request $request) use ($app) {
+        $app->get('/v1/connections', function (Request $request) use ($app) {
 
             $query = LocationQueryParser::create($request);
 
@@ -261,7 +259,7 @@ class Application extends \Silex\Application
 
 
         // station board
-        $app->get('/v1/stationboard', function(Request $request) use ($app) {
+        $app->get('/v1/stationboard', function (Request $request) use ($app) {
 
             $stationboard = array();
 

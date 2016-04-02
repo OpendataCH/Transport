@@ -54,7 +54,7 @@ class Connection
      */
     public $sections;
 
-    static public function createFromXml(\SimpleXMLElement $xml, Connection $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, Connection $obj = null)
     {
         if (!$obj) {
             $obj = new Connection();
@@ -69,7 +69,7 @@ class Connection
         $obj->duration = (string) $xml->Overview->Duration->Time;
         $obj->transfers = (int) $xml->Overview->Transfers;
 
-    	$obj->service = new Entity\Schedule\Service();
+        $obj->service = new Entity\Schedule\Service();
         if (isset($xml->Overview->ServiceDays->RegularServiceText)) {
             $obj->service->regular = (string) $xml->Overview->ServiceDays->RegularServiceText->Text;
         }
@@ -83,8 +83,8 @@ class Connection
             }
         }
 
-	    $capacities1st = array();
-	    $capacities2nd = array();
+        $capacities1st = array();
+        $capacities2nd = array();
         foreach ($xml->ConSectionList->ConSection as $section) {
             if ($section->Journey) {
                 if ($section->Journey->PassList->BasicStop) {
@@ -101,14 +101,13 @@ class Connection
         }
 
         if (count($capacities1st) > 0) {
-            $obj->capacity1st = max($capacities1st);   
+            $obj->capacity1st = max($capacities1st);
         }
         if (count($capacities2nd) > 0) {
-            $obj->capacity2nd = max($capacities2nd);   
+            $obj->capacity2nd = max($capacities2nd);
         }
 
         foreach ($xml->ConSectionList->ConSection as $section) {
-
             $obj->sections[] = Entity\Schedule\Section::createFromXml($section, $date, null);
         }
 

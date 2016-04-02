@@ -12,7 +12,7 @@ class Walk
     /**
      * @param string $time
      */
-    static public function parseTime($time)
+    public static function parseTime($time)
     {
         if (substr($time, 2, 1) == 'd') {
             return substr($time, 3);
@@ -23,7 +23,7 @@ class Walk
     /**
      * @param \DateTime $date
      */
-    static public function createFromXml(\SimpleXMLElement $xml, $date, Walk $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, $date, Walk $obj = null)
     {
         if (!$obj) {
             $obj = new Walk();

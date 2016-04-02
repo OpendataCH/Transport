@@ -53,5 +53,4 @@ class StationBoardQuery extends Query
 
         return $request->asXML();
     }
-
 }

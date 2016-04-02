@@ -28,7 +28,7 @@ class Poi extends Location
     /**
      * {@inheritDoc}
      */
-    static public function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
             $obj = new Poi;
@@ -36,4 +36,3 @@ class Poi extends Location
         return parent::createFromXml($xml, $obj);
     }
 }
-

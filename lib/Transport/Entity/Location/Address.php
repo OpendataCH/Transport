@@ -38,7 +38,7 @@ class Address extends Location
     /**
      * {@inheritDoc}
      */
-    static public function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
             $obj = new Address;
@@ -46,4 +46,3 @@ class Address extends Location
         return parent::createFromXml($xml, $obj);
     }
 }
-

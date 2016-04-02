@@ -31,7 +31,7 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
         $fieldParts = explode('/', $field);
         $fieldFromTree = null;
         $searchTree = $this->fields;
-        foreach($fieldParts as $fieldPart) {
+        foreach ($fieldParts as $fieldPart) {
             if (array_key_exists($fieldPart, $searchTree)) {
                 $fieldFromTree = $searchTree[$fieldPart];
             } else {
@@ -69,7 +69,6 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
     public function normalize($data, $format = null, array $context = array())
     {
         if (is_array($data)) {
-
             foreach ($data as $name => $value) {
                 $data[$name] = $this->serializer->normalize($value, $format, $context);
             }
@@ -79,10 +78,8 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
 
         $normalized = array();
         foreach ($data as $name => $value) {
-
             $field = isset($context['fields_parent_field']) ? $context['fields_parent_field'] . '/' . $name : $name;
             if ($this->isFieldSet($field)) {
-
                 if (null !== $value && !is_scalar($value)) {
                     $options = array(
                         'fields_parent_field' => $field,

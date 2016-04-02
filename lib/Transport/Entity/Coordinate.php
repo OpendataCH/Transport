@@ -25,7 +25,7 @@ class Coordinate
      * @param   \SimpleXMLElement   $xml    The item xml
      * @return  Coordinate          The created instance
      */
-    static public function createFromXml(\SimpleXMLElement $xml)
+    public static function createFromXml(\SimpleXMLElement $xml)
     {
         $coordinate = new Coordinate();
         $coordinate->type = (string) $xml['type'];
@@ -38,7 +38,7 @@ class Coordinate
         return $coordinate;
     }
 
-    static public function createFromJson($json)
+    public static function createFromJson($json)
     {
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84'; // best guess
@@ -51,25 +51,25 @@ class Coordinate
         return $coordinate;
     }
 
-    static public function setHAFAScoordinates($coordinate, $x, $y)
+    public static function setHAFAScoordinates($coordinate, $x, $y)
     {
         if ($y > $x) { // HAFAS bug, returns inverted lat/long
           $coordinate->x = $y;
-          $coordinate->y = $x;
+            $coordinate->y = $x;
         } else {
-          $coordinate->x = $x;
-          $coordinate->y = $y;
+            $coordinate->x = $x;
+            $coordinate->y = $y;
         }
 
         return $coordinate;
     }
 
-    static public function floatToInt($float)
+    public static function floatToInt($float)
     {
         return sprintf('%01.6f', $float) * 1000000;
     }
 
-    static public function intToFloat($int)
+    public static function intToFloat($int)
     {
         return $int / 1000000;
     }
@@ -83,9 +83,9 @@ class Coordinate
         $earth_radius = 6371;
 
         $dLat = deg2rad($this->x - $lat);
-        $dLon = deg2rad($this->y - $lon);  
+        $dLon = deg2rad($this->y - $lon);
 
-        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon/2) * sin($dLon/2);  
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon/2) * sin($dLon/2);
         $c = 2 * asin(sqrt($a));
         $d = $earth_radius * $c;
 

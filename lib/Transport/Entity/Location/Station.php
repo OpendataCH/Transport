@@ -17,7 +17,8 @@ class Station extends Location
     /**
      * @param string $id
      */
-    public function __construct($id = null) {
+    public function __construct($id = null)
+    {
         $this->id = $id;
     }
 
@@ -41,7 +42,7 @@ class Station extends Location
     /**
      * {@inheritDoc}
      */
-    static public function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
             $obj = new Station();
@@ -56,7 +57,7 @@ class Station extends Location
     /**
      * {@inheritDoc}
      */
-    static public function createFromJson($json, Location $obj = null)
+    public static function createFromJson($json, Location $obj = null)
     {
         if (!$obj) {
             $obj = new Station();

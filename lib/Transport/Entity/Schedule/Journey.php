@@ -58,7 +58,7 @@ class Journey
      */
     public $capacity2nd = null;
 
-    static public function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
     {
         if (!$obj) {
             $obj = new Journey();
@@ -66,8 +66,7 @@ class Journey
 
         // TODO: get attributes
         if ($xml->JourneyAttributeList) {
-            foreach ($xml->JourneyAttributeList->JourneyAttribute AS $journeyAttribute) {
-            
+            foreach ($xml->JourneyAttributeList->JourneyAttribute as $journeyAttribute) {
                 switch ($journeyAttribute->Attribute['type']) {
                     case 'NAME':
                         $obj->name = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
@@ -96,7 +95,7 @@ class Journey
         $capacities2nd = array();
 
         if ($xml->PassList->BasicStop) {
-            foreach ($xml->PassList->BasicStop AS $basicStop) {
+            foreach ($xml->PassList->BasicStop as $basicStop) {
                 if ($basicStop->Arr || $basicStop->Dep) {
                     $stop = Stop::createFromXml($basicStop, $date, null);
                     if ($stop->prognosis->capacity1st) {
@@ -111,10 +110,10 @@ class Journey
         }
 
         if (count($capacities1st) > 0) {
-            $obj->capacity1st = max($capacities1st);   
+            $obj->capacity1st = max($capacities1st);
         }
         if (count($capacities2nd) > 0) {
-            $obj->capacity2nd = max($capacities2nd);   
+            $obj->capacity2nd = max($capacities2nd);
         }
 
         return $obj;

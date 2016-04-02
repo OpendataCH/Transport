@@ -6,7 +6,8 @@ use Predis\Client;
 use Transport\Entity\Location\Location;
 use Transport\Entity\Location\Station;
 
-class Statistics {
+class Statistics
+{
 
     protected $redis;
 
@@ -76,7 +77,7 @@ class Statistics {
 
     public function getCalls()
     {
-	    $keys = $this->redis->keys('stats:calls:*');
+        $keys = $this->redis->keys('stats:calls:*');
 
         $result = $this->redis->sort("stats:calls", array(
             'get' => array('#', '*'),
@@ -84,13 +85,13 @@ class Statistics {
             'alpha' => true
         ));
 
-	    // regroup
-	    $calls = array();
-	    foreach (array_chunk($result, 2) as $values) {
-	        $calls[substr($values[0], 12, 10)] = $values[1];
-	    }
+        // regroup
+        $calls = array();
+        foreach (array_chunk($result, 2) as $values) {
+            $calls[substr($values[0], 12, 10)] = $values[1];
+        }
 
-	    return $calls;
+        return $calls;
     }
 
     public function getErrors()
@@ -101,13 +102,13 @@ class Statistics {
             'alpha' => true
         ));
 
-	    // regroup
-	    $errors = array();
-	    foreach (array_chunk($result, 2) as $values) {
-	        $errors[substr($values[0], 13, 10)] = $values[1];
-	    }
+        // regroup
+        $errors = array();
+        foreach (array_chunk($result, 2) as $values) {
+            $errors[substr($values[0], 13, 10)] = $values[1];
+        }
 
-	    return $errors;
+        return $errors;
     }
 
     public function getTopResources()
