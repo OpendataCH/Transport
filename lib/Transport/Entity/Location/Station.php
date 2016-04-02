@@ -44,7 +44,7 @@ class Station extends Location
         if (!$obj) {
             $obj = new Station();
         }
-        parent::createFromXml($xml, $obj);
+        Location::createFromXml($xml, $obj);
 
         $obj->id = (string) $xml['externalStationNr'];
 
@@ -59,7 +59,7 @@ class Station extends Location
         if (!$obj) {
             $obj = new Station();
         }
-        parent::createFromJson($json, $obj);
+        Location::createFromJson($json, $obj);
 
         $obj->id = $json->extId;
 
