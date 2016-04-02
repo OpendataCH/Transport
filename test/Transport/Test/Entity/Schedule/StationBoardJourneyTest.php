@@ -47,6 +47,6 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $date = \DateTime::createFromFormat('Y-m-d', '2012-03-31', new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
         $date->setTime(0, 0, 0);
-        $this->assertEquals($this->getJourney(), StationBoardJourney::createFromXml($xml->STBRes->JourneyList->STBJourney[0], $date));
+        $this->assertEquals($this->getJourney(), StationBoardJourney::createStationBoardFromXml($xml->STBRes->JourneyList->STBJourney[0], $date));
     }
 }

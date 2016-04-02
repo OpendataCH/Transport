@@ -15,10 +15,10 @@ class StationBoardJourney extends Journey
     /**
      * @param   \SimpleXMLElement   $xml
      * @param   \DateTime           $date   The date that will be assigned to this journey
-     * @param   Journey             $obj    An optional existing journey to overwrite
-     * @return  Journey
+     * @param   StationBoardJourney $obj    An optional existing journey to overwrite
+     * @return  StationBoardJourney
      */
-    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    public static function createStationBoardFromXml(\SimpleXMLElement $xml, \DateTime $date, StationBoardJourney $obj = null)
     {
         if (!$obj) {
             $obj = new StationBoardJourney();
