@@ -14,4 +14,6 @@ COPY . /var/www/html/
 
 COPY config.php.docker /var/www/html/config.php
 
+RUN chown -R www-data /var/www/html/var
+
 RUN composer install --prefer-dist --no-dev --no-interaction
