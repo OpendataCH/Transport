@@ -1,5 +1,9 @@
 FROM php:7.0-apache
 
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && \
+    apt-get install -y unzip
+
 RUN a2enmod rewrite
 
 RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/web#' /etc/apache2/apache2.conf
@@ -10,4 +14,4 @@ COPY . /var/www/html/
 
 COPY config.php.docker /var/www/html/config.php
 
-RUN composer install
+RUN composer install --prefer-dist --no-dev --no-interaction
