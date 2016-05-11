@@ -1,0 +1,9 @@
+---
+web:
+  image: opendatach/transport
+  ports:
+    - "80:80"
+  links:
+    - redis
+redis:
+  image: redis
