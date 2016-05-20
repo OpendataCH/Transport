@@ -1,5 +1,6 @@
-config.php
-var/cache/
-var/logs/
-var/xhprof/
-vendor/
+/config.php
+/var/cache/
+/var/logs/
+/var/xhprof/
+/vendor/
+/web/media/vendor/
