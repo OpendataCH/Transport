@@ -34,32 +34,24 @@ if ($app['redis.config']) {
 	    $calls = $app['stats']->getCalls();
 	    $errors = $app['stats']->getErrors();
 
-		$total = array_sum($calls);
-		$avg = $total / count($calls);
-		$max = max($calls);
-
-	    // transform to comma and new line separated list
-	    $data = array();
-	    foreach (array_slice($calls, -30) as $date => $value) {
-	        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
-	    }
-	    foreach (array_slice($errors, -30) as $date => $value) {
-	        if (isset($data[$date])) {
-	            $data[$date]['errors'] = ($value ?: 0);
-	        }
-	    }
-	    foreach ($data as $key => $value) {
-	        $data[$key] = implode(',', $value);
-	    }
-	    $data = implode('\n', $data);
-
-        // get top resources, stations and errors
-        $resources = $app['stats']->getTopResources();
-        $stations = $app['stats']->getTopStations();
-        $errors = $app['stats']->getTopExceptions();
-
         // CSV response
         if ($request->get('format') == 'csv') {
+
+		    // transform to comma and new line separated list
+		    $data = array();
+		    foreach (array_slice($calls, -30) as $date => $value) {
+		        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
+		    }
+		    foreach (array_slice($errors, -30) as $date => $value) {
+		        if (isset($data[$date])) {
+		            $data[$date]['errors'] = ($value ?: 0);
+		        }
+		    }
+		    foreach ($data as $key => $value) {
+		        $data[$key] = implode(',', $value);
+		    }
+		    $data = implode('\n', $data);
+
             $csv = "Date,Calls\n";
             foreach ($calls as $date => $count) {
                 $csv .= "$date,$count\n";
@@ -72,11 +64,19 @@ if ($app['redis.config']) {
             return $app->json(array('calls' => $calls));
         }
 
+		$total = array_sum($calls);
+		$avg = $total / count($calls);
+		$max = max($calls);
+
+		// get top resources, stations and errors
+		$resources = $app['stats']->getTopResources();
+		$stations = $app['stats']->getTopStations();
+		$errors = $app['stats']->getTopExceptions();
+
 	    return $app['twig']->render('stats.twig', array(
 	        'total' => $total,
 			'avg' => $avg,
 			'max' => $max,
-	        'data' => $data,
 	        'calls' => $calls,
 	        'resources' => $resources,
 	        'stations' => $stations,
