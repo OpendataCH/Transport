@@ -51,6 +51,29 @@
 
             <article>
                 <h2>Statistics <small id="labels"></small></h2>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p>
+                            Total calls<br/>
+                            <span class="lead">{{ total | number_format }}</span>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>
+                            Average calls per day<br/>
+                            <span class="lead">{{ avg | number_format }}</span>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>
+                            Max calls for one day<br/>
+                            <span class="lead">{{ max | number_format }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <br/>
+
                 <div id="graphdiv"></div>
 
                 <div class="row">

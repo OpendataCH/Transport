@@ -34,6 +34,10 @@ if ($app['redis.config']) {
 	    $calls = $app['stats']->getCalls();
 	    $errors = $app['stats']->getErrors();
 
+		$total = array_sum($calls);
+		$avg = $total / count($calls);
+		$max = max($calls);
+
 	    // transform to comma and new line separated list
 	    $data = array();
 	    foreach (array_slice($calls, -30) as $date => $value) {
@@ -69,6 +73,9 @@ if ($app['redis.config']) {
         }
 
 	    return $app['twig']->render('stats.twig', array(
+	        'total' => $total,
+			'avg' => $avg,
+			'max' => $max,
 	        'data' => $data,
 	        'calls' => $calls,
 	        'resources' => $resources,
