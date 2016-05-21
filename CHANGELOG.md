@@ -1,5 +1,16 @@
 # Changelog
 
+## 2016-05-21
+
+- Extended statistics page
+- Removed support for XHProf
+- Added Docker support
+- Use CDN for external JavaScript dependencies
+
+## 2016-04-18
+
+- #124 Fix capacity2nd in docs
+
 ## 2016-01-23
 
 - #119 Fix for date after midnight in stationboard passlist
