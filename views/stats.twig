@@ -71,7 +71,7 @@
                             ticks: {
                                 callback: function(tickValue, index, ticks) {
                                     
-                                    return tickValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    return tickValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
                                     
                                   }
                             }
@@ -100,19 +100,19 @@
                     <div class="col-sm-4">
                         <p>
                             Total calls<br/>
-                            <span class="lead">{{ total | number_format }}</span>
+                            <span class="lead">{{ total | number_format(0, ".", "'") }}</span>
                         </p>
                     </div>
                     <div class="col-sm-4">
                         <p>
                             Average calls per day<br/>
-                            <span class="lead">{{ avg | number_format }}</span>
+                            <span class="lead">{{ avg | number_format(0, ".", "'") }}</span>
                         </p>
                     </div>
                     <div class="col-sm-4">
                         <p>
                             Max calls for one day<br/>
-                            <span class="lead">{{ max | number_format }}</span>
+                            <span class="lead">{{ max | number_format(0, ".", "'") }}</span>
                         </p>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                         <h2 title="Top 5 since 10. Aug. 2012">Resources</h2>
                         <ul class="list-unstyled">
                             {% for resource in resources %}
-                            <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format }}</span></li>
+                            <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format(0, ".", "'") }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -139,7 +139,7 @@
                         <h2 title="Top 5 since 10. Aug. 2012">Stations</h2>
                         <ul class="list-unstyled">
                             {% for station in stations %}
-                            <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format }}</span></li>
+                            <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format(0, ".", "'") }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -147,7 +147,7 @@
                         <h2 title="Top 5 since 22. November 2015">Errors</h2>
                         <ul class="list-unstyled">
                             {% for error in errors %}
-                                <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format }}</span></li>
+                                <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
