@@ -28,7 +28,6 @@ class Application extends \Silex\Application
         $app['http_cache'] = false;
         $app['buzz.client'] = null;
         $app['monolog.level'] = \Monolog\Logger::ERROR;
-        $app['xhprof'] = false;
         $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
         $app['stats.config'] = array('enabled' => false);
         $app['rate_limiting.config'] = array('enabled' => false, 'limit' => 150);
@@ -84,11 +83,6 @@ class Application extends \Silex\Application
         $app->before(function (Request $request) use ($app) {
             $app['monolog']->addInfo('- ' . $request->getClientIp() . ' ' . $request->headers->get('referer') . ' ' . $request->server->get('HTTP_USER_AGENT'));
         });
-
-        // XHProf
-        if ($app['xhprof']) {
-            xhprof_enable();
-        }
 
         // if hosted behind a reverse proxy
         if ($app['proxy']) {

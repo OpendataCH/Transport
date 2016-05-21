@@ -1,5 +1,4 @@
 /config.php
 /var/cache/
 /var/logs/
-/var/xhprof/
 /vendor/

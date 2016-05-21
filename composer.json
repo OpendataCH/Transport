@@ -20,7 +20,6 @@
         "predis/predis": "~1.0",
         "twig/twig": "~1.23",
         "monolog/monolog": "~1.17",
-        "facebook/xhprof": "dev-master",
         "symfony/serializer": "~2.3|3.0.*",
         "ekino/newrelic-bundle": "~1.3"
     },

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f2930931266da359aa4b2b2bd3c2e42a",
-    "content-hash": "ede5049c813f97b692cc49b5cbb73e5b",
+    "hash": "4d1c2c18f1cd7400164fa3fdc85c88b5",
+    "content-hash": "d681940500f68e610c7a9cce6ae3ab92",
     "packages": [
         {
             "name": "ekino/newrelic-bundle",
@@ -61,46 +61,6 @@
                 "performance"
             ],
             "time": "2015-11-12 08:59:07"
-        },
-        {
-            "name": "facebook/xhprof",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lox/xhprof.git",
-                "reference": "d9bfac3d543e017eff1351d2bd795240d747a079"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lox/xhprof/zipball/d9bfac3d543e017eff1351d2bd795240d747a079",
-                "reference": "d9bfac3d543e017eff1351d2bd795240d747a079",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.0"
-            },
-            "bin": [
-                "bin/xhprofile"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "xhprof_lib/utils/xhprof_lib.php",
-                    "xhprof_lib/utils/xhprof_runs.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "XHProf: A Hierarchical Profiler for PHP",
-            "homepage": "http://pecl.php.net/package/xhprof",
-            "keywords": [
-                "performance",
-                "profiling"
-            ],
-            "abandoned": "lox/xhprof",
-            "time": "2015-08-23 09:14:39"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -2182,9 +2142,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "facebook/xhprof": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
