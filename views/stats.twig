@@ -36,9 +36,9 @@
         $.getJSON('?format=json', function(response) {
 
             // parse data
-            var calls = $.map(response.calls, function (value, date) {
-                return {x: date, y: value};
-            })
+            var calls = $.map(response.data, function (value) {
+                return {x: value.date, y: value.calls};
+            });
 
             // remove last element (today)
             calls = calls.reverse().splice(1).reverse();

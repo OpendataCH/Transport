@@ -34,32 +34,35 @@ if ($app['redis.config']) {
 	    $calls = $app['stats']->getCalls();
 	    $errors = $app['stats']->getErrors();
 
+	    // combine calls and errors
+	    $data = array();
+	    foreach ($calls as $date => $value) {
+	        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
+	    }
+	    foreach ($errors as $date => $value) {
+	        if (isset($data[$date])) {
+	            $data[$date]['errors'] = ($value ?: 0);
+	        }
+	    }
+		$data = array_values($data);
+
         // CSV response
         if ($request->get('format') == 'csv') {
 
-		    // transform to comma and new line separated list
-		    $data = array();
-		    foreach ($calls as $date => $value) {
-		        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
-		    }
-		    foreach ($errors as $date => $value) {
-		        if (isset($data[$date])) {
-		            $data[$date]['errors'] = ($value ?: 0);
-		        }
-		    }
-		    foreach ($data as $key => $value) {
-		        $data[$key] = implode(',', $value);
-		    }
+			$flat = array();
+			foreach ($data as $value) {
+				$flat[] = implode(',', $value);
+			}
 
             $csv = "Date,Calls,Errors\n";
-			$csv .= implode("\n", $data);
+			$csv .= implode("\n", $flat);
 
             return new Response($csv, 200, array('Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv'));
         }
 
         // JSON response
         if ($request->get('format') == 'json') {
-            return $app->json(array('calls' => $calls));
+            return $app->json(array('data' => $data));
         }
 
 		$total = array_sum($calls);
