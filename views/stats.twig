@@ -10,32 +10,77 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="media/css/layout.css" />
 
-    <script src="media/js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="media/js/dygraph-combined.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.3/Chart.min.js"></script>
 
-    <script type="text/javascript">
+    <script>
     $(function () {
-        var g = new Dygraph(document.getElementById("graphdiv"), "Date,API calls,Errors\n" + "{{ data }}", {
-            width: 595,
-            fillGraph: true,
-            includeZero: true,
-            colors: ['#008000', '#800000'],
-            yAxisLabelWidth: 45,
-            axisLabelFontSize: 13,
-            drawPoints: true,
-            pointSize: 1.5,
-            labelsDiv: document.getElementById("labels"),
-            axes: {
-                x: {
-                    valueFormatter: function(ms) {
-                        return new Date(ms).strftime('%Y-%m-%d');
-                    },
-                    axisLabelFormatter: function(d) {
-                        return d.strftime('%e. %b');
-                    },
-                    pixelsPerLabel: 100,
+
+        // show loading message
+        var loadingIntervalCount = 3;
+        var loadingInterval = setInterval(function () {
+            loadingIntervalCount = (loadingIntervalCount + 1) % 4;
+            var loading = '';
+            for (var j = 0; j < 3; j++) {
+                if (j < loadingIntervalCount) {
+                    loading += '.';
+                } else {
+                    loading += '&nbsp;';
                 }
             }
+            $('#statsChartLoadingCount').html(loading);
+        }, 300);
+
+        // load data
+        $.getJSON('?format=json', function(response) {
+
+            // parse data
+            var calls = $.map(response.calls, function (value, date) {
+                return {x: date, y: value};
+            })
+
+            // remove last element (today)
+            calls = calls.reverse().splice(1).reverse();
+
+            // render graph
+            var canvas = $("#statsChart");
+            var statsChart = new Chart(canvas, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Calls',
+                        data: calls,
+                        borderWidth: 1,
+                        borderColor: '#008000',
+                        backgroundColor: '#ddeddc',
+                        pointBackgroundColor: '#008000',
+                        pointRadius: 0,
+                        lineTension: 0
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time'
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                callback: function(tickValue, index, ticks) {
+                                    
+                                    return tickValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                    
+                                  }
+                            }
+                        }]
+                    }
+                }
+            });
+
+            $('#statsChartLoading').hide();
         });
     });
     </script>
@@ -74,7 +119,12 @@
 
                 <br/>
 
-                <div id="graphdiv"></div>
+                <div style="position: relative;">
+                    <canvas id="statsChart" width="800" height="200" style="width: 100%;"></canvas>
+                    <div id="statsChartLoading" style="position: absolute; top: 50%; width: 100%;" class="text-muted text-center lead">
+                        Loading chart <span id="statsChartLoadingCount">...</span>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-sm-4">
