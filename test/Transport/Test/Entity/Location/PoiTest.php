@@ -28,4 +28,3 @@ class PoiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getPoi(), Poi::createFromXml($xml));
     }
 }
-

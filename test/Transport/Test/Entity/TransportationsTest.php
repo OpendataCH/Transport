@@ -4,7 +4,7 @@ namespace Transport\Test\Entity;
 
 use Transport\Entity\Transportations;
 
-class APITest extends \PHPUnit_Framework_TestCase
+class TransportationsTest extends \PHPUnit_Framework_TestCase
 {
     public function testReduceTransportations()
     {

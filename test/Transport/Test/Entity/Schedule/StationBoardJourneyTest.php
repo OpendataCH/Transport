@@ -17,13 +17,13 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $prognosis->capacity2nd = '-1';
         $stop->prognosis = $prognosis;
         $station = new Entity\Location\Station();
-            $station->name = 'ZÃ¼rich, BÃ¤ckeranlage';
-            $station->id = '8591052';
-            $coordinates = new Entity\Coordinate();
-                $coordinates->x = 47.378473;
-                $coordinates->y = 8.525342;
-                $coordinates->type = 'WGS84';
-            $station->coordinate = $coordinates;
+        $station->name = 'ZÃ¼rich, BÃ¤ckeranlage';
+        $station->id = '8591052';
+        $coordinates = new Entity\Coordinate();
+        $coordinates->x = 47.378473;
+        $coordinates->y = 8.525342;
+        $coordinates->type = 'WGS84';
+        $station->coordinate = $coordinates;
         $stop->station = $station;
         $stop->location = $station;
 

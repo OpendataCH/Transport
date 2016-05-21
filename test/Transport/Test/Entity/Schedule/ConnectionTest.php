@@ -9,7 +9,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     protected function getConnection()
     {
-
         $journey = new Entity\Schedule\Journey();
         $journey->name = 'S1219278';
         $journey->category = 'S12';
@@ -28,13 +27,13 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $prognosis->capacity2nd = '2';
         $from->prognosis = $prognosis;
         $station = new Entity\Location\Station();
-            $station->name = "Zürich HB";
-            $station->id = "008503000";
-            $coordinates = new Entity\Coordinate();
-                $coordinates->x = 47.378177;
-                $coordinates->y = 8.540192;
-                $coordinates->type = "WGS84";
-            $station->coordinate = $coordinates;
+        $station->name = "Zürich HB";
+        $station->id = "008503000";
+        $coordinates = new Entity\Coordinate();
+        $coordinates->x = 47.378177;
+        $coordinates->y = 8.540192;
+        $coordinates->type = "WGS84";
+        $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
         $from->realtimeAvailability = 'RT_BHF';
@@ -44,13 +43,13 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $to->arrivalTimestamp = 1328035320;
         $to->platform = '3';
         $station = new Entity\Location\Station();
-            $station->name = "Baden";
-            $station->id = "008503504";
-            $coordinates = new Entity\Coordinate();
-                $coordinates->x = 47.47642;
-                $coordinates->y = 8.307695;
-                $coordinates->type = "WGS84";
-            $station->coordinate = $coordinates;
+        $station->name = "Baden";
+        $station->id = "008503504";
+        $coordinates = new Entity\Coordinate();
+        $coordinates->x = 47.47642;
+        $coordinates->y = 8.307695;
+        $coordinates->type = "WGS84";
+        $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
         $to->realtimeAvailability = 'RT_BHF';
@@ -68,8 +67,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $section->arrival = $to;
 
 
-		$service = new Entity\Schedule\Service();
-		$service->regular = 'daily';
+        $service = new Entity\Schedule\Service();
+        $service->regular = 'daily';
 
         $connection = new Entity\Schedule\Connection();
         $connection->from = $from;

@@ -41,4 +41,3 @@ class LocationQueryTest extends \PHPUnit_Framework_TestCase
 ', $query->toXml());
     }
 }
-

@@ -13,13 +13,13 @@ class FieldsNormalizerTest extends \PHPUnit_Framework_TestCase
     {
         $from = new Entity\Schedule\Stop();
         $station = new Entity\Location\Station();
-            $station->name = "Zürich HB";
-            $station->id = "008503000";
-            $coordinates = new Entity\Coordinate();
-                $coordinates->x = 8.540192;
-                $coordinates->y = 47.378177;
-                $coordinates->type = "WGS84";
-            $station->coordinate = $coordinates;
+        $station->name = "Zürich HB";
+        $station->id = "008503000";
+        $coordinates = new Entity\Coordinate();
+        $coordinates->x = 8.540192;
+        $coordinates->y = 47.378177;
+        $coordinates->type = "WGS84";
+        $station->coordinate = $coordinates;
         $from->station = $station;
 
         $to = new Entity\Schedule\Stop();

@@ -9,8 +9,8 @@ use Transport\Entity\Schedule\StationBoardQuery;
 
 require_once 'bootstrap.php';
 
-function download(Query $query, $file) {
-
+function download(Query $query, $file)
+{
     $api = new Transport\API();
 
     $xml = $api->sendQuery($query);
@@ -27,8 +27,8 @@ function download(Query $query, $file) {
     }
 }
 
-function downloadJson($url, $file) {
-
+function downloadJson($url, $file)
+{
     $browser = new Buzz\Browser();
 
     // send request

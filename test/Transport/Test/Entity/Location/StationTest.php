@@ -33,4 +33,3 @@ class StationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getStation(), Station::createStationFromXml($xml));
     }
 }
-
