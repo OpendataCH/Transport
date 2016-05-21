@@ -13,20 +13,20 @@
     
     $(function () {
         $('#from, #to').autocomplete({
-			source: function (request, response) {
-				$.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
-					response($.map(data.stations, function(station) {
-						return {
-							label: station.name,
-							station: station
-						}
-					}));
-				}, 'json');
-			},
-			select: function (event, ui) {
-				console.log(ui.item.station.id);
-			}
-		});
+            source: function (request, response) {
+                $.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
+                    response($.map(data.stations, function(station) {
+                        return {
+                            label: station.name,
+                            station: station
+                        }
+                    }));
+                }, 'json');
+            },
+            select: function (event, ui) {
+                console.log(ui.item.station.id);
+            }
+        });
     });
     
     </script>

@@ -89,75 +89,75 @@
 
     <div class="container">
 
-            <header>
-                <h1><a href="./">Transport</a></h1>
-                <p>Swiss public transport API</p>
-            </header>
+        <header>
+            <h1><a href="./">Transport</a></h1>
+            <p>Swiss public transport API</p>
+        </header>
 
-            <article>
-                <h2>Statistics</h2>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <p>
-                            Total calls<br/>
-                            <span class="lead">{{ total | number_format(0, ".", "'") }}</span>
-                        </p>
-                    </div>
-                    <div class="col-sm-4">
-                        <p>
-                            Average calls per day<br/>
-                            <span class="lead">{{ avg | number_format(0, ".", "'") }}</span>
-                        </p>
-                    </div>
-                    <div class="col-sm-4">
-                        <p>
-                            Max calls for one day<br/>
-                            <span class="lead">{{ max | number_format(0, ".", "'") }}</span>
-                        </p>
-                    </div>
+        <article>
+            <h2>Statistics</h2>
+            <div class="row">
+                <div class="col-sm-4">
+                    <p>
+                        Total calls<br/>
+                        <span class="lead">{{ total | number_format(0, ".", "'") }}</span>
+                    </p>
                 </div>
-
-                <br/>
-
-                <div style="position: relative;">
-                    <canvas id="statsChart" width="800" height="200" style="width: 100%;"></canvas>
-                    <div id="statsChartLoading" style="position: absolute; top: 50%; width: 100%;" class="text-muted text-center lead">
-                        Loading chart <span id="statsChartLoadingCount">...</span>
-                    </div>
+                <div class="col-sm-4">
+                    <p>
+                        Average calls per day<br/>
+                        <span class="lead">{{ avg | number_format(0, ".", "'") }}</span>
+                    </p>
                 </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h2 title="Top 5 since 10. Aug. 2012">Resources</h2>
-                        <ul class="list-unstyled">
-                            {% for resource in resources %}
-                            <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format(0, ".", "'") }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <h2 title="Top 5 since 10. Aug. 2012">Stations</h2>
-                        <ul class="list-unstyled">
-                            {% for station in stations %}
-                            <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format(0, ".", "'") }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <h2 title="Top 5 since 22. November 2015">Errors</h2>
-                        <ul class="list-unstyled">
-                            {% for error in errors %}
-                                <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="col-sm-4">
+                    <p>
+                        Max calls for one day<br/>
+                        <span class="lead">{{ max | number_format(0, ".", "'") }}</span>
+                    </p>
                 </div>
-            </article>
+            </div>
 
-            <footer class="footer">
-                <hr>
-                <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
-            </footer>
+            <br/>
+
+            <div style="position: relative;">
+                <canvas id="statsChart" width="800" height="200" style="width: 100%;"></canvas>
+                <div id="statsChartLoading" style="position: absolute; top: 50%; width: 100%;" class="text-muted text-center lead">
+                    Loading chart <span id="statsChartLoadingCount">...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <h2 title="Top 5 since 10. Aug. 2012">Resources</h2>
+                    <ul class="list-unstyled">
+                        {% for resource in resources %}
+                        <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format(0, ".", "'") }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <h2 title="Top 5 since 10. Aug. 2012">Stations</h2>
+                    <ul class="list-unstyled">
+                        {% for station in stations %}
+                        <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format(0, ".", "'") }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <h2 title="Top 5 since 22. November 2015">Errors</h2>
+                    <ul class="list-unstyled">
+                        {% for error in errors %}
+                            <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <footer class="footer">
+            <hr>
+            <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+        </footer>
 
     </div>
 
