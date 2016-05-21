@@ -12,7 +12,6 @@ $stationsTo = array();
 
 $search = $from && $to;
 if ($search) {
-
     $query = array(
         'from' => $from,
         'to' => $to,
