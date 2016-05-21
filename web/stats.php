@@ -39,10 +39,10 @@ if ($app['redis.config']) {
 
 		    // transform to comma and new line separated list
 		    $data = array();
-		    foreach (array_slice($calls, -30) as $date => $value) {
+		    foreach ($calls as $date => $value) {
 		        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
 		    }
-		    foreach (array_slice($errors, -30) as $date => $value) {
+		    foreach ($errors as $date => $value) {
 		        if (isset($data[$date])) {
 		            $data[$date]['errors'] = ($value ?: 0);
 		        }
@@ -50,12 +50,10 @@ if ($app['redis.config']) {
 		    foreach ($data as $key => $value) {
 		        $data[$key] = implode(',', $value);
 		    }
-		    $data = implode('\n', $data);
 
-            $csv = "Date,Calls\n";
-            foreach ($calls as $date => $count) {
-                $csv .= "$date,$count\n";
-            }
+            $csv = "Date,Calls,Errors\n";
+			$csv .= implode("\n", $data);
+
             return new Response($csv, 200, array('Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv'));
         }
 
