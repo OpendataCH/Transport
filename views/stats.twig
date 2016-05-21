@@ -43,14 +43,14 @@
 <body lang="en">
 
     <div class="container">
-        <div class="col-sm-8 col-sm-offset-2">
+
             <header>
                 <h1><a href="./">Transport</a></h1>
                 <p>Swiss public transport API</p>
             </header>
 
             <article>
-                <h2>Statistics <small id="labels"></small></h2>
+                <h2>Statistics</h2>
                 <div class="row">
                     <div class="col-sm-4">
                         <p>
@@ -77,37 +77,38 @@
                 <div id="graphdiv"></div>
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <h2 title="Top 5 since 10. Aug. 2012">Resources</h2>
                         <ul class="list-unstyled">
                             {% for resource in resources %}
-                            <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls }}</span></li>
+                            <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <h2 title="Top 5 since 10. Aug. 2012">Stations</h2>
                         <ul class="list-unstyled">
                             {% for station in stations %}
-                            <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls }}</span></li>
+                            <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2 title="Top 5 since 22. November 2015">Errors</h2>
+                        <ul class="list-unstyled">
+                            {% for error in errors %}
+                                <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format }}</span></li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-
-                <h2 title="Top 5 since 22. November 2015">Errors</h2>
-                <ul class="list-unstyled">
-                    {% for error in errors %}
-                        <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls }}</span></li>
-                    {% endfor %}
-                </ul>
             </article>
 
             <footer class="footer">
                 <hr>
                 <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
             </footer>
-        </div>
+
     </div>
 
 </body>
