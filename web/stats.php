@@ -37,11 +37,11 @@ if ($app['redis.config']) {
 	    // combine calls and errors
 	    $data = array();
 	    foreach ($calls as $date => $value) {
-	        $data[$date] = array('date' => $date, 'calls' => ($value ?: 0), 'errors' => 0);
+	        $data[$date] = array('date' => $date, 'calls' => ((int) $value ?: 0), 'errors' => 0);
 	    }
 	    foreach ($errors as $date => $value) {
 	        if (isset($data[$date])) {
-	            $data[$date]['errors'] = ($value ?: 0);
+	            $data[$date]['errors'] = ((int) $value ?: 0);
 	        }
 	    }
 		$data = array_values($data);
