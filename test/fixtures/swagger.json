@@ -1,0 +1,611 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Transport API",
+        "version": "1.0"
+    },
+    "host": "transport.opendata.ch",
+    "basePath": "/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/locations": {
+            "get": {
+                "tags": [
+                    "locations"
+                ],
+                "summary": "Search locations",
+                "description": "Returns the matching locations for the given parameters. Either query or ( x and y ) are required.\n\nThe locations in the response are scored to determine which is the most exact location.\n\nThis method can return a refine response, what means that the request has to be redone.",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "description": "Specifies the location name to search for (e.g. Basel)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "x",
+                        "in": "query",
+                        "description": "Latitude (e.g. 47.476001)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "y",
+                        "in": "query",
+                        "description": "Longitude (e.g. 8.306130)",
+                        "type": "number"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Only with `query` parameter. Specifies the location type, possible types are:<ul><li>`all` (default): Looks up for all types of locations</li><li>`station`: Looks up for stations (train station, bus station)</li><li>`poi`: Looks up for points of interest (Clock tower, China garden)</li><li>`address`: Looks up for an address (Zurich Bahnhofstrasse 33)</li></ul>",
+                        "type": "string"
+                    },
+                    {
+                        "name": "transportations[]",
+                        "in": "query",
+                        "description": "Only with `x` and `y` parameter. Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of locations",
+                        "schema": {
+                            "properties": {
+                                "stations": {
+                                    "description": "Search locations\n\nReturns the matching locations for the given parameters. Either query or ( x and y ) are required.\n\nThe locations in the response are scored to determine which is the most exact location.\n\nThis method can return a refine response, what means that the request has to be redone.",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Location"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/connections": {
+            "get": {
+                "tags": [
+                    "connections"
+                ],
+                "summary": "Search connections",
+                "description": "Returns the next connections from a location to another.",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Specifies the departure location of the connection (e.g. Lausanne)",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Specifies the arrival location of the connection (e.g. Gen\u00e8ve)",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "via[]",
+                        "in": "query",
+                        "description": "Specifies up to five via locations. When specifying several vias, array notation (via[]=Bern&via[]=Fribourg) is required",
+                        "type": "string"
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Date of the connection, in the format YYYY-MM-DD (e.g. 2012-03-25)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "time",
+                        "in": "query",
+                        "description": "Time of the connection, in the format hh:mm (e.g. 17:30)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "isArrivalTime",
+                        "in": "query",
+                        "description": "defaults to `0`, if set to `1` the passed `date` and `time` is the arrival time",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "transportations[]",
+                        "in": "query",
+                        "description": "Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "direct",
+                        "in": "query",
+                        "description": "defaults to `0`, if set to `1` only direct connections are allowed",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "sleeper",
+                        "in": "query",
+                        "description": "defaults to `0`, if set to `1` only night trains containing beds are allowed, implies `direct=1`",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "couchette",
+                        "in": "query",
+                        "description": "defaults to `0`, if set to `1` only night trains containing couchettes are allowed, implies `direct=1`",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "bike",
+                        "in": "query",
+                        "description": "defaults to `0`, if set to `1` only trains allowing the transport of bicycles are allowed",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "accessibility",
+                        "in": "query",
+                        "description": "Possible values are `independent_boarding`, `assisted_boarding`, and `advanced_notice`",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of connections",
+                        "schema": {
+                            "properties": {
+                                "connections": {
+                                    "description": "Search connections\n\nReturns the next connections from a location to another.",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Connection"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/stationboard": {
+            "get": {
+                "tags": [
+                    "stationboard"
+                ],
+                "summary": "Get station board",
+                "description": "Returns the next connections leaving from a specific location.",
+                "parameters": [
+                    {
+                        "name": "station",
+                        "in": "query",
+                        "description": "Specifies the location of which a stationboard should be returned (e.g. Aarau)",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The id of the station whose stationboard should be returned. Alternative to the station parameter; one of these two is required. If both an id and a station are specified the id has precedence. e.g. 8503059 (for Zurich Stadelhofen)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of departing connections to return. This is not a hard limit - if multiple connections leave at the same time it'll return any connections that leave at the same time as the last connection within the limit. For example: `limit=4` will return connections leaving at: 19:30, 19:32, 19:32, 19:35, 19:35. Because one of the connections leaving at 19:35 is within the limit, all connections leaving at 19:35 are shown.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "transportations[]",
+                        "in": "query",
+                        "description": "Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+                        "type": "string"
+                    },
+                    {
+                        "name": "datetime",
+                        "in": "query",
+                        "description": "Date and time of departing connections, in the format `YYYY-MM-DD hh:mm` (e.g. 2012-03-25 17:30)",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stationboard",
+                        "schema": {
+                            "properties": {
+                                "station": {
+                                    "description": "The first matched location based on the query. The stationboard will be displayed if this is a station.",
+                                    "$ref": "#/definitions/Station"
+                                },
+                                "stationboard": {
+                                    "description": "A list of journeys with the stop of the line leaving from that station.",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Journey"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Coordinate": {
+            "properties": {
+                "type": {
+                    "description": "The type of the given coordinate",
+                    "type": "string"
+                },
+                "x": {
+                    "description": "Latitude",
+                    "type": "integer"
+                },
+                "y": {
+                    "description": "Longitude",
+                    "type": "integer"
+                }
+            }
+        },
+        "Address": {
+            "properties": {
+                "name": {
+                    "description": "The name of this location",
+                    "type": "string"
+                },
+                "score": {
+                    "description": "The score with regard to the search request, the higher the better",
+                    "type": "integer"
+                },
+                "coordinate": {
+                    "description": "The location coordinates",
+                    "$ref": "#/definitions/Coordinate"
+                },
+                "distance": {
+                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "type": "integer"
+                }
+            }
+        },
+        "Location": {
+            "properties": {
+                "name": {
+                    "description": "The name of this location",
+                    "type": "string"
+                },
+                "score": {
+                    "description": "The score with regard to the search request, the higher the better",
+                    "type": "integer"
+                },
+                "coordinate": {
+                    "description": "The location coordinates",
+                    "$ref": "#/definitions/Coordinate"
+                },
+                "distance": {
+                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "type": "integer"
+                }
+            }
+        },
+        "Poi": {
+            "properties": {
+                "name": {
+                    "description": "The name of this location",
+                    "type": "string"
+                },
+                "score": {
+                    "description": "The score with regard to the search request, the higher the better",
+                    "type": "integer"
+                },
+                "coordinate": {
+                    "description": "The location coordinates",
+                    "$ref": "#/definitions/Coordinate"
+                },
+                "distance": {
+                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "type": "integer"
+                }
+            }
+        },
+        "Station": {
+            "properties": {
+                "id": {
+                    "description": "The ID of the station",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of this location",
+                    "type": "string"
+                },
+                "score": {
+                    "description": "The score with regard to the search request, the higher the better",
+                    "type": "integer"
+                },
+                "coordinate": {
+                    "description": "The location coordinates",
+                    "$ref": "#/definitions/Coordinate"
+                },
+                "distance": {
+                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "type": "integer"
+                }
+            }
+        },
+        "Connection": {
+            "properties": {
+                "from": {
+                    "description": "The departure checkpoint of the connection",
+                    "$ref": "#/definitions/Stop"
+                },
+                "to": {
+                    "description": "The arrival checkpoint of the connection",
+                    "$ref": "#/definitions/Stop"
+                },
+                "duration": {
+                    "description": "Duration of the journey (e.g. 00d00:43:00)",
+                    "type": "string"
+                },
+                "transfers": {
+                    "description": "Service information about how regular the connection operates",
+                    "type": "integer"
+                },
+                "service": {
+                    "description": "List of transport products (e.g. IR, S9)",
+                    "$ref": "#/definitions/Service"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "capacity1st": {
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "type": "integer"
+                },
+                "capacity2nd": {
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "type": "integer"
+                },
+                "sections": {
+                    "description": "A list of sections",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Section"
+                    }
+                }
+            }
+        },
+        "Journey": {
+            "properties": {
+                "name": {
+                    "description": "The name of the connection (e.g. ICN 518)",
+                    "type": "string"
+                },
+                "category": {
+                    "description": "The type of connection this is (e.g. ICN)",
+                    "type": "string"
+                },
+                "subcategory": {
+                    "type": "string"
+                },
+                "categoryCode": {
+                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram",
+                    "type": "integer"
+                },
+                "number": {
+                    "description": "The number of the connection's line (e.g. 518)",
+                    "type": "string"
+                },
+                "operator": {
+                    "description": "The operator of the connection's line (e.g. BBA)",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf)",
+                    "type": "string"
+                },
+                "passList": {
+                    "description": "Checkpoints the train passed on the journey",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Stop"
+                    }
+                },
+                "capacity1st": {
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "type": "integer"
+                },
+                "capacity2nd": {
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "type": "integer"
+                }
+            }
+        },
+        "Prognosis": {
+            "properties": {
+                "platform": {
+                    "description": "The estimated arrival/departure platform (e.g. 8)",
+                    "type": "string"
+                },
+                "arrival": {
+                    "description": "The departure time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T08:58:00+02:00)",
+                    "type": "string"
+                },
+                "departure": {
+                    "description": "The arrival time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T09:35:00+02:00)",
+                    "type": "string"
+                },
+                "capacity1st": {
+                    "description": "The estimated occupation load of 1st class coaches (e.g. 1)",
+                    "type": "integer"
+                },
+                "capacity2nd": {
+                    "description": "The estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "type": "integer"
+                }
+            }
+        },
+        "Section": {
+            "properties": {
+                "journey": {
+                    "description": "A journey, the transportation used by this section, can be null",
+                    "$ref": "#/definitions/Journey"
+                },
+                "walk": {
+                    "description": "Information about walking distance, if available, can be null",
+                    "$ref": "#/definitions/Walk"
+                },
+                "departure": {
+                    "description": "The departure checkpoint of the connection",
+                    "$ref": "#/definitions/Stop"
+                },
+                "arrival": {
+                    "description": "The arrival checkpoint of the connection",
+                    "$ref": "#/definitions/Stop"
+                }
+            }
+        },
+        "Service": {
+            "properties": {
+                "regular": {
+                    "description": "Information about how regular a connection operates (e.g. daily).",
+                    "type": "string"
+                },
+                "irregular": {
+                    "description": "Additional information about irregular operation dates (e.g. not 23., 24. Jun 2012).",
+                    "type": "string"
+                }
+            }
+        },
+        "StationBoardJourney": {
+            "properties": {
+                "stop": {
+                    "$ref": "#/definitions/Stop"
+                },
+                "name": {
+                    "description": "The name of the connection (e.g. ICN 518)",
+                    "type": "string"
+                },
+                "category": {
+                    "description": "The type of connection this is (e.g. ICN)",
+                    "type": "string"
+                },
+                "subcategory": {
+                    "type": "string"
+                },
+                "categoryCode": {
+                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram",
+                    "type": "integer"
+                },
+                "number": {
+                    "description": "The number of the connection's line (e.g. 518)",
+                    "type": "string"
+                },
+                "operator": {
+                    "description": "The operator of the connection's line (e.g. BBA)",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf)",
+                    "type": "string"
+                },
+                "passList": {
+                    "description": "Checkpoints the train passed on the journey",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Stop"
+                    }
+                },
+                "capacity1st": {
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "type": "integer"
+                },
+                "capacity2nd": {
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "type": "integer"
+                }
+            }
+        },
+        "Stop": {
+            "properties": {
+                "station": {
+                    "description": "A location object showing this line's stop at the requested station",
+                    "$ref": "#/definitions/Station"
+                },
+                "arrival": {
+                    "description": "The arrival time to the checkpoint (e.g. 14:58:00)",
+                    "type": "string"
+                },
+                "arrivalTimestamp": {
+                    "type": "integer"
+                },
+                "departure": {
+                    "description": "The departure time from the checkpoint, can be null",
+                    "type": "string"
+                },
+                "departureTimestamp": {
+                    "type": "integer"
+                },
+                "delay": {
+                    "type": "integer"
+                },
+                "platform": {
+                    "description": "The arrival/departure platform (e.g. 8)",
+                    "type": "string"
+                },
+                "prognosis": {
+                    "description": "The checkpoint prognosis",
+                    "$ref": "#/definitions/Prognosis"
+                },
+                "realtimeAvailability": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/Location"
+                }
+            }
+        },
+        "Walk": {
+            "properties": {
+                "duration": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "locations",
+            "description": "Search for stations and locations"
+        },
+        {
+            "name": "connections",
+            "description": "Search for connections"
+        },
+        {
+            "name": "stationboard",
+            "description": "Get station board"
+        }
+    ]
+}

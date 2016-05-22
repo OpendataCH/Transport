@@ -15,6 +15,27 @@ use Transport\Web\LocationQueryParser;
 use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Normalizer\FieldsNormalizer;
 
+/**
+ * @SWG\Swagger(
+ *     schemes={"http", "https"},
+ *     host="transport.opendata.ch",
+ *     basePath="/v1",
+ *     produces={"application/json"},
+ *     @SWG\Info(title="Transport API", version="1.0")
+ * )
+ * @SWG\Tag(
+ *   name="locations",
+ *   description="Search for stations and locations"
+ * )
+ * @SWG\Tag(
+ *   name="connections",
+ *   description="Search for connections"
+ * )
+ * @SWG\Tag(
+ *   name="stationboard",
+ *   description="Get station board"
+ * )
+ */
 class Application extends \Silex\Application
 {
     public function __construct()
@@ -177,8 +198,62 @@ class Application extends \Silex\Application
             ));
         })->bind('api');
 
-
-        // locations
+        /**
+         * Search locations
+         *
+         * Returns the matching locations for the given parameters. Either query or ( x and y ) are required.
+         *
+         * The locations in the response are scored to determine which is the most exact location.
+         *
+         * This method can return a refine response, what means that the request has to be redone.
+         *
+         * @SWG\Get(
+         *     path="/locations",
+         *     tags={"locations"},
+         *     @SWG\Parameter(
+         *         name="query",
+         *         in="query",
+         *         description="Specifies the location name to search for (e.g. Basel)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="x",
+         *         in="query",
+         *         description="Latitude (e.g. 47.476001)",
+         *         type="number"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="y",
+         *         in="query",
+         *         description="Longitude (e.g. 8.306130)",
+         *         type="number"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="type",
+         *         in="query",
+         *         description="Only with `query` parameter. Specifies the location type, possible types are:<ul><li>`all` (default): Looks up for all types of locations</li><li>`station`: Looks up for stations (train station, bus station)</li><li>`poi`: Looks up for points of interest (Clock tower, China garden)</li><li>`address`: Looks up for an address (Zurich Bahnhofstrasse 33)</li></ul>",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="transportations[]",
+         *         in="query",
+         *         description="Only with `x` and `y` parameter. Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+         *         type="string"
+         *     ),
+         *     @SWG\Response(
+         *         response="200",
+         *         description="List of locations",
+         *         @SWG\Schema(
+         *             type="object",
+         *             @SWG\Property(
+         *                  property="stations",
+         *                  type="array",
+         *                  @SWG\Items(ref="#/definitions/Location")
+         *             ),
+         *         ),
+         *     ),
+         * )
+         */
         $app->get('/v1/locations', function (Request $request) use ($app) {
 
             $stations = array();
@@ -206,8 +281,114 @@ class Application extends \Silex\Application
             return new Response($json, 200, array('Content-Type' => 'application/json'));
         })->bind('locations');
 
-
-        // connections
+        /**
+         * Search connections
+         *
+         * Returns the next connections from a location to another.
+         *
+         * @SWG\Get(
+         *     path="/connections",
+         *     tags={"connections"},
+         *     @SWG\Parameter(
+         *         name="from",
+         *         in="query",
+         *         description="Specifies the departure location of the connection (e.g. Lausanne)",
+         *         type="string",
+         *         required=true
+         *     ),
+         *     @SWG\Parameter(
+         *         name="to",
+         *         in="query",
+         *         description="Specifies the arrival location of the connection (e.g. Genève)",
+         *         type="string",
+         *         required=true
+         *     ),
+         *     @SWG\Parameter(
+         *         name="via[]",
+         *         in="query",
+         *         description="Specifies up to five via locations. When specifying several vias, array notation (via[]=Bern&via[]=Fribourg) is required",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="date",
+         *         in="query",
+         *         description="Date of the connection, in the format YYYY-MM-DD (e.g. 2012-03-25)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="time",
+         *         in="query",
+         *         description="Time of the connection, in the format hh:mm (e.g. 17:30)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="isArrivalTime",
+         *         in="query",
+         *         description="defaults to `0`, if set to `1` the passed `date` and `time` is the arrival time",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="transportations[]",
+         *         in="query",
+         *         description="Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="limit",
+         *         in="query",
+         *         description="1 - 6. Specifies the number of connections to return. If several connections depart at the same time they are counted as 1.",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="page",
+         *         in="query",
+         *         description="0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on.",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="direct",
+         *         in="query",
+         *         description="defaults to `0`, if set to `1` only direct connections are allowed",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="sleeper",
+         *         in="query",
+         *         description="defaults to `0`, if set to `1` only night trains containing beds are allowed, implies `direct=1`",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="couchette",
+         *         in="query",
+         *         description="defaults to `0`, if set to `1` only night trains containing couchettes are allowed, implies `direct=1`",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="bike",
+         *         in="query",
+         *         description="defaults to `0`, if set to `1` only trains allowing the transport of bicycles are allowed",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="accessibility",
+         *         in="query",
+         *         description="Possible values are `independent_boarding`, `assisted_boarding`, and `advanced_notice`",
+         *         type="string"
+         *     ),
+         *     @SWG\Response(
+         *         response="200",
+         *         description="A list of connections",
+         *         @SWG\Schema(
+         *             type="object",
+         *             @SWG\Property(
+         *                  property="connections",
+         *                  type="array",
+         *                  @SWG\Items(ref="#/definitions/Connection")
+         *             ),
+         *         ),
+         *     ),
+         * )
+         */
         $app->get('/v1/connections', function (Request $request) use ($app) {
 
             $query = LocationQueryParser::create($request);
@@ -252,7 +433,65 @@ class Application extends \Silex\Application
         })->bind('connections');
 
 
-        // station board
+        /**
+         * Get station board
+         *
+         * Returns the next connections leaving from a specific location.
+         *
+         * @SWG\Get(
+         *     path="/stationboard",
+         *     tags={"stationboard"},
+         *     @SWG\Parameter(
+         *         name="station",
+         *         in="query",
+         *         description="Specifies the location of which a stationboard should be returned (e.g. Aarau)",
+         *         type="string",
+         *         required=true
+         *     ),
+         *     @SWG\Parameter(
+         *         name="id",
+         *         in="query",
+         *         description="The id of the station whose stationboard should be returned. Alternative to the station parameter; one of these two is required. If both an id and a station are specified the id has precedence. e.g. 8503059 (for Zurich Stadelhofen)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="limit",
+         *         in="query",
+         *         description="Number of departing connections to return. This is not a hard limit - if multiple connections leave at the same time it'll return any connections that leave at the same time as the last connection within the limit. For example: `limit=4` will return connections leaving at: 19:30, 19:32, 19:32, 19:35, 19:35. Because one of the connections leaving at 19:35 is within the limit, all connections leaving at 19:35 are shown.",
+         *         type="integer"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="transportations[]",
+         *         in="query",
+         *         description="Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+         *         type="string"
+         *     ),
+         *     @SWG\Parameter(
+         *         name="datetime",
+         *         in="query",
+         *         description="Date and time of departing connections, in the format `YYYY-MM-DD hh:mm` (e.g. 2012-03-25 17:30)",
+         *         type="string"
+         *     ),
+         *     @SWG\Response(
+         *         response="200",
+         *         description="Stationboard",
+         *         @SWG\Schema(
+         *             type="object",
+         *             @SWG\Property(
+         *                  property="station",
+         *                  description="The first matched location based on the query. The stationboard will be displayed if this is a station.",
+         *                  ref="#/definitions/Station"
+         *             ),
+         *             @SWG\Property(
+         *                  property="stationboard",
+         *                  description="A list of journeys with the stop of the line leaving from that station.",
+         *                  type="array",
+         *                  @SWG\Items(ref="#/definitions/Journey")
+         *             ),
+         *         ),
+         *     ),
+         * )
+         */
         $app->get('/v1/stationboard', function (Request $request) use ($app) {
 
             $stationboard = array();
@@ -294,5 +533,14 @@ class Application extends \Silex\Application
             $json = $app['serializer']->serialize((object) $result, 'json');
             return new Response($json, 200, array('Content-Type' => 'application/json'));
         })->bind('stationboard');
+
+        // Swagger
+        $app->get('/swagger.json', function () use ($app) {
+
+            $swagger = \Swagger\scan(__DIR__);
+
+            return new Response($swagger, 200, array('Content-Type' => 'application/json'));
+
+        })->bind('swagger');
     }
 }

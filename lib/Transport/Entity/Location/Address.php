@@ -8,6 +8,8 @@ use Transport\Entity\Coordinate;
  * Represents a Address we received as response
  *
  * <Address name="3011 Bern, Bollwerk 19" type="WGS84" x="7440803" y="46949607"/>
+ *
+ * @SWG\Definition()
  */
 class Address extends Location
 {

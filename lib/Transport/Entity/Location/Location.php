@@ -4,27 +4,36 @@ namespace Transport\Entity\Location;
 
 use Transport\Entity\Coordinate;
 
+/**
+ * @SWG\Definition()
+ */
 class Location
 {
     /**
      * The name of this location
      * @var string
+     * @SWG\Property()
      */
     public $name;
 
     /**
      * The score with regard to the search request, the higher the better
      * @var int
+     * @SWG\Property()
      */
     public $score;
 
     /**
+     * The location coordinates
      * @var Coordinate
+     * @SWG\Property()
      */
     public $coordinate;
 
     /**
+     * If search has been with coordinates, distance to original point in meters
      * @var int
+     * @SWG\Property()
      */
     public $distance;
 

@@ -4,11 +4,14 @@ namespace Transport\Entity\Schedule;
 
 /**
  * Request for a station board journey
+ *
+ * @SWG\Definition()
  */
 class StationBoardJourney extends Journey
 {
     /**
-     * @var Transport\Entity\Schedule\Stop
+     * @var \Transport\Entity\Schedule\Stop
+     * @SWG\Property()
      */
     public $stop;
 

@@ -6,25 +6,74 @@ use Transport\Entity;
 
 /**
  * Basic Stop
+ *
+ * @SWG\Definition()
  */
 class Stop
 {
+    /**
+     * A location object showing this line's stop at the requested station
+     * @var \Transport\Entity\Location\Station
+     * @SWG\Property()
+     */
     public $station;
 
+    /**
+     * The arrival time to the checkpoint (e.g. 14:58:00)
+     * @var string
+     * @SWG\Property()
+     */
     public $arrival;
+
+    /**
+     * @var int
+     * @SWG\Property()
+     */
     public $arrivalTimestamp;
 
+    /**
+     * The departure time from the checkpoint, can be null
+     * @var string
+     * @SWG\Property()
+     */
     public $departure;
+
+    /**
+     * @var int
+     * @SWG\Property()
+     */
     public $departureTimestamp;
 
+    /**
+     * @var int
+     * @SWG\Property()
+     */
     public $delay;
 
+    /**
+     * The arrival/departure platform (e.g. 8)
+     * @var string
+     * @SWG\Property()
+     */
     public $platform;
 
+    /**
+     * The checkpoint prognosis
+     * @var \Transport\Entity\Schedule\Prognosis
+     * @SWG\Property()
+     */
     public $prognosis;
 
+    /**
+     * @var string
+     * @SWG\Property()
+     */
     public $realtimeAvailability;
 
+    /**
+     * @var \Transport\Entity\Location\Location
+     * @SWG\Property()
+     */
     public $location;
 
     public function __construct()
