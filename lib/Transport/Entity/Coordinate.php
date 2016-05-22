@@ -2,20 +2,29 @@
 
 namespace Transport\Entity;
 
+/**
+ * @SWG\Definition()
+ */
 class Coordinate
 {
     /**
+     * The type of the given coordinate
      * @var string
+     * @SWG\Property()
      */
     public $type;
 
     /**
+     * Latitude
      * @var int
+     * @SWG\Property()
      */
     public $x;
 
     /**
+     * Longitude
      * @var int
+     * @SWG\Property()
      */
     public $y;
 

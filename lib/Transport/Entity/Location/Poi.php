@@ -6,6 +6,8 @@ namespace Transport\Entity\Location;
  * Represents a Poi we received as response
  *
  * <Poi name="Ittigen, Bahnhof" score="100" type="WGS84" x="7478189" y="46976494" />
+ *
+ * @SWG\Definition()
  */
 class Poi extends Location
 {

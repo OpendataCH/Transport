@@ -2,10 +2,14 @@
 
 namespace Transport\Entity\Schedule;
 
+/**
+ * @SWG\Definition()
+ */
 class Walk
 {
     /**
      * @var int
+     * @SWG\Property()
      */
     public $duration;
 

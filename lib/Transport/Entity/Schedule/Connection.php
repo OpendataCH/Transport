@@ -5,52 +5,71 @@ namespace Transport\Entity\Schedule;
 use Transport\Entity;
 
 /**
- * Connection
+ * A connection represents a possible journey between two locations.
+ *
+ * @SWG\Definition()
  */
 class Connection
 {
     /**
-     * @var Transport\Entity\Schedule\Stop
+     * The departure checkpoint of the connection
+     * @var \Transport\Entity\Schedule\Stop
+     * @SWG\Property()
      */
     public $from;
 
     /**
-     * @var Transport\Entity\Schedule\Stop
+     * The arrival checkpoint of the connection
+     * @var \Transport\Entity\Schedule\Stop
+     * @SWG\Property()
      */
     public $to;
     
     /**
+     * Duration of the journey (e.g. 00d00:43:00)
      * @var String
+     * @SWG\Property()
      */
     public $duration;
     
     /**
+     * Service information about how regular the connection operates
      * @var int
+     * @SWG\Property()
      */
     public $transfers;
 
     /**
-     * @var Transport\EntitySchedule\Service
+     * List of transport products (e.g. IR, S9)
+     * @var \Transport\Entity\Schedule\Service
+     * @SWG\Property()
      */
     public $service;
 
     /**
-     * @var array
+     * @var string[]
+     * @SWG\Property()
      */
     public $products = array();
     
     /**
+     * The maximum estimated occupation load of 1st class coaches (e.g. 1)
      * @var int
+     * @SWG\Property()
      */
     public $capacity1st = null;
     
     /**
+     * The maximum estimated occupation load of 2nd class coaches (e.g. 2)
      * @var int
+     * @SWG\Property()
      */
     public $capacity2nd = null;
 
     /**
-     * @var array of Transport\Entity\Schedule\Stop 's
+     * A list of sections
+     * @var \Transport\Entity\Schedule\Section[]
+     * @SWG\Property()
      */
     public $sections;
 
