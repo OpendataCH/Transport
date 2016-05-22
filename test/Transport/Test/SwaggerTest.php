@@ -2,8 +2,6 @@
 
 namespace Transport\Test;
 
-use Buzz\Message\Response;
-
 class SwaggerTest extends IntegrationTest
 {
     public function testSwaggerJson()
