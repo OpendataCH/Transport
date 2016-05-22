@@ -4,7 +4,7 @@ $app['debug'] = false;
 $app['http_cache'] = false;
 $app['buzz.client'] = new Buzz\Client\Curl();
 $app['monolog.level'] = Monolog\Logger::ERROR;
-$app['redis.config'] = array('host' => 'redis', 'port' => 6379);
+$app['redis.config'] = array('host' => getenv('REDIS_HOST') ?: 'redis', 'port' => getenv('REDIS_PORT') ?: 6379, 'password' => getenv('REDIS_PASSWORD') ?: '');
 $app['stats.config'] = array('enabled' => true);
 $app['rate_limiting.config'] = array('enabled' => true, 'limit' => 300);
 $app['proxy'] = false;
