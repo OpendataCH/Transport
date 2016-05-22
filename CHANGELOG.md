@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-05-22
+
+- Add Swagger specification
+
 ## 2016-05-21
 
 - Extended statistics page
