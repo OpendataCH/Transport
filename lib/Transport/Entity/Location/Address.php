@@ -5,7 +5,7 @@ namespace Transport\Entity\Location;
 use Transport\Entity\Coordinate;
 
 /**
- * Represents a Address we received as response
+ * Represents a Address we received as response.
  *
  * <Address name="3011 Bern, Bollwerk 19" type="WGS84" x="7440803" y="46949607"/>
  *
@@ -14,7 +14,7 @@ use Transport\Entity\Coordinate;
 class Address extends Location
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toXml(\SimpleXMLElement $parent = null)
     {
@@ -38,13 +38,14 @@ class Address extends Location
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
-            $obj = new Address;
+            $obj = new self();
         }
+
         return parent::createFromXml($xml, $obj);
     }
 }

@@ -3,7 +3,7 @@
 namespace Transport\Entity\Location;
 
 /**
- * Represents a station we received as response
+ * Represents a station we received as response.
  *
  * <Station name="Bern Felsenau" score="81" externalId="008508051#95" externalStationNr="008508051" type="WGS84" x="7444245" y="46968493"/>
  *
@@ -12,7 +12,7 @@ namespace Transport\Entity\Location;
 class Station extends Location
 {
     /**
-     * The ID of the station
+     * The ID of the station.
      *
      * @var string
      * @SWG\Property()
@@ -28,7 +28,7 @@ class Station extends Location
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toXml(\SimpleXMLElement $parent = null)
     {
@@ -47,7 +47,7 @@ class Station extends Location
     public static function createStationFromXml(\SimpleXMLElement $xml, Station $obj = null)
     {
         if (!$obj) {
-            $obj = new Station();
+            $obj = new self();
         }
         Location::createFromXml($xml, $obj);
 
@@ -62,7 +62,7 @@ class Station extends Location
     public static function createStationFromJson($json, Station $obj = null)
     {
         if (!$obj) {
-            $obj = new Station();
+            $obj = new self();
         }
         Location::createFromJson($json, $obj);
 

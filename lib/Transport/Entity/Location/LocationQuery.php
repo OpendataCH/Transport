@@ -1,21 +1,19 @@
-<?php 
+<?php
 
 namespace Transport\Entity\Location;
 
 use Transport\Entity\Query;
-use Transport\Entity\Transportations;
-use Transport\Entity\Location\Location;
 
 class LocationQuery extends Query
 {
     const SBB_SEARCH_MODE = '1';
 
-    private static $locationTypes = array(
-        'all' => 'ALLTYPE',
+    private static $locationTypes = [
+        'all'     => 'ALLTYPE',
         'station' => 'ST',
         'address' => 'ADR',
-        'poi' => 'POI',
-    );
+        'poi'     => 'POI',
+    ];
 
     /**
      * @var array
@@ -28,14 +26,14 @@ class LocationQuery extends Query
      * Finds all stations, locations and poi matching the search query.
      *
      * @param string|array $query Search query (e.g. Ber)
-     * @param string $type  Location types to return (all, station, address, poi)
+     * @param string       $type  Location types to return (all, station, address, poi)
      */
     public function __construct($query, $type = null)
     {
 
         // convert query to array
         if (!is_array($query)) {
-            $query = array($query);
+            $query = [$query];
         }
         $this->query = $query;
 
@@ -50,17 +48,17 @@ class LocationQuery extends Query
 
             // If the key is "via", this is a subarray.
             if ($key === 'via') {
-                $queryArray = array();
+                $queryArray = [];
                 foreach ($value as $k => $v) {
                     $queryArray[$key.($k + 1)] = $v;
                 }
             } else {
-                $queryArray = array($key => $value);
+                $queryArray = [$key => $value];
             }
 
             foreach ($queryArray as $k => $v) {
                 $local = $request->addChild('LocValReq');
-                $local['id'] = preg_match("/^via[0-9]+$/", $k) ? 'via' : $k;
+                $local['id'] = preg_match('/^via[0-9]+$/', $k) ? 'via' : $k;
                 $local['sMode'] = self::SBB_SEARCH_MODE;
 
                 $location = $local->addChild('ReqLoc');

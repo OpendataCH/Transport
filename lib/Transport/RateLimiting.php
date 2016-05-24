@@ -3,8 +3,6 @@
 namespace Transport;
 
 use Predis\Client;
-use Transport\Entity\Location\Location;
-use Transport\Entity\Location\Station;
 
 class RateLimiting
 {
@@ -39,6 +37,7 @@ class RateLimiting
         if ($count !== null && $count >= $this->getLimit()) {
             return true;
         }
+
         return false;
     }
 

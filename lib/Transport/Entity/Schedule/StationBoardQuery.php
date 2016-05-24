@@ -2,9 +2,9 @@
 
 namespace Transport\Entity\Schedule;
 
+use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
 use Transport\Entity\Transportations;
-use Transport\Entity\Location\Station;
 
 class StationBoardQuery extends Query
 {
@@ -19,7 +19,7 @@ class StationBoardQuery extends Query
 
     public $date;
 
-    public $transportations = array('all');
+    public $transportations = ['all'];
 
     public function __construct(Station $station, \DateTime $date = null)
     {

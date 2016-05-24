@@ -11,6 +11,7 @@ class Service
 {
     /**
      * Information about how regular a connection operates (e.g. daily).
+     *
      * @var string
      * @SWG\Property()
      */
@@ -18,6 +19,7 @@ class Service
 
     /**
      * Additional information about irregular operation dates (e.g. not 23., 24. Jun 2012).
+     *
      * @var string
      * @SWG\Property()
      */

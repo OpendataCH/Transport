@@ -12,37 +12,41 @@ use Transport\Entity;
 class Section
 {
     /**
-     * A journey, the transportation used by this section, can be null
+     * A journey, the transportation used by this section, can be null.
+     *
      * @var Entity\Schedule\Journey
      * @SWG\Property()
      */
     public $journey;
 
     /**
-     * Information about walking distance, if available, can be null
+     * Information about walking distance, if available, can be null.
+     *
      * @var Entity\Schedule\Walk
      * @SWG\Property()
      */
     public $walk;
 
     /**
-     * The departure checkpoint of the connection
+     * The departure checkpoint of the connection.
+     *
      * @var Entity\Schedule\Stop
      * @SWG\Property()
      */
     public $departure;
 
     /**
-     * The arrival checkpoint of the connection
+     * The arrival checkpoint of the connection.
+     *
      * @var Entity\Schedule\Stop
      * @SWG\Property()
      */
     public $arrival;
-    
+
     public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null)
     {
         if (!$obj) {
-            $obj = new Section();
+            $obj = new self();
         }
 
         if ($xml->Journey) {

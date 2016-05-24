@@ -7,17 +7,17 @@ $datetime = isset($_GET['datetime']) ? $_GET['datetime'] : '';
 $page = isset($_GET['page']) ? ((int) $_GET['page']) - 1 : 0;
 $c = isset($_GET['c']) ? (int) $_GET['c'] : false;
 
-$stationsFrom = array();
-$stationsTo = array();
+$stationsFrom = [];
+$stationsTo = [];
 
 $search = $from && $to;
 if ($search) {
-    $query = array(
-        'from' => $from,
-        'to' => $to,
-        'page' => $page,
+    $query = [
+        'from'  => $from,
+        'to'    => $to,
+        'page'  => $page,
         'limit' => 6,
-    );
+    ];
 
     if ($datetime) {
         $query['date'] = date('Y-m-d', strtotime($datetime));
@@ -28,7 +28,7 @@ if ($search) {
         $query['via'] = $via;
     }
 
-    $url = 'http://transport.opendata.ch/v1/connections?' . http_build_query($query);
+    $url = 'http://transport.opendata.ch/v1/connections?'.http_build_query($query);
     $response = json_decode(file_get_contents($url));
 
     if ($response->from) {
@@ -193,7 +193,7 @@ if ($search) {
                                 <p>
                                     Did you mean:
                                     <?php foreach ($stationsFrom as $station): ?>
-                                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $station, 'to' => $to, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                                        <a href="connections.php?<?php echo htmlentities(http_build_query(['from' => $station, 'to' => $to, 'datetime' => $datetime]), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
                                     <?php endforeach ?>
                                 </p>
                             <?php endif; ?>
@@ -206,7 +206,7 @@ if ($search) {
                                 <p>
                                     Did you mean:
                                     <?php foreach ($stationsTo as $station): ?>
-                                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $station, 'datetime' => $datetime)), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
+                                        <a href="connections.php?<?php echo htmlentities(http_build_query(['from' => $from, 'to' => $station, 'datetime' => $datetime]), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlentities($station, ENT_QUOTES, 'UTF-8'); ?></a><?php if ($i-- > 1): ?>, <?php endif; ?>
                                     <?php endforeach ?>
                                 </p>
                             <?php endif; ?>
@@ -256,17 +256,17 @@ if ($search) {
                                 <td>
                                     <?php echo date('H:i', strtotime($connection->from->departure)); ?>
                                     <?php if ($connection->from->delay): ?>
-                                        <span style="color: #a20d0d;"><?php echo '+' . $connection->from->delay; ?></span>
+                                        <span style="color: #a20d0d;"><?php echo '+'.$connection->from->delay; ?></span>
                                     <?php endif; ?>
                                     <br/>
                                     <?php echo date('H:i', strtotime($connection->to->arrival)); ?>
                                     <?php if ($connection->to->delay): ?>
-                                        <span style="color: #a20d0d;"><?php echo '+' . $connection->to->delay; ?></span>
+                                        <span style="color: #a20d0d;"><?php echo '+'.$connection->to->delay; ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <?php echo (substr($connection->duration, 0, 2) > 0) ? htmlentities(trim(substr($connection->duration, 0, 2), '0')) . 'd ' : ''; ?>
-                                    <?php echo htmlentities(trim(substr($connection->duration, 3, 1), '0') . substr($connection->duration, 4, 4)); ?>′<br/>
+                                    <?php echo (substr($connection->duration, 0, 2) > 0) ? htmlentities(trim(substr($connection->duration, 0, 2), '0')).'d ' : ''; ?>
+                                    <?php echo htmlentities(trim(substr($connection->duration, 3, 1), '0').substr($connection->duration, 4, 4)); ?>′<br/>
                                     <span class="muted">
                                     <?php echo htmlentities(implode(', ', $connection->products)); ?>
                                     </span>
@@ -296,7 +296,7 @@ if ($search) {
                                     <td rowspan="2">
                                         <?php echo date('H:i', strtotime($section->departure->departure)); ?>
                                         <?php if ($section->departure->delay): ?>
-                                            <span style="color: #a20d0d;"><?php echo '+' . $section->departure->delay; ?></span>
+                                            <span style="color: #a20d0d;"><?php echo '+'.$section->departure->delay; ?></span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
@@ -338,7 +338,7 @@ if ($search) {
                                     <td style="border-top: 0;">
                                         <?php echo date('H:i', strtotime($section->arrival->arrival)); ?>
                                         <?php if ($section->arrival->delay): ?>
-                                            <span style="color: #a20d0d;"><?php echo '+' . $section->arrival->delay; ?></span>
+                                            <span style="color: #a20d0d;"><?php echo '+'.$section->arrival->delay; ?></span>
                                         <?php endif; ?>
                                     </td>
                                     <td style="border-top: 0;">
@@ -360,10 +360,10 @@ if ($search) {
                 <?php $datetime = $datetime ?: date('Y-m-d H:i:s'); ?>
                 <div class="row">
                     <div class="col-xs-6">
-                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page)), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
+                        <a href="connections.php?<?php echo htmlentities(http_build_query(['from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page]), ENT_QUOTES, 'UTF-8'); ?>">Earlier connections</a>
                     </div>
                     <div class="col-xs-6 text-right">
-                        <a href="connections.php?<?php echo htmlentities(http_build_query(array('from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2)), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
+                        <a href="connections.php?<?php echo htmlentities(http_build_query(['from' => $from, 'to' => $to, 'datetime' => $datetime, 'page' => $page + 2]), ENT_QUOTES, 'UTF-8'); ?>">Later connections</a>
                     </div>
                 </div>
                 <form class="pager">

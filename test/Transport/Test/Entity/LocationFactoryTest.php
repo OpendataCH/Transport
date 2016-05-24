@@ -3,12 +3,11 @@
 namespace Transport\Test\Entity;
 
 use Transport\Entity\Coordinate;
-use Transport\Entity\LocationFactory;
 use Transport\Entity\Location\Station;
+use Transport\Entity\LocationFactory;
 
 class LocationFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCreateFromXml_Poi()
     {
         $xml = new \SimpleXMLElement('<Poi />');

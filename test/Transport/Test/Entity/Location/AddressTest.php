@@ -2,14 +2,14 @@
 
 namespace Transport\Test\Entity\Location;
 
-use Transport\Entity\Location\Address;
 use Transport\Entity\Coordinate;
+use Transport\Entity\Location\Address;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
     protected function getAddress()
     {
-        $address = new Address;
+        $address = new Address();
         $address->name = '3011 Bern, Bollwerk 19';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';

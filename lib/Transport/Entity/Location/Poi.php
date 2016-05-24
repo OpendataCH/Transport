@@ -3,7 +3,7 @@
 namespace Transport\Entity\Location;
 
 /**
- * Represents a Poi we received as response
+ * Represents a Poi we received as response.
  *
  * <Poi name="Ittigen, Bahnhof" score="100" type="WGS84" x="7478189" y="46976494" />
  *
@@ -12,7 +12,7 @@ namespace Transport\Entity\Location;
 class Poi extends Location
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toXml(\SimpleXMLElement $parent = null)
     {
@@ -28,13 +28,14 @@ class Poi extends Location
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
         if (!$obj) {
-            $obj = new Poi;
+            $obj = new self();
         }
+
         return parent::createFromXml($xml, $obj);
     }
 }

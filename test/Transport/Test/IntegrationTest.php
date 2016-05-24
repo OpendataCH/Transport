@@ -18,7 +18,7 @@ abstract class IntegrationTest extends WebTestCase
         //$app['debug'] = true;
         //unset($app['exception_handler']);
 
-        $this->browser = $this->getMock('Buzz\\Browser', array('post', 'get'));
+        $this->browser = $this->getMock('Buzz\\Browser', ['post', 'get']);
 
         $app['api'] = new \Transport\API($this->browser);
 
@@ -44,7 +44,7 @@ abstract class IntegrationTest extends WebTestCase
 
     public function getFixture($filename)
     {
-        return file_get_contents(__DIR__ . '/../../fixtures/' . $filename);
+        return file_get_contents(__DIR__.'/../../fixtures/'.$filename);
     }
 
     public function getXmlFixture($filename)

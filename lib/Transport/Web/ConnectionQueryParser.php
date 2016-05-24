@@ -3,12 +3,12 @@
 namespace Transport\Web;
 
 use Symfony\Component\HttpFoundation\Request;
-use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Location\Location;
+use Transport\Entity\Schedule\ConnectionQuery;
 
 class ConnectionQueryParser
 {
-    public static function create(Request $request, Location $from, Location $to, $via = array())
+    public static function create(Request $request, Location $from, Location $to, $via = [])
     {
         $datetime = $request->get('datetime');
         if ($datetime) {
@@ -25,11 +25,11 @@ class ConnectionQueryParser
         if ($isArrivalTime !== null) {
             switch ($isArrivalTime) {
                 case 0:
-                case "false":
+                case 'false':
                     $query->isArrivalTime = false;
                     break;
                 case 1:
-                case "true":
+                case 'true':
                     $query->isArrivalTime = true;
                     break;
                 default:
@@ -83,7 +83,7 @@ class ConnectionQueryParser
 
     public static function validate(ConnectionQuery $query)
     {
-        $errors = array();
+        $errors = [];
 
         if ($query->limit > 6) {
             $errors[] = 'Maximal value of argument `limit` is 6.';

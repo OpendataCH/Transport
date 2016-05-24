@@ -2,8 +2,8 @@
 
 namespace Transport\Test\Entity\Location;
 
-use Transport\Entity\Location\Station;
 use Transport\Entity\Coordinate;
+use Transport\Entity\Location\Station;
 
 class StationTest extends \PHPUnit_Framework_TestCase
 {

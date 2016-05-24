@@ -2,14 +2,14 @@
 
 namespace Transport\Test\Entity\Location;
 
-use Transport\Entity\Location\Poi;
 use Transport\Entity\Coordinate;
+use Transport\Entity\Location\Poi;
 
 class PoiTest extends \PHPUnit_Framework_TestCase
 {
     protected function getPoi()
     {
-        $poi = new Poi;
+        $poi = new Poi();
         $poi->name = 'Ittigen, Bahnhof';
         $poi->score = '100';
         $coordinate = new Coordinate();

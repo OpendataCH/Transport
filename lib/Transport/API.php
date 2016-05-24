@@ -3,11 +3,11 @@
 namespace Transport;
 
 use Buzz\Browser;
-use Transport\Entity\Query;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
-use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Query;
 use Transport\Entity\Schedule\ConnectionPageQuery;
+use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
@@ -47,7 +47,7 @@ class API
 
         // check for server error
         if ($response->isServerError()) {
-            throw new \Exception('Server error from fahrplan.sbb.ch: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+            throw new \Exception('Server error from fahrplan.sbb.ch: '.$response->getStatusCode().' '.$response->getReasonPhrase());
         }
 
         // parse result
@@ -56,12 +56,12 @@ class API
 
         // check for XML error
         if ($result === false) {
-            throw new \Exception('Invalid XML from fahrplan.sbb.ch: ' . $content);
+            throw new \Exception('Invalid XML from fahrplan.sbb.ch: '.$content);
         }
 
         // check for SBB error
         if ($result->Err) {
-            throw new \Exception('Error from fahrplan.sbb.ch: ' . $result->Err['code'] . ' - ' . $result->Err['text']);
+            throw new \Exception('Error from fahrplan.sbb.ch: '.$result->Err['code'].' - '.$result->Err['text']);
         }
 
         return $result;
@@ -72,7 +72,7 @@ class API
      */
     public function sendQuery(Query $query, $url = self::URL)
     {
-        $headers = array();
+        $headers = [];
         $headers[] = 'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0';
         $headers[] = 'Accept: application/xml';
         $headers[] = 'Content-Type: application/xml';
@@ -97,7 +97,7 @@ class API
             $result = $this->sendAndParseQuery($pageQuery);
         }
 
-        $connections = array();
+        $connections = [];
         if ($result->ConRes->ConnectionList->Connection) {
             foreach ($result->ConRes->ConnectionList->Connection as $connection) {
                 $connections[] = Entity\Schedule\Connection::createFromXml($connection, null);
@@ -115,17 +115,17 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        $locations = array();
+        $locations = [];
         $viaCount = 0;
         foreach ($result->LocValRes as $part) {
             $id = (string) $part['id'];
 
             // A "via" can occur 0-5 times
-            if ($id == "via") {
+            if ($id == 'via') {
                 $id = $id.(++$viaCount);
             }
 
-            $locations[$id] = array();
+            $locations[$id] = [];
             foreach ($part->children() as $location) {
                 $location = Entity\LocationFactory::createFromXml($location);
                 if ($location) {
@@ -137,6 +137,7 @@ class API
         if (count($locations) > 1) {
             return $locations;
         }
+
         return reset($locations);
     }
 
@@ -145,14 +146,14 @@ class API
      */
     public function findNearbyLocations(NearbyQuery $query)
     {
-        $url = self::URL_QUERY . '?' . http_build_query($query->toArray());
+        $url = self::URL_QUERY.'?'.http_build_query($query->toArray());
 
         // send request
         $response = $this->browser->get($url);
 
         // check for server error
         if ($response->isServerError()) {
-            throw new \Exception('Server error from fahrplan.sbb.ch: ' . $response->getStatusCode() . ' ' . $response->getReasonPhrase());
+            throw new \Exception('Server error from fahrplan.sbb.ch: '.$response->getStatusCode().' '.$response->getReasonPhrase());
         }
 
         // fix broken JSON
@@ -165,10 +166,10 @@ class API
 
         // check for JSON error
         if ($result === null) {
-            throw new \Exception('Invalid JSON from fahrplan.sbb.ch: ' . $content);
+            throw new \Exception('Invalid JSON from fahrplan.sbb.ch: '.$content);
         }
 
-        $locations = array();
+        $locations = [];
         foreach ($result->stops as $stop) {
             $location = Entity\LocationFactory::createFromJson($stop);
             if ($location) {
@@ -190,7 +191,7 @@ class API
 
         $date = $query->date;
 
-        $journeys = array();
+        $journeys = [];
         if ($result->STBRes->JourneyList->STBJourney) {
             foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
                 $journey = Entity\Schedule\StationBoardJourney::createStationBoardFromXml($journey, $date, null);

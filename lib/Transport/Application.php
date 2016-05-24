@@ -4,16 +4,16 @@ namespace Transport;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Transport\Entity\Location\Station;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
-use Transport\Web\ConnectionQueryParser;
-use Transport\Web\LocationQueryParser;
+use Transport\Entity\Location\Station;
 use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Normalizer\FieldsNormalizer;
+use Transport\Web\ConnectionQueryParser;
+use Transport\Web\LocationQueryParser;
 
 /**
  * @SWG\Swagger(
@@ -50,8 +50,8 @@ class Application extends \Silex\Application
         $app['buzz.client'] = null;
         $app['monolog.level'] = \Monolog\Logger::ERROR;
         $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
-        $app['stats.config'] = array('enabled' => false);
-        $app['rate_limiting.config'] = array('enabled' => false, 'limit' => 150);
+        $app['stats.config'] = ['enabled' => false];
+        $app['rate_limiting.config'] = ['enabled' => false, 'limit' => 150];
         $app['proxy'] = false;
         $app['proxy_server.address'] = null;
 
@@ -62,17 +62,17 @@ class Application extends \Silex\Application
         }
 
         // New Relic
-        $app->register(new \Ekino\Bundle\NewRelicBundle\Silex\EkinoNewRelicServiceProvider(), array(
+        $app->register(new \Ekino\Bundle\NewRelicBundle\Silex\EkinoNewRelicServiceProvider(), [
             'new_relic.application_name' => false,
-            'new_relic.log_exceptions' => true,
-        ));
+            'new_relic.log_exceptions'   => true,
+        ]);
 
         // HTTP cache
         if ($app['http_cache']) {
-            $app->register(new \Silex\Provider\HttpCacheServiceProvider(), array(
+            $app->register(new \Silex\Provider\HttpCacheServiceProvider(), [
                 'http_cache.cache_dir' => __DIR__.'/../../var/cache/',
-                'http_cache.options' => array('debug' => $app['debug']),
-            ));
+                'http_cache.options'   => ['debug' => $app['debug']],
+            ]);
         }
 
         // Exception handler
@@ -88,26 +88,26 @@ class Application extends \Silex\Application
                 $app['stats']->error($e);
             }
 
-            $errors = array(array('message' => $e->getMessage()));
+            $errors = [['message' => $e->getMessage()]];
 
-            $result = array('errors' => $errors);
+            $result = ['errors' => $errors];
 
             return $app->json($result, $code);
         });
 
         // Monolog
-        $app->register(new \Silex\Provider\MonologServiceProvider(), array(
+        $app->register(new \Silex\Provider\MonologServiceProvider(), [
             'monolog.logfile' => __DIR__.'/../../var/logs/transport.log',
-            'monolog.level' => $app['monolog.level'],
-            'monolog.name' => 'transport',
-        ));
+            'monolog.level'   => $app['monolog.level'],
+            'monolog.name'    => 'transport',
+        ]);
         $app->before(function (Request $request) use ($app) {
-            $app['monolog']->addInfo('- ' . $request->getClientIp() . ' ' . $request->headers->get('referer') . ' ' . $request->server->get('HTTP_USER_AGENT'));
+            $app['monolog']->addInfo('- '.$request->getClientIp().' '.$request->headers->get('referer').' '.$request->server->get('HTTP_USER_AGENT'));
         });
 
         // if hosted behind a reverse proxy
         if ($app['proxy']) {
-            $proxies = array($_SERVER['REMOTE_ADDR']);
+            $proxies = [$_SERVER['REMOTE_ADDR']];
             if (is_array($app['proxy'])) {
                 $proxies = $app['proxy'];
             }
@@ -131,10 +131,10 @@ class Application extends \Silex\Application
 
         // Serializer
         $app['serializer'] = $app->share(function () use ($app) {
-            $fields = $app['request']->get('fields') ?: array();
-            return new Serializer(array(new FieldsNormalizer($fields)), array('json' => new JsonEncoder()));
-        });
+            $fields = $app['request']->get('fields') ?: [];
 
+            return new Serializer([new FieldsNormalizer($fields)], ['json' => new JsonEncoder()]);
+        });
 
         // Redis
         $redis = null;
@@ -165,7 +165,7 @@ class Application extends \Silex\Application
             if ($app['rate_limiting']->isEnabled()) {
                 $ip = $request->getClientIp();
                 if ($app['rate_limiting']->hasReachedLimit($ip)) {
-                    throw new HttpException(429, 'Rate limit of ' . $app['rate_limiting']->getLimit() . ' requests per minute exceeded');
+                    throw new HttpException(429, 'Rate limit of '.$app['rate_limiting']->getLimit().' requests per minute exceeded');
                 }
                 $app['rate_limiting']->increment($ip);
             }
@@ -187,18 +187,17 @@ class Application extends \Silex\Application
             return file_get_contents('index.html');
         })->bind('home');
 
-
         // api
         $app->get('/v1/', function (Request $request) use ($app) {
 
-            return $app->json(array(
-                'date' => date('c'),
-                'author' => 'Opendata.ch',
+            return $app->json([
+                'date'    => date('c'),
+                'author'  => 'Opendata.ch',
                 'version' => '1.0',
-            ));
+            ]);
         })->bind('api');
 
-        /**
+        /*
          * Search locations
          *
          * Returns the matching locations for the given parameters. Either query or ( x and y ) are required.
@@ -256,7 +255,7 @@ class Application extends \Silex\Application
          */
         $app->get('/v1/locations', function (Request $request) use ($app) {
 
-            $stations = array();
+            $stations = [];
 
             $x = $request->get('x') ?: null;
             $y = $request->get('y') ?: null;
@@ -275,13 +274,14 @@ class Application extends \Silex\Application
                 $stations = $app['api']->findLocations($query);
             }
 
-            $result = array('stations' => $stations);
+            $result = ['stations' => $stations];
 
             $json = $app['serializer']->serialize((object) $result, 'json');
-            return new Response($json, 200, array('Content-Type' => 'application/json'));
+
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
         })->bind('locations');
 
-        /**
+        /*
          * Search connections
          *
          * Returns the next connections from a location to another.
@@ -397,12 +397,12 @@ class Application extends \Silex\Application
             $stations = $app['api']->findLocations($query);
 
             // get connections
-            $connections = array();
+            $connections = [];
             $from = reset($stations['from']) ?: null;
             $to = reset($stations['to']) ?: null;
-            $via = array();
+            $via = [];
             foreach ($stations as $k => $v) {
-                if (preg_match("/^via[0-9]+$/", $k) && $v) {
+                if (preg_match('/^via[0-9]+$/', $k) && $v) {
                     $via[] = reset($v);
                 }
             }
@@ -415,25 +415,25 @@ class Application extends \Silex\Application
 
                 $errors = ConnectionQueryParser::validate($query);
                 if ($errors) {
-                    return $app->json(array('errors' => $errors), 400);
+                    return $app->json(['errors' => $errors], 400);
                 }
 
                 $connections = $app['api']->findConnections($query);
             }
 
-            $result = array(
+            $result = [
                 'connections' => $connections,
-                'from' => $from,
-                'to' => $to,
-                'stations' => $stations,
-            );
+                'from'        => $from,
+                'to'          => $to,
+                'stations'    => $stations,
+            ];
 
             $json = $app['serializer']->serialize((object) $result, 'json');
-            return new Response($json, 200, array('Content-Type' => 'application/json'));
+
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
         })->bind('connections');
 
-
-        /**
+        /*
          * Get station board
          *
          * Returns the next connections leaving from a specific location.
@@ -494,7 +494,7 @@ class Application extends \Silex\Application
          */
         $app->get('/v1/stationboard', function (Request $request) use ($app) {
 
-            $stationboard = array();
+            $stationboard = [];
 
             $limit = $request->get('limit', 40);
             if ($limit > 420) {
@@ -528,10 +528,11 @@ class Application extends \Silex\Application
                 $stationboard = $app['api']->getStationBoard($query);
             }
 
-            $result = array('station' => $station, 'stationboard' => $stationboard);
+            $result = ['station' => $station, 'stationboard' => $stationboard];
 
             $json = $app['serializer']->serialize((object) $result, 'json');
-            return new Response($json, 200, array('Content-Type' => 'application/json'));
+
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
         })->bind('stationboard');
 
         // Swagger
@@ -539,7 +540,7 @@ class Application extends \Silex\Application
 
             $swagger = \Swagger\scan(__DIR__);
 
-            return new Response($swagger, 200, array('Content-Type' => 'application/json'));
+            return new Response($swagger, 200, ['Content-Type' => 'application/json']);
 
         })->bind('swagger');
     }
