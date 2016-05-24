@@ -254,15 +254,15 @@
         "Coordinate": {
             "properties": {
                 "type": {
-                    "description": "The type of the given coordinate",
+                    "description": "The type of the given coordinate.",
                     "type": "string"
                 },
                 "x": {
-                    "description": "Latitude",
+                    "description": "Latitude.",
                     "type": "integer"
                 },
                 "y": {
-                    "description": "Longitude",
+                    "description": "Longitude.",
                     "type": "integer"
                 }
             }
@@ -270,19 +270,19 @@
         "Address": {
             "properties": {
                 "name": {
-                    "description": "The name of this location",
+                    "description": "The name of this location.",
                     "type": "string"
                 },
                 "score": {
-                    "description": "The score with regard to the search request, the higher the better",
+                    "description": "The score with regard to the search request, the higher the better.",
                     "type": "integer"
                 },
                 "coordinate": {
-                    "description": "The location coordinates",
+                    "description": "The location coordinates.",
                     "$ref": "#/definitions/Coordinate"
                 },
                 "distance": {
-                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "description": "If search has been with coordinates, distance to original point in meters.",
                     "type": "integer"
                 }
             }
@@ -290,19 +290,19 @@
         "Location": {
             "properties": {
                 "name": {
-                    "description": "The name of this location",
+                    "description": "The name of this location.",
                     "type": "string"
                 },
                 "score": {
-                    "description": "The score with regard to the search request, the higher the better",
+                    "description": "The score with regard to the search request, the higher the better.",
                     "type": "integer"
                 },
                 "coordinate": {
-                    "description": "The location coordinates",
+                    "description": "The location coordinates.",
                     "$ref": "#/definitions/Coordinate"
                 },
                 "distance": {
-                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "description": "If search has been with coordinates, distance to original point in meters.",
                     "type": "integer"
                 }
             }
@@ -310,19 +310,19 @@
         "Poi": {
             "properties": {
                 "name": {
-                    "description": "The name of this location",
+                    "description": "The name of this location.",
                     "type": "string"
                 },
                 "score": {
-                    "description": "The score with regard to the search request, the higher the better",
+                    "description": "The score with regard to the search request, the higher the better.",
                     "type": "integer"
                 },
                 "coordinate": {
-                    "description": "The location coordinates",
+                    "description": "The location coordinates.",
                     "$ref": "#/definitions/Coordinate"
                 },
                 "distance": {
-                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "description": "If search has been with coordinates, distance to original point in meters.",
                     "type": "integer"
                 }
             }
@@ -330,23 +330,23 @@
         "Station": {
             "properties": {
                 "id": {
-                    "description": "The ID of the station",
+                    "description": "The ID of the station.",
                     "type": "string"
                 },
                 "name": {
-                    "description": "The name of this location",
+                    "description": "The name of this location.",
                     "type": "string"
                 },
                 "score": {
-                    "description": "The score with regard to the search request, the higher the better",
+                    "description": "The score with regard to the search request, the higher the better.",
                     "type": "integer"
                 },
                 "coordinate": {
-                    "description": "The location coordinates",
+                    "description": "The location coordinates.",
                     "$ref": "#/definitions/Coordinate"
                 },
                 "distance": {
-                    "description": "If search has been with coordinates, distance to original point in meters",
+                    "description": "If search has been with coordinates, distance to original point in meters.",
                     "type": "integer"
                 }
             }
@@ -354,23 +354,23 @@
         "Connection": {
             "properties": {
                 "from": {
-                    "description": "The departure checkpoint of the connection",
+                    "description": "The departure checkpoint of the connection.",
                     "$ref": "#/definitions/Stop"
                 },
                 "to": {
-                    "description": "The arrival checkpoint of the connection",
+                    "description": "The arrival checkpoint of the connection.",
                     "$ref": "#/definitions/Stop"
                 },
                 "duration": {
-                    "description": "Duration of the journey (e.g. 00d00:43:00)",
+                    "description": "Duration of the journey (e.g. 00d00:43:00).",
                     "type": "string"
                 },
                 "transfers": {
-                    "description": "Service information about how regular the connection operates",
+                    "description": "Service information about how regular the connection operates.",
                     "type": "integer"
                 },
                 "service": {
-                    "description": "List of transport products (e.g. IR, S9)",
+                    "description": "List of transport products (e.g. IR, S9).",
                     "$ref": "#/definitions/Service"
                 },
                 "products": {
@@ -380,15 +380,15 @@
                     }
                 },
                 "capacity1st": {
-                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1).",
                     "type": "integer"
                 },
                 "capacity2nd": {
-                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2).",
                     "type": "integer"
                 },
                 "sections": {
-                    "description": "A list of sections",
+                    "description": "A list of sections.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Section"
@@ -399,45 +399,45 @@
         "Journey": {
             "properties": {
                 "name": {
-                    "description": "The name of the connection (e.g. ICN 518)",
+                    "description": "The name of the connection (e.g. ICN 518).",
                     "type": "string"
                 },
                 "category": {
-                    "description": "The type of connection this is (e.g. ICN)",
+                    "description": "The type of connection this is (e.g. ICN).",
                     "type": "string"
                 },
                 "subcategory": {
                     "type": "string"
                 },
                 "categoryCode": {
-                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram",
+                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram.",
                     "type": "integer"
                 },
                 "number": {
-                    "description": "The number of the connection's line (e.g. 518)",
+                    "description": "The number of the connection's line (e.g. 518).",
                     "type": "string"
                 },
                 "operator": {
-                    "description": "The operator of the connection's line (e.g. BBA)",
+                    "description": "The operator of the connection's line (e.g. BBA).",
                     "type": "string"
                 },
                 "to": {
-                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf)",
+                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf).",
                     "type": "string"
                 },
                 "passList": {
-                    "description": "Checkpoints the train passed on the journey",
+                    "description": "Checkpoints the train passed on the journey.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Stop"
                     }
                 },
                 "capacity1st": {
-                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1).",
                     "type": "integer"
                 },
                 "capacity2nd": {
-                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2).",
                     "type": "integer"
                 }
             }
@@ -445,23 +445,23 @@
         "Prognosis": {
             "properties": {
                 "platform": {
-                    "description": "The estimated arrival/departure platform (e.g. 8)",
+                    "description": "The estimated arrival/departure platform (e.g. 8).",
                     "type": "string"
                 },
                 "arrival": {
-                    "description": "The departure time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T08:58:00+02:00)",
+                    "description": "The departure time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T08:58:00+02:00).",
                     "type": "string"
                 },
                 "departure": {
-                    "description": "The arrival time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T09:35:00+02:00)",
+                    "description": "The arrival time prognosis to the checkpoint, date format: [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) (e.g. 2012-03-31T09:35:00+02:00).",
                     "type": "string"
                 },
                 "capacity1st": {
-                    "description": "The estimated occupation load of 1st class coaches (e.g. 1)",
+                    "description": "The estimated occupation load of 1st class coaches (e.g. 1).",
                     "type": "integer"
                 },
                 "capacity2nd": {
-                    "description": "The estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "description": "The estimated occupation load of 2nd class coaches (e.g. 2).",
                     "type": "integer"
                 }
             }
@@ -469,19 +469,19 @@
         "Section": {
             "properties": {
                 "journey": {
-                    "description": "A journey, the transportation used by this section, can be null",
+                    "description": "A journey, the transportation used by this section, can be null.",
                     "$ref": "#/definitions/Journey"
                 },
                 "walk": {
-                    "description": "Information about walking distance, if available, can be null",
+                    "description": "Information about walking distance, if available, can be null.",
                     "$ref": "#/definitions/Walk"
                 },
                 "departure": {
-                    "description": "The departure checkpoint of the connection",
+                    "description": "The departure checkpoint of the connection.",
                     "$ref": "#/definitions/Stop"
                 },
                 "arrival": {
-                    "description": "The arrival checkpoint of the connection",
+                    "description": "The arrival checkpoint of the connection.",
                     "$ref": "#/definitions/Stop"
                 }
             }
@@ -504,45 +504,45 @@
                     "$ref": "#/definitions/Stop"
                 },
                 "name": {
-                    "description": "The name of the connection (e.g. ICN 518)",
+                    "description": "The name of the connection (e.g. ICN 518).",
                     "type": "string"
                 },
                 "category": {
-                    "description": "The type of connection this is (e.g. ICN)",
+                    "description": "The type of connection this is (e.g. ICN).",
                     "type": "string"
                 },
                 "subcategory": {
                     "type": "string"
                 },
                 "categoryCode": {
-                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram",
+                    "description": "An internal category code, indicates the type of the public transport vehicle. Possible values are 0, 1, 2, 3, 5, 8: train; 4: ship; 6: bus; 7: cable car (aerial, big); 9: tram.",
                     "type": "integer"
                 },
                 "number": {
-                    "description": "The number of the connection's line (e.g. 518)",
+                    "description": "The number of the connection's line (e.g. 518).",
                     "type": "string"
                 },
                 "operator": {
-                    "description": "The operator of the connection's line (e.g. BBA)",
+                    "description": "The operator of the connection's line (e.g. BBA).",
                     "type": "string"
                 },
                 "to": {
-                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf)",
+                    "description": "The final destination of this line (e.g. Aarau Rohr, Unterdorf).",
                     "type": "string"
                 },
                 "passList": {
-                    "description": "Checkpoints the train passed on the journey",
+                    "description": "Checkpoints the train passed on the journey.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Stop"
                     }
                 },
                 "capacity1st": {
-                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1)",
+                    "description": "The maximum estimated occupation load of 1st class coaches (e.g. 1).",
                     "type": "integer"
                 },
                 "capacity2nd": {
-                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2)",
+                    "description": "The maximum estimated occupation load of 2nd class coaches (e.g. 2).",
                     "type": "integer"
                 }
             }
@@ -550,18 +550,18 @@
         "Stop": {
             "properties": {
                 "station": {
-                    "description": "A location object showing this line's stop at the requested station",
+                    "description": "A location object showing this line's stop at the requested station.",
                     "$ref": "#/definitions/Station"
                 },
                 "arrival": {
-                    "description": "The arrival time to the checkpoint (e.g. 14:58:00)",
+                    "description": "The arrival time to the checkpoint (e.g. 14:58:00).",
                     "type": "string"
                 },
                 "arrivalTimestamp": {
                     "type": "integer"
                 },
                 "departure": {
-                    "description": "The departure time from the checkpoint, can be null",
+                    "description": "The departure time from the checkpoint, can be null.",
                     "type": "string"
                 },
                 "departureTimestamp": {
@@ -571,11 +571,11 @@
                     "type": "integer"
                 },
                 "platform": {
-                    "description": "The arrival/departure platform (e.g. 8)",
+                    "description": "The arrival/departure platform (e.g. 8).",
                     "type": "string"
                 },
                 "prognosis": {
-                    "description": "The checkpoint prognosis",
+                    "description": "The checkpoint prognosis.",
                     "$ref": "#/definitions/Prognosis"
                 },
                 "realtimeAvailability": {
