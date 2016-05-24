@@ -8,6 +8,8 @@ RUN a2enmod rewrite
 
 RUN sed -i "s#Listen 80#Listen 8000#" /etc/apache2/apache2.conf
 RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/web#' /etc/apache2/apache2.conf
+RUN sed -i 's#ErrorLog /proc/self/fd/2#ErrorLog "|/bin/cat"#' /etc/apache2/apache2.conf
+RUN sed -i 's#CustomLog /proc/self/fd/1"#CustomLog "|/bin/cat"#' /etc/apache2/apache2.conf
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
