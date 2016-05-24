@@ -12,35 +12,40 @@ use Transport\Entity;
 class Connection
 {
     /**
-     * The departure checkpoint of the connection
+     * The departure checkpoint of the connection.
+     *
      * @var \Transport\Entity\Schedule\Stop
      * @SWG\Property()
      */
     public $from;
 
     /**
-     * The arrival checkpoint of the connection
+     * The arrival checkpoint of the connection.
+     *
      * @var \Transport\Entity\Schedule\Stop
      * @SWG\Property()
      */
     public $to;
-    
+
     /**
-     * Duration of the journey (e.g. 00d00:43:00)
-     * @var String
+     * Duration of the journey (e.g. 00d00:43:00).
+     *
+     * @var string
      * @SWG\Property()
      */
     public $duration;
-    
+
     /**
-     * Service information about how regular the connection operates
+     * Service information about how regular the connection operates.
+     *
      * @var int
      * @SWG\Property()
      */
     public $transfers;
 
     /**
-     * List of transport products (e.g. IR, S9)
+     * List of transport products (e.g. IR, S9).
+     *
      * @var \Transport\Entity\Schedule\Service
      * @SWG\Property()
      */
@@ -50,24 +55,27 @@ class Connection
      * @var string[]
      * @SWG\Property()
      */
-    public $products = array();
-    
+    public $products = [];
+
     /**
-     * The maximum estimated occupation load of 1st class coaches (e.g. 1)
+     * The maximum estimated occupation load of 1st class coaches (e.g. 1).
+     *
      * @var int
      * @SWG\Property()
      */
     public $capacity1st = null;
-    
+
     /**
-     * The maximum estimated occupation load of 2nd class coaches (e.g. 2)
+     * The maximum estimated occupation load of 2nd class coaches (e.g. 2).
+     *
      * @var int
      * @SWG\Property()
      */
     public $capacity2nd = null;
 
     /**
-     * A list of sections
+     * A list of sections.
+     *
      * @var \Transport\Entity\Schedule\Section[]
      * @SWG\Property()
      */
@@ -76,12 +84,12 @@ class Connection
     public static function createFromXml(\SimpleXMLElement $xml, Connection $obj = null)
     {
         if (!$obj) {
-            $obj = new Connection();
+            $obj = new self();
         }
         $date = \DateTime::createFromFormat('Ymd', (string) $xml->Overview->Date, new \DateTimeZone('Europe/Zurich'));
         $date->setTimezone(new \DateTimeZone('Europe/Zurich'));
         $date->setTime(0, 0, 0);
-        
+
         $obj->from = Entity\Schedule\Stop::createFromXml($xml->Overview->Departure->BasicStop, $date, null);
         $obj->to = Entity\Schedule\Stop::createFromXml($xml->Overview->Arrival->BasicStop, $date, null);
 
@@ -98,21 +106,21 @@ class Connection
 
         if (isset($xml->Overview->Products->Product)) {
             foreach ($xml->Overview->Products->Product as $product) {
-                $obj->products[] = trim((string)$product['cat']);
+                $obj->products[] = trim((string) $product['cat']);
             }
         }
 
-        $capacities1st = array();
-        $capacities2nd = array();
+        $capacities1st = [];
+        $capacities2nd = [];
         foreach ($xml->ConSectionList->ConSection as $section) {
             if ($section->Journey) {
                 if ($section->Journey->PassList->BasicStop) {
                     foreach ($section->Journey->PassList->BasicStop as $stop) {
                         if (isset($stop->StopPrognosis->Capacity1st)) {
-                            $capacities1st[] = (int)$stop->StopPrognosis->Capacity1st;
+                            $capacities1st[] = (int) $stop->StopPrognosis->Capacity1st;
                         }
                         if (isset($stop->StopPrognosis->Capacity2nd)) {
-                            $capacities2nd[] = (int)$stop->StopPrognosis->Capacity2nd;
+                            $capacities2nd[] = (int) $stop->StopPrognosis->Capacity2nd;
                         }
                     }
                 }

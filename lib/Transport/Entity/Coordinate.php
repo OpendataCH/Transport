@@ -8,35 +8,39 @@ namespace Transport\Entity;
 class Coordinate
 {
     /**
-     * The type of the given coordinate
+     * The type of the given coordinate.
+     *
      * @var string
      * @SWG\Property()
      */
     public $type;
 
     /**
-     * Latitude
+     * Latitude.
+     *
      * @var int
      * @SWG\Property()
      */
     public $x;
 
     /**
-     * Longitude
+     * Longitude.
+     *
      * @var int
      * @SWG\Property()
      */
     public $y;
 
     /**
-     * Factory method to create an instance of Coordinate and extract the data from the given xml
+     * Factory method to create an instance of Coordinate and extract the data from the given xml.
      *
-     * @param   \SimpleXMLElement   $xml    The item xml
-     * @return  Coordinate          The created instance
+     * @param \SimpleXMLElement $xml The item xml
+     *
+     * @return Coordinate The created instance
      */
     public static function createFromXml(\SimpleXMLElement $xml)
     {
-        $coordinate = new Coordinate();
+        $coordinate = new self();
         $coordinate->type = (string) $xml['type'];
 
         $x = self::intToFloat((string) $xml['x']);
@@ -49,7 +53,7 @@ class Coordinate
 
     public static function createFromJson($json)
     {
-        $coordinate = new Coordinate();
+        $coordinate = new self();
         $coordinate->type = 'WGS84'; // best guess
 
         $x = self::intToFloat($json->x);
@@ -94,10 +98,10 @@ class Coordinate
         $dLat = deg2rad($this->x - $lat);
         $dLon = deg2rad($this->y - $lon);
 
-        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon/2) * sin($dLon/2);
+        $a = sin($dLat / 2) * sin($dLat / 2) + cos(deg2rad($lat)) * cos(deg2rad($this->y)) * sin($dLon / 2) * sin($dLon / 2);
         $c = 2 * asin(sqrt($a));
         $d = $earth_radius * $c;
 
-        return round($d*1000, 1);
+        return round($d * 1000, 1);
     }
 }

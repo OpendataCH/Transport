@@ -2,13 +2,12 @@
 
 namespace Transport\Normalizer;
 
-use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Exception\RuntimeException;
+use Symfony\Component\Serializer\Normalizer\SerializerAwareNormalizer;
 
 class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerInterface
 {
-    private $fields = array();
+    private $fields = [];
 
     public function __construct(array $fields)
     {
@@ -51,6 +50,7 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
         if (is_array($fieldFromTree)) {
             return true;
         }
+
         return false;
     }
 
@@ -58,7 +58,7 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
     {
         return array_reduce(
             array_reverse(explode('/', $field)),
-            function ($result, $value) { return array($value => $result); },
+            function ($result, $value) { return [$value => $result]; },
             true
         );
     }
@@ -66,7 +66,7 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
     /**
      * {@inheritdoc}
      */
-    public function normalize($data, $format = null, array $context = array())
+    public function normalize($data, $format = null, array $context = [])
     {
         if (is_array($data)) {
             foreach ($data as $name => $value) {
@@ -76,14 +76,14 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
             return $data;
         }
 
-        $normalized = array();
+        $normalized = [];
         foreach ($data as $name => $value) {
-            $field = isset($context['fields_parent_field']) ? $context['fields_parent_field'] . '/' . $name : $name;
+            $field = isset($context['fields_parent_field']) ? $context['fields_parent_field'].'/'.$name : $name;
             if ($this->isFieldSet($field)) {
                 if (null !== $value && !is_scalar($value)) {
-                    $options = array(
+                    $options = [
                         'fields_parent_field' => $field,
-                    );
+                    ];
                     $value = $this->serializer->normalize($value, $format, array_merge($context, $options));
                 }
 
@@ -95,7 +95,7 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null)
     {

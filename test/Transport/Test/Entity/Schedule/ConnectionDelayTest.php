@@ -20,12 +20,12 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $prognosis->capacity2nd = '1';
         $from->prognosis = $prognosis;
         $station = new Entity\Location\Station();
-        $station->name = "Zürich Altstetten";
-        $station->id = "008503001";
+        $station->name = 'Zürich Altstetten';
+        $station->id = '008503001';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.391481;
         $coordinates->y = 8.488936;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
@@ -36,12 +36,12 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $to->arrivalTimestamp = 1326728940;
         $to->platform = '7';
         $station = new Entity\Location\Station();
-        $station->name = "Zug";
-        $station->id = "008502204";
+        $station->name = 'Zug';
+        $station->id = '008502204';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.173618;
         $coordinates->y = 8.515292;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
@@ -54,26 +54,26 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $sectionFrom->departure = '2012-01-16T16:06:00+0100';
         $sectionFrom->departureTimestamp = 1326726360;
         $station = new Entity\Location\Station();
-        $station->name = "Zürich, Bahnhof Altstetten";
-        $station->id = "000103022";
+        $station->name = 'Zürich, Bahnhof Altstetten';
+        $station->id = '000103022';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.391103;
         $coordinates->y = 8.488378;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
         $sectionFrom->location = $station;
 
         $sectionTo = new Entity\Schedule\Stop();
-        $sectionTo->arrival = "2012-01-16T16:10:00+0100";
+        $sectionTo->arrival = '2012-01-16T16:10:00+0100';
         $sectionTo->arrivalTimestamp = 1326726600;
         $station = new Entity\Location\Station();
-        $station->name = "Zürich Altstetten";
-        $station->id = "008503001";
+        $station->name = 'Zürich Altstetten';
+        $station->id = '008503001';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.391481;
         $coordinates->y = 8.488936;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
@@ -103,12 +103,12 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $prognosis->capacity2nd = '1';
         $sectionFrom->prognosis = $prognosis;
         $station = new Entity\Location\Station();
-        $station->name = "Zürich Altstetten";
-        $station->id = "008503001";
+        $station->name = 'Zürich Altstetten';
+        $station->id = '008503001';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.391481;
         $coordinates->y = 8.488936;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $sectionFrom->station = $station;
         $sectionFrom->location = $station;
@@ -119,18 +119,18 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $sectionTo->arrivalTimestamp = 1326728940;
         $sectionTo->platform = '7';
         $station = new Entity\Location\Station();
-        $station->name = "Zug";
-        $station->id = "008502204";
+        $station->name = 'Zug';
+        $station->id = '008502204';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.173618;
         $coordinates->y = 8.515292;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $sectionTo->station = $station;
         $sectionTo->location = $station;
         $sectionTo->realtimeAvailability = 'RT_BHF';
 
-        $passList = array();
+        $passList = [];
         $passList[0] = clone $sectionFrom;
         $passList[0]->platform = '';
         $passList[1] = clone $sectionTo;
@@ -152,20 +152,20 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $connection->duration = '00d00:43:00';
         $connection->transfers = 0;
         $connection->service = $service;
-        $connection->products = array('S9');
+        $connection->products = ['S9'];
         $connection->capacity1st = 1;
         $connection->capacity2nd = 1;
-        $connection->sections = array(
+        $connection->sections = [
             $section1,
             $section2,
-        );
+        ];
 
         return $connection;
     }
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/connections/hafas_response_2012-01-16.xml');
+        $xml = simplexml_load_file(__DIR__.'/../../../../fixtures/connections/hafas_response_2012-01-16.xml');
 
         $this->assertEquals($this->getConnection(), Connection::createFromXml($xml->ConRes->ConnectionList->Connection));
     }

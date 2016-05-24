@@ -21,6 +21,7 @@ class Walk
         if (substr($time, 2, 1) == 'd') {
             return substr($time, 3);
         }
+
         return $time;
     }
 
@@ -30,7 +31,7 @@ class Walk
     public static function createFromXml(\SimpleXMLElement $xml, $date, Walk $obj = null)
     {
         if (!$obj) {
-            $obj = new Walk();
+            $obj = new self();
         }
 
         $obj->duration = self::parseTime((string) $xml->Duration->Time);

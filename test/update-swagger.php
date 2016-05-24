@@ -7,4 +7,4 @@ $client = new Symfony\Component\HttpKernel\Client($app);
 
 $client->request('GET', '/swagger.json');
 
-file_put_contents( __DIR__ . '/fixtures/swagger.json', $client->getResponse()->getContent());
+file_put_contents(__DIR__.'/fixtures/swagger.json', $client->getResponse()->getContent());

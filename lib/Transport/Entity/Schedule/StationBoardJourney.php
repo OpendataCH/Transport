@@ -3,7 +3,7 @@
 namespace Transport\Entity\Schedule;
 
 /**
- * Request for a station board journey
+ * Request for a station board journey.
  *
  * @SWG\Definition()
  */
@@ -16,15 +16,16 @@ class StationBoardJourney extends Journey
     public $stop;
 
     /**
-     * @param   \SimpleXMLElement   $xml
-     * @param   \DateTime           $date   The date that will be assigned to this journey
-     * @param   StationBoardJourney $obj    An optional existing journey to overwrite
-     * @return  StationBoardJourney
+     * @param \SimpleXMLElement   $xml
+     * @param \DateTime           $date The date that will be assigned to this journey
+     * @param StationBoardJourney $obj  An optional existing journey to overwrite
+     *
+     * @return StationBoardJourney
      */
     public static function createStationBoardFromXml(\SimpleXMLElement $xml, \DateTime $date, StationBoardJourney $obj = null)
     {
         if (!$obj) {
-            $obj = new StationBoardJourney();
+            $obj = new self();
         }
 
         $stop = Stop::createFromXml($xml->MainStop->BasicStop, $date, null);

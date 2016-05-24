@@ -10,39 +10,44 @@ use Transport\Entity\Coordinate;
 class Location
 {
     /**
-     * The name of this location
+     * The name of this location.
+     *
      * @var string
      * @SWG\Property()
      */
     public $name;
 
     /**
-     * The score with regard to the search request, the higher the better
+     * The score with regard to the search request, the higher the better.
+     *
      * @var int
      * @SWG\Property()
      */
     public $score;
 
     /**
-     * The location coordinates
+     * The location coordinates.
+     *
      * @var Coordinate
      * @SWG\Property()
      */
     public $coordinate;
 
     /**
-     * If search has been with coordinates, distance to original point in meters
+     * If search has been with coordinates, distance to original point in meters.
+     *
      * @var int
      * @SWG\Property()
      */
     public $distance;
 
     /**
-     * Factory method to create an instance and extract the data from the given xml
+     * Factory method to create an instance and extract the data from the given xml.
      *
-     * @param   \SimpleXMLElement   $xml    The item xml
-     * @param   Location            $obj    An object or null to create it
-     * @return  Location            The created instance
+     * @param \SimpleXMLElement $xml The item xml
+     * @param Location          $obj An object or null to create it
+     *
+     * @return Location The created instance
      */
     public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
     {
@@ -62,11 +67,12 @@ class Location
     }
 
     /**
-     * Factory method to create an instance and extract the data from the given JSON object
+     * Factory method to create an instance and extract the data from the given JSON object.
      *
-     * @param   object     $json  The item JSON
-     * @param   Location   $obj    An object or null to create it
-     * @return  Location           The created instance
+     * @param object   $json The item JSON
+     * @param Location $obj  An object or null to create it
+     *
+     * @return Location The created instance
      */
     public static function createFromJson($json, Location $obj = null)
     {

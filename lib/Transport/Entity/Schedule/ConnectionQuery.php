@@ -2,9 +2,9 @@
 
 namespace Transport\Entity\Schedule;
 
+use Transport\Entity\Location\Location;
 use Transport\Entity\Query;
 use Transport\Entity\Transportations;
-use Transport\Entity\Location\Location;
 
 class ConnectionQuery extends Query
 {
@@ -26,7 +26,7 @@ class ConnectionQuery extends Query
 
     public $isArrivalTime = false;
 
-    public $transportations = array('all');
+    public $transportations = ['all'];
 
     public $limit = 4;
 
@@ -48,7 +48,7 @@ class ConnectionQuery extends Query
 
     public $accessibility = null;
 
-    public function __construct(Location $srcLocation, Location $dstLocation, array $viaLocations = array(), $date = null, $time = null)
+    public function __construct(Location $srcLocation, Location $dstLocation, array $viaLocations = [], $date = null, $time = null)
     {
         $this->srcLocation = $srcLocation;
         $this->dstLocation = $dstLocation;

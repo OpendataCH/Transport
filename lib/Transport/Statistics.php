@@ -8,7 +8,6 @@ use Transport\Entity\Location\Station;
 
 class Statistics
 {
-
     protected $redis;
 
     protected $enabled;
@@ -23,7 +22,7 @@ class Statistics
     {
         if ($this->enabled) {
             $date = date('Y-m-d');
-            $prefix = "stats:calls";
+            $prefix = 'stats:calls';
             $key = "$prefix:$date";
             $this->redis->sadd($prefix, $key);
             $this->redis->incr($key);
@@ -33,7 +32,7 @@ class Statistics
     public function station(Location $station)
     {
         if ($station instanceof Station) {
-            $this->count('stats:stations', $station->id, array('name' => $station->name, 'x' => $station->coordinate->x, 'y' => $station->coordinate->y));
+            $this->count('stats:stations', $station->id, ['name' => $station->name, 'x' => $station->coordinate->x, 'y' => $station->coordinate->y]);
         }
     }
 
@@ -42,7 +41,7 @@ class Statistics
      */
     public function resource($path)
     {
-        $this->count('stats:resources', $path, array('path' => $path));
+        $this->count('stats:resources', $path, ['path' => $path]);
     }
 
     public function error($e)
@@ -51,19 +50,19 @@ class Statistics
 
         if ($this->enabled) {
             $date = date('Y-m-d');
-            $prefix = "stats:errors";
+            $prefix = 'stats:errors';
             $key = "$prefix:$date";
             $this->redis->sadd($prefix, $key);
             $this->redis->incr($key);
         }
 
-        $this->count('stats:exceptions', $exceptionClass, array('exception' => $exceptionClass));
+        $this->count('stats:exceptions', $exceptionClass, ['exception' => $exceptionClass]);
     }
 
     /**
      * @param string $prefix
      * @param string $id
-     * @param array $data
+     * @param array  $data
      */
     protected function count($prefix, $id, $data)
     {
@@ -79,14 +78,14 @@ class Statistics
     {
         $keys = $this->redis->keys('stats:calls:*');
 
-        $result = $this->redis->sort("stats:calls", array(
-            'get' => array('#', '*'),
+        $result = $this->redis->sort('stats:calls', [
+            'get'   => ['#', '*'],
             'sort'  => 'ASC',
-            'alpha' => true
-        ));
+            'alpha' => true,
+        ]);
 
         // regroup
-        $calls = array();
+        $calls = [];
         foreach (array_chunk($result, 2) as $values) {
             $calls[substr($values[0], 12, 10)] = $values[1];
         }
@@ -96,14 +95,14 @@ class Statistics
 
     public function getErrors()
     {
-        $result = $this->redis->sort("stats:errors", array(
-            'get' => array('#', '*'),
+        $result = $this->redis->sort('stats:errors', [
+            'get'   => ['#', '*'],
             'sort'  => 'ASC',
-            'alpha' => true
-        ));
+            'alpha' => true,
+        ]);
 
         // regroup
-        $errors = array();
+        $errors = [];
         foreach (array_chunk($result, 2) as $values) {
             $errors[substr($values[0], 13, 10)] = $values[1];
         }
@@ -113,34 +112,34 @@ class Statistics
 
     public function getTopResources()
     {
-        return $this->top('stats:resources', array('path', 'calls'));
+        return $this->top('stats:resources', ['path', 'calls']);
     }
 
     public function getTopStations()
     {
-        return $this->top('stats:stations', array('name', 'x', 'y', 'calls'));
+        return $this->top('stats:stations', ['name', 'x', 'y', 'calls']);
     }
 
     public function getTopExceptions()
     {
-        return $this->top('stats:exceptions', array('exception', 'calls'));
+        return $this->top('stats:exceptions', ['exception', 'calls']);
     }
 
     /**
-     * @param string $key
+     * @param string   $key
      * @param string[] $fields
      */
     protected function top($key, $fields)
     {
-        $result = $this->redis->sort($key, array(
-            'by' => '*->calls',
-            'limit' => array(0, 5),
-            'get' => array_map(function ($value) { return "*->$value"; }, $fields),
+        $result = $this->redis->sort($key, [
+            'by'    => '*->calls',
+            'limit' => [0, 5],
+            'get'   => array_map(function ($value) { return "*->$value"; }, $fields),
             'sort'  => 'DESC',
-        ));
+        ]);
 
         // regroup
-        $data = array();
+        $data = [];
         foreach (array_chunk($result, count($fields)) as $values) {
             $data[] = array_combine($fields, $values);
         }

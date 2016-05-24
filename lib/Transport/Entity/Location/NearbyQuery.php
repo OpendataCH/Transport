@@ -13,7 +13,7 @@ class NearbyQuery
 
     public $limit;
 
-    public $transportations = array('all');
+    public $transportations = ['all'];
 
     public function __construct($lat, $lon, $limit = 10)
     {
@@ -24,14 +24,14 @@ class NearbyQuery
 
     public function toArray()
     {
-        return array(
+        return [
             'performLocating' => '2',
-            'tpl' => 'stop2json',
-            'look_maxno' => $this->limit,
-            'look_stopclass' => Transportations::reduceTransportationsDec($this->transportations, 10),
-            'look_maxdist' => 5000,
-            'look_y' => Coordinate::floatToInt($this->lat),
-            'look_x' => Coordinate::floatToInt($this->lon),
-        );
+            'tpl'             => 'stop2json',
+            'look_maxno'      => $this->limit,
+            'look_stopclass'  => Transportations::reduceTransportationsDec($this->transportations, 10),
+            'look_maxdist'    => 5000,
+            'look_y'          => Coordinate::floatToInt($this->lat),
+            'look_x'          => Coordinate::floatToInt($this->lon),
+        ];
     }
 }

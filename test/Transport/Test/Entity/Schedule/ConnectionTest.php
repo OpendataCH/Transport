@@ -17,7 +17,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $journey->capacity1st = 1;
         $journey->capacity2nd = 2;
 
-
         $from = new Entity\Schedule\Stop();
         $from->departure = '2012-01-31T19:14:00+0100';
         $from->departureTimestamp = 1328033640;
@@ -27,12 +26,12 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $prognosis->capacity2nd = '2';
         $from->prognosis = $prognosis;
         $station = new Entity\Location\Station();
-        $station->name = "Zürich HB";
-        $station->id = "008503000";
+        $station->name = 'Zürich HB';
+        $station->id = '008503000';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.378177;
         $coordinates->y = 8.540192;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $from->station = $station;
         $from->location = $station;
@@ -43,18 +42,18 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $to->arrivalTimestamp = 1328035320;
         $to->platform = '3';
         $station = new Entity\Location\Station();
-        $station->name = "Baden";
-        $station->id = "008503504";
+        $station->name = 'Baden';
+        $station->id = '008503504';
         $coordinates = new Entity\Coordinate();
         $coordinates->x = 47.47642;
         $coordinates->y = 8.307695;
-        $coordinates->type = "WGS84";
+        $coordinates->type = 'WGS84';
         $station->coordinate = $coordinates;
         $to->station = $station;
         $to->location = $station;
         $to->realtimeAvailability = 'RT_BHF';
 
-        $passList = array();
+        $passList = [];
         $passList[0] = clone $from;
         $passList[0]->platform = '';
         $passList[1] = clone $to;
@@ -66,7 +65,6 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $section->departure = $from;
         $section->arrival = $to;
 
-
         $service = new Entity\Schedule\Service();
         $service->regular = 'daily';
 
@@ -76,17 +74,17 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $connection->duration = '00d00:28:00';
         $connection->transfers = 0;
         $connection->service = $service;
-        $connection->products = array('S12');
+        $connection->products = ['S12'];
         $connection->capacity1st = 1;
         $connection->capacity2nd = 2;
-        $connection->sections = array($section);
+        $connection->sections = [$section];
 
         return $connection;
     }
 
     public function testCreateFromXml()
     {
-        $xml = simplexml_load_file(__DIR__ . '/../../../../fixtures/connections/hafas_response_2012-01-31.xml');
+        $xml = simplexml_load_file(__DIR__.'/../../../../fixtures/connections/hafas_response_2012-01-31.xml');
         $this->assertEquals($this->getConnection(), Connection::createFromXml($xml->ConRes->ConnectionList->Connection));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +20,9 @@ if (stream_resolve_include_path($config)) {
 }
 
 // twig
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
+$app->register(new Silex\Provider\TwigServiceProvider(), [
     'twig.path'       => __DIR__.'/../views',
-));
+]);
 
 if ($app['redis.config']) {
     $app['redis'] = new Predis\Client($app['redis.config']);
@@ -35,9 +35,9 @@ if ($app['redis.config']) {
         $errors = $app['stats']->getErrors();
 
         // combine calls and errors
-        $data = array();
+        $data = [];
         foreach ($calls as $date => $value) {
-            $data[$date] = array('date' => $date, 'calls' => ((int) $value ?: 0), 'errors' => 0);
+            $data[$date] = ['date' => $date, 'calls' => ((int) $value ?: 0), 'errors' => 0];
         }
         foreach ($errors as $date => $value) {
             if (isset($data[$date])) {
@@ -48,7 +48,7 @@ if ($app['redis.config']) {
 
         // CSV response
         if ($request->get('format') == 'csv') {
-            $flat = array();
+            $flat = [];
             foreach ($data as $value) {
                 $flat[] = implode(',', $value);
             }
@@ -56,12 +56,12 @@ if ($app['redis.config']) {
             $csv = "Date,Calls,Errors\n";
             $csv .= implode("\n", $flat);
 
-            return new Response($csv, 200, array('Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv'));
+            return new Response($csv, 200, ['Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment;filename=transport.csv']);
         }
 
         // JSON response
         if ($request->get('format') == 'json') {
-            return $app->json(array('data' => $data));
+            return $app->json(['data' => $data]);
         }
 
         $total = array_sum($calls);
@@ -73,22 +73,21 @@ if ($app['redis.config']) {
         $stations = $app['stats']->getTopStations();
         $errors = $app['stats']->getTopExceptions();
 
-        return $app['twig']->render('stats.twig', array(
-            'total' => $total,
-            'avg' => $avg,
-            'max' => $max,
-            'calls' => $calls,
+        return $app['twig']->render('stats.twig', [
+            'total'     => $total,
+            'avg'       => $avg,
+            'max'       => $max,
+            'calls'     => $calls,
             'resources' => $resources,
-            'stations' => $stations,
-            'errors' => $errors,
-        ));
+            'stations'  => $stations,
+            'errors'    => $errors,
+        ]);
     });
 } else {
     $app->get('/', function (Request $request) use ($app) {
         return 'No Redis configured. See section "Statistics" in README.md.';
     });
 }
-
 
 // run
 $app->run();

@@ -15,20 +15,20 @@ class LocationQueryParser
         $via = $request->get('via');
         if (!is_array($via)) {
             if ($via) {
-                $via = array($via);
+                $via = [$via];
             } else {
-                $via = array();
+                $via = [];
             }
         }
 
-        $query = new LocationQuery(array('from' => $from, 'to' => $to, 'via' => $via));
+        $query = new LocationQuery(['from' => $from, 'to' => $to, 'via' => $via]);
 
         return $query;
     }
 
     public static function validate(ConnectionQuery $query)
     {
-        $errors = array();
+        $errors = [];
 
         if ($query->limit > 6) {
             $errors[] = 'Maximal value of argument `limit` is 6.';

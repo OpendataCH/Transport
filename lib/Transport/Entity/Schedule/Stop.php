@@ -5,21 +5,23 @@ namespace Transport\Entity\Schedule;
 use Transport\Entity;
 
 /**
- * Basic Stop
+ * Basic Stop.
  *
  * @SWG\Definition()
  */
 class Stop
 {
     /**
-     * A location object showing this line's stop at the requested station
+     * A location object showing this line's stop at the requested station.
+     *
      * @var \Transport\Entity\Location\Station
      * @SWG\Property()
      */
     public $station;
 
     /**
-     * The arrival time to the checkpoint (e.g. 14:58:00)
+     * The arrival time to the checkpoint (e.g. 14:58:00).
+     *
      * @var string
      * @SWG\Property()
      */
@@ -32,7 +34,8 @@ class Stop
     public $arrivalTimestamp;
 
     /**
-     * The departure time from the checkpoint, can be null
+     * The departure time from the checkpoint, can be null.
+     *
      * @var string
      * @SWG\Property()
      */
@@ -51,14 +54,16 @@ class Stop
     public $delay;
 
     /**
-     * The arrival/departure platform (e.g. 8)
+     * The arrival/departure platform (e.g. 8).
+     *
      * @var string
      * @SWG\Property()
      */
     public $platform;
 
     /**
-     * The checkpoint prognosis
+     * The checkpoint prognosis.
+     *
      * @var \Transport\Entity\Schedule\Prognosis
      * @SWG\Property()
      */
@@ -82,11 +87,12 @@ class Stop
     }
 
     /**
-     * Calculates a datetime by parsing the time and date given
+     * Calculates a datetime by parsing the time and date given.
      *
-     * @param   string		$time		The time to parse, can contain an optional offset prefix (e.g., "02d")
-     * @param   \DateTime	$referenceDate    The date
-     * @return  \DateTime  The parsed time in ISO format
+     * @param string    $time          The time to parse, can contain an optional offset prefix (e.g., "02d")
+     * @param \DateTime $referenceDate The date
+     *
+     * @return \DateTime The parsed time in ISO format
      */
     public static function calculateDateTime($time, \DateTime $referenceDate, $stopPrognosis = null)
     {
@@ -125,7 +131,7 @@ class Stop
             $offset = 1;
         }
 
-        $date->add(new \DateInterval('P' . $offset . 'D'));
+        $date->add(new \DateInterval('P'.$offset.'D'));
 
         return $date;
     }
@@ -133,7 +139,7 @@ class Stop
     public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
     {
         if (!$obj) {
-            $obj = new Stop();
+            $obj = new self();
         }
 
         $obj->station = Entity\Location\Station::createStationFromXml($xml->Station); // deprecated, use location instead
@@ -174,7 +180,7 @@ class Stop
 
         if ($xml->StAttrList) {
             foreach ($xml->StAttrList->StAttr as $attr) {
-                if ($attr["code"] == "RA") {
+                if ($attr['code'] == 'RA') {
                     $obj->realtimeAvailability = (string) $attr['text'];
                 }
             }

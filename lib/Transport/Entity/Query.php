@@ -1,15 +1,13 @@
-<?php 
+<?php
 
 namespace Transport\Entity;
-
-use Transport\Entity\Location\Location;
 
 abstract class Query
 {
     public $lang = 'EN';
 
     /**
-     * @return  \SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     protected function createRequest()
     {

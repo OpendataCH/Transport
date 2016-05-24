@@ -16,7 +16,7 @@ class LocationFactory
         case 'ReqLoc':
         case 'Err':
         default:
-            return null;
+            return;
         }
     }
 
