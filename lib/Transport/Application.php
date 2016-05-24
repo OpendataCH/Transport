@@ -198,7 +198,7 @@ class Application extends \Silex\Application
         })->bind('api');
 
         /**
-         * Search locations
+         * Search locations.
          *
          * Returns the matching locations for the given parameters. Either query or ( x and y ) are required.
          *
@@ -282,7 +282,7 @@ class Application extends \Silex\Application
         })->bind('locations');
 
         /**
-         * Search connections
+         * Search connections.
          *
          * Returns the next connections from a location to another.
          *
@@ -434,7 +434,7 @@ class Application extends \Silex\Application
         })->bind('connections');
 
         /**
-         * Get station board
+         * Get station board.
          *
          * Returns the next connections leaving from a specific location.
          *
