@@ -19,7 +19,7 @@
                 "tags": [
                     "locations"
                 ],
-                "summary": "Search locations",
+                "summary": "Search locations.",
                 "description": "Returns the matching locations for the given parameters. Either query or ( x and y ) are required.\n\nThe locations in the response are scored to determine which is the most exact location.\n\nThis method can return a refine response, what means that the request has to be redone.",
                 "parameters": [
                     {
@@ -59,7 +59,7 @@
                         "schema": {
                             "properties": {
                                 "stations": {
-                                    "description": "Search locations\n\nReturns the matching locations for the given parameters. Either query or ( x and y ) are required.\n\nThe locations in the response are scored to determine which is the most exact location.\n\nThis method can return a refine response, what means that the request has to be redone.",
+                                    "description": "Search locations.\n\nReturns the matching locations for the given parameters. Either query or ( x and y ) are required.\n\nThe locations in the response are scored to determine which is the most exact location.\n\nThis method can return a refine response, what means that the request has to be redone.",
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/definitions/Location"
@@ -77,7 +77,7 @@
                 "tags": [
                     "connections"
                 ],
-                "summary": "Search connections",
+                "summary": "Search connections.",
                 "description": "Returns the next connections from a location to another.",
                 "parameters": [
                     {
@@ -173,7 +173,7 @@
                         "schema": {
                             "properties": {
                                 "connections": {
-                                    "description": "Search connections\n\nReturns the next connections from a location to another.",
+                                    "description": "Search connections.\n\nReturns the next connections from a location to another.",
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/definitions/Connection"
@@ -191,7 +191,7 @@
                 "tags": [
                     "stationboard"
                 ],
-                "summary": "Get station board",
+                "summary": "Get station board.",
                 "description": "Returns the next connections leaving from a specific location.",
                 "parameters": [
                     {
