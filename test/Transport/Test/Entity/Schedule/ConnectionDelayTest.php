@@ -95,7 +95,7 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $sectionFrom = new Entity\Schedule\Stop();
         $sectionFrom->departure = '2012-01-16T16:10:00+0100';
         $sectionFrom->departureTimestamp = 1326726600;
-        $sectionFrom->delay = '8';
+        $sectionFrom->delay = 8;
         $sectionFrom->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
         $prognosis->departure = '2012-01-16T16:18:00+0100';
