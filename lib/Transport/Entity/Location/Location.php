@@ -36,7 +36,7 @@ class Location
     /**
      * If search has been with coordinates, distance to original point in meters.
      *
-     * @var int
+     * @var float
      * @SWG\Property()
      */
     public $distance;

@@ -283,7 +283,8 @@
                 },
                 "distance": {
                     "description": "If search has been with coordinates, distance to original point in meters.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 }
             }
         },
@@ -303,7 +304,8 @@
                 },
                 "distance": {
                     "description": "If search has been with coordinates, distance to original point in meters.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 }
             }
         },
@@ -323,7 +325,8 @@
                 },
                 "distance": {
                     "description": "If search has been with coordinates, distance to original point in meters.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 }
             }
         },
@@ -347,7 +350,8 @@
                 },
                 "distance": {
                     "description": "If search has been with coordinates, distance to original point in meters.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 }
             }
         },

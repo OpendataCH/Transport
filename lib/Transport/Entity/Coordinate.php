@@ -90,6 +90,8 @@ class Coordinate
     /**
      * Calculates the distance to another coordinate using the Haversine Formula.
      * Not really accurate.
+     *
+     * @return float
      */
     public function getDistanceTo($lat, $lon)
     {
