@@ -1,5 +1,12 @@
 # Changelog
 
+## 2016-05-25
+
+- Coding style fixes
+- Make Location class abstract
+- Change location score to integer
+- Change Docker image to port 8000
+
 ## 2016-05-22
 
 - Add Swagger specification
