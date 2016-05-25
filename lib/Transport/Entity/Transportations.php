@@ -48,8 +48,6 @@ class Transportations
 
     public static function reduceTransportationsDec($transportations = [], $limit = 16)
     {
-        $dec = 0;
-
         if (in_array('all', $transportations)) {
             $dec = pow(2, $limit) - 1;
         } else {
