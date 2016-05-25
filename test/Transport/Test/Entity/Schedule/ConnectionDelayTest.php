@@ -16,8 +16,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $from->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
         $prognosis->departure = '2012-01-16T16:18:00+0100';
-        $prognosis->capacity1st = '1';
-        $prognosis->capacity2nd = '1';
+        $prognosis->capacity1st = 1;
+        $prognosis->capacity2nd = 1;
         $from->prognosis = $prognosis;
         $station = new Entity\Location\Station();
         $station->name = 'Zürich Altstetten';
@@ -99,8 +99,8 @@ class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
         $sectionFrom->platform = '3';
         $prognosis = new Entity\Schedule\Prognosis();
         $prognosis->departure = '2012-01-16T16:18:00+0100';
-        $prognosis->capacity1st = '1';
-        $prognosis->capacity2nd = '1';
+        $prognosis->capacity1st = 1;
+        $prognosis->capacity2nd = 1;
         $sectionFrom->prognosis = $prognosis;
         $station = new Entity\Location\Station();
         $station->name = 'Zürich Altstetten';

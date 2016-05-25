@@ -13,8 +13,8 @@ class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
         $stop->departure = '2012-03-31T23:57:00+0200';
         $stop->departureTimestamp = 1333231020;
         $prognosis = new Entity\Schedule\Prognosis();
-        $prognosis->capacity1st = '-1';
-        $prognosis->capacity2nd = '-1';
+        $prognosis->capacity1st = -1;
+        $prognosis->capacity2nd = -1;
         $stop->prognosis = $prognosis;
         $station = new Entity\Location\Station();
         $station->name = 'ZÃ¼rich, BÃ¤ckeranlage';
