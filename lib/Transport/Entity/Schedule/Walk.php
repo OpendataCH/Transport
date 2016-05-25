@@ -8,7 +8,7 @@ namespace Transport\Entity\Schedule;
 class Walk
 {
     /**
-     * @var int
+     * @var string
      * @SWG\Property()
      */
     public $duration;

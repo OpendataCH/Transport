@@ -593,7 +593,7 @@
         "Walk": {
             "properties": {
                 "duration": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         }
