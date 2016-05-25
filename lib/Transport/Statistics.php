@@ -76,8 +76,6 @@ class Statistics
 
     public function getCalls()
     {
-        $keys = $this->redis->keys('stats:calls:*');
-
         $result = $this->redis->sort('stats:calls', [
             'get'   => ['#', '*'],
             'sort'  => 'ASC',
