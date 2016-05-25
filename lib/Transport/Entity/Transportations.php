@@ -26,7 +26,7 @@ class Transportations
     /**
      * Converts a list of transportation strings into a bitmask accepted by the SBB.
      *
-     * @param array[]string $transportations A list of transportations
+     * @param string[] $transportations A list of transportations
      * @param int           $limit           Maximum number of transportations (bits)
      * @param bool          $lsb0            Least significant bit first, LSB 0
      *
