@@ -11,7 +11,7 @@ class PoiTest extends \PHPUnit_Framework_TestCase
     {
         $poi = new Poi();
         $poi->name = 'Ittigen, Bahnhof';
-        $poi->score = '100';
+        $poi->score = 100;
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
         $coordinate->x = 46.976494;

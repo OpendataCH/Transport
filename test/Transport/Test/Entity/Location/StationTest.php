@@ -11,7 +11,7 @@ class StationTest extends \PHPUnit_Framework_TestCase
     {
         $station = new Station('008508051');
         $station->name = 'Bern Felsenau';
-        $station->score = '81';
+        $station->score = 81;
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
         $coordinate->x = 46.968493;
