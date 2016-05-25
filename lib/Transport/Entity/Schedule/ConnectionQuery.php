@@ -60,7 +60,7 @@ class ConnectionQuery extends Query
 
     public function toXml()
     {
-        if ($this->isArrivalTime == false) {
+        if ($this->isArrivalTime === false) {
             $forwardCount = $this->limit;
             $backwardCount = 0;
         } else {
