@@ -7,7 +7,7 @@ use Transport\Entity\Coordinate;
 /**
  * @SWG\Definition()
  */
-class Location
+abstract class Location
 {
     /**
      * The name of this location.
@@ -87,4 +87,11 @@ class Location
 
         return $obj;
     }
+
+    /**
+     * Convert to XML representation.
+     *
+     * @return \SimpleXMLElement
+     */
+    abstract public function toXml(\SimpleXMLElement $parent = null);
 }
