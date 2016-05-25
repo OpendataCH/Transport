@@ -50,7 +50,7 @@ class ConnectionQueryParser
 
         $transportations = $request->get('transportations');
         if ($transportations) {
-            $query->transportations = $transportations;
+            $query->transportations = (array) $transportations;
         }
 
         $direct = $request->get('direct');
