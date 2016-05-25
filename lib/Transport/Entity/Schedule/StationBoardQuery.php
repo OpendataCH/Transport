@@ -33,7 +33,7 @@ class StationBoardQuery extends Query
 
     public function toXml()
     {
-        $request = $this->createRequest('STBReq');
+        $request = $this->createRequest();
 
         $board = $request->addChild('STBReq');
 
