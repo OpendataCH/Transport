@@ -1800,7 +1800,7 @@
     "from": {
         "id": "008503000",
         "name": "Z\u00fcrich",
-        "score": "100",
+        "score": 100,
         "coordinate": {
             "type": "WGS84",
             "x": 47.378177,
@@ -1811,7 +1811,7 @@
     "to": {
         "id": "008507000",
         "name": "Bern",
-        "score": "101",
+        "score": 101,
         "coordinate": {
             "type": "WGS84",
             "x": 46.948825,
@@ -1824,7 +1824,7 @@
             {
                 "id": "008503000",
                 "name": "Z\u00fcrich",
-                "score": "100",
+                "score": 100,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.378177,
@@ -1835,7 +1835,7 @@
             {
                 "id": "008503000",
                 "name": "Z\u00fcrich HB",
-                "score": "99",
+                "score": 99,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.378177,
@@ -1846,7 +1846,7 @@
             {
                 "id": "008503016",
                 "name": "Z\u00fcrich Flughafen",
-                "score": "99",
+                "score": 99,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.450378,
@@ -1857,7 +1857,7 @@
             {
                 "id": "008503006",
                 "name": "Z\u00fcrich Oerlikon",
-                "score": "98",
+                "score": 98,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.411527,
@@ -1868,7 +1868,7 @@
             {
                 "id": "008591368",
                 "name": "Z\u00fcrich, Sihlquai\/HB",
-                "score": "93",
+                "score": 93,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.379876,
@@ -1879,7 +1879,7 @@
             {
                 "id": "008503083",
                 "name": "Z\u00fcrich, R\u00f6merhof",
-                "score": "93",
+                "score": 93,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.368091,
@@ -1890,7 +1890,7 @@
             {
                 "id": "008530813",
                 "name": "Z\u00fcrich Kreuzplatz",
-                "score": "92",
+                "score": 92,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.364873,
@@ -1901,7 +1901,7 @@
             {
                 "id": "008591427",
                 "name": "Z\u00fcrich, Werd",
-                "score": "92",
+                "score": 92,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.372325,
@@ -1912,7 +1912,7 @@
             {
                 "id": "008591049",
                 "name": "Z\u00fcrich, Auzelg",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.416695,
@@ -1923,7 +1923,7 @@
             {
                 "id": "008588078",
                 "name": "Z\u00fcrich, Central",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.376846,
@@ -1934,7 +1934,7 @@
             {
                 "id": "008591245",
                 "name": "Z\u00fcrich, Laubegg",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.358733,
@@ -1945,7 +1945,7 @@
             {
                 "id": "008503610",
                 "name": "Z\u00fcrich, Triemli",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.368154,
@@ -1956,7 +1956,7 @@
             {
                 "id": "008576193",
                 "name": "Z\u00fcrich, Bellevue",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.367093,
@@ -1967,7 +1967,7 @@
             {
                 "id": "008591405",
                 "name": "Z\u00fcrich, Uetlihof",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.356737,
@@ -1978,7 +1978,7 @@
             {
                 "id": "008591303",
                 "name": "Z\u00fcrich, Platte",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.375003,
@@ -1989,7 +1989,7 @@
             {
                 "id": "008591110",
                 "name": "Z\u00fcrich, Dammweg",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.388487,
@@ -2000,7 +2000,7 @@
             {
                 "id": "008591190",
                 "name": "Z\u00fcrich, Heuried",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.369412,
@@ -2011,7 +2011,7 @@
             {
                 "id": "008591309",
                 "name": "Z\u00fcrich, Rathaus",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.37174,
@@ -2022,7 +2022,7 @@
             {
                 "id": "008591316",
                 "name": "Z\u00fcrich, Rennweg",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.373062,
@@ -2033,7 +2033,7 @@
             {
                 "id": "008591233",
                 "name": "Z\u00fcrich, Klusplatz",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.364037,
@@ -2044,7 +2044,7 @@
             {
                 "id": "008591239",
                 "name": "Z\u00fcrich, Kunsthaus",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.370437,
@@ -2055,7 +2055,7 @@
             {
                 "id": "008591276",
                 "name": "Z\u00fcrich, Milchbuck",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.397495,
@@ -2066,7 +2066,7 @@
             {
                 "id": "008576195",
                 "name": "Z\u00fcrich, Opernhaus",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.365412,
@@ -2077,7 +2077,7 @@
             {
                 "id": "008591183",
                 "name": "Z\u00fcrich, Helmhaus",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.370068,
@@ -2088,7 +2088,7 @@
             {
                 "id": "008591246",
                 "name": "Z\u00fcrich, Laubiweg",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.394987,
@@ -2099,7 +2099,7 @@
             {
                 "id": "008591442",
                 "name": "Z\u00fcrich, Zoo",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.381575,
@@ -2110,7 +2110,7 @@
             {
                 "id": "008503010",
                 "name": "Z\u00fcrich Enge",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.3641,
@@ -2121,7 +2121,7 @@
             {
                 "id": "008576198",
                 "name": "Z\u00fcrich, H\u00f6schgasse",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.357996,
@@ -2132,7 +2132,7 @@
             {
                 "id": "008591262",
                 "name": "Z\u00fcrich, L\u00f6wenplatz",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.375893,
@@ -2143,7 +2143,7 @@
             {
                 "id": "008591420",
                 "name": "Z\u00fcrich, Waldgarten",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.404227,
@@ -2154,7 +2154,7 @@
             {
                 "id": "008530811",
                 "name": "Z\u00fcrich Balgrist",
-                "score": "91",
+                "score": 91,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.35458,
@@ -2165,7 +2165,7 @@
             {
                 "id": "008591362",
                 "name": "Z\u00fcrich, Seilbahn Rigiblick",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.385916,
@@ -2176,7 +2176,7 @@
             {
                 "id": "008503059",
                 "name": "Z\u00fcrich Stadelhofen FB",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.366356,
@@ -2187,7 +2187,7 @@
             {
                 "id": "008591105",
                 "name": "Z\u00fcrich, B\u00fcrkliplatz",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.366823,
@@ -2198,7 +2198,7 @@
             {
                 "id": "008591257",
                 "name": "Z\u00fcrich, Limmatplatz",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.384604,
@@ -2209,7 +2209,7 @@
             {
                 "id": "008591367",
                 "name": "Z\u00fcrich, Sihlpost\/HB",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.376091,
@@ -2220,7 +2220,7 @@
             {
                 "id": "008591369",
                 "name": "Z\u00fcrich, Sihlstrasse",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.372271,
@@ -2231,7 +2231,7 @@
             {
                 "id": "008591071",
                 "name": "Z\u00fcrich, Beckenhof",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.384083,
@@ -2242,7 +2242,7 @@
             {
                 "id": "008591174",
                 "name": "Z\u00fcrich, Haldenegg",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.379651,
@@ -2253,7 +2253,7 @@
             {
                 "id": "008591259",
                 "name": "Z\u00fcrich, Lochergut",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.375345,
@@ -2264,7 +2264,7 @@
             {
                 "id": "008503001",
                 "name": "Z\u00fcrich Altstetten",
-                "score": "90",
+                "score": 90,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 47.391481,
@@ -2277,7 +2277,7 @@
             {
                 "id": "008507000",
                 "name": "Bern",
-                "score": "101",
+                "score": 101,
                 "coordinate": {
                     "type": "WGS84",
                     "x": 46.948825,

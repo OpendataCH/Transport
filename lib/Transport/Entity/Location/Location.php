@@ -59,7 +59,7 @@ class Location
             $obj->name = (string) $xml['name'];
         }
         if ($xml['score']) {
-            $obj->score = (string) $xml['score'];
+            $obj->score = (int) $xml['score'];
         }
         $obj->coordinate = Coordinate::createFromXml($xml);
 

@@ -3,7 +3,7 @@
         {
             "id": "008504416",
             "name": "Br\u00fcgg BE",
-            "score": "100",
+            "score": 100,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.123629,
@@ -14,7 +14,7 @@
         {
             "id": "008507507",
             "name": "Blausee BE",
-            "score": "98",
+            "score": 98,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.534314,
@@ -25,7 +25,7 @@
         {
             "id": "008576420",
             "name": "Br\u00fcgg BE, Jura",
-            "score": "97",
+            "score": 97,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.123458,
@@ -36,7 +36,7 @@
         {
             "id": "008592482",
             "name": "Br\u00fcgg BE, Pfeid",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.121373,
@@ -47,7 +47,7 @@
         {
             "id": "008583066",
             "name": "Brienz BE, Engi",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.737722,
@@ -58,7 +58,7 @@
         {
             "id": "008576419",
             "name": "Br\u00fcgg BE, Bahnhof",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.123944,
@@ -69,7 +69,7 @@
         {
             "id": "008576727",
             "name": "Brienz BE, G\u00e4rbi",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.754172,
@@ -80,7 +80,7 @@
         {
             "id": "008504312",
             "name": "Renan BE",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.125715,
@@ -91,7 +91,7 @@
         {
             "id": "008576728",
             "name": "Brienz BE, Bahnhof",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.754766,
@@ -102,7 +102,7 @@
         {
             "id": "008576447",
             "name": "Br\u00fcgg BE, M\u00f6schler",
-            "score": "96",
+            "score": 96,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.123989,
@@ -113,7 +113,7 @@
         {
             "id": "008576739",
             "name": "Brienz BE, Fulbach",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.746541,
@@ -124,7 +124,7 @@
         {
             "id": "008581021",
             "name": "Bargen BE, Bahnhof",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.040407,
@@ -135,7 +135,7 @@
         {
             "id": "008576740",
             "name": "Brienz BE, Lauenen",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.748878,
@@ -146,7 +146,7 @@
         {
             "id": "008590067",
             "name": "Bremgarten BE, Post",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.975595,
@@ -157,7 +157,7 @@
         {
             "id": "008576418",
             "name": "Br\u00fcgg BE, B\u00e4rletweg",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.125202,
@@ -168,7 +168,7 @@
         {
             "id": "008592478",
             "name": "Br\u00fcgg BE, Br\u00fcggfeld",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.12407,
@@ -179,7 +179,7 @@
         {
             "id": "008592479",
             "name": "Br\u00fcgg BE, Br\u00fcggmoos",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.119224,
@@ -190,7 +190,7 @@
         {
             "id": "008576416",
             "name": "Br\u00fcgg BE, Chaletweg",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.12451,
@@ -201,7 +201,7 @@
         {
             "id": "008576417",
             "name": "Br\u00fcgg BE, Sonnhalde",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.125184,
@@ -212,7 +212,7 @@
         {
             "id": "008576737",
             "name": "Brienz BE, Lammbach",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.751629,
@@ -223,7 +223,7 @@
         {
             "id": "008508894",
             "name": "B\u00e4riswil BE, Brunnen",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.018923,
@@ -234,7 +234,7 @@
         {
             "id": "008577030",
             "name": "B\u00e4riswil BE, M\u00e4tteli",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.020541,
@@ -245,7 +245,7 @@
         {
             "id": "008592481",
             "name": "Br\u00fcgg BE, Moosw\u00e4ldli",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 47.121337,
@@ -256,7 +256,7 @@
         {
             "id": "008587231",
             "name": "Brienz BE, Buscheli",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.74957,
@@ -267,7 +267,7 @@
         {
             "id": "008589020",
             "name": "Bremgarten BE, Chutze",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.972988,
@@ -278,7 +278,7 @@
         {
             "id": "008589023",
             "name": "Bremgarten BE, L\u00e4ndli",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.972808,
@@ -289,7 +289,7 @@
         {
             "id": "008588551",
             "name": "Bremgarten BE, Seftau",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.970318,
@@ -300,7 +300,7 @@
         {
             "id": "008581559",
             "name": "Brienz BE, Glyssibach",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.753435,
@@ -311,7 +311,7 @@
         {
             "id": "008571720",
             "name": "Buchen BE, Schulhaus",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.779055,
@@ -322,7 +322,7 @@
         {
             "id": "008588413",
             "name": "Brienz BE, Stegmatte",
-            "score": "95",
+            "score": 95,
             "coordinate": {
                 "type": "WGS84",
                 "x": 46.740931,
