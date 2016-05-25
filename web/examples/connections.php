@@ -29,6 +29,7 @@ if ($search) {
     }
 
     $url = 'http://transport.opendata.ch/v1/connections?'.http_build_query($query);
+    $url = filter_var($url, FILTER_VALIDATE_URL);
     $response = json_decode(file_get_contents($url));
 
     if ($response->from) {
