@@ -47,7 +47,7 @@ class LocationFactoryTest extends \PHPUnit_Framework_TestCase
 EOF;
         $station = new Station();
         $station->name = 'Nummerland';
-        $station->id = 8508489;
+        $station->id = '8508489';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
         $coordinate->x = 47.003057;
@@ -71,7 +71,7 @@ EOF;
 EOF;
         $station = new Station();
         $station->name = 'Nümmerland';
-        $station->id = 8508489;
+        $station->id = '8508489';
         $coordinate = new Coordinate();
         $coordinate->type = 'WGS84';
         $coordinate->x = 47.003057;
