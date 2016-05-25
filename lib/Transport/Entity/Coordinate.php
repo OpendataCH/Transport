@@ -18,7 +18,7 @@ class Coordinate
     /**
      * Latitude.
      *
-     * @var int
+     * @var float
      * @SWG\Property()
      */
     public $x;
@@ -26,7 +26,7 @@ class Coordinate
     /**
      * Longitude.
      *
-     * @var int
+     * @var float
      * @SWG\Property()
      */
     public $y;

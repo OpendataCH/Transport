@@ -259,11 +259,13 @@
                 },
                 "x": {
                     "description": "Latitude.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 },
                 "y": {
                     "description": "Longitude.",
-                    "type": "integer"
+                    "type": "number",
+                    "format": "float"
                 }
             }
         },
