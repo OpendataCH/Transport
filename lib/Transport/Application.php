@@ -183,12 +183,12 @@ class Application extends \Silex\Application
         });
 
         // home
-        $app->get('/', function (Request $request) use ($app) {
+        $app->get('/', function () use ($app) {
             return file_get_contents('index.html');
         })->bind('home');
 
         // api
-        $app->get('/v1/', function (Request $request) use ($app) {
+        $app->get('/v1/', function () use ($app) {
 
             return $app->json([
                 'date'    => date('c'),
