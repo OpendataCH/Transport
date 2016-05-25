@@ -30,7 +30,7 @@ class ConnectionPageQuery extends Query
         $conScr['scrDir'] = $this->query->page < 0 ? 'B' : 'F';
         $conScr['nrCons'] = $this->query->limit;
 
-        $context = $conScr->addChild('ConResCtxt', $this->context);
+        $conScr->addChild('ConResCtxt', $this->context);
 
         return $request->asXML();
     }
