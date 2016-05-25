@@ -263,7 +263,7 @@ class Application extends \Silex\Application
             if ($x && $y) {
                 $query = new NearbyQuery($x, $y);
                 if ($transportations) {
-                    $query->transportations = $transportations;
+                    $query->transportations = (array) $transportations;
                 }
                 $stations = $app['api']->findNearbyLocations($query);
             }
@@ -522,7 +522,7 @@ class Application extends \Silex\Application
 
                 $query = new StationBoardQuery($station, $date);
                 if ($transportations) {
-                    $query->transportations = $transportations;
+                    $query->transportations = (array) $transportations;
                 }
                 $query->maxJourneys = $limit;
                 $stationboard = $app['api']->getStationBoard($query);
