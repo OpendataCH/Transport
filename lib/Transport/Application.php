@@ -126,7 +126,9 @@ class Application extends \Silex\Application
         // allow cross-domain requests, enable cache
         $app->after(function (Request $request, Response $response) {
             $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Cache-Control', 's-maxage=30, public');
+            if ($app['http_cache']) {
+                $response->headers->set('Cache-Control', 's-maxage=30, public');
+            }
         });
 
         // Serializer
