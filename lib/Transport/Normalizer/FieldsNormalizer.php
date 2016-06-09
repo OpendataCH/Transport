@@ -58,7 +58,9 @@ class FieldsNormalizer extends SerializerAwareNormalizer implements NormalizerIn
     {
         return array_reduce(
             array_reverse(explode('/', $field)),
-            function ($result, $value) { return [$value => $result]; },
+            function ($result, $value) {
+                return [$value => $result];
+            },
             true
         );
     }

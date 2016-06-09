@@ -52,7 +52,9 @@ class Transportations
             $dec = pow(2, $limit) - 1;
         } else {
             $map = self::$transportationBits;
-            $dec = array_reduce($transportations, function ($aggr, $val) use ($map) { return $aggr + $map[$val]; }, 0);
+            $dec = array_reduce($transportations, function ($aggr, $val) use ($map) {
+                return $aggr + $map[$val];
+            }, 0);
         }
 
         return $dec;
