@@ -132,7 +132,9 @@ class Statistics
         $result = $this->redis->sort($key, [
             'by'    => '*->calls',
             'limit' => [0, 5],
-            'get'   => array_map(function ($value) { return "*->$value"; }, $fields),
+            'get'   => array_map(function ($value) {
+                return "*->$value";
+            }, $fields),
             'sort'  => 'DESC',
         ]);
 
