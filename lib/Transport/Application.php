@@ -77,7 +77,6 @@ class Application extends \Silex\Application
 
         // Exception handler
         $app->error(function (\Exception $e, $code) use ($app) {
-
             if ($app['debug']) {
                 return;
             }
@@ -161,7 +160,6 @@ class Application extends \Silex\Application
         $app['rate_limiting'] = new \Transport\RateLimiting($redis, $app['rate_limiting.config']['enabled'], $app['rate_limiting.config']['limit']);
 
         $app->before(function (Request $request) use ($app) {
-
             if ($app['rate_limiting']->isEnabled()) {
                 $ip = $request->getClientIp();
                 if ($app['rate_limiting']->hasReachedLimit($ip)) {
@@ -172,7 +170,6 @@ class Application extends \Silex\Application
         });
 
         $app->after(function (Request $request, Response $response) use ($app) {
-
             if ($app['rate_limiting']->isEnabled()) {
                 $ip = $request->getClientIp();
 
@@ -189,7 +186,6 @@ class Application extends \Silex\Application
 
         // api
         $app->get('/v1/', function () use ($app) {
-
             return $app->json([
                 'date'    => date('c'),
                 'author'  => 'Opendata.ch',
@@ -254,7 +250,6 @@ class Application extends \Silex\Application
          * )
          */
         $app->get('/v1/locations', function (Request $request) use ($app) {
-
             $stations = [];
 
             $x = $request->get('x') ?: null;
@@ -390,7 +385,6 @@ class Application extends \Silex\Application
          * )
          */
         $app->get('/v1/connections', function (Request $request) use ($app) {
-
             $query = LocationQueryParser::create($request);
 
             // get stations
@@ -493,7 +487,6 @@ class Application extends \Silex\Application
          * )
          */
         $app->get('/v1/stationboard', function (Request $request) use ($app) {
-
             $stationboard = [];
 
             $limit = $request->get('limit', 40);
@@ -537,11 +530,9 @@ class Application extends \Silex\Application
 
         // Swagger
         $app->get('/swagger.json', function () use ($app) {
-
             $swagger = \Swagger\scan(__DIR__);
 
             return new Response($swagger, 200, ['Content-Type' => 'application/json']);
-
         })->bind('swagger');
     }
 }

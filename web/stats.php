@@ -30,7 +30,6 @@ if ($app['redis.config']) {
 
     // home
     $app->get('/', function (Request $request) use ($app) {
-
         $calls = $app['stats']->getCalls();
         $errors = $app['stats']->getErrors();
 
