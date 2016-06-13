@@ -1,5 +1,10 @@
 # Changelog
 
+## 2016-06-13
+
+- #136 Remove Cache-Control header if HTTP cache is not enabled
+- Filter URL in connections example
+
 ## 2016-05-25
 
 - Coding style fixes
