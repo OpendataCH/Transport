@@ -123,9 +123,11 @@ class Application extends \Silex\Application
         $app['api'] = new \Transport\API(new \Buzz\Browser($client));
 
         // allow cross-domain requests, enable cache
-        $app->after(function (Request $request, Response $response) {
+        $app->after(function (Request $request, Response $response) use ($app) {
             $response->headers->set('Access-Control-Allow-Origin', '*');
-            $response->headers->set('Cache-Control', 's-maxage=30, public');
+            if ($app['http_cache']) {
+                $response->headers->set('Cache-Control', 's-maxage=30, public');
+            }
         });
 
         // Serializer
