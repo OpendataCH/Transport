@@ -64,8 +64,8 @@ if ($app['redis.config']) {
         }
 
         $total = array_sum($calls);
-        $avg = $total / count($calls);
-        $max = max($calls);
+        $avg = $total / max(count($calls), 1);
+        $max = count($calls) > 0 ? max($calls) : 0;
 
         // get top resources, stations and errors
         $resources = $app['stats']->getTopResources();
