@@ -45,7 +45,7 @@ class StationBoardTest extends IntegrationTest
             ->will($this->onConsecutiveCalls($responseLocation, $responseStationBoard));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/stationboard', $parameters);
+        $client->request('GET', '/v1/stationboard', $parameters);
 
         $this->assertEquals($this->getFixture('stationboard/'.$response), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());

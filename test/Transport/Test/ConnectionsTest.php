@@ -42,7 +42,7 @@ class ConnectionsTest extends IntegrationTest
             ->will($this->onConsecutiveCalls($responseLocation, $responseConnection));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/connections', $parameters);
+        $client->request('GET', '/v1/connections', $parameters);
 
         $this->assertEquals($this->getFixture('connections/'.$response), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());
@@ -59,7 +59,7 @@ class ConnectionsTest extends IntegrationTest
             ->will($this->returnValue($response));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/connections', ['from' => 'Zürich', 'to' => 'Bern']);
+        $client->request('GET', '/v1/connections', ['from' => 'Zürich', 'to' => 'Bern']);
 
         $this->assertEquals($this->getFixture('connections/response_error.json'), $this->json($client->getResponse()));
         $this->assertEquals(500, $client->getResponse()->getStatusCode());
@@ -76,7 +76,7 @@ class ConnectionsTest extends IntegrationTest
             ->will($this->returnValue($response));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/connections', ['from' => 'Zürich', 'to' => 'Bern']);
+        $client->request('GET', '/v1/connections', ['from' => 'Zürich', 'to' => 'Bern']);
 
         $this->assertEquals($this->getFixture('connections/response_500.json'), $this->json($client->getResponse()));
         $this->assertEquals(500, $client->getResponse()->getStatusCode());

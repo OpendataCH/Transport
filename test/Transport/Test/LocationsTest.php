@@ -27,7 +27,7 @@ class LocationsTest extends IntegrationTest
             ->will($this->onConsecutiveCalls($response));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/locations', [
+        $client->request('GET', '/v1/locations', [
             'query' => 'Be',
         ]);
 
@@ -59,7 +59,7 @@ class LocationsTest extends IntegrationTest
             ->will($this->onConsecutiveCalls($response));
 
         $client = $this->createClient();
-        $crawler = $client->request('GET', '/v1/locations', $parameters);
+        $client->request('GET', '/v1/locations', $parameters);
 
         $this->assertEquals($this->getFixture('locations/'.$jsonReponse), $this->json($client->getResponse()));
         $this->assertTrue($client->getResponse()->isOk());
