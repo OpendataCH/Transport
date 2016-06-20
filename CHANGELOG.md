@@ -1,5 +1,11 @@
 # Changelog
 
+## 2016-06-20
+
+- Allow Docker image to run without Redis by default
+- Turn off rate limiting and stats by default in Docker image
+- Prevent warnings for empty arrays in statistics
+
 ## 2016-06-13
 
 - #136 Remove Cache-Control header if HTTP cache is not enabled
