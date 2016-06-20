@@ -9,5 +9,10 @@ services:
       - "8000:80"
     volumes:
       - .:/var/www/html
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      STATS_ENABLED: "true"
+      RATE_LIMITING_ENABLED: "true"
   redis:
     image: redis
