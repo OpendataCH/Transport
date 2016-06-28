@@ -21,7 +21,7 @@ $app['stats.config'] = ['enabled' => false];
 // Rate limiting
 $app['rate_limiting.config'] = ['enabled' => false, 'limit' => 150];
 
-// if hosted behind a reverse proxy
+// Trusted proxies, needed for rate limiting behing a reverse proxy, e.g. $app['proxy'] = ['127.0.0.1'];
 $app['proxy'] = false;
 
 // Address of the proxy server (e.g. 192.168.0.1:8080) to use when connecting
