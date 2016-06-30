@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Mit XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) von Reinhard Hüttermann (HaCon Ingenieurgesellschaft mbH) bearbeitet -->
-<!-- edited with XMLSpy v2010 rel. 3 sp1 (x64) (http://www.altova.com) by XMLSpy 2010 Professional Ed. Release 3, Installed for 3 users (HaCon Ingenieurgesellschaft mbH) -->
+<!-- Mit XMLSpy v2016 rel. 2 (http://www.altova.com) von rhu (HaCon Ingenieurgesellschaft mbH) bearbeitet -->
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (x64) (http://www.altova.com) by HaCon (HaCon Ingenieurgesellschaft mbH) -->
 <!-- ======================================================================= -->
 <!-- location validation request/result -->
 <!-- connection request/result -->
@@ -50,6 +50,10 @@
 <!--                             ver 3.3.1 Added new value REDIRECTION_PASSAGENEW of JStatus (ad: 2014-10-24) -->
 <!--                             ver 3.3.2 Added attribute stationName for TrainSearch request (mschu: 2014-01-13) -->
 <!--                             ver 3.3.3 Added simple XML structure of train formations SFormation (jf: 2015-04-15) -->
+<!--                             ver 3.3.4 FPLU-624: Added DELAY value back to JStatus element and added Coord element to LocValReq element (mschu: 2016-01-29), -->
+<!--                                       FPLU-630: Added two new values  "F" and "L" to the sMode attribute in the attlist.RFlags field to specify searching for the first or last connection on the request date. (mschu: 02.02.2016) -->
+<!--                             ver 3.3.5 FPLU-632: Added request and response for the TimeTableInfo service to retrieve various information about the current timetable data pools as well as version numbers for client and server (mschu: 16.03.2016) -->
+<!--                             ver 3.3.6 FPLU-631: Element readOutText added as part of a connection (rhu: 25.04.2016) -->
 <!-- ======================================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="ReqC">
@@ -62,6 +66,11 @@
 				<xs:element ref="LocValReq" maxOccurs="unbounded"/>
 				<xs:element ref="ConReq"/>
 				<xs:element ref="ConIntervalReq"/>
+				<xs:element ref="TimeTableInfoReq">
+					<xs:annotation>
+						<xs:documentation> TimeTableInfoReq speicifies a TimeTable info request. At the moment the element is empty. The result is in TimeTableInfoRes.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
 				<xs:element ref="ConScrReq"/>
 				<xs:element ref="ConReconstructionReq">
 					<xs:annotation>
@@ -80,7 +89,7 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:attributeGroup name="attlist.ReqCResC">
-		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.3.3">
+		<xs:attribute name="ver" type="xs:string" use="required" fixed="3.3.5">
 			<xs:annotation>
 				<xs:documentation>Current version of the Interface. The version given in the result must match the version specified in the request.</xs:documentation>
 			</xs:annotation>
@@ -107,7 +116,7 @@
 		</xs:attribute>
 		<xs:attribute name="accessId" type="xs:string" use="optional">
 			<xs:annotation>
-				<xs:documentation>The id imay contain any string for identification of the user</xs:documentation>
+				<xs:documentation>The id may contain any string for identification of the user</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>
@@ -118,6 +127,7 @@
 		<xs:complexType>
 			<xs:choice>
 				<xs:element ref="ReqLoc"/>
+				<xs:element ref="Coord"/>
 			</xs:choice>
 			<xs:attributeGroup ref="attlist.LocValReq"/>
 		</xs:complexType>
@@ -733,7 +743,7 @@ Use the following parameters for group travel:  mode="1" type="EXC" value="GN"</
 		</xs:attribute>
 		<xs:attribute name="sMode" use="optional" default="N">
 			<xs:annotation>
-				<xs:documentation>The attribute sMode specifies a search mode. Valid values are N for normal search and P for economic search. The default is N.</xs:documentation>
+				<xs:documentation>The attribute sMode specifies a search mode. Valid values are N for normal search, P for economic search, F for searching the first connection on the operating day and L for searching the last connection on the operating day. The default is N.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:token">
@@ -777,6 +787,7 @@ Use the following parameters for group travel:  mode="1" type="EXC" value="GN"</
 				<xs:choice>
 					<xs:element ref="ConRes"/>
 					<xs:element ref="LocValRes" maxOccurs="unbounded"/>
+					<xs:element ref="TimeTableInfoRes"/>
 					<xs:element ref="STBRes"/>
 					<xs:element ref="JourneyRes"/>
 					<xs:element ref="TrainSearchRes"/>
@@ -1157,6 +1168,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 				<xs:element ref="CommentList" minOccurs="0"/>
 				<xs:element ref="AltConList" minOccurs="0"/>
 				<xs:element ref="ctxRecon" minOccurs="0"/>
+				<xs:element ref="readOutText"/>
 			</xs:sequence>
 			<xs:attributeGroup ref="attlist.Connection"/>
 		</xs:complexType>
@@ -1702,6 +1714,82 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 	<xs:attributeGroup name="attlist.Comment">
 		<xs:attribute name="id" type="xs:ID"/>
 	</xs:attributeGroup>
+	<xs:element name="TimeTableInfoReq">
+		<xs:annotation>
+			<xs:documentation> TimeTableInfoReq speicifies TimeTable info request. At the moment the element is empty. The result is in TimeTableInfoRes.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="TimeTableInfoRes">
+		<xs:annotation>
+			<xs:documentation>TimeTableInfoRes specifies the answer to TimeTableInfoReq request</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Err" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="TimeTablePeriod"/>
+				<xs:element name="TimeTableInfoList">
+					<xs:annotation>
+						<xs:documentation>The TimeTableInfoList element contains a list of information items about the installed timetable pools.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element name="TimeTableInfo">
+								<xs:annotation>
+									<xs:documentation>The TimeTableInfo element is a container for various information pertaining to a timetable pool as the generation timestamp and the identification string.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Date">
+											<xs:annotation>
+												<xs:documentation>The element Date contains the date when the timetable pool was generated. The format is YYYYMMDD.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Time">
+											<xs:annotation>
+												<xs:documentation>The element Time contains the time when the timetable pool was generatied The format of the Time element is hh:mm.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="ident" type="xs:string" use="optional">
+										<xs:annotation>
+											<xs:documentation>The ident attribute specifies a 5-character identification string for the timetable pool.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="serverVersion" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>The serverVerstion attribute includes the version string of the server as displayed in the user interface.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="clientVersion" type="xs:string" use="optional">
+				<xs:annotation>
+					<xs:documentation>The clientVersion attribute includes the version string of the client as displayed in the user interface.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TimeTablePeriod">
+		<xs:annotation>
+			<xs:documentation>TimeTableInfoPeriod specifies the period of timetable</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="begin" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Attribute begin speicifies the begin of timetable</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="end" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Attribute end specifies the end of the timetable</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="Polyline">
 		<xs:annotation>
 			<xs:documentation>A polygon line of coordinates for the geographical description of a route.</xs:documentation>
@@ -2174,20 +2262,7 @@ In requests (DirectTrainReq) the format must be: yyyymmdd.</xs:documentation>
 				<xs:element ref="AnnoList" minOccurs="0"/>
 				<xs:element name="JStatus">
 					<xs:annotation>
-						<xs:documentation>Possible values are: FAILURE - train
-							failure via real time.  NEW or  ADDITIONAL -
-							identifies addtional train. REPLACEMENT - identifies
-							alternative train.  REDIRECTION - one or several
-							additional stops and contrary some stops can not be
-							served. REDIRECTION_NEW - one or more exceptional
-							stops are part of the journey, REDIRECTION_PASSAGE -
-							one or more exceptional passages are part of the
-							journey, REDIRECTION_PASSAGENEW combination of
-							exceptional stops and exceptional passages. PARTIAL_FAILURE - a part of
-							a track can not be served.   PARTIAL_ACTIVATION ,
-							REDIRECTION_FAILURE,  REPLACEMENT_REDIRECTION are
-							reserverd for future use. SCHEDULED - train is in
-							time.
+						<xs:documentation>Possible values are:FAILURE - train failure via real time.  NEW or  ADDITIONAL - identifies addtional train. REPLACEMENT - identifies alternative train.  REDIRECTION - one or several additional stops and contrary some stops can not be served. REDIRECTION_NEW - one or more exceptional stops are part of the journey, REDIRECTION_PASSAGE - one or more exceptional passages are part of the journey, REDIRECTION_PASSAGENEW combination of exceptional stops and exceptional passages. PARTIAL_FAILURE - a part of a track can not be served.   PARTIAL_ACTIVATION , REDIRECTION_FAILURE,  REPLACEMENT_REDIRECTION are reserverd for future use. SCHEDULED - train is in time. DELAY - train is delayed.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -2600,4 +2675,10 @@ In a train search, the Time element specifies the departure time of the train at
 			</xs:annotation>
 		</xs:attribute>
 	</xs:attributeGroup>
+	<xs:element name="readOutText" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Is part of a connection and contains the
+				description of a connection as read out text</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 </xs:schema>
