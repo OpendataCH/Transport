@@ -1,5 +1,10 @@
 # Changelog
 
+## 2016-07-01
+
+- Require PHP 5.5
+- Update Composer dependencies
+
 ## 2016-06-20
 
 - Allow Docker image to run without Redis by default
