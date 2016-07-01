@@ -173,10 +173,25 @@
                         "schema": {
                             "properties": {
                                 "connections": {
-                                    "description": "Search connections.\n\nReturns the next connections from a location to another.",
+                                    "description": "Found connections",
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/definitions/Connection"
+                                    }
+                                },
+                                "from": {
+                                    "description": "Departure station of search",
+                                    "$ref": "#/definitions/Station"
+                                },
+                                "to": {
+                                    "description": "Arrival station of search",
+                                    "$ref": "#/definitions/Station"
+                                },
+                                "stations": {
+                                    "description": "All stations from query",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Station"
                                     }
                                 }
                             },

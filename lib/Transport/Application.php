@@ -380,7 +380,24 @@ class Application extends \Silex\Application
          *             @SWG\Property(
          *                  property="connections",
          *                  type="array",
+         *                  description="Found connections",
          *                  @SWG\Items(ref="#/definitions/Connection")
+         *             ),
+         *             @SWG\Property(
+         *                  property="from",
+         *                  description="Departure station of search",
+         *                  ref="#/definitions/Station"
+         *             ),
+         *             @SWG\Property(
+         *                  property="to",
+         *                  description="Arrival station of search",
+         *                  ref="#/definitions/Station"
+         *             ),
+         *             @SWG\Property(
+         *                  property="stations",
+         *                  type="array",
+         *                  description="All stations from query",
+         *                  @SWG\Items(ref="#/definitions/Station")
          *             ),
          *         ),
          *     ),
