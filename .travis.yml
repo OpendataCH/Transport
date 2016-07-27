@@ -26,3 +26,4 @@ deploy:
     https://api.travis-ci.org/repo/OpendataCH%2Fplaybook/requests
   on:
     branch: master
+    php: 7.0
