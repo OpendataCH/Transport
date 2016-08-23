@@ -7,7 +7,7 @@ web:
     - redis
   environment:
     REDIS_HOST: redis
-    REDIS_TCP_PORT: "6379"
+    REDIS_PORT: "6379"
     STATS_ENABLED: "true"
     RATE_LIMITING_ENABLED: "true"
 redis:
