@@ -11,7 +11,7 @@ services:
       - .:/var/www/html
     environment:
       REDIS_HOST: redis
-      REDIS_PORT: "6379"
+      REDIS_TCP_PORT: "6379"
       STATS_ENABLED: "true"
       RATE_LIMITING_ENABLED: "true"
   redis:
