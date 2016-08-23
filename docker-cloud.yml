@@ -5,5 +5,10 @@ web:
     - "80:80"
   links:
     - redis
+  environment:
+    REDIS_HOST: redis
+    REDIS_PORT: "6379"
+    STATS_ENABLED: "true"
+    RATE_LIMITING_ENABLED: "true"
 redis:
   image: redis
