@@ -111,7 +111,11 @@ class Journey
                         $obj->number = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                         break;
                     case 'OPERATOR':
-                        $obj->operator = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        foreach ($journeyAttribute->Attribute->AttributeVariant as $journeyAttributeVariant) {
+                            if ($journeyAttributeVariant['type'] == 'NORMAL') {
+                                $obj->operator = (string) $journeyAttributeVariant->Text;
+                            }
+                        }
                         break;
                     case 'DIRECTION':
                         $obj->to = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
