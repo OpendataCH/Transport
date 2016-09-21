@@ -1,5 +1,11 @@
 # Changelog
 
+## 2016-09-21
+
+- #142 Use normal attribute variant for more consistent operator attribute
+- Add Redis environment variables to docker-cloud.yml
+- Rename REDIS_TCP_PORT to avoid env conflict on Docker Cloud
+
 ## 2016-07-01
 
 - Require PHP 5.5
