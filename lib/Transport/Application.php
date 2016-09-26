@@ -543,7 +543,7 @@ class Application extends \Silex\Application
                 }
                 
                 if($boardType) {	
-				    $query->boardType = $boardType;
+                    $query->boardType = $boardType;
                 }
                 
                 $query->maxJourneys = $limit;
