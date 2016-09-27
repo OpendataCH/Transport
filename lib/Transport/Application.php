@@ -524,9 +524,9 @@ class Application extends \Silex\Application
             $transportations = $request->get('transportations');
 
             $station = $request->get('station') ?: $request->get('id');
-            
+
             $boardType = $request->get('type');
-            if($boardType != 'ARR' AND $boardType != 'DEP' AND isset($boardType)) {
+            if ($boardType != 'ARR' and $boardType != 'DEP' and isset($boardType)) {
                 $boardType = 'DEP';
             }
 
@@ -541,11 +541,11 @@ class Application extends \Silex\Application
                 if ($transportations) {
                     $query->transportations = (array) $transportations;
                 }
-                
-                if($boardType) {	
+
+                if ($boardType) {
                     $query->boardType = $boardType;
                 }
-                
+
                 $query->maxJourneys = $limit;
                 $stationboard = $app['api']->getStationBoard($query);
             }
