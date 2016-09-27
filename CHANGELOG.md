@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-09-27
+
+- #144 Add type (departure, arrival) parameter for statiobard
+
 ## 2016-09-21
 
 - #142 Use normal attribute variant for more consistent operator attribute
