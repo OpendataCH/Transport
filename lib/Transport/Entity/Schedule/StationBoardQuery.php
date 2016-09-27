@@ -13,7 +13,7 @@ class StationBoardQuery extends Query
      */
     public $station;
 
-    public $boardType = 'DEP';
+    public $boardType = 'departure';
 
     public $maxJourneys = 40;
 
@@ -37,7 +37,13 @@ class StationBoardQuery extends Query
 
         $board = $request->addChild('STBReq');
 
-        $board->addAttribute('boardType', $this->boardType);
+        if ($this->boardType === 'arrival') {
+            $boardType = 'ARR';
+        } else {
+            $boardType = 'DEP';
+        }
+        $board->addAttribute('boardType', $boardType);
+
         $board->addAttribute('maxJourneys', $this->maxJourneys);
         $board->addChild('Time', $this->date->format('H:i'));
 

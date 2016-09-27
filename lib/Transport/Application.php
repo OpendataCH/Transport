@@ -526,9 +526,6 @@ class Application extends \Silex\Application
             $station = $request->get('station') ?: $request->get('id');
 
             $boardType = $request->get('type');
-            if ($boardType != 'ARR' and $boardType != 'DEP' and isset($boardType)) {
-                $boardType = 'DEP';
-            }
 
             $query = new LocationQuery($station, 'station');
             $stations = $app['api']->findLocations($query);
