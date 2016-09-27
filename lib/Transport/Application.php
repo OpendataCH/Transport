@@ -485,6 +485,12 @@ class Application extends \Silex\Application
          *         description="Date and time of departing connections, in the format `YYYY-MM-DD hh:mm` (e.g. 2012-03-25 17:30)",
          *         type="string"
          *     ),
+         *     @SWG\Parameter(
+         *         name="type",
+         *         in="query",
+         *         description="`departure` (default) or `arrival`",
+         *         type="string"
+         *     ),
          *     @SWG\Response(
          *         response="200",
          *         description="Stationboard",
