@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-09-29
+
+- #140 Improve journey number by using LINE attribute
+
 ## 2016-09-27
 
 - #144 Add type (departure, arrival) parameter for statiobard

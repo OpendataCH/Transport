@@ -107,8 +107,17 @@ class Journey
                     case 'INTERNALCATEGORY':
                         $obj->subcategory = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
                         break;
+                    case 'LINE':
+                        $line = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        if ($line && !$obj->number) {
+                            $obj->number = $line;
+                        }
+                        break;
                     case 'NUMBER':
-                        $obj->number = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        $number = (string) $journeyAttribute->Attribute->AttributeVariant->Text;
+                        if ($number && !$obj->number) {
+                            $obj->number = $number;
+                        }
                         break;
                     case 'OPERATOR':
                         foreach ($journeyAttribute->Attribute->AttributeVariant as $journeyAttributeVariant) {
