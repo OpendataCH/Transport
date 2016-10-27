@@ -1,5 +1,9 @@
 # Changelog
 
+## 2016-10-28
+
+- Rate limiting set to 3 requests per second per IP address
+
 ## 2016-09-29
 
 - #140 Improve journey number by using LINE attribute
