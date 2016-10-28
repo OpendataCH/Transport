@@ -19,7 +19,7 @@ $app['redis.config'] = false; // ['host' => 'localhost', 'port' => 6379];
 $app['stats.config'] = ['enabled' => false];
 
 // Rate limiting
-$app['rate_limiting.config'] = ['enabled' => false, 'limit' => 150];
+$app['rate_limiting.config'] = ['enabled' => false, 'limit' => 3];
 
 // Trusted proxies, needed for rate limiting behing a reverse proxy, e.g. $app['proxy'] = ['127.0.0.1'];
 $app['proxy'] = false;

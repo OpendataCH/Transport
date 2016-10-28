@@ -14,11 +14,15 @@ class RateLimiting
 
     protected $limit;
 
-    public function __construct(Client $redis = null, $enabled = false, $limit = 150)
+    protected $second;
+
+    public function __construct(Client $redis = null, $enabled = false, $limit = 3)
     {
         $this->redis = $redis;
         $this->enabled = $enabled;
         $this->limit = $limit;
+
+        $this->second = time();
     }
 
     public function isEnabled()
@@ -43,10 +47,10 @@ class RateLimiting
 
     protected function key($ip)
     {
-        $minute = date('Y-m-d\TH:i');
         $prefix = self::KEY_PREFIX;
+        $second = date('Y-m-d\TH:i:s', $this->second);
 
-        $key = "$prefix:$ip:$minute";
+        $key = "$prefix:$ip:$second";
 
         return $key;
     }
@@ -63,7 +67,7 @@ class RateLimiting
         $key = $this->key($ip);
         $this->redis->transaction(function ($tx) use ($key) {
             $tx->incr($key);
-            $tx->expire($key, 120); // expire after two minutes
+            $tx->expire($key, 5); // expire after five seconds
         });
     }
 
@@ -74,6 +78,6 @@ class RateLimiting
 
     public function getReset()
     {
-        return ceil(time() / 60) * 60;
+        return $this->second + 1;
     }
 }

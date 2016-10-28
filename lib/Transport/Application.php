@@ -51,7 +51,7 @@ class Application extends \Silex\Application
         $app['monolog.level'] = \Monolog\Logger::ERROR;
         $app['redis.config'] = false; // array('host' => 'localhost', 'port' => 6379);
         $app['stats.config'] = ['enabled' => false];
-        $app['rate_limiting.config'] = ['enabled' => false, 'limit' => 150];
+        $app['rate_limiting.config'] = ['enabled' => false, 'limit' => 3];
         $app['proxy'] = false;
         $app['proxy_server.address'] = null;
 
@@ -165,7 +165,7 @@ class Application extends \Silex\Application
             if ($app['rate_limiting']->isEnabled()) {
                 $ip = $request->getClientIp();
                 if ($app['rate_limiting']->hasReachedLimit($ip)) {
-                    throw new HttpException(429, 'Rate limit of '.$app['rate_limiting']->getLimit().' requests per minute exceeded');
+                    throw new HttpException(429, 'Rate limit of '.$app['rate_limiting']->getLimit().' requests per second exceeded');
                 }
                 $app['rate_limiting']->increment($ip);
             }
