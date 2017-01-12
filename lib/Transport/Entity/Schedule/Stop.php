@@ -125,6 +125,14 @@ class Stop
                 // we passed midnight
                 $offset = 1;
             }
+        } elseif (isset($stopPrognosis->Arr->Time)) {
+            $prognosisTime = strtotime((string) $stopPrognosis->Arr->Time);
+
+            if ($dateTime < $referenceTime && $prognosisTime < $referenceTime && ($dateTime - $prognosisTime) < 0) {
+
+                // we passed midnight
+                $offset = 1;
+            }
         } elseif ($dateTime < $referenceTime) {
 
             // we passed midnight

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2017-01-12
+
+- #151 Fix delayed arrival time
+
 ## 2016-10-28
 
 - Rate limiting set to 3 requests per second per IP address
