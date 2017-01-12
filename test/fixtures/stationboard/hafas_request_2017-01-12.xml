@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ReqC lang="EN" prod="iPhone3.1" ver="2.3" accessId="vWjygiRIy0uclbLz4qDO7S3G4dcIIViwoLFCZlopGhe88vlsfedGIqctZP9lvqb">
+  <STBReq boardType="ARR" maxJourneys="1">
+    <Time>19:06</Time>
+    <Period>
+      <DateBegin>
+        <Date>20170112</Date>
+      </DateBegin>
+      <DateEnd>
+        <Date>20170112</Date>
+      </DateEnd>
+    </Period>
+    <TableStation externalId="008591052"/>
+    <ProductFilter>1111111111111111</ProductFilter>
+  </STBReq>
+</ReqC>

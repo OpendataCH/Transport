@@ -1,0 +1,408 @@
+{
+    "station": {
+        "id": "008591052",
+        "name": "Z\u00fcrich, B\u00e4ckeranlage",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.37833,
+            "y": 8.52287
+        },
+        "distance": null
+    },
+    "stationboard": [
+        {
+            "stop": {
+                "station": {
+                    "id": "8579896",
+                    "name": "Bern, Hirschengraben",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 46.946066,
+                        "y": 7.437783
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-01-12T19:00:00+0100",
+                "arrivalTimestamp": 1484244000,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": 6,
+                "platform": "",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": "2017-01-12T19:06:00+0100",
+                    "departure": null,
+                    "capacity1st": -1,
+                    "capacity2nd": -1
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8579896",
+                    "name": "Bern, Hirschengraben",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 46.946066,
+                        "y": 7.437783
+                    },
+                    "distance": null
+                }
+            },
+            "name": "NFT 8",
+            "category": "NFT",
+            "subcategory": "NFT",
+            "categoryCode": 9,
+            "number": "8",
+            "operator": "SVB Auto",
+            "to": "Bern Br\u00fcnnen Westside, Bahnhof",
+            "passList": [
+                {
+                    "station": {
+                        "id": "8582262",
+                        "name": "Bern Br\u00fcnnen Westside, Bahnhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944421,
+                            "y": 7.374984
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:39:00+0100",
+                    "departureTimestamp": 1484329140,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8582262",
+                        "name": "Bern Br\u00fcnnen Westside, Bahnhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944421,
+                            "y": 7.374984
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8571344",
+                        "name": "Bethlehem b. Bern, Kirche",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.949194,
+                            "y": 7.39343
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:45:00+0100",
+                    "departureTimestamp": 1484329500,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8571344",
+                        "name": "Bethlehem b. Bern, Kirche",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.949194,
+                            "y": 7.39343
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8579898",
+                        "name": "B\u00fcmpliz, Unterf\u00fchrung",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.942191,
+                            "y": 7.400702
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:49:00+0100",
+                    "departureTimestamp": 1484329740,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8579898",
+                        "name": "B\u00fcmpliz, Unterf\u00fchrung",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.942191,
+                            "y": 7.400702
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8580939",
+                        "name": "Bern Europaplatz, Bahnhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.943252,
+                            "y": 7.406311
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:51:00+0100",
+                    "departureTimestamp": 1484329860,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8580939",
+                        "name": "Bern Europaplatz, Bahnhof",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.943252,
+                            "y": 7.406311
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8590005",
+                        "name": "Bern, Steigerhubel",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.943935,
+                            "y": 7.411669
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:52:00+0100",
+                    "departureTimestamp": 1484329920,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8590005",
+                        "name": "Bern, Steigerhubel",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.943935,
+                            "y": 7.411669
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8590042",
+                        "name": "Bern, Schlossmatte",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944169,
+                            "y": 7.414995
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:53:00+0100",
+                    "departureTimestamp": 1484329980,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8590042",
+                        "name": "Bern, Schlossmatte",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944169,
+                            "y": 7.414995
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8590041",
+                        "name": "Bern, Loryplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944439,
+                            "y": 7.421296
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:54:00+0100",
+                    "departureTimestamp": 1484330040,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8590041",
+                        "name": "Bern, Loryplatz",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.944439,
+                            "y": 7.421296
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8590009",
+                        "name": "Bern, Kaufm\u00e4nnischer Verband",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.945688,
+                            "y": 7.427472
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:56:00+0100",
+                    "departureTimestamp": 1484330160,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8590009",
+                        "name": "Bern, Kaufm\u00e4nnischer Verband",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.945688,
+                            "y": 7.427472
+                        },
+                        "distance": null
+                    }
+                },
+                {
+                    "station": {
+                        "id": "8579897",
+                        "name": "Bern, Kocherpark",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.945886,
+                            "y": 7.434052
+                        },
+                        "distance": null
+                    },
+                    "arrival": null,
+                    "arrivalTimestamp": null,
+                    "departure": "2017-01-13T18:58:00+0100",
+                    "departureTimestamp": 1484330280,
+                    "delay": null,
+                    "platform": "",
+                    "prognosis": {
+                        "platform": null,
+                        "arrival": null,
+                        "departure": null,
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "realtimeAvailability": null,
+                    "location": {
+                        "id": "8579897",
+                        "name": "Bern, Kocherpark",
+                        "score": null,
+                        "coordinate": {
+                            "type": "WGS84",
+                            "x": 46.945886,
+                            "y": 7.434052
+                        },
+                        "distance": null
+                    }
+                }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+        }
+    ]
+}

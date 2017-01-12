@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ResC xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://fahrplan.sbb.ch/xsd/hafasXMLInterface.xsd" ver="3.3.5" prod="HAFAS 5.41.SBB.4.16.6" lang="EN">
+  <STBRes>
+    <JourneyList>
+      <STBJourney>
+        <JHandle tNr="227467" puic="085" cycle="01"/>
+        <MainStop>
+          <BasicStop>
+            <Station name="Bern, Hirschengraben" x="7437783" y="46946066" type="WGS84" externalId="8579896#85" externalStationNr="8579896"/>
+            <Arr>
+              <Time>19:00</Time>
+            </Arr>
+            <StopPrognosis>
+              <Arr>
+                <Time>19:06</Time>
+              </Arr>
+              <Capacity1st>-1</Capacity1st>
+              <Capacity2nd>-1</Capacity2nd>
+            </StopPrognosis>
+          </BasicStop>
+        </MainStop>
+        <JourneyAttributeList>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NAME">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 8</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="CATEGORY" code="9">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="INTERNALCATEGORY">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="OPERATOR">
+              <AttributeVariant type="NORMAL">
+                <Text>SVB Auto</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NUMBER">
+              <AttributeVariant type="NORMAL">
+                <Text>8</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="ADMINISTRATION">
+              <AttributeVariant type="NORMAL">
+                <Text>000827</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NAMEFORMATTED" code="1">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 8</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NAMEFORMATTED" code="2">
+              <AttributeVariant type="NORMAL">
+                <Text>Low-floor tramway 8</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NAMEFORMATTED" code="3">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 8 12546</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="14" to="15">
+            <Attribute type="NAMEFORMATTED" code="4">
+              <AttributeVariant type="NORMAL">
+                <Text>NFT 8</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+          <JourneyAttribute from="0" to="15">
+            <Attribute type="DIRECTION">
+              <AttributeVariant type="NORMAL">
+                <Text>Bern Brünnen Westside, Bahnhof</Text>
+              </AttributeVariant>
+            </Attribute>
+          </JourneyAttribute>
+        </JourneyAttributeList>
+        <PassList>
+          <BasicStop>
+            <Station name="Bern Brünnen Westside, Bahnhof" x="7374984" y="46944421" type="WGS84" externalId="8582262#85" externalStationNr="8582262"/>
+            <Dep>
+              <Time>18:39</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bethlehem b. Bern, Kirche" x="7393430" y="46949194" type="WGS84" externalId="8571344#85" externalStationNr="8571344"/>
+            <Dep>
+              <Time>18:45</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bümpliz, Unterführung" x="7400702" y="46942191" type="WGS84" externalId="8579898#85" externalStationNr="8579898"/>
+            <Dep>
+              <Time>18:49</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern Europaplatz, Bahnhof" x="7406311" y="46943252" type="WGS84" externalId="8580939#85" externalStationNr="8580939"/>
+            <Dep>
+              <Time>18:51</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern, Steigerhubel" x="7411669" y="46943935" type="WGS84" externalId="8590005#85" externalStationNr="8590005"/>
+            <Dep>
+              <Time>18:52</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern, Schlossmatte" x="7414995" y="46944169" type="WGS84" externalId="8590042#85" externalStationNr="8590042"/>
+            <Dep>
+              <Time>18:53</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern, Loryplatz" x="7421296" y="46944439" type="WGS84" externalId="8590041#85" externalStationNr="8590041"/>
+            <Dep>
+              <Time>18:54</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern, Kaufmännischer Verband" x="7427472" y="46945688" type="WGS84" externalId="8590009#85" externalStationNr="8590009"/>
+            <Dep>
+              <Time>18:56</Time>
+            </Dep>
+          </BasicStop>
+          <BasicStop>
+            <Station name="Bern, Kocherpark" x="7434052" y="46945886" type="WGS84" externalId="8579897#85" externalStationNr="8579897"/>
+            <Dep>
+              <Time>18:58</Time>
+            </Dep>
+          </BasicStop>
+        </PassList>
+        <ServiceDaysList>
+          <ServiceDays>
+            <RegularServiceText>
+              <Text/>
+            </RegularServiceText>
+            <IrregularServiceText>
+              <Text/>
+            </IrregularServiceText>
+          </ServiceDays>
+        </ServiceDaysList>
+      </STBJourney>
+    </JourneyList>
+  </STBRes>
+</ResC>
