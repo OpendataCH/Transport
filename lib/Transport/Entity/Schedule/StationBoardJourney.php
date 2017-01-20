@@ -31,7 +31,11 @@ class StationBoardJourney extends Journey
         $stop = Stop::createFromXml($xml->MainStop->BasicStop, $date, null);
 
         // use resolved date from main stop
-        $date = new \DateTime($stop->departure);
+        if ($stop->departure) {
+            $date = new \DateTime($stop->departure);
+        } else {
+            $date = new \DateTime($stop->arrival);
+        }
 
         /* @var $obj StationBoardJourney */
         $obj = Journey::createFromXml($xml, $date, $obj);
