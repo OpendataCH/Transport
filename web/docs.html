@@ -39,7 +39,6 @@
                         <li><a href="#location">location</a></li>
                         <li><a href="#coordinates">coordinates</a></li>
                         <li><a href="#connection">connection</a></li>
-                        <li><a href="#checkpoint">checkpoint</a></li>
                         <li><a href="#prognosis">prognosis</a></li>
                         <li><a href="#stop">stop</a></li>
                         <li><a href="#section">section</a></li>
@@ -627,11 +626,11 @@
                 <tbody>
                     <tr>
                         <td><code>from</code></td>
-                        <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                        <td colspan="2">The departure <a href="#stop"> checkpoint</a> of the connection</td>
                     </tr>
                     <tr>
                         <td><code>to</code></td>
-                        <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                        <td colspan="2">The arrival <a href="#stop"> checkpoint</a> of the connection</td>
                     </tr>
                     <tr>
                         <td><code>duration</code></td>
@@ -660,45 +659,6 @@
                     <tr>
                         <td><code>sections</code></td>
                         <td colspan="2">A list of <a href="#section">sections</a></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 id="checkpoint">Checkpoint Object</h4>
-
-            <p>A checkpoint represents an arrival or a departure point (in time and space) of a connection.</p>
-
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>station</code></td>
-                        <td colspan="2">The <a href="#location">location</a> of the checkpoint</td>
-                    </tr>
-                    <tr>
-                        <td><code>arrival</code></td>
-                        <td>The arrival time to the checkpoint</td>
-                        <td>14:58:00</td>
-                    </tr>
-                    <tr>
-                        <td><code>departure</code></td>
-                        <td>The departure time from the checkpoint</td>
-                        <td>null</td>
-                    </tr>
-                    <tr>
-                        <td><code>platform</code></td>
-                        <td>The arrival/departure platform </td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td><code>prognosis</code></td>
-                        <td colspan="2">The checkpoint <a href="#prognosis">prognosis</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -772,6 +732,8 @@
 
             <h4 id="stop">Stop Object</h4>
 
+            <p>A checkpoint represents an arrival or a departure point (in time and space) of a connection.</p>
+
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -786,29 +748,28 @@
                     <td colspan="2">A <a href="#location">location</a> object showing this line's stop at the requested station.</td>
                 </tr>
                 <tr>
-                    <td><code>name</code></td>
-                    <td>The name of the connection</td>
-                    <td>Bus 2</td>
+                    <td><code>arrival</code></td>
+                    <td>The arrival time to the checkpoint</td>
+                    <td>14:58:00</td>
                 </tr>
                 <tr>
-                    <td><code>category</code></td>
-                    <td>The type of connection this is</td>
-                    <td>Bus</td>
+                    <td><code>departure</code></td>
+                    <td>The departure time from the checkpoint</td>
+                    <td>null</td>
                 </tr>
                 <tr>
-                    <td><code>number</code></td>
-                    <td>The number of the connection's line, e.g. Bus line 2</td>
+                    <td><code>delay</code></td>
+                    <td>The delay at this checkpoint, can be null if no <a href="#prognosis">prognosis</a> is available.</td>
                     <td>2</td>
                 </tr>
                 <tr>
-                    <td><code>operator</code></td>
-                    <td>The operator of the connection's line</td>
-                    <td>BBA</td>
+                    <td><code>platform</code></td>
+                    <td>The arrival/departure platform </td>
+                    <td>8</td>
                 </tr>
                 <tr>
-                    <td><code>to</code></td>
-                    <td>The final destination of this line</td>
-                    <td>Aarau Rohr, Unterdorf</td>
+                    <td><code>prognosis</code></td>
+                    <td colspan="2">The checkpoint <a href="#prognosis">prognosis</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -837,11 +798,11 @@
                     </tr>
                     <tr>
                         <td><code>departure</code></td>
-                        <td colspan="2">The departure <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                        <td colspan="2">The departure <a href="#stop"> checkpoint</a> of the connection</td>
                     </tr>
                     <tr>
                         <td><code>arrival</code></td>
-                        <td colspan="2">The arrival <a href="#checkpoint"> checkpoint</a> of the connection</td>
+                        <td colspan="2">The arrival <a href="#stop"> checkpoint</a> of the connection</td>
                     </tr>
                 </tbody>
             </table>
@@ -891,7 +852,7 @@
                     </tr>
                     <tr>
                         <td><code>passList</code></td>
-                        <td colspan="2"><a href="#checkpoint">Checkpoints</a> the train passed on the journey</td>
+                        <td colspan="2"><a href="#stop">Checkpoints</a> the train passed on the journey</td>
                     </tr>
                     <tr>
                         <td><code>capacity1st</code></td>
