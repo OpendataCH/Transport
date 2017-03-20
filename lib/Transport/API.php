@@ -3,11 +3,14 @@
 namespace Transport;
 
 use Buzz\Browser;
+use Transport\Entity\Location\Location;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Query;
+use Transport\Entity\Schedule\Connection;
 use Transport\Entity\Schedule\ConnectionPageQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
+use Transport\Entity\Schedule\Journey;
 use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
@@ -81,7 +84,7 @@ class API
     }
 
     /**
-     * @return array
+     * @return Connection[]
      */
     public function findConnections(ConnectionQuery $query)
     {
@@ -108,7 +111,7 @@ class API
     }
 
     /**
-     * @return array
+     * @return Location[]
      */
     public function findLocations(LocationQuery $query)
     {
@@ -142,7 +145,7 @@ class API
     }
 
     /**
-     * @return array
+     * @return Location[]
      */
     public function findNearbyLocations(NearbyQuery $query)
     {
@@ -182,7 +185,7 @@ class API
     }
 
     /**
-     * @return array
+     * @return Journey[]
      */
     public function getStationBoard(StationBoardQuery $query)
     {
