@@ -53,7 +53,7 @@ download($query, 'locations/hafas_response.xml');
 // Connection
 $from = new Station('008503000');
 $to = new Station('008503504');
-$query = new ConnectionQuery($from, $to, [], $date->format('c'));
+$query = new ConnectionQuery($from, $to, [], $date->format('Y-m-d'), $date->format('H:i'));
 download($query, 'connections/hafas_response_'.$date->format('Y-m-d').'.xml');
 
 // Station Board
