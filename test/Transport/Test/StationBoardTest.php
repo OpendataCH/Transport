@@ -23,6 +23,7 @@ class StationBoardTest extends IntegrationTest
             [['station' => '008591052', 'limit' => '1', 'datetime' => '2016-01-17T23:30:00'], 'hafas_request_2016-01-17.xml', 'hafas_response_2016-01-17.xml', 'response_2016-01-17.json'], // midnight delay
             [['station' => '008591052', 'limit' => '3', 'datetime' => '2016-01-19T23:47:00'], 'hafas_request_2016-01-19.xml', 'hafas_response_2016-01-19.xml', 'response_2016-01-19.json'], // delay after midnight
             [['station' => '008591052', 'limit' => '1', 'datetime' => '2017-01-12T19:06:00', 'type' => 'arrival'], 'hafas_request_2017-01-12.xml', 'hafas_response_2017-01-12.xml', 'response_2017-01-12.json'], // delayed arrival
+            [['station' => '008591052', 'limit' => '3', 'datetime' => '2015-12-23T14:20:00'], 'hafas_request_2015-12-23.xml', 'hafas_response_2016-12-23.xml', 'response_2016-12-23.json'],
         ];
     }
 

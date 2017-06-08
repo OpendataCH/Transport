@@ -42,7 +42,7 @@ function downloadJson($url, $file)
 
 date_default_timezone_set('Europe/Zurich');
 
-$date = new \DateTime('2015-12-23T14:30:00');
+$date = new \DateTime('2016-12-23T14:30:00');
 
 // Location
 $query = new LocationQuery(['from' => 'Züri', 'to' => 'Bern']);

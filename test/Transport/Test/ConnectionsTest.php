@@ -19,6 +19,7 @@ class ConnectionsTest extends IntegrationTest
         return [
             [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2012-01-31', 'time' => '23:55:00'], 'hafas_request_2012-01-31.xml', 'hafas_response_2012-01-31.xml', 'response_2012-01-31.json'],
             [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2012-12-23', 'time' => '14:30:00'], 'hafas_request_2015-12-23.xml', 'hafas_response_2015-12-23.xml', 'response_2015-12-23.json'],
+            [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2012-12-23', 'time' => '14:30:00'], 'hafas_request_2015-12-23.xml', 'hafas_response_2016-12-23.xml', 'response_2016-12-23.json'],
         ];
     }
 
