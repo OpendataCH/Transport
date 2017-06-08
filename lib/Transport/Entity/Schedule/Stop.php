@@ -196,4 +196,40 @@ class Stop
 
         return $obj;
     }
+
+    public static function createFromJson($json, Stop $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        $obj->station = Entity\Location\Station::createStationFromJson($json); // deprecated, use location instead
+
+        $obj->location = Entity\LocationFactory::createFromJson($json);
+
+        $isArrival = false;
+        if (isset($json->arrival)) {
+            $isArrival = true;
+            $arrivalDate = new \DateTime($json->arrival);
+            $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
+            $obj->arrivalTimestamp = $arrivalDate->getTimestamp();
+        }
+        if (isset($json->departure)) {
+            $departureDate = new \DateTime($json->departure);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
+        }
+        if (isset($json->time)) {
+            $departureDate = new \DateTime();
+            $departureDate->setTimestamp($json->time);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
+        }
+
+        if (isset($json->track)) {
+            $obj->platform = $json->track;
+        }
+
+        return $obj;
+    }
 }

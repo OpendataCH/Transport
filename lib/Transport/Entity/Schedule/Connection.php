@@ -140,4 +140,35 @@ class Connection
 
         return $obj;
     }
+
+    public static function createFromJson($json, Connection $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        $obj->from = Entity\Schedule\Stop::createFromJson($json->legs[0], null);
+        $obj->to = Entity\Schedule\Stop::createFromJson($json->legs[count($json->legs) - 1], null);
+
+        if (!$obj->to->platform && isset($json->legs[count($json->legs) - 2]->track)) {
+            $obj->to->platform = $json->legs[count($json->legs) - 2]->track;
+        }
+
+        $obj->duration = gmdate('0z\dH:i:s', $json->duration);
+        $obj->transfers = count($json->legs) - 1;
+
+        if (isset($json->legs)) {
+            foreach ($json->legs as $leg) {
+                if (isset($leg->line)) {
+                    $obj->products[] = $leg->line;
+                }
+
+                if (isset($leg->type)) {
+                    $obj->sections[] = Entity\Schedule\Section::createFromJson($leg, null);
+                }
+            }
+        }
+
+        return $obj;
+    }
 }

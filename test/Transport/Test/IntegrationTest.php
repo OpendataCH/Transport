@@ -18,7 +18,7 @@ abstract class IntegrationTest extends WebTestCase
         //$app['debug'] = true;
         //unset($app['exception_handler']);
 
-        $this->browser = $this->getMock('Buzz\\Browser', ['post', 'get']);
+        $this->browser = $this->getMock('Buzz\\Browser', ['send']);
 
         $app['api'] = new \Transport\API($this->browser);
 

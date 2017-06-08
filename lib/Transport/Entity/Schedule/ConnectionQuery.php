@@ -2,6 +2,7 @@
 
 namespace Transport\Entity\Schedule;
 
+use Buzz\Message\Form\FormRequest;
 use Transport\Entity\Location\Location;
 use Transport\Entity\Query;
 use Transport\Entity\Transportations;
@@ -56,6 +57,17 @@ class ConnectionQuery extends Query
 
         $this->date = $date ?: date('Y-m-d');
         $this->time = $time ?: date('H:i');
+    }
+
+    public function toFormRequest()
+    {
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL . 'route.json');
+        $request->setField('from', $this->srcLocation->name);
+        $request->setField('to', $this->dstLocation->name);
+        $request->setField('date', date('Y-m-d', strtotime($this->date)));
+        $request->setField('time', date('H:i', strtotime($this->time)));
+
+        return $request;
     }
 
     public function toXml()

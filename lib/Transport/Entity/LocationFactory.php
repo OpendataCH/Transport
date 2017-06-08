@@ -22,6 +22,9 @@ class LocationFactory
 
     public static function createFromJson($json)
     {
+        if (isset($json->isaddress) && $json->isaddress) {
+            return Location\Address::createFromJson($json);
+        }
         return Location\Station::createStationFromJson($json);
     }
 }

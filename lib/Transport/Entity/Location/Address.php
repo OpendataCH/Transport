@@ -48,4 +48,16 @@ class Address extends Location
 
         return parent::createFromXml($xml, $obj);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function createFromJson($json, Location $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        return parent::createFromXml($json, $obj);
+    }
 }

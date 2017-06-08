@@ -8,7 +8,7 @@ use Transport\Entity\Schedule\ConnectionQuery;
 
 class ConnectionQueryParser
 {
-    public static function create(Request $request, Location $from, Location $to, $via = [])
+    public static function create(Request $request, $from, $to, $via = [])
     {
         $datetime = $request->get('datetime');
         if ($datetime) {

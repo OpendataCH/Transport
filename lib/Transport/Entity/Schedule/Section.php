@@ -62,4 +62,26 @@ class Section
 
         return $obj;
     }
+
+    public static function createFromJson($json, Section $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        if (isset($json->tripid)) {
+            $obj->journey = Entity\Schedule\Journey::createFromJson($json, null);
+        }
+
+        if ((isset($json->type) && $json->type === 'walk')) {
+            $obj->walk = Entity\Schedule\Walk::createFromJson($json);
+        }
+
+        $obj->departure = Entity\Schedule\Stop::createFromJson($json, null);
+        if (isset($json->exit)) {
+            $obj->arrival = Entity\Schedule\Stop::createFromJson($json->exit, null);
+        }
+
+        return $obj;
+    }
 }

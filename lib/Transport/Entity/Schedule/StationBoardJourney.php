@@ -44,4 +44,20 @@ class StationBoardJourney extends Journey
 
         return $obj;
     }
+
+    public static function createFromJson($json, Journey $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        $stop = Stop::createFromJson($json, null);
+
+        /* @var $obj StationBoardJourney */
+        $obj = Journey::createFromJson($json, $obj);
+
+        $obj->stop = $stop;
+
+        return $obj;
+    }
 }

@@ -54,12 +54,57 @@ class Coordinate
     public static function createFromJson($json)
     {
         $coordinate = new self();
-        $coordinate->type = 'WGS84'; // best guess
+        $coordinate->type = 'WGS84';
 
-        $x = self::intToFloat($json->x);
-        $y = self::intToFloat($json->y);
+        if (isset($json->x) && isset($json->y)) {
 
-        $coordinate = self::setHAFAScoordinates($coordinate, $x, $y);
+            $y = (int) $json->y;
+            $x = (int) $json->x;
+
+            // https://github.com/ValentinMinder/Swisstopo-WGS84-LV03/blob/master/scripts/php/wgs84_ch1903.php
+            // 
+            // The MIT License (MIT)
+            // 
+            // Copyright (c) 2014 Federal Office of Topography swisstopo, Wabern, CH
+            // 
+            // Permission is hereby granted, free of charge, to any person obtaining a copy
+            //  of this software and associated documentation files (the "Software"), to deal
+            //  in the Software without restriction, including without limitation the rights
+            //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            //  copies of the Software, and to permit persons to whom the Software is
+            //  furnished to do so, subject to the following conditions:
+            // 
+            // The above copyright notice and this permission notice shall be included in
+            //  all copies or substantial portions of the Software.
+            // 
+            // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            //  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+            //  THE SOFTWARE.
+            //  
+
+            $y = ($y - 200000)/1000000;
+            $x = ($x - 600000)/1000000;
+
+            $lat = 16.9023892
+               + 3.238272 * $y
+               - 0.270978 * pow($x,2)
+               - 0.002528 * pow($y,2)
+               - 0.0447 * pow($x,2) * $y
+               - 0.0140 * pow($y,3);
+
+            $long = 2.6779094
+               + 4.728982 * $x
+               + 0.791484 * $x * $y
+               + 0.1306 * $x * pow($y,2)
+               - 0.0436 * pow($x,3);
+
+            $coordinate->x = round($lat * 100/36, 6);
+            $coordinate->y = round($long * 100/36, 6);
+        }
 
         return $coordinate;
     }

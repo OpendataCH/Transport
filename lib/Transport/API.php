@@ -5,6 +5,7 @@ namespace Transport;
 use Buzz\Browser;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\NearbyQuery;
+use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
 use Transport\Entity\Schedule\ConnectionPageQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
@@ -12,8 +13,7 @@ use Transport\Entity\Schedule\StationBoardQuery;
 
 class API
 {
-    const URL = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
-    const URL_QUERY = 'http://fahrplan.sbb.ch/bin/query.exe/dny';
+    const URL = 'https://timetable.search.ch/api/';
 
     const SBB_PROD = 'iPhone3.1';
     const SBB_VERSION = '2.3';
@@ -32,14 +32,28 @@ class API
      */
     protected $lang;
 
+    protected $clientIpAddress;
+
+    protected $clientUserAgent;
+
     public function __construct(Browser $browser = null, $lang = 'EN')
     {
         $this->browser = $browser ?: new Browser();
         $this->lang = $lang;
     }
 
+    public function setClientIpAddress($clientIpAddress)
+    {
+        $this->clientIpAddress = $clientIpAddress;
+    }
+
+    public function setClientUserAgent($clientUserAgent)
+    {
+        $this->clientUserAgent = $clientUserAgent;
+    }
+
     /**
-     * @return \SimpleXMLElement
+     * @return object
      */
     private function sendAndParseQuery(Query $query)
     {
@@ -47,21 +61,21 @@ class API
 
         // check for server error
         if ($response->isServerError()) {
-            throw new \Exception('Server error from fahrplan.sbb.ch: '.$response->getStatusCode().' '.$response->getReasonPhrase());
+            throw new \Exception('Server error from timetable.search.ch: '.$response->getStatusCode().' '.$response->getReasonPhrase());
         }
 
         // parse result
         $content = $response->getContent();
-        $result = @simplexml_load_string($content);
+        $result = json_decode($content);
 
-        // check for XML error
-        if ($result === false) {
-            throw new \Exception('Invalid XML from fahrplan.sbb.ch: '.$content);
+        // check for JSON error
+        if ($result === null) {
+            throw new \Exception('Invalid JSON from timetable.search.ch: '.$content);
         }
 
-        // check for SBB error
-        if ($result->Err) {
-            throw new \Exception('Error from fahrplan.sbb.ch: '.$result->Err['code'].' - '.$result->Err['text']);
+        // check for API error
+        if (isset($result->error)) {
+            throw new \Exception('Error from timetable.search.ch: '.$result->error);
         }
 
         return $result;
@@ -72,12 +86,10 @@ class API
      */
     public function sendQuery(Query $query, $url = self::URL)
     {
-        $headers = [];
-        $headers[] = 'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0';
-        $headers[] = 'Accept: application/xml';
-        $headers[] = 'Content-Type: application/xml';
-
-        return $this->browser->post($url, $headers, $query->toXml());
+        $formRequest = $query->toFormRequest();
+        $formRequest->setField('ip_address', $this->clientIpAddress);
+        $formRequest->setField('user_agent', $this->clientUserAgent);
+        return $this->browser->send($formRequest);
     }
 
     /**
@@ -88,19 +100,19 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        // load pages
-        for ($i = 0; $i < abs($query->page); $i++) {
-
-            // load next page
-            $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
-
-            $result = $this->sendAndParseQuery($pageQuery);
-        }
+        // // load pages
+        // for ($i = 0; $i < abs($query->page); $i++) {
+        // 
+        //     // load next page
+        //     $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
+        // 
+        //     $result = $this->sendAndParseQuery($pageQuery);
+        // }
 
         $connections = [];
-        if ($result->ConRes->ConnectionList->Connection) {
-            foreach ($result->ConRes->ConnectionList->Connection as $connection) {
-                $connections[] = Entity\Schedule\Connection::createFromXml($connection, null);
+        if ($result->connections) {
+            foreach ($result->connections as $connection) {
+                $connections[] = Entity\Schedule\Connection::createFromJson($connection, null);
             }
         }
 
@@ -116,66 +128,8 @@ class API
         $result = $this->sendAndParseQuery($query);
 
         $locations = [];
-        $viaCount = 0;
-        foreach ($result->LocValRes as $part) {
-            $id = (string) $part['id'];
-
-            // A "via" can occur 0-5 times
-            if ($id == 'via') {
-                $id = $id.(++$viaCount);
-            }
-
-            $locations[$id] = [];
-            foreach ($part->children() as $location) {
-                $location = Entity\LocationFactory::createFromXml($location);
-                if ($location) {
-                    $locations[$id][] = $location;
-                }
-            }
-        }
-
-        if (count($locations) > 1) {
-            return $locations;
-        }
-
-        return reset($locations);
-    }
-
-    /**
-     * @return array
-     */
-    public function findNearbyLocations(NearbyQuery $query)
-    {
-        $url = self::URL_QUERY.'?'.http_build_query($query->toArray());
-
-        // send request
-        $response = $this->browser->get($url);
-
-        // check for server error
-        if ($response->isServerError()) {
-            throw new \Exception('Server error from fahrplan.sbb.ch: '.$response->getStatusCode().' '.$response->getReasonPhrase());
-        }
-
-        // fix broken JSON
-        $content = $response->getContent();
-        $content = preg_replace('/(\w+) ?:/i', '"\1":', $content);
-        $content = str_replace("\\'", "'", $content);
-
-        // parse result
-        $result = json_decode($content);
-
-        // check for JSON error
-        if ($result === null) {
-            throw new \Exception('Invalid JSON from fahrplan.sbb.ch: '.$content);
-        }
-
-        $locations = [];
-        foreach ($result->stops as $stop) {
-            $location = Entity\LocationFactory::createFromJson($stop);
-            if ($location) {
-                $location->distance = $location->coordinate->getDistanceTo($query->lat, $query->lon);
-                $locations[] = $location;
-            }
+        foreach ($result as $location) {
+            $locations[] = Entity\LocationFactory::createFromJson($location);
         }
 
         return $locations;
@@ -189,19 +143,20 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        $date = $query->date;
+        $station = Station::createStationFromJson($result->stop);
 
         $journeys = [];
-        if ($result->STBRes->JourneyList->STBJourney) {
-            foreach ($result->STBRes->JourneyList->STBJourney as $journey) {
-                $journey = Entity\Schedule\StationBoardJourney::createStationBoardFromXml($journey, $date, null);
 
-                $date = new \DateTime($journey->stop->departure);
-
-                $journeys[] = $journey;
+        if ($result->connections) {
+            foreach ($result->connections as $connection) {
+                 $journey = Entity\Schedule\StationBoardJourney::createFromJson($connection, null);
+                 $journey->stop->station = $station;
+                 $journeys[] = $journey;
             }
         }
 
-        return $journeys;
+        $stationboard = ['station' => $station, 'stationboard' => $journeys];
+
+        return $stationboard;
     }
 }

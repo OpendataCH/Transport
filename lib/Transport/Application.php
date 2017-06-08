@@ -181,6 +181,14 @@ class Application extends \Silex\Application
             }
         });
 
+        // IP address and user agent forwarding
+        $app->before(function (Request $request) use ($app) {
+            $ipAddress = $request->getClientIp();
+            $userAgent = $request->headers->get('User-Agent');
+            $app['api']->setClientIpAddress($ipAddress);
+            $app['api']->setClientUserAgent($userAgent);
+        });
+
         // home
         $app->get('/', function () use ($app) {
             return file_get_contents('index.html');
@@ -254,20 +262,11 @@ class Application extends \Silex\Application
         $app->get('/v1/locations', function (Request $request) use ($app) {
             $stations = [];
 
-            $x = $request->get('x') ?: null;
-            $y = $request->get('y') ?: null;
-            $transportations = $request->get('transportations');
-            if ($x && $y) {
-                $query = new NearbyQuery($x, $y);
-                if ($transportations) {
-                    $query->transportations = (array) $transportations;
-                }
-                $stations = $app['api']->findNearbyLocations($query);
-            }
-
             $query = $request->get('query');
-            if ($query) {
-                $query = new LocationQuery($query, $request->get('type'));
+            $x = $request->get('x');
+            $y = $request->get('y');
+            if ($query || ($x && $y)) {
+                $query = new LocationQuery($query, $request->get('type'), $x, $y);
                 $stations = $app['api']->findLocations($query);
             }
 
@@ -404,26 +403,22 @@ class Application extends \Silex\Application
          * )
          */
         $app->get('/v1/connections', function (Request $request) use ($app) {
-            $query = LocationQueryParser::create($request);
 
             // get stations
-            $stations = $app['api']->findLocations($query);
+            $from = new Station();
+            $from->name = $request->get('from');
+            $to = new Station();
+            $to->name = $request->get('to');
+            $stations = array(
+                'from' => array($from),
+                'to' => array($to),
+            );
 
             // get connections
             $connections = [];
-            $from = reset($stations['from']) ?: null;
-            $to = reset($stations['to']) ?: null;
             $via = [];
-            foreach ($stations as $k => $v) {
-                if (preg_match('/^via[0-9]+$/', $k) && $v) {
-                    $via[] = reset($v);
-                }
-            }
 
             if ($from && $to) {
-                $app['stats']->station($from);
-                $app['stats']->station($to);
-
                 $query = ConnectionQueryParser::create($request, $from, $to, $via);
 
                 $errors = ConnectionQueryParser::validate($query);
@@ -529,16 +524,12 @@ class Application extends \Silex\Application
 
             $transportations = $request->get('transportations');
 
-            $station = $request->get('station') ?: $request->get('id');
-
             $boardType = $request->get('type');
 
-            $query = new LocationQuery($station, 'station');
-            $stations = $app['api']->findLocations($query);
-            $station = reset($stations);
+            $station = new Station();
+            $station->name = $request->get('station') ?: $request->get('id');
 
             if ($station instanceof Station) {
-                $app['stats']->station($station);
 
                 $query = new StationBoardQuery($station, $date);
                 if ($transportations) {
@@ -553,9 +544,7 @@ class Application extends \Silex\Application
                 $stationboard = $app['api']->getStationBoard($query);
             }
 
-            $result = ['station' => $station, 'stationboard' => $stationboard];
-
-            $json = $app['serializer']->serialize((object) $result, 'json');
+            $json = $app['serializer']->serialize((object) $stationboard, 'json');
 
             return new Response($json, 200, ['Content-Type' => 'application/json']);
         })->bind('stationboard');

@@ -1,7 +1,7 @@
 {
     "errors": [
         {
-            "message": "Error from fahrplan.sbb.ch: F2 - Spool: Error writing the spoolfile."
+            "message": "Error from timetable.search.ch: Incomplete route description."
         }
     ]
 }
