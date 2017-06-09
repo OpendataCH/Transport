@@ -40,6 +40,7 @@ class StationBoardQuery extends Query
         $request->setField('time', $this->date->format('H:i'));
         $request->setField('mode', $this->boardType === 'arrival' ? 'arrival' : 'depart');
         $request->setField('limit', $this->maxJourneys);
+        $request->setField('show_tracks', true);
 
         return $request;
     }
