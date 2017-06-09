@@ -64,6 +64,7 @@ class ConnectionQuery extends Query
         $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL . 'route.json');
         $request->setField('from', $this->srcLocation->name);
         $request->setField('to', $this->dstLocation->name);
+        $request->setField('via', $this->viaLocations);
         $request->setField('date', date('Y-m-d', strtotime($this->date)));
         $request->setField('time', date('H:i', strtotime($this->time)));
 

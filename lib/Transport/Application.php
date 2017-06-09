@@ -416,7 +416,14 @@ class Application extends \Silex\Application
 
             // get connections
             $connections = [];
-            $via = [];
+            $via = $request->get('via');
+            if (!is_array($via)) {
+                if ($via) {
+                    $via = [$via];
+                } else {
+                    $via = [];
+                }
+            }
 
             if ($from && $to) {
                 $query = ConnectionQueryParser::create($request, $from, $to, $via);
