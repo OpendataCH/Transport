@@ -171,8 +171,14 @@ class Journey
             $obj->name = $json->number;
             $obj->number = $json->number;
         }
+        if (isset($json->{'*L'})) {
+            $obj->number = $json->{'*L'};
+        }
         if (isset($json->line)) {
             $obj->category = $json->line;
+        }
+        if (isset($json->{'*G'})) {
+            $obj->category = $json->{'*G'};
         }
         if (isset($json->terminal)) {
             if (isset($json->terminal->name)) {
