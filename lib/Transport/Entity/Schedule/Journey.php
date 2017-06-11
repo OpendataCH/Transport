@@ -197,7 +197,9 @@ class Journey
                 $obj->passList[] = Stop::createFromJson($stop);
             }
         }
-        $obj->passList[] = Stop::createFromJson($json->exit);
+        if (isset($json->exit)) {
+            $obj->passList[] = Stop::createFromJson($json->exit);
+        }
 
         return $obj;
     }
