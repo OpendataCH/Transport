@@ -110,13 +110,35 @@ class API
         // }
 
         $connections = [];
-        if ($result->connections) {
-            foreach ($result->connections as $connection) {
-                $connections[] = Entity\Schedule\Connection::createFromJson($connection, null);
+        if (isset($result->connections)) {
+            if ($result->connections) {
+                foreach ($result->connections as $connection) {
+                    $connections[] = Entity\Schedule\Connection::createFromJson($connection, null);
+                }
             }
         }
 
-        return $connections;
+        $from = null;
+        $to = null;
+        $stations = [
+            'from' => [],
+            'to' => [],
+        ];
+        if (isset($result->points)) {
+            $from = Entity\LocationFactory::createFromJson($result->points[0]);
+            $stations['from'][] = $from;
+            $to = Entity\LocationFactory::createFromJson($result->points[1]);
+            $stations['to'][] = $to;
+        }
+
+        $result = [
+            'connections' => $connections,
+            'from' => $from,
+            'to' => $to,
+            'stations' => $stations,
+        ];
+
+        return $result;
     }
 
     /**

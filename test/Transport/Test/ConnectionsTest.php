@@ -50,7 +50,7 @@ class ConnectionsTest extends IntegrationTest
             ->will($this->returnValue($response));
 
         $client = $this->createClient();
-        $client->request('GET', '/v1/connections');
+        $client->request('GET', '/v1/connections', ['from' => 'Zürich', 'to' => 'Bern']);
 
         $this->assertEquals($this->getFixture('connections/response_error.json'), $this->json($client->getResponse()));
         $this->assertEquals(500, $client->getResponse()->getStatusCode());

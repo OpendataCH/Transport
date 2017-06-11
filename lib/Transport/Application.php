@@ -409,13 +409,8 @@ class Application extends \Silex\Application
             $from->name = $request->get('from');
             $to = new Station();
             $to->name = $request->get('to');
-            $stations = array(
-                'from' => array($from),
-                'to' => array($to),
-            );
 
             // get connections
-            $connections = [];
             $via = $request->get('via');
             if (!is_array($via)) {
                 if ($via) {
@@ -433,15 +428,21 @@ class Application extends \Silex\Application
                     return $app->json(['errors' => $errors], 400);
                 }
 
-                $connections = $app['api']->findConnections($query);
-            }
+                $result = $app['api']->findConnections($query);
 
-            $result = [
-                'connections' => $connections,
-                'from'        => $from,
-                'to'          => $to,
-                'stations'    => $stations,
-            ];
+            } else {
+    
+                // default empty response
+                $result = [
+                    'connections' => [],
+                    'from' => null,
+                    'to' => null,
+                    'stations' => [
+                        'from' => [],
+                        'to' => [],
+                    ],
+                ];
+            }
 
             $json = $app['serializer']->serialize((object) $result, 'json');
 

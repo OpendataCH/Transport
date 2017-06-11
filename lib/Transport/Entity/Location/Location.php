@@ -80,6 +80,10 @@ abstract class Location
             throw new \InvalidArgumentException('Argument must be an object');
         }
 
+        if (isset($json->text)) {
+            $obj->name = $json->text;
+        }
+
         if (isset($json->label)) {
             $obj->name = $json->label;
         }
