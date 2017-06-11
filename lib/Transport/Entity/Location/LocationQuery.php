@@ -50,6 +50,9 @@ class LocationQuery extends Query
             $request->setField('latlon', $this->lat . ',' . $this->lon);
         }
 
+        $request->setField('show_ids', '1');
+        $request->setField('show_coordinates', '1');
+
         return $request;
     }
 
