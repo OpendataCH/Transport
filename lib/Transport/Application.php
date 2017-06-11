@@ -425,7 +425,7 @@ class Application extends \Silex\Application
                 }
             }
 
-            if ($from && $to) {
+            if ($from->name && $to->name) {
                 $query = ConnectionQueryParser::create($request, $from, $to, $via);
 
                 $errors = ConnectionQueryParser::validate($query);
