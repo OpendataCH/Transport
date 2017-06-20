@@ -1,0 +1,1078 @@
+{
+    "connections": [
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-20T22:32:00+0200",
+                "departureTimestamp": 1497990720,
+                "delay": 1,
+                "platform": "12",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": "2017-06-20T22:33:00+0200",
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-20T23:02:00+0200",
+                "arrivalTimestamp": 1497992520,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "12",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 1,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 738",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 738",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-20T22:32:00+0200",
+                                "departureTimestamp": 1497990720,
+                                "delay": 1,
+                                "platform": "12",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": "2017-06-20T22:33:00+0200",
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-20T23:02:00+0200",
+                                "arrivalTimestamp": 1497992520,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": 1,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": "2017-06-20T23:03:00+0200",
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-20T22:32:00+0200",
+                        "departureTimestamp": 1497990720,
+                        "delay": 1,
+                        "platform": "12",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": "2017-06-20T22:33:00+0200",
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-20T23:02:00+0200",
+                        "arrivalTimestamp": 1497992520,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": 1,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": "2017-06-20T23:03:00+0200",
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-20T23:02:00+0200",
+                "departureTimestamp": 1497992520,
+                "delay": 0,
+                "platform": "31",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": "2017-06-20T23:02:00+0200",
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-20T23:32:00+0200",
+                "arrivalTimestamp": 1497994320,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "31",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 1,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 838",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 838",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-20T23:02:00+0200",
+                                "departureTimestamp": 1497992520,
+                                "delay": 0,
+                                "platform": "31",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": "2017-06-20T23:02:00+0200",
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-20T23:32:00+0200",
+                                "arrivalTimestamp": 1497994320,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": 0,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": "2017-06-20T23:32:00+0200",
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-20T23:02:00+0200",
+                        "departureTimestamp": 1497992520,
+                        "delay": 0,
+                        "platform": "31",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": "2017-06-20T23:02:00+0200",
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-20T23:32:00+0200",
+                        "arrivalTimestamp": 1497994320,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": 0,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": "2017-06-20T23:32:00+0200",
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-20T23:32:00+0200",
+                "departureTimestamp": 1497994320,
+                "delay": null,
+                "platform": "16",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-21T00:02:00+0200",
+                "arrivalTimestamp": 1497996120,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "16",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 1,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 740",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 740",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-20T23:32:00+0200",
+                                "departureTimestamp": 1497994320,
+                                "delay": null,
+                                "platform": "16",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-21T00:02:00+0200",
+                                "arrivalTimestamp": 1497996120,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": null,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-20T23:32:00+0200",
+                        "departureTimestamp": 1497994320,
+                        "delay": null,
+                        "platform": "16",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-21T00:02:00+0200",
+                        "arrivalTimestamp": 1497996120,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": null,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-21T00:02:00+0200",
+                "departureTimestamp": 1497996120,
+                "delay": null,
+                "platform": "14",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-21T00:32:00+0200",
+                "arrivalTimestamp": 1497997920,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "14",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 1,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 842",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 842",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-21T00:02:00+0200",
+                                "departureTimestamp": 1497996120,
+                                "delay": null,
+                                "platform": "14",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-21T00:32:00+0200",
+                                "arrivalTimestamp": 1497997920,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": null,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-21T00:02:00+0200",
+                        "departureTimestamp": 1497996120,
+                        "delay": null,
+                        "platform": "14",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-21T00:32:00+0200",
+                        "arrivalTimestamp": 1497997920,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": null,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "from": {
+        "id": "8503000",
+        "name": "Z\u00fcrich HB",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.377847,
+            "y": 8.540502
+        },
+        "distance": null
+    },
+    "to": {
+        "id": "8500218",
+        "name": "Olten",
+        "score": null,
+        "coordinate": {
+            "type": "WGS84",
+            "x": 47.351927,
+            "y": 7.907693
+        },
+        "distance": null
+    },
+    "stations": {
+        "from": [
+            {
+                "id": "8503000",
+                "name": "Z\u00fcrich HB",
+                "score": null,
+                "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.377847,
+                    "y": 8.540502
+                },
+                "distance": null
+            }
+        ],
+        "to": [
+            {
+                "id": "8500218",
+                "name": "Olten",
+                "score": null,
+                "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                },
+                "distance": null
+            }
+        ]
+    }
+}

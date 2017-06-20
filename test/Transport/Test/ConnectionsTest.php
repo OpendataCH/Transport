@@ -6,25 +6,18 @@ use Buzz\Message\Response;
 
 class ConnectionsTest extends IntegrationTest
 {
-    private $url = 'http://fahrplan.sbb.ch/bin/extxml.exe/';
-
-    private $headers = [
-        'User-Agent: SBBMobile/4.8 CFNetwork/609.1.4 Darwin/13.0.0',
-        'Accept: application/xml',
-        'Content-Type: application/xml',
-    ];
-
     public function connectionsProvider()
     {
         return [
-            [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2016-12-23', 'time' => '14:30:00'], 'hafas_request_2015-12-23.xml', 'searchch_response_2016-12-23.json', 'response_2016-12-23.json'],
+            [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2016-12-23', 'time' => '14:30:00'], 'searchch_response_2016-12-23.json', 'response_2016-12-23.json'],
+            [['from' => 'Zürich HB', 'to' => 'Olten', 'date' => '2017-06-20', 'time' => '22:30:00'], 'searchch_response_2017-06-20.json', 'response_2017-06-20.json'],
         ];
     }
 
     /**
      * @dataProvider connectionsProvider
      */
-    public function testGetConnections($parameters, $hafasRequest, $hafasResponse, $response)
+    public function testGetConnections($parameters, $hafasResponse, $response)
     {
         $responseConnection = new Response();
         $responseConnection->setContent($this->getFixture('connections/'.$hafasResponse));
