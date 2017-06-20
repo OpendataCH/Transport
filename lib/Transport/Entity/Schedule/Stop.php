@@ -233,6 +233,17 @@ class Stop
             $obj->departureTimestamp = $departureDate->getTimestamp();
         }
 
+        $obj->prognosis = Prognosis::createFromJson($json, $obj);
+
+        if ($obj->prognosis) {
+            if ($obj->prognosis->arrival && $obj->arrival) {
+                $obj->delay = (strtotime($obj->prognosis->arrival) - strtotime($obj->arrival)) / 60;
+            }
+            if ($obj->prognosis->departure && $obj->departure) {
+                $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
+            }
+        }
+
         if (isset($json->track)) {
             $obj->platform = $json->track;
         }

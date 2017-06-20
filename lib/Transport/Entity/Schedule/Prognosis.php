@@ -92,4 +92,36 @@ class Prognosis
 
         return $obj;
     }
+
+    public static function createFromJson($json, $stop, Prognosis $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        if (isset($json->arr_delay)) {
+            $delay = (int) $json->arr_delay;
+            $interval = new \DateInterval('PT'.abs($delay).'M');
+            $arrivalDate = new \DateTime($stop->arrival);
+            if ($delay > 0) {
+                $arrivalDate->add($interval);
+            } else {
+                $arrivalDate->sub($interval);
+            }
+            $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
+        }
+        if (isset($json->dep_delay)) {
+            $delay = (int) $json->dep_delay;
+            $interval = new \DateInterval('PT'.abs($delay).'M');
+            $departureDate = new \DateTime($stop->departure);
+            if ($delay > 0) {
+                $departureDate->add($interval);
+            } else {
+                $departureDate->sub($interval);
+            }
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+        }
+
+        return $obj;
+    }
 }
