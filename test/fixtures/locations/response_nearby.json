@@ -1,15 +1,92 @@
 {
     "stations": [
         {
+            "id": null,
+            "name": "Hinterberg 4, Kehrsiten",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": null,
+                "y": null
+            },
+            "distance": 6
+        },
+        {
+            "id": "8508490",
+            "name": "Kehrsiten-B\u00fcrgenstock BB",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 47.002853,
+                "y": 8.382384
+            },
+            "distance": 195
+        },
+        {
             "id": "8508489",
             "name": "Kehrsiten-B\u00fcrgenstock",
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 47.003066,
-                "y": 8.382324
+                "x": 47.00306,
+                "y": 8.382322
             },
-            "distance": 232.5
+            "distance": 199
+        },
+        {
+            "id": "8508491",
+            "name": "B\u00fcrgenstock Resort",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.997196,
+                "y": 8.378866
+            },
+            "distance": 578
+        },
+        {
+            "id": "8557028",
+            "name": "B\u00fcrgenstock, Zentrum",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.996714,
+                "y": 8.381672
+            },
+            "distance": 640
+        },
+        {
+            "id": "8557030",
+            "name": "B\u00fcrgenstock, Waldhotel",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.996434,
+                "y": 8.38519
+            },
+            "distance": 769
+        },
+        {
+            "id": "8579228",
+            "name": "B\u00fcrgenstock, Ost",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.996717,
+                "y": 8.38676
+            },
+            "distance": 813
+        },
+        {
+            "id": "8557029",
+            "name": "B\u00fcrgenstock, Residenzen",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.995002,
+                "y": 8.374344
+            },
+            "distance": 920
         },
         {
             "id": "8579842",
@@ -17,10 +94,21 @@
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.994616,
-                "y": 8.385892
+                "x": 46.994611,
+                "y": 8.385894
             },
-            "distance": 1017.4
+            "distance": 972
+        },
+        {
+            "id": "8579244",
+            "name": "Obb\u00fcrgen, Abzw. Trogen",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.995628,
+                "y": 8.389081
+            },
+            "distance": 1021
         }
     ]
 }
