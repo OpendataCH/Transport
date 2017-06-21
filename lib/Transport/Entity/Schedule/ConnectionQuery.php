@@ -67,6 +67,7 @@ class ConnectionQuery extends Query
         $request->setField('via', $this->viaLocations);
         $request->setField('date', date('Y-m-d', strtotime($this->date)));
         $request->setField('time', date('H:i', strtotime($this->time)));
+        $request->setField('time_type', $this->isArrivalTime ? 'arrival' : 'departure');
         $request->setField('show_delays', '1');
 
         return $request;
