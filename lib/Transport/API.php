@@ -100,15 +100,6 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        // // load pages
-        // for ($i = 0; $i < abs($query->page); $i++) {
-        // 
-        //     // load next page
-        //     $pageQuery = new ConnectionPageQuery($query, (string) $result->ConRes->ConResCtxt);
-        // 
-        //     $result = $this->sendAndParseQuery($pageQuery);
-        // }
-
         $connections = [];
         if (isset($result->connections)) {
             if ($result->connections) {
@@ -117,6 +108,8 @@ class API
                 }
             }
         }
+
+        $connections = array_slice($connections, $query->page * $query->limit, $query->limit);
 
         $from = null;
         $to = null;
