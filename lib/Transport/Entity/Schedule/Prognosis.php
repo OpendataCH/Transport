@@ -105,8 +105,6 @@ class Prognosis
             $arrivalDate = new \DateTime($stop->arrival);
             if ($delay > 0) {
                 $arrivalDate->add($interval);
-            } else {
-                $arrivalDate->sub($interval);
             }
             $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
         }
@@ -116,8 +114,6 @@ class Prognosis
             $departureDate = new \DateTime($stop->departure);
             if ($delay > 0) {
                 $departureDate->add($interval);
-            } else {
-                $departureDate->sub($interval);
             }
             $obj->departure = $departureDate->format(\DateTime::ISO8601);
         }
