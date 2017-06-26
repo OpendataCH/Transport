@@ -58,6 +58,6 @@ class Address extends Location
             $obj = new self();
         }
 
-        return parent::createFromXml($json, $obj);
+        return parent::createFromJson($json, $obj);
     }
 }
