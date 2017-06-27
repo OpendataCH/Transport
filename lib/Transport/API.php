@@ -4,10 +4,8 @@ namespace Transport;
 
 use Buzz\Browser;
 use Transport\Entity\Location\LocationQuery;
-use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
-use Transport\Entity\Schedule\ConnectionPageQuery;
 use Transport\Entity\Schedule\ConnectionQuery;
 use Transport\Entity\Schedule\StationBoardQuery;
 
@@ -89,6 +87,7 @@ class API
         $formRequest = $query->toFormRequest();
         $formRequest->setField('ip_address', $this->clientIpAddress);
         $formRequest->setField('user_agent', $this->clientUserAgent);
+
         return $this->browser->send($formRequest);
     }
 
@@ -115,7 +114,7 @@ class API
         $to = null;
         $stations = [
             'from' => [],
-            'to' => [],
+            'to'   => [],
         ];
         if (isset($result->points)) {
             $from = Entity\LocationFactory::createFromJson($result->points[0]);
@@ -126,9 +125,9 @@ class API
 
         $result = [
             'connections' => $connections,
-            'from' => $from,
-            'to' => $to,
-            'stations' => $stations,
+            'from'        => $from,
+            'to'          => $to,
+            'stations'    => $stations,
         ];
 
         return $result;
@@ -164,9 +163,9 @@ class API
 
         if ($result->connections) {
             foreach ($result->connections as $connection) {
-                 $journey = Entity\Schedule\StationBoardJourney::createFromJson($connection, null);
-                 $journey->stop->station = $station;
-                 $journeys[] = $journey;
+                $journey = Entity\Schedule\StationBoardJourney::createFromJson($connection, null);
+                $journey->stop->station = $station;
+                $journeys[] = $journey;
             }
         }
 

@@ -1,7 +1,6 @@
 <?php
 
 use Transport\Entity\Location\LocationQuery;
-use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
 use Transport\Entity\Schedule\ConnectionQuery;

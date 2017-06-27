@@ -25,6 +25,7 @@ class LocationFactory
         if (isset($json->isaddress) && $json->isaddress) {
             return Location\Address::createFromJson($json);
         }
+
         return Location\Station::createStationFromJson($json);
     }
 }

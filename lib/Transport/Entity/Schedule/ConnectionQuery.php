@@ -61,7 +61,7 @@ class ConnectionQuery extends Query
 
     public function toFormRequest()
     {
-        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL . 'route.json');
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL.'route.json');
         $request->setField('from', $this->srcLocation->name);
         $request->setField('to', $this->dstLocation->name);
         $request->setField('via', $this->viaLocations);

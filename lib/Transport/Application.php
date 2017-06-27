@@ -8,12 +8,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 use Transport\Entity\Location\LocationQuery;
-use Transport\Entity\Location\NearbyQuery;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Schedule\StationBoardQuery;
 use Transport\Normalizer\FieldsNormalizer;
 use Transport\Web\ConnectionQueryParser;
-use Transport\Web\LocationQueryParser;
 
 /**
  * @SWG\Swagger(
@@ -429,17 +427,16 @@ class Application extends \Silex\Application
                 }
 
                 $result = $app['api']->findConnections($query);
-
             } else {
-    
+
                 // default empty response
                 $result = [
                     'connections' => [],
-                    'from' => null,
-                    'to' => null,
-                    'stations' => [
+                    'from'        => null,
+                    'to'          => null,
+                    'stations'    => [
                         'from' => [],
-                        'to' => [],
+                        'to'   => [],
                     ],
                 ];
             }
@@ -538,7 +535,6 @@ class Application extends \Silex\Application
             $station->name = $request->get('station') ?: $request->get('id');
 
             if ($station instanceof Station) {
-
                 $query = new StationBoardQuery($station, $date);
                 if ($transportations) {
                     $query->transportations = (array) $transportations;
