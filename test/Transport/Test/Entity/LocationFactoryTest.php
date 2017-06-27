@@ -2,7 +2,6 @@
 
 namespace Transport\Test\Entity;
 
-use Transport\Entity\Coordinate;
 use Transport\Entity\Location\Station;
 use Transport\Entity\LocationFactory;
 

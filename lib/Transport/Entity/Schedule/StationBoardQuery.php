@@ -34,7 +34,7 @@ class StationBoardQuery extends Query
 
     public function toFormRequest()
     {
-        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL . 'stationboard.json');
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL.'stationboard.json');
         $request->setField('stop', $this->station->name);
         $request->setField('date', $this->date->format('Y-m-d'));
         $request->setField('time', $this->date->format('H:i'));

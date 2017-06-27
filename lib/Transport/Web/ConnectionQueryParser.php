@@ -3,7 +3,6 @@
 namespace Transport\Web;
 
 use Symfony\Component\HttpFoundation\Request;
-use Transport\Entity\Location\Location;
 use Transport\Entity\Schedule\ConnectionQuery;
 
 class ConnectionQueryParser

@@ -43,11 +43,11 @@ class LocationQuery extends Query
 
     public function toFormRequest()
     {
-        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL . 'completion.json');
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL.'completion.json');
         $request->setField('term', $this->query);
 
         if ($this->lat && $this->lon) {
-            $request->setField('latlon', $this->lat . ',' . $this->lon);
+            $request->setField('latlon', $this->lat.','.$this->lon);
         }
 
         $request->setField('show_ids', '1');
