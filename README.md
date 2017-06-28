@@ -1,3 +1,5 @@
+> **The backend of the Transport API will change on 31 July 2017.** Test your client code by replacing the Transport API domain name with transport-beta.opendata.ch and review the [list of known issues](https://github.com/OpendataCH/Transport/labels/beta) on GitHub. [Read more on opendata.ch](https://opendata.ch/2017/06/search-ch-rettet-transport-opendata-ch/).
+
 # Transport API
 
 [![Build Status](https://secure.travis-ci.org/OpendataCH/Transport.png?branch=master)](http://travis-ci.org/OpendataCH/Transport)
