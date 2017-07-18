@@ -155,10 +155,10 @@ class Connection
         }
 
         $obj->duration = gmdate('0z\dH:i:s', $json->duration);
-        
+
         $numberOfVehicles = 0;
-        foreach($json->legs as $leg){
-            if(isset($leg->type) && $leg->type != 'walk'){
+        foreach ($json->legs as $leg) {
+            if (isset($leg->type) && $leg->type != 'walk') {
                 $numberOfVehicles++;
             }
         }
