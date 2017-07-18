@@ -78,7 +78,7 @@
                 }
             },
             "duration": "00d00:15:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IR"
@@ -334,7 +334,7 @@
                 }
             },
             "duration": "00d00:28:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "S12"
@@ -894,7 +894,7 @@
                 }
             },
             "duration": "00d00:15:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IR"
@@ -1150,7 +1150,7 @@
                 }
             },
             "duration": "00d00:20:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IR"
