@@ -158,7 +158,7 @@ class Connection
 
         $numberOfVehicles = 0;
         foreach ($json->legs as $leg) {
-            if ($leg->type != NULL && $leg->type != 'walk') {
+            if ($leg->type != null && $leg->type != 'walk') {
                 $numberOfVehicles++;
             }
         }
