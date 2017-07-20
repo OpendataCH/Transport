@@ -155,7 +155,14 @@ class Connection
         }
 
         $obj->duration = gmdate('0z\dH:i:s', $json->duration);
-        $obj->transfers = count($json->legs) - 1;
+
+        $numberOfVehicles = 0;
+        foreach ($json->legs as $leg) {
+            if (isset($leg->type) && $leg->type != 'walk') {
+                $numberOfVehicles++;
+            }
+        }
+        $obj->transfers = $numberOfVehicles - 1;
 
         if (isset($json->legs)) {
             foreach ($json->legs as $leg) {

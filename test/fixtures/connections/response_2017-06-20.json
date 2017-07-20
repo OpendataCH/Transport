@@ -78,7 +78,7 @@
                 }
             },
             "duration": "00d00:30:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IC"
@@ -334,7 +334,7 @@
                 }
             },
             "duration": "00d00:30:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IC"
@@ -590,7 +590,7 @@
                 }
             },
             "duration": "00d00:30:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IC"
@@ -846,7 +846,7 @@
                 }
             },
             "duration": "00d00:30:00",
-            "transfers": 1,
+            "transfers": 0,
             "service": null,
             "products": [
                 "IC"
