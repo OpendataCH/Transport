@@ -69,7 +69,7 @@ class API
 
         // check for rate limit error
         if ($response->getStatusCode() == 429) {
-            throw new HttpException(429, 'Rate limit error from timetable.search.ch: ' . $content);
+            throw new HttpException(429, 'Rate limit error from timetable.search.ch: '.$content);
         }
 
         // check for JSON error
