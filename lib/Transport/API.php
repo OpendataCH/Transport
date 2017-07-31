@@ -3,6 +3,7 @@
 namespace Transport;
 
 use Buzz\Browser;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Transport\Entity\Location\LocationQuery;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
@@ -65,6 +66,11 @@ class API
         // parse result
         $content = $response->getContent();
         $result = json_decode($content);
+
+        // check for rate limit error
+        if ($response->getStatusCode() == 429) {
+            throw new HttpException(429, 'Rate limit error from timetable.search.ch: ' . $content);
+        }
 
         // check for JSON error
         if ($result === null) {
