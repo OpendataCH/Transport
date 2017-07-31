@@ -1,15 +1,114 @@
 {
     "stations": [
         {
+            "id": null,
+            "name": "rte de l'Etraz (Haltestelle), Nyon",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": null,
+                "y": null
+            },
+            "distance": 2
+        },
+        {
             "id": "8593897",
             "name": "Nyon, rte de l'Etraz",
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.388635,
-                "y": 6.238738
+                "x": 46.388651,
+                "y": 6.23873
             },
-            "distance": 2.2
+            "distance": 2
+        },
+        {
+            "id": "8593883",
+            "name": "Nyon, chemin du Vallon",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.387219,
+                "y": 6.24023
+            },
+            "distance": 199
+        },
+        {
+            "id": "8588672",
+            "name": "Prangins, Pont de la Redoute",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.390803,
+                "y": 6.241451
+            },
+            "distance": 317
+        },
+        {
+            "id": "8570008",
+            "name": "Nyon, La Redoute",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.39165,
+                "y": 6.23813
+            },
+            "distance": 334
+        },
+        {
+            "id": "8593890",
+            "name": "Nyon, Mafroi",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.385356,
+                "y": 6.241065
+            },
+            "distance": 410
+        },
+        {
+            "id": "8570000",
+            "name": "Nyon, gare",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.384852,
+                "y": 6.236811
+            },
+            "distance": 449
+        },
+        {
+            "id": "8593886",
+            "name": "Nyon, La Paix",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.391851,
+                "y": 6.23507
+            },
+            "distance": 451
+        },
+        {
+            "id": "8593878",
+            "name": "Nyon, Chantemerle",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.393063,
+                "y": 6.237293
+            },
+            "distance": 501
+        },
+        {
+            "id": "8593881",
+            "name": "Nyon, chemin des Plantaz",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.391713,
+                "y": 6.233851
+            },
+            "distance": 504
         }
     ]
 }

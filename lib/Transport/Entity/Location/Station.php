@@ -66,7 +66,17 @@ class Station extends Location
         }
         Location::createFromJson($json, $obj);
 
-        $obj->id = $json->extId;
+        if (isset($json->id)) {
+            $obj->id = $json->id;
+        }
+
+        if (isset($json->stopid)) {
+            $obj->id = $json->stopid;
+        }
+
+        if (isset($json->terminal->id)) {
+            $obj->id = $json->terminal->id;
+        }
 
         return $obj;
     }

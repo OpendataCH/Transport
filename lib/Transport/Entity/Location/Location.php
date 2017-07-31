@@ -80,10 +80,27 @@ abstract class Location
             throw new \InvalidArgumentException('Argument must be an object');
         }
 
-        if ($json->name) {
-            $obj->name = html_entity_decode($json->name, null, 'UTF-8');
+        if (isset($json->text)) {
+            $obj->name = $json->text;
         }
+
+        if (isset($json->label)) {
+            $obj->name = $json->label;
+        }
+
+        if (isset($json->name)) {
+            $obj->name = $json->name;
+        }
+
+        if (isset($json->terminal->id)) {
+            $obj->id = $json->terminal->id;
+        }
+
         $obj->coordinate = Coordinate::createFromJson($json);
+
+        if (isset($json->dist)) {
+            $obj->distance = $json->dist;
+        }
 
         return $obj;
     }

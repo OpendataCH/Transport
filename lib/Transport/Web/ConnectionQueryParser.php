@@ -3,12 +3,11 @@
 namespace Transport\Web;
 
 use Symfony\Component\HttpFoundation\Request;
-use Transport\Entity\Location\Location;
 use Transport\Entity\Schedule\ConnectionQuery;
 
 class ConnectionQueryParser
 {
-    public static function create(Request $request, Location $from, Location $to, $via = [])
+    public static function create(Request $request, $from, $to, $via = [])
     {
         $datetime = $request->get('datetime');
         if ($datetime) {

@@ -2,6 +2,7 @@
 
 namespace Transport\Entity\Schedule;
 
+use Buzz\Message\Form\FormRequest;
 use Transport\Entity\Location\Station;
 use Transport\Entity\Query;
 use Transport\Entity\Transportations;
@@ -29,6 +30,20 @@ class StationBoardQuery extends Query
             $date = new \DateTime('now', new \DateTimeZone('Europe/Zurich'));
         }
         $this->date = $date;
+    }
+
+    public function toFormRequest()
+    {
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL.'stationboard.json');
+        $request->setField('stop', $this->station->name);
+        $request->setField('date', $this->date->format('Y-m-d'));
+        $request->setField('time', $this->date->format('H:i'));
+        $request->setField('mode', $this->boardType === 'arrival' ? 'arrival' : 'depart');
+        $request->setField('limit', $this->maxJourneys);
+        $request->setField('show_tracks', '1');
+        $request->setField('show_subsequent_stops', '1');
+
+        return $request;
     }
 
     public function toXml()

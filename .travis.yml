@@ -15,15 +15,27 @@ after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 deploy:
-  provider: script
-  script: >-
-    curl -s -X POST
-    -H "Content-Type: application/json"
-    -H "Accept: application/json"
-    -H "Travis-API-Version: 3"
-    -H "Authorization: token ${TRAVIS_TOKEN}"
-    -d '{"request": {"message": "Deploy transport.opendata.ch", "branch": "master", "config": {"deploy": {"provider": "script", "skip_cleanup": "true", "script": "ansible-playbook deploy-transport.yml"}}}}'
-    https://api.travis-ci.org/repo/OpendataCH%2Fplaybook/requests
-  on:
-    branch: master
-    php: 7.0
+  - provider: script
+    script: >-
+      curl -s -X POST
+      -H "Content-Type: application/json"
+      -H "Accept: application/json"
+      -H "Travis-API-Version: 3"
+      -H "Authorization: token ${TRAVIS_TOKEN}"
+      -d '{"request": {"message": "Deploy transport.opendata.ch", "branch": "master", "config": {"deploy": {"provider": "script", "skip_cleanup": "true", "script": "ansible-playbook deploy-transport.yml"}}}}'
+      https://api.travis-ci.org/repo/OpendataCH%2Fplaybook/requests
+    on:
+      branch: master
+      php: 7.0
+  - provider: script
+    script: >-
+      curl -s -X POST
+      -H "Content-Type: application/json"
+      -H "Accept: application/json"
+      -H "Travis-API-Version: 3"
+      -H "Authorization: token ${TRAVIS_TOKEN}"
+      -d '{"request": {"message": "Deploy transport-beta.opendata.ch", "branch": "master", "config": {"deploy": {"provider": "script", "skip_cleanup": "true", "script": "ansible-playbook deploy-transport-beta.yml"}}}}'
+      https://api.travis-ci.org/repo/OpendataCH%2Fplaybook/requests
+    on:
+      branch: beta
+      php: 7.0

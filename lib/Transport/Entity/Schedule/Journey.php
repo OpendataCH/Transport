@@ -160,4 +160,52 @@ class Journey
 
         return $obj;
     }
+
+    public static function createFromJson($json, Journey $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        if (isset($json->number)) {
+            $obj->name = $json->number;
+            $obj->number = $json->number;
+        }
+        if (isset($json->{'*L'})) {
+            $obj->number = $json->{'*L'};
+        }
+        if (isset($json->line)) {
+            $obj->category = $json->line;
+        }
+        if (isset($json->{'*G'})) {
+            $obj->category = $json->{'*G'};
+        }
+        if (isset($json->terminal)) {
+            if (isset($json->terminal->name)) {
+                $obj->to = $json->terminal->name;
+            } else {
+                $obj->to = $json->terminal;
+            }
+        }
+        if (isset($json->operator)) {
+            $obj->operator = $json->operator;
+        }
+
+        $obj->passList[] = Stop::createFromJson($json);
+        if (isset($json->stops)) {
+            foreach ($json->stops as $stop) {
+                $obj->passList[] = Stop::createFromJson($stop);
+            }
+        }
+        if (isset($json->subsequent_stops)) {
+            foreach ($json->subsequent_stops as $stop) {
+                $obj->passList[] = Stop::createFromJson($stop);
+            }
+        }
+        if (isset($json->exit)) {
+            $obj->passList[] = Stop::createFromJson($json->exit);
+        }
+
+        return $obj;
+    }
 }
