@@ -1,5 +1,9 @@
 # Changelog
 
+## 2017-07-31
+
+- Switch to timetable.search.ch as backend
+
 ## 2017-01-12
 
 - #151 Fix delayed arrival time
