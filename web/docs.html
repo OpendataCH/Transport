@@ -52,11 +52,11 @@
 
             <h3 id="rate-limiting">Rate Limiting</h3>
 
-            <p>The number of HTTP requests you can send to <code>transport-beta.opendata.ch</code> is limited to 3 requests per second per IP address. The number of remaining requests is sent back for your information in the HTTP response header <code>X-Rate-Limit-Remaining</code>. If you reach the maximum number of requests please <a href="mailto:transport@opendata.ch">contact us</a>, we are eager to hear your use case and discuss a solution.</p>
+            <p>The number of HTTP requests you can send to <code>transport.opendata.ch</code> is limited to 3 requests per second per IP address. The number of remaining requests is sent back for your information in the HTTP response header <code>X-Rate-Limit-Remaining</code>. If you reach the maximum number of requests please <a href="mailto:transport@opendata.ch">contact us</a>, we are eager to hear your use case and discuss a solution.</p>
 
             <h3 id="api-resources">API Resources</h3>
 
-            <p>The Transport API builds on REST style resources which respond in JSON. Individual resources are detailed below. Cross Origin Resource Sharing (CORS) is enabled, so you can easily use the API on transport-beta.opendata.ch from any website (avoid setting custom headers though).</p>
+            <p>The Transport API builds on REST style resources which respond in JSON. Individual resources are detailed below. Cross Origin Resource Sharing (CORS) is enabled, so you can easily use the API on transport.opendata.ch from any website (avoid setting custom headers though).</p>
 
             <hr/>
 
@@ -70,7 +70,7 @@
 
             <h4>Resource URL</h4>
 
-            <pre>http://transport-beta.opendata.ch/v1/locations</pre>
+            <pre>http://transport.opendata.ch/v1/locations</pre>
 
             <h4>Request Parameters</h4>
 
@@ -147,7 +147,7 @@
 
             <h4>Example Request</h4>
 
-            <pre>GET http://transport-beta.opendata.ch/v1/locations?query=Basel</pre>
+            <pre>GET http://transport.opendata.ch/v1/locations?query=Basel</pre>
 
             <h4>Example response</h4>
 
@@ -177,7 +177,7 @@
 
             <h4>Resource URL</h4>
 
-            <pre>http://transport-beta.opendata.ch/v1/connections</pre>
+            <pre>http://transport.opendata.ch/v1/connections</pre>
 
             <h4>Request Parameters</h4>
 
@@ -297,9 +297,9 @@
 
             <h4>Example Requests</h4>
 
-            <pre>GET http://transport-beta.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève</pre>
             <p>which is the same as</p>
-            <pre>GET http://transport-beta.opendata.ch/v1/connections?from=008501120&amp;to=008501008</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=008501120&amp;to=008501008</pre>
 
             <h4>Example response</h4>
 
@@ -368,7 +368,7 @@
 
             <h4>Resource URL</h4>
 
-            <pre>http://transport-beta.opendata.ch/v1/stationboard</pre>
+            <pre>http://transport.opendata.ch/v1/stationboard</pre>
 
             <h4>Request Parameters</h4>
 
@@ -452,9 +452,9 @@
 
             <h4>Example Requests</h4>
 
-            <pre>GET http://transport-beta.opendata.ch/v1/stationboard?station=Aarau&amp;limit=10</pre>
+            <pre>GET http://transport.opendata.ch/v1/stationboard?station=Aarau&amp;limit=10</pre>
             <p>which is the same as</p>
-            <pre>GET http://transport-beta.opendata.ch/v1/stationboard?id=008502113&amp;limit=10</pre>
+            <pre>GET http://transport.opendata.ch/v1/stationboard?id=008502113&amp;limit=10</pre>
 
             <h4>Example response</h4>
 
@@ -874,7 +874,7 @@
             </p>
             <h4>Example Request</h4>
 
-            <pre>GET http://transport-beta.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from/departure&amp;fields[]=connections/to/arrival</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from/departure&amp;fields[]=connections/to/arrival</pre>
 
             <h4>Example response</h4>
 
@@ -898,7 +898,7 @@
 
             <h4>Example Request</h4>
 
-            <pre>GET http://transport-beta.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from&amp;fields[]=connections/to/station</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève&amp;fields[]=connections/from&amp;fields[]=connections/to/station</pre>
 
             <h4>Example response</h4>
 
