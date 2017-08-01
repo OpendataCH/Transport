@@ -38,6 +38,7 @@ class API
     public function __construct(Browser $browser = null, $lang = 'EN')
     {
         $this->browser = $browser ?: new Browser();
+        $this->browser->getClient()->setTimeout(10);
         $this->lang = $lang;
     }
 
