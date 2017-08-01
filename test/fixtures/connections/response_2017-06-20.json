@@ -15,14 +15,14 @@
                 },
                 "arrival": null,
                 "arrivalTimestamp": null,
-                "departure": "2016-12-23T14:36:00+0100",
-                "departureTimestamp": 1482500160,
-                "delay": null,
-                "platform": "17",
+                "departure": "2017-06-20T22:32:00+0200",
+                "departureTimestamp": 1497990720,
+                "delay": 1,
+                "platform": "12",
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
-                    "departure": null,
+                    "departure": "2017-06-20T22:33:00+0200",
                     "capacity1st": null,
                     "capacity2nd": null
                 },
@@ -41,22 +41,22 @@
             },
             "to": {
                 "station": {
-                    "id": "8503504",
-                    "name": "Baden",
+                    "id": "8500218",
+                    "name": "Olten",
                     "score": null,
                     "coordinate": {
                         "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
+                        "x": 47.351927,
+                        "y": 7.907693
                     },
                     "distance": null
                 },
-                "arrival": "2016-12-23T14:51:00+0100",
-                "arrivalTimestamp": 1482501060,
+                "arrival": "2017-06-20T23:02:00+0200",
+                "arrivalTimestamp": 1497992520,
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
-                "platform": "17",
+                "platform": "12",
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
@@ -66,849 +66,33 @@
                 },
                 "realtimeAvailability": null,
                 "location": {
-                    "id": "8503504",
-                    "name": "Baden",
+                    "id": "8500218",
+                    "name": "Olten",
                     "score": null,
                     "coordinate": {
                         "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
+                        "x": 47.351927,
+                        "y": 7.907693
                     },
                     "distance": null
                 }
             },
-            "duration": "00d00:15:00",
+            "duration": "00d00:30:00",
             "transfers": 0,
             "service": null,
             "products": [
-                "IR"
+                "IC"
             ],
             "capacity1st": null,
             "capacity2nd": null,
             "sections": [
                 {
                     "journey": {
-                        "name": "IR 1974",
-                        "category": "IR",
+                        "name": "IC 738",
+                        "category": "IC",
                         "subcategory": null,
                         "categoryCode": null,
-                        "number": "IR 1974",
-                        "operator": "SBB",
-                        "to": "Basel SBB",
-                        "passList": [
-                            {
-                                "station": {
-                                    "id": "8503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.377847,
-                                        "y": 8.540502
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": null,
-                                "arrivalTimestamp": null,
-                                "departure": "2016-12-23T14:36:00+0100",
-                                "departureTimestamp": 1482500160,
-                                "delay": null,
-                                "platform": "17",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.377847,
-                                        "y": 8.540502
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:51:00+0100",
-                                "arrivalTimestamp": 1482501060,
-                                "departure": null,
-                                "departureTimestamp": null,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
-                                    },
-                                    "distance": null
-                                }
-                            }
-                        ],
-                        "capacity1st": null,
-                        "capacity2nd": null
-                    },
-                    "walk": null,
-                    "departure": {
-                        "station": {
-                            "id": "8503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.377847,
-                                "y": 8.540502
-                            },
-                            "distance": null
-                        },
-                        "arrival": null,
-                        "arrivalTimestamp": null,
-                        "departure": "2016-12-23T14:36:00+0100",
-                        "departureTimestamp": 1482500160,
-                        "delay": null,
-                        "platform": "17",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": null,
-                        "location": {
-                            "id": "8503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.377847,
-                                "y": 8.540502
-                            },
-                            "distance": null
-                        }
-                    },
-                    "arrival": {
-                        "station": {
-                            "id": "8503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
-                            },
-                            "distance": null
-                        },
-                        "arrival": "2016-12-23T14:51:00+0100",
-                        "arrivalTimestamp": 1482501060,
-                        "departure": null,
-                        "departureTimestamp": null,
-                        "delay": null,
-                        "platform": null,
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": null,
-                        "location": {
-                            "id": "8503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
-                            },
-                            "distance": null
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "from": {
-                "station": {
-                    "id": "8503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.377847,
-                        "y": 8.540502
-                    },
-                    "distance": null
-                },
-                "arrival": null,
-                "arrivalTimestamp": null,
-                "departure": "2016-12-23T14:44:00+0100",
-                "departureTimestamp": 1482500640,
-                "delay": null,
-                "platform": "41\/42",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": null,
-                "location": {
-                    "id": "8503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.377847,
-                        "y": 8.540502
-                    },
-                    "distance": null
-                }
-            },
-            "to": {
-                "station": {
-                    "id": "8503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
-                    },
-                    "distance": null
-                },
-                "arrival": "2016-12-23T15:12:00+0100",
-                "arrivalTimestamp": 1482502320,
-                "departure": null,
-                "departureTimestamp": null,
-                "delay": null,
-                "platform": "41\/42",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": null,
-                "location": {
-                    "id": "8503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
-                    },
-                    "distance": null
-                }
-            },
-            "duration": "00d00:28:00",
-            "transfers": 0,
-            "service": null,
-            "products": [
-                "S12"
-            ],
-            "capacity1st": null,
-            "capacity2nd": null,
-            "sections": [
-                {
-                    "journey": {
-                        "name": "S12 19254",
-                        "category": "S",
-                        "subcategory": null,
-                        "categoryCode": null,
-                        "number": "12",
-                        "operator": "SBB",
-                        "to": "Brugg AG",
-                        "passList": [
-                            {
-                                "station": {
-                                    "id": "8503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.377847,
-                                        "y": 8.540502
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": null,
-                                "arrivalTimestamp": null,
-                                "departure": "2016-12-23T14:44:00+0100",
-                                "departureTimestamp": 1482500640,
-                                "delay": null,
-                                "platform": "41\/42",
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503000",
-                                    "name": "Z\u00fcrich HB",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.377847,
-                                        "y": 8.540502
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503020",
-                                    "name": "Z\u00fcrich Hardbr\u00fccke",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.385087,
-                                        "y": 8.517686
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:46:00+0100",
-                                "arrivalTimestamp": 1482500760,
-                                "departure": "2016-12-23T14:46:00+0100",
-                                "departureTimestamp": 1482500760,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503020",
-                                    "name": "Z\u00fcrich Hardbr\u00fccke",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.385087,
-                                        "y": 8.517686
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503001",
-                                    "name": "Z\u00fcrich Altstetten",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.391478,
-                                        "y": 8.488939
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:50:00+0100",
-                                "arrivalTimestamp": 1482501000,
-                                "departure": "2016-12-23T14:51:00+0100",
-                                "departureTimestamp": 1482501060,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503001",
-                                    "name": "Z\u00fcrich Altstetten",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.391478,
-                                        "y": 8.488939
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503509",
-                                    "name": "Schlieren",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.399171,
-                                        "y": 8.447228
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:53:00+0100",
-                                "arrivalTimestamp": 1482501180,
-                                "departure": "2016-12-23T14:53:00+0100",
-                                "departureTimestamp": 1482501180,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503509",
-                                    "name": "Schlieren",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.399171,
-                                        "y": 8.447228
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503512",
-                                    "name": "Glanzenberg",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.398871,
-                                        "y": 8.420423
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:55:00+0100",
-                                "arrivalTimestamp": 1482501300,
-                                "departure": "2016-12-23T14:55:00+0100",
-                                "departureTimestamp": 1482501300,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503512",
-                                    "name": "Glanzenberg",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.398871,
-                                        "y": 8.420423
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503508",
-                                    "name": "Dietikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.405775,
-                                        "y": 8.404969
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T14:59:00+0100",
-                                "arrivalTimestamp": 1482501540,
-                                "departure": "2016-12-23T15:00:00+0100",
-                                "departureTimestamp": 1482501600,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503508",
-                                    "name": "Dietikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.405775,
-                                        "y": 8.404969
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503506",
-                                    "name": "Killwangen-Spreitenbach",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.433325,
-                                        "y": 8.354194
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:04:00+0100",
-                                "arrivalTimestamp": 1482501840,
-                                "departure": "2016-12-23T15:04:00+0100",
-                                "departureTimestamp": 1482501840,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503506",
-                                    "name": "Killwangen-Spreitenbach",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.433325,
-                                        "y": 8.354194
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503511",
-                                    "name": "Neuenhof",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.450657,
-                                        "y": 8.331234
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:06:00+0100",
-                                "arrivalTimestamp": 1482501960,
-                                "departure": "2016-12-23T15:06:00+0100",
-                                "departureTimestamp": 1482501960,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503511",
-                                    "name": "Neuenhof",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.450657,
-                                        "y": 8.331234
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503505",
-                                    "name": "Wettingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.459634,
-                                        "y": 8.315986
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:09:00+0100",
-                                "arrivalTimestamp": 1482502140,
-                                "departure": "2016-12-23T15:10:00+0100",
-                                "departureTimestamp": 1482502200,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503505",
-                                    "name": "Wettingen",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.459634,
-                                        "y": 8.315986
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:12:00+0100",
-                                "arrivalTimestamp": 1482502320,
-                                "departure": null,
-                                "departureTimestamp": null,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
-                                    },
-                                    "distance": null
-                                }
-                            }
-                        ],
-                        "capacity1st": null,
-                        "capacity2nd": null
-                    },
-                    "walk": null,
-                    "departure": {
-                        "station": {
-                            "id": "8503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.377847,
-                                "y": 8.540502
-                            },
-                            "distance": null
-                        },
-                        "arrival": null,
-                        "arrivalTimestamp": null,
-                        "departure": "2016-12-23T14:44:00+0100",
-                        "departureTimestamp": 1482500640,
-                        "delay": null,
-                        "platform": "41\/42",
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": null,
-                        "location": {
-                            "id": "8503000",
-                            "name": "Z\u00fcrich HB",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.377847,
-                                "y": 8.540502
-                            },
-                            "distance": null
-                        }
-                    },
-                    "arrival": {
-                        "station": {
-                            "id": "8503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
-                            },
-                            "distance": null
-                        },
-                        "arrival": "2016-12-23T15:12:00+0100",
-                        "arrivalTimestamp": 1482502320,
-                        "departure": null,
-                        "departureTimestamp": null,
-                        "delay": null,
-                        "platform": null,
-                        "prognosis": {
-                            "platform": null,
-                            "arrival": null,
-                            "departure": null,
-                            "capacity1st": null,
-                            "capacity2nd": null
-                        },
-                        "realtimeAvailability": null,
-                        "location": {
-                            "id": "8503504",
-                            "name": "Baden",
-                            "score": null,
-                            "coordinate": {
-                                "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
-                            },
-                            "distance": null
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "from": {
-                "station": {
-                    "id": "8503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.377847,
-                        "y": 8.540502
-                    },
-                    "distance": null
-                },
-                "arrival": null,
-                "arrivalTimestamp": null,
-                "departure": "2016-12-23T15:06:00+0100",
-                "departureTimestamp": 1482501960,
-                "delay": null,
-                "platform": "17",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": null,
-                "location": {
-                    "id": "8503000",
-                    "name": "Z\u00fcrich HB",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.377847,
-                        "y": 8.540502
-                    },
-                    "distance": null
-                }
-            },
-            "to": {
-                "station": {
-                    "id": "8503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
-                    },
-                    "distance": null
-                },
-                "arrival": "2016-12-23T15:21:00+0100",
-                "arrivalTimestamp": 1482502860,
-                "departure": null,
-                "departureTimestamp": null,
-                "delay": null,
-                "platform": "17",
-                "prognosis": {
-                    "platform": null,
-                    "arrival": null,
-                    "departure": null,
-                    "capacity1st": null,
-                    "capacity2nd": null
-                },
-                "realtimeAvailability": null,
-                "location": {
-                    "id": "8503504",
-                    "name": "Baden",
-                    "score": null,
-                    "coordinate": {
-                        "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
-                    },
-                    "distance": null
-                }
-            },
-            "duration": "00d00:15:00",
-            "transfers": 0,
-            "service": null,
-            "products": [
-                "IR"
-            ],
-            "capacity1st": null,
-            "capacity2nd": null,
-            "sections": [
-                {
-                    "journey": {
-                        "name": "IR 2176",
-                        "category": "IR",
-                        "subcategory": null,
-                        "categoryCode": null,
-                        "number": "IR 2176",
+                        "number": "IC 738",
                         "operator": "SBB",
                         "to": "Bern",
                         "passList": [
@@ -926,14 +110,14 @@
                                 },
                                 "arrival": null,
                                 "arrivalTimestamp": null,
-                                "departure": "2016-12-23T15:06:00+0100",
-                                "departureTimestamp": 1482501960,
-                                "delay": null,
-                                "platform": "17",
+                                "departure": "2017-06-20T22:32:00+0200",
+                                "departureTimestamp": 1497990720,
+                                "delay": 1,
+                                "platform": "12",
                                 "prognosis": {
                                     "platform": null,
                                     "arrival": null,
-                                    "departure": null,
+                                    "departure": "2017-06-20T22:33:00+0200",
                                     "capacity1st": null,
                                     "capacity2nd": null
                                 },
@@ -952,38 +136,38 @@
                             },
                             {
                                 "station": {
-                                    "id": "8503504",
-                                    "name": "Baden",
+                                    "id": "8500218",
+                                    "name": "Olten",
                                     "score": null,
                                     "coordinate": {
                                         "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
+                                        "x": 47.351927,
+                                        "y": 7.907693
                                     },
                                     "distance": null
                                 },
-                                "arrival": "2016-12-23T15:21:00+0100",
-                                "arrivalTimestamp": 1482502860,
+                                "arrival": "2017-06-20T23:02:00+0200",
+                                "arrivalTimestamp": 1497992520,
                                 "departure": null,
                                 "departureTimestamp": null,
-                                "delay": null,
+                                "delay": 1,
                                 "platform": null,
                                 "prognosis": {
                                     "platform": null,
-                                    "arrival": null,
+                                    "arrival": "2017-06-20T23:03:00+0200",
                                     "departure": null,
                                     "capacity1st": null,
                                     "capacity2nd": null
                                 },
                                 "realtimeAvailability": null,
                                 "location": {
-                                    "id": "8503504",
-                                    "name": "Baden",
+                                    "id": "8500218",
+                                    "name": "Olten",
                                     "score": null,
                                     "coordinate": {
                                         "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
+                                        "x": 47.351927,
+                                        "y": 7.907693
                                     },
                                     "distance": null
                                 }
@@ -1007,14 +191,14 @@
                         },
                         "arrival": null,
                         "arrivalTimestamp": null,
-                        "departure": "2016-12-23T15:06:00+0100",
-                        "departureTimestamp": 1482501960,
-                        "delay": null,
-                        "platform": "17",
+                        "departure": "2017-06-20T22:32:00+0200",
+                        "departureTimestamp": 1497990720,
+                        "delay": 1,
+                        "platform": "12",
                         "prognosis": {
                             "platform": null,
                             "arrival": null,
-                            "departure": null,
+                            "departure": "2017-06-20T22:33:00+0200",
                             "capacity1st": null,
                             "capacity2nd": null
                         },
@@ -1033,38 +217,38 @@
                     },
                     "arrival": {
                         "station": {
-                            "id": "8503504",
-                            "name": "Baden",
+                            "id": "8500218",
+                            "name": "Olten",
                             "score": null,
                             "coordinate": {
                                 "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
+                                "x": 47.351927,
+                                "y": 7.907693
                             },
                             "distance": null
                         },
-                        "arrival": "2016-12-23T15:21:00+0100",
-                        "arrivalTimestamp": 1482502860,
+                        "arrival": "2017-06-20T23:02:00+0200",
+                        "arrivalTimestamp": 1497992520,
                         "departure": null,
                         "departureTimestamp": null,
-                        "delay": null,
+                        "delay": 1,
                         "platform": null,
                         "prognosis": {
                             "platform": null,
-                            "arrival": null,
+                            "arrival": "2017-06-20T23:03:00+0200",
                             "departure": null,
                             "capacity1st": null,
                             "capacity2nd": null
                         },
                         "realtimeAvailability": null,
                         "location": {
-                            "id": "8503504",
-                            "name": "Baden",
+                            "id": "8500218",
+                            "name": "Olten",
                             "score": null,
                             "coordinate": {
                                 "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
+                                "x": 47.351927,
+                                "y": 7.907693
                             },
                             "distance": null
                         }
@@ -1087,14 +271,14 @@
                 },
                 "arrival": null,
                 "arrivalTimestamp": null,
-                "departure": "2016-12-23T15:10:00+0100",
-                "departureTimestamp": 1482502200,
-                "delay": null,
+                "departure": "2017-06-20T23:02:00+0200",
+                "departureTimestamp": 1497992520,
+                "delay": 0,
                 "platform": "31",
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
-                    "departure": null,
+                    "departure": "2017-06-20T23:02:00+0200",
                     "capacity1st": null,
                     "capacity2nd": null
                 },
@@ -1113,18 +297,18 @@
             },
             "to": {
                 "station": {
-                    "id": "8503504",
-                    "name": "Baden",
+                    "id": "8500218",
+                    "name": "Olten",
                     "score": null,
                     "coordinate": {
                         "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
+                        "x": 47.351927,
+                        "y": 7.907693
                     },
                     "distance": null
                 },
-                "arrival": "2016-12-23T15:30:00+0100",
-                "arrivalTimestamp": 1482503400,
+                "arrival": "2017-06-20T23:32:00+0200",
+                "arrivalTimestamp": 1497994320,
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
@@ -1138,35 +322,35 @@
                 },
                 "realtimeAvailability": null,
                 "location": {
-                    "id": "8503504",
-                    "name": "Baden",
+                    "id": "8500218",
+                    "name": "Olten",
                     "score": null,
                     "coordinate": {
                         "type": "WGS84",
-                        "x": 47.476417,
-                        "y": 8.307693
+                        "x": 47.351927,
+                        "y": 7.907693
                     },
                     "distance": null
                 }
             },
-            "duration": "00d00:20:00",
+            "duration": "00d00:30:00",
             "transfers": 0,
             "service": null,
             "products": [
-                "IR"
+                "IC"
             ],
             "capacity1st": null,
             "capacity2nd": null,
             "sections": [
                 {
                     "journey": {
-                        "name": "IR 2076",
-                        "category": "IR",
+                        "name": "IC 838",
+                        "category": "IC",
                         "subcategory": null,
                         "categoryCode": null,
-                        "number": "IR 2076",
+                        "number": "IC 838",
                         "operator": "SBB",
-                        "to": "Basel SBB",
+                        "to": "Bern",
                         "passList": [
                             {
                                 "station": {
@@ -1182,14 +366,14 @@
                                 },
                                 "arrival": null,
                                 "arrivalTimestamp": null,
-                                "departure": "2016-12-23T15:10:00+0100",
-                                "departureTimestamp": 1482502200,
-                                "delay": null,
+                                "departure": "2017-06-20T23:02:00+0200",
+                                "departureTimestamp": 1497992520,
+                                "delay": 0,
                                 "platform": "31",
                                 "prognosis": {
                                     "platform": null,
                                     "arrival": null,
-                                    "departure": null,
+                                    "departure": "2017-06-20T23:02:00+0200",
                                     "capacity1st": null,
                                     "capacity2nd": null
                                 },
@@ -1208,114 +392,38 @@
                             },
                             {
                                 "station": {
-                                    "id": "8503001",
-                                    "name": "Z\u00fcrich Altstetten",
+                                    "id": "8500218",
+                                    "name": "Olten",
                                     "score": null,
                                     "coordinate": {
                                         "type": "WGS84",
-                                        "x": 47.391478,
-                                        "y": 8.488939
+                                        "x": 47.351927,
+                                        "y": 7.907693
                                     },
                                     "distance": null
                                 },
-                                "arrival": "2016-12-23T15:15:00+0100",
-                                "arrivalTimestamp": 1482502500,
-                                "departure": "2016-12-23T15:16:00+0100",
-                                "departureTimestamp": 1482502560,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503001",
-                                    "name": "Z\u00fcrich Altstetten",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.391478,
-                                        "y": 8.488939
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503508",
-                                    "name": "Dietikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.405775,
-                                        "y": 8.404969
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:21:00+0100",
-                                "arrivalTimestamp": 1482502860,
-                                "departure": "2016-12-23T15:23:00+0100",
-                                "departureTimestamp": 1482502980,
-                                "delay": null,
-                                "platform": null,
-                                "prognosis": {
-                                    "platform": null,
-                                    "arrival": null,
-                                    "departure": null,
-                                    "capacity1st": null,
-                                    "capacity2nd": null
-                                },
-                                "realtimeAvailability": null,
-                                "location": {
-                                    "id": "8503508",
-                                    "name": "Dietikon",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.405775,
-                                        "y": 8.404969
-                                    },
-                                    "distance": null
-                                }
-                            },
-                            {
-                                "station": {
-                                    "id": "8503504",
-                                    "name": "Baden",
-                                    "score": null,
-                                    "coordinate": {
-                                        "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
-                                    },
-                                    "distance": null
-                                },
-                                "arrival": "2016-12-23T15:30:00+0100",
-                                "arrivalTimestamp": 1482503400,
+                                "arrival": "2017-06-20T23:32:00+0200",
+                                "arrivalTimestamp": 1497994320,
                                 "departure": null,
                                 "departureTimestamp": null,
-                                "delay": null,
+                                "delay": 0,
                                 "platform": null,
                                 "prognosis": {
                                     "platform": null,
-                                    "arrival": null,
+                                    "arrival": "2017-06-20T23:32:00+0200",
                                     "departure": null,
                                     "capacity1st": null,
                                     "capacity2nd": null
                                 },
                                 "realtimeAvailability": null,
                                 "location": {
-                                    "id": "8503504",
-                                    "name": "Baden",
+                                    "id": "8500218",
+                                    "name": "Olten",
                                     "score": null,
                                     "coordinate": {
                                         "type": "WGS84",
-                                        "x": 47.476417,
-                                        "y": 8.307693
+                                        "x": 47.351927,
+                                        "y": 7.907693
                                     },
                                     "distance": null
                                 }
@@ -1339,10 +447,266 @@
                         },
                         "arrival": null,
                         "arrivalTimestamp": null,
-                        "departure": "2016-12-23T15:10:00+0100",
-                        "departureTimestamp": 1482502200,
-                        "delay": null,
+                        "departure": "2017-06-20T23:02:00+0200",
+                        "departureTimestamp": 1497992520,
+                        "delay": 0,
                         "platform": "31",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": "2017-06-20T23:02:00+0200",
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-20T23:32:00+0200",
+                        "arrivalTimestamp": 1497994320,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": 0,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": "2017-06-20T23:32:00+0200",
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-20T23:32:00+0200",
+                "departureTimestamp": 1497994320,
+                "delay": null,
+                "platform": "16",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-21T00:02:00+0200",
+                "arrivalTimestamp": 1497996120,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "16",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 0,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 740",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 740",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-20T23:32:00+0200",
+                                "departureTimestamp": 1497994320,
+                                "delay": null,
+                                "platform": "16",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-21T00:02:00+0200",
+                                "arrivalTimestamp": 1497996120,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": null,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-20T23:32:00+0200",
+                        "departureTimestamp": 1497994320,
+                        "delay": null,
+                        "platform": "16",
                         "prognosis": {
                             "platform": null,
                             "arrival": null,
@@ -1365,18 +729,18 @@
                     },
                     "arrival": {
                         "station": {
-                            "id": "8503504",
-                            "name": "Baden",
+                            "id": "8500218",
+                            "name": "Olten",
                             "score": null,
                             "coordinate": {
                                 "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
+                                "x": 47.351927,
+                                "y": 7.907693
                             },
                             "distance": null
                         },
-                        "arrival": "2016-12-23T15:30:00+0100",
-                        "arrivalTimestamp": 1482503400,
+                        "arrival": "2017-06-21T00:02:00+0200",
+                        "arrivalTimestamp": 1497996120,
                         "departure": null,
                         "departureTimestamp": null,
                         "delay": null,
@@ -1390,13 +754,269 @@
                         },
                         "realtimeAvailability": null,
                         "location": {
-                            "id": "8503504",
-                            "name": "Baden",
+                            "id": "8500218",
+                            "name": "Olten",
                             "score": null,
                             "coordinate": {
                                 "type": "WGS84",
-                                "x": 47.476417,
-                                "y": 8.307693
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "from": {
+                "station": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2017-06-21T00:02:00+0200",
+                "departureTimestamp": 1497996120,
+                "delay": null,
+                "platform": "14",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8503000",
+                    "name": "Z\u00fcrich HB",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.377847,
+                        "y": 8.540502
+                    },
+                    "distance": null
+                }
+            },
+            "to": {
+                "station": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                },
+                "arrival": "2017-06-21T00:32:00+0200",
+                "arrivalTimestamp": 1497997920,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "14",
+                "prognosis": {
+                    "platform": null,
+                    "arrival": null,
+                    "departure": null,
+                    "capacity1st": null,
+                    "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                    "id": "8500218",
+                    "name": "Olten",
+                    "score": null,
+                    "coordinate": {
+                        "type": "WGS84",
+                        "x": 47.351927,
+                        "y": 7.907693
+                    },
+                    "distance": null
+                }
+            },
+            "duration": "00d00:30:00",
+            "transfers": 0,
+            "service": null,
+            "products": [
+                "IC"
+            ],
+            "capacity1st": null,
+            "capacity2nd": null,
+            "sections": [
+                {
+                    "journey": {
+                        "name": "IC 842",
+                        "category": "IC",
+                        "subcategory": null,
+                        "categoryCode": null,
+                        "number": "IC 842",
+                        "operator": "SBB",
+                        "to": "Bern",
+                        "passList": [
+                            {
+                                "station": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": null,
+                                "arrivalTimestamp": null,
+                                "departure": "2017-06-21T00:02:00+0200",
+                                "departureTimestamp": 1497996120,
+                                "delay": null,
+                                "platform": "14",
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8503000",
+                                    "name": "Z\u00fcrich HB",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.377847,
+                                        "y": 8.540502
+                                    },
+                                    "distance": null
+                                }
+                            },
+                            {
+                                "station": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                },
+                                "arrival": "2017-06-21T00:32:00+0200",
+                                "arrivalTimestamp": 1497997920,
+                                "departure": null,
+                                "departureTimestamp": null,
+                                "delay": null,
+                                "platform": null,
+                                "prognosis": {
+                                    "platform": null,
+                                    "arrival": null,
+                                    "departure": null,
+                                    "capacity1st": null,
+                                    "capacity2nd": null
+                                },
+                                "realtimeAvailability": null,
+                                "location": {
+                                    "id": "8500218",
+                                    "name": "Olten",
+                                    "score": null,
+                                    "coordinate": {
+                                        "type": "WGS84",
+                                        "x": 47.351927,
+                                        "y": 7.907693
+                                    },
+                                    "distance": null
+                                }
+                            }
+                        ],
+                        "capacity1st": null,
+                        "capacity2nd": null
+                    },
+                    "walk": null,
+                    "departure": {
+                        "station": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        },
+                        "arrival": null,
+                        "arrivalTimestamp": null,
+                        "departure": "2017-06-21T00:02:00+0200",
+                        "departureTimestamp": 1497996120,
+                        "delay": null,
+                        "platform": "14",
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8503000",
+                            "name": "Z\u00fcrich HB",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.377847,
+                                "y": 8.540502
+                            },
+                            "distance": null
+                        }
+                    },
+                    "arrival": {
+                        "station": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
+                            },
+                            "distance": null
+                        },
+                        "arrival": "2017-06-21T00:32:00+0200",
+                        "arrivalTimestamp": 1497997920,
+                        "departure": null,
+                        "departureTimestamp": null,
+                        "delay": null,
+                        "platform": null,
+                        "prognosis": {
+                            "platform": null,
+                            "arrival": null,
+                            "departure": null,
+                            "capacity1st": null,
+                            "capacity2nd": null
+                        },
+                        "realtimeAvailability": null,
+                        "location": {
+                            "id": "8500218",
+                            "name": "Olten",
+                            "score": null,
+                            "coordinate": {
+                                "type": "WGS84",
+                                "x": 47.351927,
+                                "y": 7.907693
                             },
                             "distance": null
                         }
@@ -1417,13 +1037,13 @@
         "distance": null
     },
     "to": {
-        "id": "8503504",
-        "name": "Baden",
+        "id": "8500218",
+        "name": "Olten",
         "score": null,
         "coordinate": {
             "type": "WGS84",
-            "x": 47.476417,
-            "y": 8.307693
+            "x": 47.351927,
+            "y": 7.907693
         },
         "distance": null
     },
@@ -1443,13 +1063,13 @@
         ],
         "to": [
             {
-                "id": "8503504",
-                "name": "Baden",
+                "id": "8500218",
+                "name": "Olten",
                 "score": null,
                 "coordinate": {
                     "type": "WGS84",
-                    "x": 47.476417,
-                    "y": 8.307693
+                    "x": 47.351927,
+                    "y": 7.907693
                 },
                 "distance": null
             }

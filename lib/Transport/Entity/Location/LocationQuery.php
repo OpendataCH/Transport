@@ -2,6 +2,7 @@
 
 namespace Transport\Entity\Location;
 
+use Buzz\Message\Form\FormRequest;
 use Transport\Entity\Query;
 
 class LocationQuery extends Query
@@ -22,22 +23,37 @@ class LocationQuery extends Query
 
     public $type;
 
+    public $lat;
+
+    public $lon;
+
     /**
      * Finds all stations, locations and poi matching the search query.
      *
      * @param string|array $query Search query (e.g. Ber)
      * @param string       $type  Location types to return (all, station, address, poi)
      */
-    public function __construct($query, $type = null)
+    public function __construct($query, $type = null, $lat = null, $lon = null)
     {
-
-        // convert query to array
-        if (!is_array($query)) {
-            $query = [$query];
-        }
         $this->query = $query;
-
         $this->type = $type;
+        $this->lat = $lat;
+        $this->lon = $lon;
+    }
+
+    public function toFormRequest()
+    {
+        $request = new FormRequest(FormRequest::METHOD_GET, \Transport\API::URL.'completion.json');
+        $request->setField('term', $this->query);
+
+        if ($this->lat && $this->lon) {
+            $request->setField('latlon', $this->lat.','.$this->lon);
+        }
+
+        $request->setField('show_ids', '1');
+        $request->setField('show_coordinates', '1');
+
+        return $request;
     }
 
     public function toXml()

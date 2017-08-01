@@ -38,4 +38,17 @@ class Walk
 
         return $obj;
     }
+
+    public static function createFromJson($json, Walk $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        if (isset($json->normal_time)) {
+            $obj->duration = $json->normal_time;
+        }
+
+        return $obj;
+    }
 }

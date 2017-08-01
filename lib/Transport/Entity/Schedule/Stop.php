@@ -196,4 +196,58 @@ class Stop
 
         return $obj;
     }
+
+    public static function createFromJson($json, Stop $obj = null)
+    {
+        if (!$obj) {
+            $obj = new self();
+        }
+
+        $obj->station = Entity\Location\Station::createStationFromJson($json); // deprecated, use location instead
+
+        $obj->location = Entity\LocationFactory::createFromJson($json);
+
+        if (isset($json->arrival)) {
+            $arrivalDate = new \DateTime($json->arrival);
+            $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
+            $obj->arrivalTimestamp = $arrivalDate->getTimestamp();
+        }
+        if (isset($json->arr)) {
+            $arrivalDate = new \DateTime($json->arr);
+            $obj->arrival = $arrivalDate->format(\DateTime::ISO8601);
+            $obj->arrivalTimestamp = $arrivalDate->getTimestamp();
+        }
+        if (isset($json->departure)) {
+            $departureDate = new \DateTime($json->departure);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
+        }
+        if (isset($json->dep)) {
+            $departureDate = new \DateTime($json->dep);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
+        }
+        if (isset($json->time)) {
+            $departureDate = new \DateTime($json->time);
+            $obj->departure = $departureDate->format(\DateTime::ISO8601);
+            $obj->departureTimestamp = $departureDate->getTimestamp();
+        }
+
+        $obj->prognosis = Prognosis::createFromJson($json, $obj);
+
+        if ($obj->prognosis) {
+            if ($obj->prognosis->arrival && $obj->arrival) {
+                $obj->delay = (strtotime($obj->prognosis->arrival) - strtotime($obj->arrival)) / 60;
+            }
+            if ($obj->prognosis->departure && $obj->departure) {
+                $obj->delay = (strtotime($obj->prognosis->departure) - strtotime($obj->departure)) / 60;
+            }
+        }
+
+        if (isset($json->track)) {
+            $obj->platform = $json->track;
+        }
+
+        return $obj;
+    }
 }
