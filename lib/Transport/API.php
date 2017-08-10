@@ -114,7 +114,9 @@ class API
             }
         }
 
-        $connections = array_slice($connections, $query->page * $query->limit, $query->limit);
+        $max = 16 - $query->limit;
+        $min = 0;
+        $connections = array_slice($connections, min(max($query->page * $query->limit, $min), $max), $query->limit);
 
         $from = null;
         $to = null;
