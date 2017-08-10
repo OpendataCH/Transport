@@ -1,5 +1,13 @@
 # Changelog
 
+## 2017-08-10
+
+- #158 Implement negative pagination
+
+## 2017-08-02
+
+- Switch to rate limit of timetable.search.ch
+
 ## 2017-07-31
 
 - Switch to timetable.search.ch as backend
