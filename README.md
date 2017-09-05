@@ -41,3 +41,15 @@ You can get some basic statistics for the API by configuring a Redis server in y
 ## Development
 
 XSD for the XML Fahrplan API is available here: [hafasXMLInterface.xsd](hafasXMLInterface.xsd)
+
+## Troubleshooting
+
+### Missing package php-xml
+
+If you're running Ubuntu and `composer install` produces the error message
+
+    Your requirements could not be resolved to an installable set of packages.
+
+you can try to install the package `php-xml` using the command
+
+    sudo apt install php-xml
