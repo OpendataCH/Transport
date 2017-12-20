@@ -144,7 +144,7 @@ class Stop
         return $date;
     }
 
-    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Stop $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -197,7 +197,7 @@ class Stop
         return $obj;
     }
 
-    public static function createFromJson($json, Stop $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

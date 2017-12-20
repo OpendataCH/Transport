@@ -137,6 +137,7 @@ class Application extends \Silex\Application
 
         // Redis
         $redis = null;
+
         try {
             if ($app['redis.config']) {
                 $redis = new \Predis\Client($app['redis.config']);

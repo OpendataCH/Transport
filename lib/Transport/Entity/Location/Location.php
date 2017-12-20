@@ -49,7 +49,7 @@ abstract class Location
      *
      * @return Location The created instance
      */
-    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, self $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');
@@ -74,7 +74,7 @@ abstract class Location
      *
      * @return Location The created instance
      */
-    public static function createFromJson($json, Location $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');

@@ -87,7 +87,7 @@ class Journey
      */
     public $capacity2nd = null;
 
-    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Journey $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -161,7 +161,7 @@ class Journey
         return $obj;
     }
 
-    public static function createFromJson($json, Journey $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

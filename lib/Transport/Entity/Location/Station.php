@@ -44,7 +44,7 @@ class Station extends Location
         return $xml;
     }
 
-    public static function createStationFromXml(\SimpleXMLElement $xml, Station $obj = null)
+    public static function createStationFromXml(\SimpleXMLElement $xml, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -59,7 +59,7 @@ class Station extends Location
     /**
      * @param object $json The item JSON
      */
-    public static function createStationFromJson($json, Station $obj = null)
+    public static function createStationFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
