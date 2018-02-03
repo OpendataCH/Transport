@@ -81,7 +81,7 @@ class Connection
      */
     public $sections;
 
-    public static function createFromXml(\SimpleXMLElement $xml, Connection $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -141,7 +141,7 @@ class Connection
         return $obj;
     }
 
-    public static function createFromJson($json, Connection $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

@@ -43,7 +43,7 @@ class Section
      */
     public $arrival;
 
-    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, Section $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -63,7 +63,7 @@ class Section
         return $obj;
     }
 
-    public static function createFromJson($json, Section $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

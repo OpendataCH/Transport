@@ -45,11 +45,11 @@ abstract class Location
      * Factory method to create an instance and extract the data from the given xml.
      *
      * @param \SimpleXMLElement $xml The item xml
-     * @param Location          $obj An object or null to create it
+     * @param self              $obj An object or null to create it
      *
-     * @return Location The created instance
+     * @return self The created instance
      */
-    public static function createFromXml(\SimpleXMLElement $xml, Location $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, self $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');
@@ -69,12 +69,12 @@ abstract class Location
     /**
      * Factory method to create an instance and extract the data from the given JSON object.
      *
-     * @param object   $json The item JSON
-     * @param Location $obj  An object or null to create it
+     * @param object $json The item JSON
+     * @param self   $obj  An object or null to create it
      *
      * @return Location The created instance
      */
-    public static function createFromJson($json, Location $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!is_object($obj)) {
             throw new \InvalidArgumentException('Argument must be an object');

@@ -28,7 +28,7 @@ class Walk
     /**
      * @param \DateTime $date
      */
-    public static function createFromXml(\SimpleXMLElement $xml, $date, Walk $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, $date, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -39,7 +39,7 @@ class Walk
         return $obj;
     }
 
-    public static function createFromJson($json, Walk $obj = null)
+    public static function createFromJson($json, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

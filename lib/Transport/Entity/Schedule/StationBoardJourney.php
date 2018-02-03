@@ -22,7 +22,7 @@ class StationBoardJourney extends Journey
      *
      * @return StationBoardJourney
      */
-    public static function createStationBoardFromXml(\SimpleXMLElement $xml, \DateTime $date, StationBoardJourney $obj = null)
+    public static function createStationBoardFromXml(\SimpleXMLElement $xml, \DateTime $date, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

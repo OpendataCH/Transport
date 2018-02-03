@@ -49,7 +49,7 @@ class Prognosis
      */
     public $capacity2nd;
 
-    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, $isArrival, Prognosis $obj = null)
+    public static function createFromXml(\SimpleXMLElement $xml, \DateTime $date, $isArrival, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();
@@ -93,7 +93,7 @@ class Prognosis
         return $obj;
     }
 
-    public static function createFromJson($json, $stop, Prognosis $obj = null)
+    public static function createFromJson($json, $stop, self $obj = null)
     {
         if (!$obj) {
             $obj = new self();

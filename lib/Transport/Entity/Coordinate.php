@@ -111,7 +111,7 @@ class Coordinate
     public static function setHAFAScoordinates($coordinate, $x, $y)
     {
         if ($y > $x) { // HAFAS bug, returns inverted lat/long
-          $coordinate->x = $y;
+            $coordinate->x = $y;
             $coordinate->y = $x;
         } else {
             $coordinate->x = $x;
