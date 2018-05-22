@@ -1,5 +1,10 @@
 # Changelog
 
+## 2018-05-22
+
+- #164 Restore support for transportations in connection queries
+- Increase connections limit to 16
+
 ## 2017-08-10
 
 - #158 Implement negative pagination
