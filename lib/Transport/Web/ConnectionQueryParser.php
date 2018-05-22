@@ -84,8 +84,8 @@ class ConnectionQueryParser
     {
         $errors = [];
 
-        if ($query->limit > 6) {
-            $errors[] = 'Maximal value of argument `limit` is 6.';
+        if ($query->limit > 16) {
+            $errors[] = 'Maximal value of argument `limit` is 16.';
         }
         if ($query->page > 10) {
             $errors[] = 'Maximal value of argument `page` is 10.';
