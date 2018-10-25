@@ -1,5 +1,9 @@
 # Changelog
 
+## 2018-10-25
+
+- #182 Restore support for transportations in stationboard
+
 ## 2018-05-22
 
 - #164 Restore support for transportations in connection queries
