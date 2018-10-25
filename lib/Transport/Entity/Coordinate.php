@@ -128,7 +128,7 @@ class Coordinate
 
     public static function intToFloat($int)
     {
-        return $int / 1000000;
+        return ((int) $int) / 1000000;
     }
 
     /**
