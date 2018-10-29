@@ -238,12 +238,6 @@ class Application extends \Silex\Application
          *         description="Only with `query` parameter. Specifies the location type, possible types are:<ul><li>`all` (default): Looks up for all types of locations</li><li>`station`: Looks up for stations (train station, bus station)</li><li>`poi`: Looks up for points of interest (Clock tower, China garden)</li><li>`address`: Looks up for an address (Zurich Bahnhofstrasse 33)</li></ul>",
          *         type="string"
          *     ),
-         *     @SWG\Parameter(
-         *         name="transportations[]",
-         *         in="query",
-         *         description="Only with `x` and `y` parameter. Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
-         *         type="string"
-         *     ),
          *     @SWG\Response(
          *         response="200",
          *         description="List of locations",
@@ -325,7 +319,7 @@ class Application extends \Silex\Application
          *     @SWG\Parameter(
          *         name="transportations[]",
          *         in="query",
-         *         description="Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+         *         description="Transportation means; one or more of `train`, `tram`, `ship`, `bus`, `cableway` (e.g. transportations[]=tram&transportations[]=bus)",
          *         type="string"
          *     ),
          *     @SWG\Parameter(
@@ -477,7 +471,7 @@ class Application extends \Silex\Application
          *     @SWG\Parameter(
          *         name="transportations[]",
          *         in="query",
-         *         description="Transportation means; one or more of `ice_tgv_rj`, `ec_ic`, `ir`, `re_d`, `ship`, `s_sn_r`, `bus`, `cableway`, `arz_ext`, `tramway_underground` (e.g. transportations[]=ec_ic&transportations[]=bus)",
+         *         description="Transportation means; one or more of `train`, `tram`, `ship`, `bus`, `cableway` (e.g. transportations[]=tram&transportations[]=bus)",
          *         type="string"
          *     ),
          *     @SWG\Parameter(
