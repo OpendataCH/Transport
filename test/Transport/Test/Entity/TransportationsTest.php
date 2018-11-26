@@ -54,4 +54,18 @@ class TransportationsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(1023, Transportations::reduceTransportationsDec($transportations, 10));
     }
+
+    public function testTransformDeprecatedTypes()
+    {
+        $transportations = ['ice_tgv_rj'];
+
+        $this->assertSame(['train'], Transportations::transformDeprecatedTypes($transportations));
+    }
+
+    public function testTransformDeprecatedTypesTrainBus()
+    {
+        $transportations = ['ice_tgv_rj','bus','ec_ic'];
+
+        $this->assertSame(['train','bus'], Transportations::transformDeprecatedTypes($transportations));
+    }
 }
