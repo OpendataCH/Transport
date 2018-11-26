@@ -77,11 +77,10 @@ class Transportations
         return $dec;
     }
 
-
     /**
      * Converts old transportations types into new generic types.
      *
-     * @param array    $transportations A list of transportations
+     * @param array $transportations A list of transportations
      *
      * @return array A list of transportations where old types have been replaced by new types
      */
