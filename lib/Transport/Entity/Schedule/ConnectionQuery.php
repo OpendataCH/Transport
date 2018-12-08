@@ -78,7 +78,7 @@ class ConnectionQuery extends Query
         $request->setField('show_delays', '1');
 
         if (count($this->transportations) > 0 && $this->transportations[0] != 'all') {
-            $request->setField('transportation_types', implode(',', $this->transportations));
+            $request->setField('transportation_types', implode(',', Transportations::transformDeprecatedTypes($this->transportations)));
         }
 
         return $request;

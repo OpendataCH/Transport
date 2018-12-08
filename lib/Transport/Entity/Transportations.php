@@ -23,6 +23,23 @@ class Transportations
         'groups'              => 32768, // 2^15
     ];
 
+    private static $deprecatedTransportations = [
+        'ice_tgv_rj'          => 'train',
+        'ec_ic'               => 'train',
+        'ir'                  => 'train',
+        're_d'                => 'train',
+        'ship'                => 'ship',
+        's_sn_r'              => 'train',
+        'bus'                 => 'bus',
+        'cableway'            => 'cableway',
+        'arz_ext'             => 'train',
+        'tramway_underground' => 'tram',
+        'tramway'             => 'tram',
+        'direct'              => 'train',
+        'direct_sleeper'      => 'train',
+        'direct_couchette'    => 'train',
+    ];
+
     /**
      * Converts a list of transportation strings into a bitmask accepted by the SBB.
      *
@@ -58,5 +75,26 @@ class Transportations
         }
 
         return $dec;
+    }
+
+    /**
+     * Converts old transportations types into new generic types.
+     *
+     * @param array $transportations A list of transportations
+     *
+     * @return array A list of transportations where old types have been replaced by new types
+     */
+    public static function transformDeprecatedTypes($transportations = [])
+    {
+        foreach (self::$deprecatedTransportations as $oldTrsp => $newTrsp) {
+            $transportations = array_replace($transportations,
+                array_fill_keys(
+                    array_keys($transportations, $oldTrsp),
+                    $newTrsp
+                )
+            );
+        }
+
+        return array_unique($transportations);
     }
 }
