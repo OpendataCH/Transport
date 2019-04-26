@@ -12,6 +12,18 @@ namespace Transport\Entity\Location;
 class Station extends Location
 {
     /**
+     * Mapping between transportation types and 
+     * icon class (field in completion response)
+     */
+    private static $transportationTypes = [
+        'sl-icon-type-train'        => ['train'],
+        'sl-icon-type-tram'         => ['tram'],
+        'sl-icon-type-funicular'    => ['cableway'],
+        'sl-icon-type-bus'          => ['bus'],
+        'sl-icon-type-ship'         => ['ship']
+    ];
+
+    /**
      * The ID of the station.
      *
      * @var string
@@ -76,6 +88,10 @@ class Station extends Location
 
         if (isset($json->terminal->id)) {
             $obj->id = $json->terminal->id;
+        }
+
+        if (isset($json->iconclass)) {
+            $obj->transportation_types = array_key_exists($json->iconclass, self::$transportationTypes) ? self::$transportationTypes[$json->iconclass] : [];
         }
 
         return $obj;
