@@ -1,5 +1,9 @@
 # Changelog
 
+## 2018-12-08
+
+- #193 Restore support for old transportations values
+
 ## 2018-10-25
 
 - #182 Restore support for transportations in stationboard
