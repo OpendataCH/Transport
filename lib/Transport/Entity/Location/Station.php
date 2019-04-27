@@ -13,14 +13,14 @@ class Station extends Location
 {
     /**
      * Mapping between search.ch icon class and
-     * more generic icon types
+     * more generic icon types.
      */
     private static $icons = [
         'sl-icon-type-train'        => 'train',
         'sl-icon-type-tram'         => 'tram',
         'sl-icon-type-funicular'    => 'cableway',
         'sl-icon-type-bus'          => 'bus',
-        'sl-icon-type-ship'         => 'ship'
+        'sl-icon-type-ship'         => 'ship',
     ];
 
     /**
