@@ -10,7 +10,7 @@
                 "y": 7.439123
             },
             "distance": null,
-            "transportation_types": []
+            "icon": null
         },
         {
             "id": "8576646",
@@ -22,9 +22,7 @@
                 "y": 7.440213
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8576193",
@@ -36,9 +34,7 @@
                 "y": 8.545112
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8579896",
@@ -50,9 +46,7 @@
                 "y": 7.437783
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8507110",
@@ -64,9 +58,7 @@
                 "y": 7.447504
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8516161",
@@ -78,7 +70,7 @@
                 "y": 7.465469
             },
             "distance": null,
-            "transportation_types": []
+            "icon": null
         },
         {
             "id": "8505213",
@@ -90,7 +82,7 @@
                 "y": 9.029509
             },
             "distance": null,
-            "transportation_types": []
+            "icon": null
         },
         {
             "id": "8587387",
@@ -102,9 +94,7 @@
                 "y": 6.143032
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8588989",
@@ -116,9 +106,7 @@
                 "y": 7.442867
             },
             "distance": null,
-            "transportation_types": [
-                "tram"
-            ]
+            "icon": "tram"
         },
         {
             "id": "8591988",
@@ -130,9 +118,7 @@
                 "y": 6.62907
             },
             "distance": null,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         }
     ]
 }

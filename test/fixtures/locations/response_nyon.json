@@ -10,7 +10,7 @@
                 "y": null
             },
             "distance": 2,
-            "transportation_types": []
+            "icon": null
         },
         {
             "id": "8593897",
@@ -22,9 +22,7 @@
                 "y": 6.23873
             },
             "distance": 2,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8593883",
@@ -36,9 +34,7 @@
                 "y": 6.24023
             },
             "distance": 199,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8588672",
@@ -50,9 +46,7 @@
                 "y": 6.241451
             },
             "distance": 317,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8570008",
@@ -64,9 +58,7 @@
                 "y": 6.23813
             },
             "distance": 334,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8593890",
@@ -78,9 +70,7 @@
                 "y": 6.241065
             },
             "distance": 410,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8570000",
@@ -92,9 +82,7 @@
                 "y": 6.236811
             },
             "distance": 449,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8593886",
@@ -106,9 +94,7 @@
                 "y": 6.23507
             },
             "distance": 451,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8593878",
@@ -120,9 +106,7 @@
                 "y": 6.237293
             },
             "distance": 501,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         },
         {
             "id": "8593881",
@@ -134,9 +118,7 @@
                 "y": 6.233851
             },
             "distance": 504,
-            "transportation_types": [
-                "bus"
-            ]
+            "icon": "bus"
         }
     ]
 }
