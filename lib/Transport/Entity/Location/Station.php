@@ -12,6 +12,18 @@ namespace Transport\Entity\Location;
 class Station extends Location
 {
     /**
+     * Mapping between search.ch icon class and
+     * more generic icon types
+     */
+    private static $icons = [
+        'sl-icon-type-train'        => 'train',
+        'sl-icon-type-tram'         => 'tram',
+        'sl-icon-type-funicular'    => 'cableway',
+        'sl-icon-type-bus'          => 'bus',
+        'sl-icon-type-ship'         => 'ship'
+    ];
+
+    /**
      * The ID of the station.
      *
      * @var string
@@ -76,6 +88,10 @@ class Station extends Location
 
         if (isset($json->terminal->id)) {
             $obj->id = $json->terminal->id;
+        }
+
+        if (isset($json->iconclass)) {
+            $obj->icon = array_key_exists($json->iconclass, self::$icons) ? self::$icons[$json->iconclass] : null;
         }
 
         return $obj;
