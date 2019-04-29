@@ -71,9 +71,7 @@ class ConnectionQuery extends Query
         if ($this->page >= 0) {
             $request->setField('num', ($this->page + 1) * $this->limit);
         } else {
-            // in case of arrival, shift by 1 page because "pre" and "num" overlap by this much
-            $shift = $this->isArrivalTime ? 1 : 0;
-            $request->setField('pre', (abs($this->page) + $shift) * $this->limit);
+            $request->setField('pre', abs($this->page) * $this->limit);
         }
         $request->setField('show_delays', '1');
 
