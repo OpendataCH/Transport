@@ -68,11 +68,21 @@ class ConnectionQuery extends Query
         $request->setField('date', date('Y-m-d', strtotime($this->date)));
         $request->setField('time', date('H:i', strtotime($this->time)));
         $request->setField('time_type', $this->isArrivalTime ? 'arrival' : 'departure');
-        if ($this->page >= 0) {
-            $request->setField('num', ($this->page + 1) * $this->limit);
-        } else {
-            $request->setField('pre', abs($this->page) * $this->limit);
+
+        $page = $this->page;
+        $limit = $this->limit;
+
+        if ($this->isArrivalTime) {
+            // offset page by one for arrival time
+            $page = $page - 1;
         }
+
+        if ($page >= 0) {
+            $request->setField('num', ($page + 1) * $limit);
+        } else {
+            $request->setField('pre', abs($page) * $limit);
+        }
+
         $request->setField('show_delays', '1');
 
         if (count($this->transportations) > 0 && $this->transportations[0] != 'all') {

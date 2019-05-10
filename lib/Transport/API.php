@@ -116,7 +116,12 @@ class API
 
         $max = 16 - $query->limit;
         $min = 0;
-        $connections = array_slice($connections, min(max($query->page * $query->limit, $min), $max), $query->limit);
+        $page = $query->page;
+        if ($query->isArrivalTime) {
+            // offset page by one for arrival time
+            $page = $page - 1;
+        }
+        $connections = array_slice($connections, min(max($page * $query->limit, $min), $max), $query->limit);
 
         $from = null;
         $to = null;
