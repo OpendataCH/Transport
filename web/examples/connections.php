@@ -14,7 +14,7 @@ function fetch($url)
 {
     $data = file_get_contents($url);
     if ($data === false) {
-        exit($http_response_header[0]);
+        exit('Error from API: ' . $http_response_header[0]);
     }
 
     return $data;
