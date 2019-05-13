@@ -10,6 +10,14 @@ $c = isset($_GET['c']) ? (int) $_GET['c'] : false;
 $stationsFrom = [];
 $stationsTo = [];
 
+function fetch($url) {
+    $data = file_get_contents($url);
+    if ($data === false) {
+        throw new \Exception($http_response_header[0]);
+    }
+    return $data;
+}
+
 $search = $from && $to;
 if ($search) {
     $query = [
@@ -30,7 +38,7 @@ if ($search) {
 
     $url = 'http://transport.opendata.ch/v1/connections?'.http_build_query($query);
     $url = filter_var($url, FILTER_VALIDATE_URL);
-    $response = json_decode(file_get_contents($url));
+    $response = json_decode(fetch($url));
 
     if ($response->from) {
         $from = $response->from->name;
