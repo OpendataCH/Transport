@@ -10,11 +10,13 @@ $c = isset($_GET['c']) ? (int) $_GET['c'] : false;
 $stationsFrom = [];
 $stationsTo = [];
 
-function fetch($url) {
+function fetch($url)
+{
     $data = file_get_contents($url);
     if ($data === false) {
         throw new \Exception($http_response_header[0]);
     }
+
     return $data;
 }
 
