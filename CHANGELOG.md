@@ -1,5 +1,9 @@
 # Changelog
 
+## 2019-05-13
+
+- #199 Adjustments to pagination for timetable.search.ch
+
 ## 2018-12-08
 
 - #193 Restore support for old transportations values
