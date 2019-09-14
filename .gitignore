@@ -2,3 +2,4 @@
 /var/cache/
 /var/logs/
 /vendor/
+/id_rsa
