@@ -1,5 +1,5 @@
 {
-    "name": "OpendataCH/Transport",
+    "name": "opendatach/transport",
     "description": "Swiss public transport API",
     "homepage": "http://transport.opendata.ch/",
     "license": "MIT",
