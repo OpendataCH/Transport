@@ -162,7 +162,7 @@ class Connection
                 $numberOfVehicles++;
             }
         }
-        $obj->transfers = $numberOfVehicles - 1;
+        $obj->transfers = max($numberOfVehicles - 1, 0);
 
         if (isset($json->legs)) {
             foreach ($json->legs as $leg) {
