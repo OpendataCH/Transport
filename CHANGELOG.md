@@ -1,5 +1,10 @@
 # Changelog
 
+## 2020-04-16
+
+- #205 Fix for negative transfers
+- Fix Connection service and products documentation
+
 ## 2019-05-13
 
 - #199 Adjustments to pagination for timetable.search.ch
