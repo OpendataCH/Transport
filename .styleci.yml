@@ -1,4 +1,4 @@
 preset: recommended
 
 disabled:
-  - phpdoc_to_comment
+  - no_alternative_syntax
