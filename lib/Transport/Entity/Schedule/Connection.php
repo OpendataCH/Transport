@@ -36,15 +36,13 @@ class Connection
     public $duration;
 
     /**
-     * Service information about how regular the connection operates.
-     *
      * @var int
      * @SWG\Property()
      */
     public $transfers;
 
     /**
-     * List of transport products (e.g. IR, S9).
+     * Service information about how regular the connection operates.
      *
      * @var \Transport\Entity\Schedule\Service
      * @SWG\Property()
@@ -52,6 +50,8 @@ class Connection
     public $service;
 
     /**
+     * List of transport products (e.g. IR, S9).
+     *
      * @var string[]
      * @SWG\Property()
      */

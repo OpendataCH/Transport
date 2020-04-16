@@ -387,14 +387,14 @@
                     "type": "string"
                 },
                 "transfers": {
-                    "description": "Service information about how regular the connection operates.",
                     "type": "integer"
                 },
                 "service": {
-                    "description": "List of transport products (e.g. IR, S9).",
+                    "description": "Service information about how regular the connection operates.",
                     "$ref": "#/definitions/Service"
                 },
                 "products": {
+                    "description": "List of transport products (e.g. IR, S9).",
                     "type": "array",
                     "items": {
                         "type": "string"
