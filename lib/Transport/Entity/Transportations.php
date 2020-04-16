@@ -87,7 +87,8 @@ class Transportations
     public static function transformDeprecatedTypes($transportations = [])
     {
         foreach (self::$deprecatedTransportations as $oldTrsp => $newTrsp) {
-            $transportations = array_replace($transportations,
+            $transportations = array_replace(
+                $transportations,
                 array_fill_keys(
                     array_keys($transportations, $oldTrsp),
                     $newTrsp
