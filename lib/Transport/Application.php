@@ -189,7 +189,7 @@ class Application extends \Silex\Application
         });
 
         // home
-        $app->get('/', function () use ($app) {
+        $app->get('/', function () {
             return file_get_contents('index.html');
         })->bind('home');
 
@@ -549,7 +549,7 @@ class Application extends \Silex\Application
         })->bind('stationboard');
 
         // Swagger
-        $app->get('/swagger.json', function () use ($app) {
+        $app->get('/swagger.json', function () {
             $swagger = \Swagger\scan(__DIR__);
 
             return new Response($swagger, 200, ['Content-Type' => 'application/json']);
