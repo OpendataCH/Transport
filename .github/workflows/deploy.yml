@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ $default-branch ]
+    branches: [ master ]
 
 env:
   SSH_USER: www-data
