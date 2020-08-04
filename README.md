@@ -2,7 +2,7 @@
 
 # Transport API
 
-![Build](https://github.com/OpendataCH/Transport/workflows/Build/badge.svg)
+[![Build](https://github.com/OpendataCH/Transport/workflows/Build/badge.svg)](https://github.com/OpendataCH/Transport/actions)
 
 The Transport API allows interested developers to build their own applications using public timetable data, whether they're on the web, the desktop or mobile devices.
 
