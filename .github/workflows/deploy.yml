@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ $default-branch ]
+
+env:
+  SSH_USER: www-data
+  SSH_HOST: opendata02.nine.ch
+  SSH_HOST_KEY: opendata02.nine.ch ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1U2mdLkqfY5hzBOEvyiFVIif1wXAXOGMHlHhWquH2gYgxalKBOSmQrOXzks8fF7mdW8AR45Z2SbFeSxDZcKWvoIJz1C1Vr48Kt1HDtSq1ZC8w701diK688ErsuqzzBzO8iLycC0dFmFX3tndSAmvKK/8V/AJkhwxjYCW1zZ2PQRlpQK1zue5V/gJn0XWsaTZtAitz7UdenEwBeaPBM+jo3yw7xABdv6tLD/DaSIHU9Sw54OYoJfax+EUx02X9iMQawouQ6kKKhfdDeYqeaRBwCWyotTufQ3ZIpnwiAf0FOFjKn5DMrnQIAE0kTmByDFgjJewp28dAJpW1GHcf4FiR
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    name: Deployment
+
+    steps:
+
+    - name: Deploy
+      run: |
+        eval $(ssh-agent -s)
+        mkdir -p ~/.ssh
+        echo "${{ env.SSH_HOST_KEY }}" >> ~/.ssh/known_hosts
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
+        ssh -o ForwardAgent=yes ${{ env.SSH_USER }}@${{ env.SSH_HOST }} <<END
+          cd /home/www-data/transport.opendata.ch &&
+          git pull --rebase --stat &&
+          /home/www-data/bin/composer install --no-dev --no-interaction --no-progress --optimize-autoloader
+        END
