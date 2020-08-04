@@ -2,7 +2,7 @@
 
 # Transport API
 
-[![Build Status](https://secure.travis-ci.org/OpendataCH/Transport.png?branch=master)](http://travis-ci.org/OpendataCH/Transport)
+![Build](https://github.com/OpendataCH/Transport/workflows/Build/badge.svg)
 
 The Transport API allows interested developers to build their own applications using public timetable data, whether they're on the web, the desktop or mobile devices.
 
