@@ -167,6 +167,10 @@ class Journey
             $obj = new self();
         }
 
+        if (isset($json->number)) {
+            $obj->name = $json->number;
+            $obj->number = $json->number;
+        }
         if (isset($json->{'*Z'})) {
             $obj->name = $json->{'*Z'};
             $obj->number = $json->{'*Z'};
