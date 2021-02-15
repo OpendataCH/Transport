@@ -420,11 +420,11 @@
         "Journey": {
             "properties": {
                 "name": {
-                    "description": "The name of the connection (e.g. ICN 518).",
+                    "description": "The name of the connection (e.g. 019351).",
                     "type": "string"
                 },
                 "category": {
-                    "description": "The type of connection this is (e.g. ICN).",
+                    "description": "The type of connection this is (e.g. S).",
                     "type": "string"
                 },
                 "subcategory": {
@@ -435,7 +435,7 @@
                     "type": "integer"
                 },
                 "number": {
-                    "description": "The number of the connection's line (e.g. 518).",
+                    "description": "The number of the connection's line (e.g. 13).",
                     "type": "string"
                 },
                 "operator": {
@@ -525,11 +525,11 @@
                     "$ref": "#/definitions/Stop"
                 },
                 "name": {
-                    "description": "The name of the connection (e.g. ICN 518).",
+                    "description": "The name of the connection (e.g. 019351).",
                     "type": "string"
                 },
                 "category": {
-                    "description": "The type of connection this is (e.g. ICN).",
+                    "description": "The type of connection this is (e.g. S).",
                     "type": "string"
                 },
                 "subcategory": {
@@ -540,7 +540,7 @@
                     "type": "integer"
                 },
                 "number": {
-                    "description": "The number of the connection's line (e.g. 518).",
+                    "description": "The number of the connection's line (e.g. 13).",
                     "type": "string"
                 },
                 "operator": {
