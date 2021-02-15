@@ -1,5 +1,9 @@
 # Changelog
 
+## 2021-02-15
+
+- #210 Restore train name/numer
+
 ## 2020-04-16
 
 - #205 Fix for negative transfers
