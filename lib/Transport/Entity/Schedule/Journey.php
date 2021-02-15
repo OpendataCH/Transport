@@ -10,7 +10,7 @@ namespace Transport\Entity\Schedule;
 class Journey
 {
     /**
-     * The name of the connection (e.g. ICN 518).
+     * The name of the connection (e.g. 019351).
      *
      * @var string
      * @SWG\Property()
@@ -18,7 +18,7 @@ class Journey
     public $name;
 
     /**
-     * The type of connection this is (e.g. ICN).
+     * The type of connection this is (e.g. S).
      *
      * @var string
      * @SWG\Property()
@@ -40,7 +40,7 @@ class Journey
     public $categoryCode;
 
     /**
-     * The number of the connection's line (e.g. 518).
+     * The number of the connection's line (e.g. 13).
      *
      * @var string
      * @SWG\Property()
@@ -170,6 +170,10 @@ class Journey
         if (isset($json->number)) {
             $obj->name = $json->number;
             $obj->number = $json->number;
+        }
+        if (isset($json->{'*Z'})) {
+            $obj->name = $json->{'*Z'};
+            $obj->number = $json->{'*Z'};
         }
         if (isset($json->{'*L'})) {
             $obj->number = $json->{'*L'};
