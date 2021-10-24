@@ -11,6 +11,7 @@ class ConnectionsTest extends IntegrationTest
         return [
             [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2016-12-23', 'time' => '14:30:00'], 'searchch_response_2016-12-23.json', 'response_2016-12-23.json'],
             [['from' => 'Zürich HB', 'to' => 'Olten', 'date' => '2017-06-20', 'time' => '22:30:00'], 'searchch_response_2017-06-20.json', 'response_2017-06-20.json'],
+            [['from' => 'Zürich', 'to' => 'Bern', 'date' => '2021-11-01', 'time' => '14:30:00'], 'searchch_response_2021-11-01.json', 'response_2021-11-01.json'],
         ];
     }
 

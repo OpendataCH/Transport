@@ -1,0 +1,404 @@
+{
+    "count": 4,
+    "min_duration": 900,
+    "rawtime": 900,
+    "max_duration": 1680,
+    "maxtime": 1680,
+    "connections": [
+        {
+            "from": "Z\u00fcrich HB",
+            "departure": "2021-11-01 14:44:00",
+            "to": "Baden",
+            "arrival": "2021-11-01 15:12:00",
+            "duration": 1680,
+            "legs": [
+                {
+                    "departure": "2021-11-01 14:44:00",
+                    "tripid": "T2021_019254_000011_101_f650179_0",
+                    "stopid": "8503000",
+                    "x": 683212,
+                    "y": 248030,
+                    "name": "Z\u00fcrich HB",
+                    "sbb_name": "Z\u00fcrich HB",
+                    "type": "strain",
+                    "line": "S12",
+                    "terminal": "Brugg AG",
+                    "fgcolor": "fff",
+                    "bgcolor": "039",
+                    "*G": "S",
+                    "*L": "12",
+                    "*Z": "019254",
+                    "operator": "SBB",
+                    "stops": [
+                        {
+                            "arrival": "2021-11-01 14:46:00",
+                            "departure": "2021-11-01 14:46:00",
+                            "name": "Z\u00fcrich Hardbr\u00fccke",
+                            "stopid": "8503020",
+                            "x": 681478,
+                            "y": 248811,
+                            "lon": 8.517686,
+                            "lat": 47.385087
+                        },
+                        {
+                            "arrival": "2021-11-01 14:50:00",
+                            "departure": "2021-11-01 14:50:00",
+                            "name": "Z\u00fcrich Altstetten",
+                            "stopid": "8503001",
+                            "x": 679300,
+                            "y": 249492,
+                            "lon": 8.488966,
+                            "lat": 47.391478
+                        },
+                        {
+                            "arrival": "2021-11-01 14:53:00",
+                            "departure": "2021-11-01 14:53:00",
+                            "name": "Schlieren",
+                            "stopid": "8503509",
+                            "x": 676139,
+                            "y": 250306,
+                            "lon": 8.447241,
+                            "lat": 47.399171
+                        },
+                        {
+                            "arrival": "2021-11-01 14:56:00",
+                            "departure": "2021-11-01 14:56:00",
+                            "name": "Glanzenberg",
+                            "stopid": "8503512",
+                            "x": 674117,
+                            "y": 250247,
+                            "lon": 8.420449,
+                            "lat": 47.398871
+                        },
+                        {
+                            "arrival": "2021-11-01 14:59:00",
+                            "departure": "2021-11-01 15:00:00",
+                            "name": "Dietikon",
+                            "stopid": "8503508",
+                            "x": 672941,
+                            "y": 251001,
+                            "lon": 8.404995,
+                            "lat": 47.405783
+                        },
+                        {
+                            "arrival": "2021-11-01 15:03:00",
+                            "departure": "2021-11-01 15:03:00",
+                            "name": "Killwangen-Spreitenbach",
+                            "stopid": "8503506",
+                            "x": 669073,
+                            "y": 254017,
+                            "lon": 8.354221,
+                            "lat": 47.433325
+                        },
+                        {
+                            "arrival": "2021-11-01 15:06:00",
+                            "departure": "2021-11-01 15:06:00",
+                            "name": "Neuenhof",
+                            "stopid": "8503511",
+                            "x": 667319,
+                            "y": 255924,
+                            "lon": 8.33126,
+                            "lat": 47.450657
+                        },
+                        {
+                            "arrival": "2021-11-01 15:09:00",
+                            "departure": "2021-11-01 15:10:00",
+                            "name": "Wettingen",
+                            "stopid": "8503505",
+                            "x": 666158,
+                            "y": 256909,
+                            "lon": 8.316013,
+                            "lat": 47.459634
+                        }
+                    ],
+                    "runningtime": 1680,
+                    "exit": {
+                        "arrival": "2021-11-01 15:12:00",
+                        "stopid": "8503504",
+                        "x": 665511,
+                        "y": 258768,
+                        "name": "Baden",
+                        "sbb_name": "Baden",
+                        "track": "3",
+                        "lon": 8.307706,
+                        "lat": 47.476417
+                    },
+                    "track": "41\/42",
+                    "attributes": {
+                        "1_1.1_OM": "Maskenpflicht f\u00fcr Reisende ab 12 Jahren"
+                    },
+                    "type_name": "S-Bahn",
+                    "lon": 8.540502,
+                    "lat": 47.377847
+                },
+                {
+                    "arrival": "2021-11-01 15:12:00",
+                    "stopid": "8503504",
+                    "x": 665511,
+                    "y": 258768,
+                    "name": "Baden",
+                    "sbb_name": "Baden",
+                    "normal_time": 0,
+                    "stops": null,
+                    "lon": 8.307706,
+                    "lat": 47.476417
+                }
+            ]
+        },
+        {
+            "from": "Z\u00fcrich HB",
+            "departure": "2021-11-01 15:06:00",
+            "to": "Baden",
+            "arrival": "2021-11-01 15:21:00",
+            "duration": 900,
+            "legs": [
+                {
+                    "departure": "2021-11-01 15:06:00",
+                    "tripid": "T2021_002176_000011_101_89eed1e_0",
+                    "stopid": "8503000",
+                    "x": 683212,
+                    "y": 248030,
+                    "name": "Z\u00fcrich HB",
+                    "sbb_name": "Z\u00fcrich HB",
+                    "type": "express_train",
+                    "line": "IR 16",
+                    "terminal": "Bern",
+                    "fgcolor": "fff",
+                    "bgcolor": "f00",
+                    "*G": "IR",
+                    "*L": "16",
+                    "*Z": "002176",
+                    "operator": "SBB",
+                    "stops": [],
+                    "runningtime": 900,
+                    "exit": {
+                        "arrival": "2021-11-01 15:21:00",
+                        "stopid": "8503504",
+                        "x": 665511,
+                        "y": 258768,
+                        "name": "Baden",
+                        "sbb_name": "Baden",
+                        "track": "3",
+                        "lon": 8.307706,
+                        "lat": 47.476417
+                    },
+                    "track": "13",
+                    "attributes": {
+                        "1_1.1_OM": "Maskenpflicht f\u00fcr Reisende ab 12 Jahren",
+                        "1_4.7_FS": "Gratis-Internet mit der App SBB FreeSurf"
+                    },
+                    "type_name": "Zug",
+                    "lon": 8.540502,
+                    "lat": 47.377847
+                },
+                {
+                    "arrival": "2021-11-01 15:21:00",
+                    "stopid": "8503504",
+                    "x": 665511,
+                    "y": 258768,
+                    "name": "Baden",
+                    "sbb_name": "Baden",
+                    "normal_time": 0,
+                    "stops": null,
+                    "lon": 8.307706,
+                    "lat": 47.476417
+                }
+            ]
+        },
+        {
+            "from": "Z\u00fcrich HB",
+            "departure": "2021-11-01 15:10:00",
+            "to": "Baden",
+            "arrival": "2021-11-01 15:30:00",
+            "duration": 1200,
+            "legs": [
+                {
+                    "departure": "2021-11-01 15:10:00",
+                    "tripid": "T2021_002076_000011_101_3ae269b_0",
+                    "stopid": "8503000",
+                    "x": 683212,
+                    "y": 248030,
+                    "name": "Z\u00fcrich HB",
+                    "sbb_name": "Z\u00fcrich HB",
+                    "type": "express_train",
+                    "line": "IR 36",
+                    "terminal": "Basel SBB",
+                    "fgcolor": "fff",
+                    "bgcolor": "f00",
+                    "*G": "IR",
+                    "*L": "36",
+                    "*Z": "002076",
+                    "operator": "SBB",
+                    "stops": [
+                        {
+                            "arrival": "2021-11-01 15:15:00",
+                            "departure": "2021-11-01 15:16:00",
+                            "name": "Z\u00fcrich Altstetten",
+                            "stopid": "8503001",
+                            "x": 679300,
+                            "y": 249492,
+                            "lon": 8.488966,
+                            "lat": 47.391478
+                        },
+                        {
+                            "arrival": "2021-11-01 15:21:00",
+                            "departure": "2021-11-01 15:23:00",
+                            "name": "Dietikon",
+                            "stopid": "8503508",
+                            "x": 672941,
+                            "y": 251001,
+                            "lon": 8.404995,
+                            "lat": 47.405783
+                        }
+                    ],
+                    "runningtime": 1200,
+                    "exit": {
+                        "arrival": "2021-11-01 15:30:00",
+                        "stopid": "8503504",
+                        "x": 665511,
+                        "y": 258768,
+                        "name": "Baden",
+                        "sbb_name": "Baden",
+                        "track": "2",
+                        "lon": 8.307706,
+                        "lat": 47.476417
+                    },
+                    "track": "32",
+                    "attributes": {
+                        "1_1.1_OM": "Maskenpflicht f\u00fcr Reisende ab 12 Jahren",
+                        "1_4.7_FS": "Gratis-Internet mit der App SBB FreeSurf"
+                    },
+                    "type_name": "Zug",
+                    "lon": 8.540502,
+                    "lat": 47.377847
+                },
+                {
+                    "arrival": "2021-11-01 15:30:00",
+                    "stopid": "8503504",
+                    "x": 665511,
+                    "y": 258768,
+                    "name": "Baden",
+                    "sbb_name": "Baden",
+                    "normal_time": 0,
+                    "stops": null,
+                    "lon": 8.307706,
+                    "lat": 47.476417
+                }
+            ]
+        },
+        {
+            "from": "Z\u00fcrich HB",
+            "departure": "2021-11-01 15:11:00",
+            "to": "Baden",
+            "arrival": "2021-11-01 15:33:00",
+            "duration": 1320,
+            "legs": [
+                {
+                    "departure": "2021-11-01 15:11:00",
+                    "tripid": "T2021_019956_000011_101_8eb0d06_0",
+                    "stopid": "8503000",
+                    "x": 683212,
+                    "y": 248030,
+                    "name": "Z\u00fcrich HB",
+                    "sbb_name": "Z\u00fcrich HB",
+                    "type": "strain",
+                    "line": "S19",
+                    "terminal": "Koblenz",
+                    "fgcolor": "fff",
+                    "bgcolor": "039",
+                    "*G": "S",
+                    "*L": "19",
+                    "*Z": "019956",
+                    "operator": "SBB",
+                    "stops": [
+                        {
+                            "arrival": "2021-11-01 15:16:00",
+                            "departure": "2021-11-01 15:17:00",
+                            "name": "Z\u00fcrich Altstetten",
+                            "stopid": "8503001",
+                            "x": 679300,
+                            "y": 249492,
+                            "lon": 8.488966,
+                            "lat": 47.391478
+                        },
+                        {
+                            "arrival": "2021-11-01 15:23:00",
+                            "departure": "2021-11-01 15:25:00",
+                            "name": "Dietikon",
+                            "stopid": "8503508",
+                            "x": 672941,
+                            "y": 251001,
+                            "lon": 8.404995,
+                            "lat": 47.405783
+                        },
+                        {
+                            "arrival": "2021-11-01 15:31:00",
+                            "departure": "2021-11-01 15:31:00",
+                            "name": "Wettingen",
+                            "stopid": "8503505",
+                            "x": 666158,
+                            "y": 256909,
+                            "lon": 8.316013,
+                            "lat": 47.459634
+                        }
+                    ],
+                    "runningtime": 1320,
+                    "exit": {
+                        "arrival": "2021-11-01 15:33:00",
+                        "stopid": "8503504",
+                        "x": 665511,
+                        "y": 258768,
+                        "name": "Baden",
+                        "sbb_name": "Baden",
+                        "track": "3",
+                        "lon": 8.307706,
+                        "lat": 47.476417
+                    },
+                    "track": "31",
+                    "attributes": {
+                        "1_1.1_OM": "Maskenpflicht f\u00fcr Reisende ab 12 Jahren"
+                    },
+                    "type_name": "S-Bahn",
+                    "lon": 8.540502,
+                    "lat": 47.377847
+                },
+                {
+                    "arrival": "2021-11-01 15:33:00",
+                    "stopid": "8503504",
+                    "x": 665511,
+                    "y": 258768,
+                    "name": "Baden",
+                    "sbb_name": "Baden",
+                    "normal_time": 0,
+                    "stops": null,
+                    "lon": 8.307706,
+                    "lat": 47.476417
+                }
+            ]
+        }
+    ],
+    "url": "https:\/\/fahrplan.search.ch\/Z%C3%BCrich-HB..Baden?time=14.38&date=2021-11-01&time_type=departure",
+    "points": [
+        {
+            "text": "Z\u00fcrich HB",
+            "url": "https:\/\/map.search.ch\/Z%C3%BCrich-HB",
+            "id": "8503000",
+            "x": "683212",
+            "y": "248030",
+            "lon": 8.540502,
+            "lat": 47.377847
+        },
+        {
+            "text": "Baden",
+            "url": "https:\/\/map.search.ch\/Baden",
+            "id": "8503504",
+            "x": "665511",
+            "y": "258768",
+            "lon": 8.307706,
+            "lat": 47.476417
+        }
+    ],
+    "description": "Von Z\u00fcrich HB nach Baden am Montag 01.11.2021",
+    "request": null,
+    "eof": 1
+}
