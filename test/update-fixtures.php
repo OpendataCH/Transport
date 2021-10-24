@@ -34,7 +34,7 @@ function updateLocations(Query $query, $file)
     $json = json_encode($result, JSON_PRETTY_PRINT);
 
     $filename = __DIR__.'/fixtures/'.$file;
-    file_put_contents($filename, $json . "\n");
+    file_put_contents($filename, $json."\n");
 }
 
 function updateConnections(Query $query, $file)
@@ -46,7 +46,7 @@ function updateConnections(Query $query, $file)
     $json = json_encode($result, JSON_PRETTY_PRINT);
 
     $filename = __DIR__.'/fixtures/'.$file;
-    file_put_contents($filename, $json . "\n");
+    file_put_contents($filename, $json."\n");
 }
 
 date_default_timezone_set('Europe/Zurich');
