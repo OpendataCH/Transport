@@ -56,7 +56,7 @@
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
-                "platform": "12",
+                "platform": null,
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
@@ -312,7 +312,7 @@
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
-                "platform": "31",
+                "platform": null,
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
@@ -568,7 +568,7 @@
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
-                "platform": "16",
+                "platform": null,
                 "prognosis": {
                     "platform": null,
                     "arrival": null,
@@ -824,7 +824,7 @@
                 "departure": null,
                 "departureTimestamp": null,
                 "delay": null,
-                "platform": "14",
+                "platform": null,
                 "prognosis": {
                     "platform": null,
                     "arrival": null,

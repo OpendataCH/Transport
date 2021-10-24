@@ -150,8 +150,8 @@ class Connection
         $obj->from = Entity\Schedule\Stop::createFromJson($json->legs[0], null);
         $obj->to = Entity\Schedule\Stop::createFromJson($json->legs[count($json->legs) - 1], null);
 
-        if (!$obj->to->platform && isset($json->legs[count($json->legs) - 2]->track)) {
-            $obj->to->platform = $json->legs[count($json->legs) - 2]->track;
+        if (!$obj->to->platform && isset($json->legs[count($json->legs) - 2]->exit->track)) {
+            $obj->to->platform = $json->legs[count($json->legs) - 2]->exit->track;
         }
 
         $obj->duration = gmdate('0z\dH:i:s', $json->duration);
