@@ -1,1 +1,97 @@
-[{"label":"rte de l'Etraz (Haltestelle), Nyon","dist":2.0,"iconclass":"sl-icon-type-adr"},{"label":"Nyon, rte de l'Etraz","id":"8593897","x":"507703","y":"138182","dist":2,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, chemin du Vallon","id":"8593883","x":"507816","y":"138021","dist":199,"iconclass":"sl-icon-type-bus"},{"label":"Prangins, Pont de la Redoute","id":"8588672","x":"507916","y":"138418","dist":317,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, La Redoute","id":"8570008","x":"507662","y":"138516","dist":334,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, Mafroi","id":"8593890","x":"507877","y":"137813","dist":410,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, gare","id":"8570000","x":"507549","y":"137762","dist":449,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, La Paix","id":"8593886","x":"507427","y":"138542","dist":451,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, Chantemerle","id":"8593878","x":"507600","y":"138674","dist":501,"iconclass":"sl-icon-type-bus"},{"label":"Nyon, chemin des Plantaz","id":"8593881","x":"507333","y":"138528","dist":504,"iconclass":"sl-icon-type-bus"}]
+[
+    {
+        "label": "rte de l'Etraz (Haltestelle), Nyon",
+        "dist": 2,
+        "iconclass": "sl-icon-type-adr"
+    },
+    {
+        "label": "Nyon, rte de l'Etraz",
+        "id": "8593897",
+        "x": "507703",
+        "y": "138182",
+        "lon": 6.23873,
+        "lat": 46.388651,
+        "dist": 0,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, chemin du Vallon",
+        "id": "8593883",
+        "x": "507816",
+        "y": "138021",
+        "lon": 6.24023,
+        "lat": 46.387219,
+        "dist": 199,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Prangins, Pont de la Redoute",
+        "id": "8588672",
+        "x": "507916",
+        "y": "138418",
+        "lon": 6.241451,
+        "lat": 46.390803,
+        "dist": 317,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, La Redoute",
+        "id": "8570008",
+        "x": "507662",
+        "y": "138516",
+        "lon": 6.23813,
+        "lat": 46.39165,
+        "dist": 334,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, Mafroi",
+        "id": "8593890",
+        "x": "507877",
+        "y": "137813",
+        "lon": 6.241065,
+        "lat": 46.385356,
+        "dist": 410,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, La Paix",
+        "id": "8593886",
+        "x": "507427",
+        "y": "138542",
+        "lon": 6.23507,
+        "lat": 46.391851,
+        "dist": 451,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, Chantemerle",
+        "id": "8593878",
+        "x": "507600",
+        "y": "138674",
+        "lon": 6.237293,
+        "lat": 46.393063,
+        "dist": 501,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, chemin des Plantaz",
+        "id": "8593881",
+        "x": "507333",
+        "y": "138528",
+        "lon": 6.233851,
+        "lat": 46.391713,
+        "dist": 504,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Nyon, gare",
+        "id": "8570000",
+        "x": "507510",
+        "y": "137711",
+        "lon": 6.236315,
+        "lat": 46.384388,
+        "dist": 510,
+        "iconclass": "sl-icon-type-bus"
+    }
+]

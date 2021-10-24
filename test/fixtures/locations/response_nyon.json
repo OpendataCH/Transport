@@ -21,7 +21,7 @@
                 "x": 46.388651,
                 "y": 6.23873
             },
-            "distance": 2,
+            "distance": 0,
             "icon": "bus"
         },
         {
@@ -73,18 +73,6 @@
             "icon": "bus"
         },
         {
-            "id": "8570000",
-            "name": "Nyon, gare",
-            "score": null,
-            "coordinate": {
-                "type": "WGS84",
-                "x": 46.384852,
-                "y": 6.236811
-            },
-            "distance": 449,
-            "icon": "bus"
-        },
-        {
             "id": "8593886",
             "name": "Nyon, La Paix",
             "score": null,
@@ -118,6 +106,18 @@
                 "y": 6.233851
             },
             "distance": 504,
+            "icon": "bus"
+        },
+        {
+            "id": "8570000",
+            "name": "Nyon, gare",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.384388,
+                "y": 6.236315
+            },
+            "distance": 510,
             "icon": "bus"
         }
     ]

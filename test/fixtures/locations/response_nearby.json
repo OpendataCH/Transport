@@ -9,12 +9,12 @@
                 "x": null,
                 "y": null
             },
-            "distance": 6,
+            "distance": 9,
             "icon": null
         },
         {
             "id": "8508490",
-            "name": "Kehrsiten-B\u00fcrgenstock BB",
+            "name": "Kehrsiten-B\u00fcrgenstock (Talst.)",
             "score": null,
             "coordinate": {
                 "type": "WGS84",
@@ -42,11 +42,11 @@
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.997196,
-                "y": 8.378866
+                "x": 46.996847,
+                "y": 8.378676
             },
-            "distance": 578,
-            "icon": null
+            "distance": 618,
+            "icon": "bus"
         },
         {
             "id": "8557028",
@@ -54,10 +54,10 @@
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.996714,
-                "y": 8.381672
+                "x": 46.996666,
+                "y": 8.38104
             },
-            "distance": 640,
+            "distance": 637,
             "icon": "bus"
         },
         {

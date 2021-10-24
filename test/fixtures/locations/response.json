@@ -6,11 +6,11 @@
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.948823,
-                "y": 7.439123
+                "x": 46.948832,
+                "y": 7.439136
             },
             "distance": null,
-            "icon": null
+            "icon": "train"
         },
         {
             "id": "8576646",
@@ -49,6 +49,18 @@
             "icon": "tram"
         },
         {
+            "id": "8505213",
+            "name": "Bellinzona",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.195425,
+                "y": 9.029522
+            },
+            "distance": null,
+            "icon": "train"
+        },
+        {
             "id": "8507110",
             "name": "Bern, Zytglogge",
             "score": null,
@@ -66,35 +78,11 @@
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.967818,
-                "y": 7.465469
+                "x": 46.967827,
+                "y": 7.465483
             },
             "distance": null,
-            "icon": null
-        },
-        {
-            "id": "8505213",
-            "name": "Bellinzona",
-            "score": null,
-            "coordinate": {
-                "type": "WGS84",
-                "x": 46.195434,
-                "y": 9.029509
-            },
-            "distance": null,
-            "icon": null
-        },
-        {
-            "id": "8587387",
-            "name": "Gen\u00e8ve, Bel-Air",
-            "score": null,
-            "coordinate": {
-                "type": "WGS84",
-                "x": 46.204747,
-                "y": 6.143032
-            },
-            "distance": null,
-            "icon": "tram"
+            "icon": "train"
         },
         {
             "id": "8588989",
@@ -109,16 +97,28 @@
             "icon": "tram"
         },
         {
-            "id": "8591988",
-            "name": "Lausanne, Bel-Air",
+            "id": "8501170",
+            "name": "Bel-Air LEB",
             "score": null,
             "coordinate": {
                 "type": "WGS84",
-                "x": 46.522292,
-                "y": 6.62907
+                "x": 46.578689,
+                "y": 6.605526
             },
             "distance": null,
-            "icon": "bus"
+            "icon": "train"
+        },
+        {
+            "id": "8579897",
+            "name": "Bern, Kocherpark",
+            "score": null,
+            "coordinate": {
+                "type": "WGS84",
+                "x": 46.945882,
+                "y": 7.434053
+            },
+            "distance": null,
+            "icon": "tram"
         }
     ]
 }

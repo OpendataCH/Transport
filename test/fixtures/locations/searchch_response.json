@@ -1,1 +1,102 @@
-[{"label":"Bern","id":"8507000","x":"600037","y":"199749","iconclass":"sl-icon-type-zug","html":"<span class=\"sl-keyword\">Be<\/span>rn"},{"label":"Bern, Bahnhof","id":"8576646","x":"600120","y":"199669","iconclass":"sl-icon-type-tram","html":"<span class=\"sl-keyword\">Be<\/span>rn, Bahnhof"},{"label":"Zürich, Bellevue","id":"8576193","x":"683577","y":"246839","iconclass":"sl-icon-type-tram","html":"Zürich, <span class=\"sl-keyword\">Be<\/span>llevue"},{"label":"Bern, Hirschengraben","id":"8579896","x":"599935","y":"199442","iconclass":"sl-icon-type-tram","html":"<span class=\"sl-keyword\">Be<\/span>rn, Hirschengraben"},{"label":"Bern, Zytglogge","id":"8507110","x":"600675","y":"199640","iconclass":"sl-icon-type-tram","html":"<span class=\"sl-keyword\">Be<\/span>rn, Zytglogge"},{"label":"Bern Wankdorf","id":"8516161","x":"602042","y":"201861","iconclass":"sl-icon-type-zug","html":"<span class=\"sl-keyword\">Be<\/span>rn Wankdorf"},{"label":"Bellinzona","id":"8505213","x":"722802","y":"117242","iconclass":"sl-icon-type-zug","html":"<span class=\"sl-keyword\">Be<\/span>llinzona"},{"label":"Genève, Bel-Air","id":"8587387","x":"500005","y":"117858","iconclass":"sl-icon-type-tram","html":"Genève, <span class=\"sl-keyword\">Be<\/span>l-Air"},{"label":"Bern, Bärenplatz","id":"8588989","x":"600322","y":"199671","iconclass":"sl-icon-type-tram","html":"<span class=\"sl-keyword\">Be<\/span>rn, Bärenplatz"},{"label":"Lausanne, Bel-Air","id":"8591988","x":"537880","y":"152653","iconclass":"sl-icon-type-bus","html":"Lausanne, <span class=\"sl-keyword\">Be<\/span>l-Air"}]
+[
+    {
+        "label": "Bern",
+        "id": "8507000",
+        "x": "600038",
+        "y": "199750",
+        "lon": 7.439136,
+        "lat": 46.948832,
+        "iconclass": "sl-icon-type-train",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn"
+    },
+    {
+        "label": "Bern, Bahnhof",
+        "id": "8576646",
+        "x": "600120",
+        "y": "199669",
+        "lon": 7.440213,
+        "lat": 46.948104,
+        "iconclass": "sl-icon-type-tram",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn, Bahnhof"
+    },
+    {
+        "label": "Z\u00fcrich, Bellevue",
+        "id": "8576193",
+        "x": "683577",
+        "y": "246839",
+        "lon": 8.545112,
+        "lat": 47.367089,
+        "iconclass": "sl-icon-type-tram",
+        "html": "Z\u00fcrich, <span class=\"sl-keyword\">Be<\/span>llevue"
+    },
+    {
+        "label": "Bern, Hirschengraben",
+        "id": "8579896",
+        "x": "599935",
+        "y": "199442",
+        "lon": 7.437783,
+        "lat": 46.946062,
+        "iconclass": "sl-icon-type-tram",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn, Hirschengraben"
+    },
+    {
+        "label": "Bellinzona",
+        "id": "8505213",
+        "x": "722803",
+        "y": "117241",
+        "lon": 9.029522,
+        "lat": 46.195425,
+        "iconclass": "sl-icon-type-train",
+        "html": "<span class=\"sl-keyword\">Be<\/span>llinzona"
+    },
+    {
+        "label": "Bern, Zytglogge",
+        "id": "8507110",
+        "x": "600675",
+        "y": "199640",
+        "lon": 7.447504,
+        "lat": 46.947842,
+        "iconclass": "sl-icon-type-tram",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn, Zytglogge"
+    },
+    {
+        "label": "Bern Wankdorf",
+        "id": "8516161",
+        "x": "602043",
+        "y": "201862",
+        "lon": 7.465483,
+        "lat": 46.967827,
+        "iconclass": "sl-icon-type-train",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn Wankdorf"
+    },
+    {
+        "label": "Bern, B\u00e4renplatz",
+        "id": "8588989",
+        "x": "600322",
+        "y": "199671",
+        "lon": 7.442867,
+        "lat": 46.948122,
+        "iconclass": "sl-icon-type-tram",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn, B\u00e4renplatz"
+    },
+    {
+        "label": "Bel-Air LEB",
+        "id": "8501170",
+        "x": "536140",
+        "y": "158941",
+        "lon": 6.605526,
+        "lat": 46.578689,
+        "iconclass": "sl-icon-type-train",
+        "html": "<span class=\"sl-keyword\">Be<\/span>l-Air LEB"
+    },
+    {
+        "label": "Bern, Kocherpark",
+        "id": "8579897",
+        "x": "599651",
+        "y": "199422",
+        "lon": 7.434053,
+        "lat": 46.945882,
+        "iconclass": "sl-icon-type-tram",
+        "html": "<span class=\"sl-keyword\">Be<\/span>rn, Kocherpark"
+    }
+]

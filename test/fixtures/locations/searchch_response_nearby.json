@@ -1,1 +1,97 @@
-[{"label":"Hinterberg 4, Kehrsiten","dist":6.0,"iconclass":"sl-icon-type-adr"},{"label":"Kehrsiten-Bürgenstock BB","id":"8508490","x":"671773","y":"206187","dist":195,"iconclass":"sl-icon-type-bus"},{"label":"Kehrsiten-Bürgenstock","id":"8508489","x":"671768","y":"206210","dist":199,"iconclass":"sl-icon-type-ship"},{"label":"Bürgenstock Resort","id":"8508491","x":"671513","y":"205555","dist":578,"iconclass":"sl-icon-type-fun"},{"label":"Bürgenstock, Zentrum","id":"8557028","x":"671727","y":"205504","dist":640,"iconclass":"sl-icon-type-bus"},{"label":"Bürgenstock, Waldhotel","id":"8557030","x":"671995","y":"205476","dist":769,"iconclass":"sl-icon-type-bus"},{"label":"Bürgenstock, Ost","id":"8579228","x":"672114","y":"205509","dist":813,"iconclass":"sl-icon-type-bus"},{"label":"Bürgenstock, Residenzen","id":"8557029","x":"671172","y":"205307","dist":920,"iconclass":"sl-icon-type-bus"},{"label":"Obbürgen, Unter-Misli","id":"8579842","x":"672051","y":"205274","dist":972,"iconclass":"sl-icon-type-bus"},{"label":"Obbürgen, Abzw. Trogen","id":"8579244","x":"672292","y":"205390","dist":1021,"iconclass":"sl-icon-type-bus"}]
+[
+    {
+        "label": "Hinterberg 4, Kehrsiten",
+        "dist": 9,
+        "iconclass": "sl-icon-type-adr"
+    },
+    {
+        "label": "Kehrsiten-B\u00fcrgenstock (Talst.)",
+        "id": "8508490",
+        "x": "671773",
+        "y": "206187",
+        "lon": 8.382384,
+        "lat": 47.002853,
+        "dist": 195,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Kehrsiten-B\u00fcrgenstock",
+        "id": "8508489",
+        "x": "671768",
+        "y": "206210",
+        "lon": 8.382322,
+        "lat": 47.00306,
+        "dist": 199,
+        "iconclass": "sl-icon-type-ship"
+    },
+    {
+        "label": "B\u00fcrgenstock Resort",
+        "id": "8508491",
+        "x": "671499",
+        "y": "205516",
+        "lon": 8.378676,
+        "lat": 46.996847,
+        "dist": 618,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "B\u00fcrgenstock, Zentrum",
+        "id": "8557028",
+        "x": "671679",
+        "y": "205498",
+        "lon": 8.38104,
+        "lat": 46.996666,
+        "dist": 637,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "B\u00fcrgenstock, Waldhotel",
+        "id": "8557030",
+        "x": "671995",
+        "y": "205476",
+        "lon": 8.38519,
+        "lat": 46.996434,
+        "dist": 769,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "B\u00fcrgenstock, Ost",
+        "id": "8579228",
+        "x": "672114",
+        "y": "205509",
+        "lon": 8.38676,
+        "lat": 46.996717,
+        "dist": 813,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "B\u00fcrgenstock, Residenzen",
+        "id": "8557029",
+        "x": "671172",
+        "y": "205307",
+        "lon": 8.374344,
+        "lat": 46.995002,
+        "dist": 920,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Obb\u00fcrgen, Unter-Misli",
+        "id": "8579842",
+        "x": "672051",
+        "y": "205274",
+        "lon": 8.385894,
+        "lat": 46.994611,
+        "dist": 972,
+        "iconclass": "sl-icon-type-bus"
+    },
+    {
+        "label": "Obb\u00fcrgen, Abzw. Trogen",
+        "id": "8579244",
+        "x": "672292",
+        "y": "205390",
+        "lon": 8.389081,
+        "lat": 46.995628,
+        "dist": 1021,
+        "iconclass": "sl-icon-type-bus"
+    }
+]
