@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && \
