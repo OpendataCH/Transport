@@ -334,36 +334,6 @@ class Application extends \Silex\Application
          *         description="0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on.",
          *         type="integer"
          *     ),
-         *     @SWG\Parameter(
-         *         name="direct",
-         *         in="query",
-         *         description="defaults to `0`, if set to `1` only direct connections are allowed",
-         *         type="integer"
-         *     ),
-         *     @SWG\Parameter(
-         *         name="sleeper",
-         *         in="query",
-         *         description="defaults to `0`, if set to `1` only night trains containing beds are allowed, implies `direct=1`",
-         *         type="integer"
-         *     ),
-         *     @SWG\Parameter(
-         *         name="couchette",
-         *         in="query",
-         *         description="defaults to `0`, if set to `1` only night trains containing couchettes are allowed, implies `direct=1`",
-         *         type="integer"
-         *     ),
-         *     @SWG\Parameter(
-         *         name="bike",
-         *         in="query",
-         *         description="defaults to `0`, if set to `1` only trains allowing the transport of bicycles are allowed",
-         *         type="integer"
-         *     ),
-         *     @SWG\Parameter(
-         *         name="accessibility",
-         *         in="query",
-         *         description="Possible values are `independent_boarding`, `assisted_boarding`, and `advanced_notice`",
-         *         type="string"
-         *     ),
          *     @SWG\Response(
          *         response="200",
          *         description="A list of connections",
