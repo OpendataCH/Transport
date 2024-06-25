@@ -4,7 +4,7 @@ namespace Transport\Test\Entity;
 
 use Transport\Entity\LocationFactory;
 
-class LocationFactoryTest extends \PHPUnit_Framework_TestCase
+class LocationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateFromXml_Poi()
     {

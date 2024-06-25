@@ -2,11 +2,16 @@
 
 namespace Transport\Test;
 
-use Silex\WebTestCase;
-
-abstract class IntegrationTest extends WebTestCase
+abstract class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
+    protected $app;
+
     protected $browser;
+
+    public function setUp(): void
+    {
+        $this->app = $this->createApplication();
+    }
 
     public function createApplication()
     {
@@ -18,11 +23,16 @@ abstract class IntegrationTest extends WebTestCase
         //$app['debug'] = true;
         //unset($app['exception_handler']);
 
-        $this->browser = $this->getMock('Buzz\\Browser', ['send']);
+        $this->browser = $this->getMockBuilder('Buzz\\Browser')->setMethods(['send'])->getMock();
 
         $app['api'] = new \Transport\API($this->browser);
 
         return $app;
+    }
+
+    public function createClient(array $server = array())
+    {
+        return new \Symfony\Component\HttpKernel\Client($this->app, $server);
     }
 
     public function getBrowser()

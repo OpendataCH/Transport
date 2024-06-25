@@ -5,7 +5,7 @@ namespace Transport\Test\Entity\Location;
 use Transport\Entity\Coordinate;
 use Transport\Entity\Location\Address;
 
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     protected function getAddress()
     {

@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Serializer;
 use Transport\Entity;
 use Transport\Normalizer\FieldsNormalizer;
 
-class FieldsNormalizerTest extends \PHPUnit_Framework_TestCase
+class FieldsNormalizerTest extends \PHPUnit\Framework\TestCase
 {
     protected function getConnection()
     {

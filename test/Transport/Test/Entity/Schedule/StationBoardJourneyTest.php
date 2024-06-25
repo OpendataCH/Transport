@@ -5,7 +5,7 @@ namespace Transport\Test\Entity\Schedule;
 use Transport\Entity;
 use Transport\Entity\Schedule\StationBoardJourney;
 
-class StationBoardJourneyTest extends \PHPUnit_Framework_TestCase
+class StationBoardJourneyTest extends \PHPUnit\Framework\TestCase
 {
     protected function getJourney()
     {

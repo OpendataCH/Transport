@@ -4,14 +4,14 @@ namespace Transport\Test\Entity\Schedule;
 
 use Transport\Entity\Schedule\Stop;
 
-class StopTest extends \PHPUnit_Framework_TestCase
+class StopTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \DateTime
      */
     private $date;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->date = new \DateTime('2012-03-30T12:30:00+0200');
     }

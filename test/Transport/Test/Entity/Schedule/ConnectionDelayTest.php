@@ -5,7 +5,7 @@ namespace Transport\Test\Entity\Schedule;
 use Transport\Entity;
 use Transport\Entity\Schedule\Connection;
 
-class ConnectionDelayTest extends \PHPUnit_Framework_TestCase
+class ConnectionDelayTest extends \PHPUnit\Framework\TestCase
 {
     protected function getConnection()
     {

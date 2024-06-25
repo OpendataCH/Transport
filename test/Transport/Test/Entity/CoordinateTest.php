@@ -4,7 +4,7 @@ namespace Transport\Test\Entity;
 
 use Transport\Entity\Coordinate;
 
-class CoordinateTest extends \PHPUnit_Framework_TestCase
+class CoordinateTest extends \PHPUnit\Framework\TestCase
 {
     public static function provider()
     {

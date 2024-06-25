@@ -5,7 +5,7 @@ namespace Transport\Test\Entity\Location;
 use Transport\Entity\Coordinate;
 use Transport\Entity\Location\Poi;
 
-class PoiTest extends \PHPUnit_Framework_TestCase
+class PoiTest extends \PHPUnit\Framework\TestCase
 {
     protected function getPoi()
     {
