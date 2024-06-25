@@ -9,6 +9,8 @@ use Transport\Entity\Coordinate;
  */
 abstract class Location
 {
+    public $id;
+
     /**
      * The name of this location.
      *
