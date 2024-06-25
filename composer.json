@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.5.9",
         "silex/silex": "~1.3",
-        "kriswallsmith/buzz": "~0.15",
+        "kriswallsmith/buzz": "^0.16.1",
         "predis/predis": "~1.0",
         "twig/twig": "~1.23",
         "monolog/monolog": "~1.17",
