@@ -170,12 +170,11 @@ class API
         // send request
         $result = $this->sendAndParseQuery($query);
 
-        // check for API messages
-        if (isset($result->messages) && is_array($result->messages)) {
-            throw new \Exception('Messages from timetable.search.ch: '.implode($result->messages));
+        if (isset($result->stop)) {
+            $station = Station::createStationFromJson($result->stop);
+        } else {
+            $station = null;
         }
-
-        $station = Station::createStationFromJson($result->stop);
 
         $journeys = [];
 
