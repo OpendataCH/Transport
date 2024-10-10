@@ -477,7 +477,6 @@ class Application extends \Silex\Application
          * )
          */
         $app->get('/v1/stationboard', function (Request $request) use ($app) {
-            $stationboard = [];
 
             $limit = $request->get('limit', 40);
             if ($limit > 420) {
@@ -511,6 +510,13 @@ class Application extends \Silex\Application
 
                 $query->maxJourneys = $limit;
                 $stationboard = $app['api']->getStationBoard($query);
+            } else {
+
+                // default empty response
+                $stationboard = [
+                    'station' => null,
+                    'stationboard' => [],
+                ];
             }
 
             $json = $app['serializer']->serialize((object) $stationboard, 'json');
