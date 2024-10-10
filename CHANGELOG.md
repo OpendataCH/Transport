@@ -1,5 +1,13 @@
 # Changelog
 
+## 2024-10-10
+
+- Switch transport.opendata.ch to PHP 8.2
+
+## 2024-06-25
+
+- Add PHP 8 compatibility
+
 ## 2021-02-15
 
 - #210 Restore train name/numer
