@@ -499,7 +499,7 @@ class Application extends \Silex\Application
             $station = new Station();
             $station->name = $request->get('station') ?: $request->get('id');
 
-            if ($station instanceof Station) {
+            if ($station->name) {
                 $query = new StationBoardQuery($station, $date);
                 if ($transportations) {
                     $query->transportations = (array) $transportations;
