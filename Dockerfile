@@ -1,8 +1,11 @@
-FROM php:7.4-apache
+FROM php:8.3-apache
 
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && \
     apt-get install -y unzip
+
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN a2enmod rewrite
 
