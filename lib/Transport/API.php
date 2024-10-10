@@ -178,7 +178,7 @@ class API
 
         $journeys = [];
 
-        if ($result->connections) {
+        if (isset($result->connections) && $result->connections) {
             foreach ($result->connections as $connection) {
                 $journey = Entity\Schedule\StationBoardJourney::createFromJson($connection, null);
                 $journey->stop->station = $station;
