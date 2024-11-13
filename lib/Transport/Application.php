@@ -184,8 +184,10 @@ class Application extends \Silex\Application
         $app->before(function (Request $request) use ($app) {
             $ipAddress = $request->getClientIp();
             $userAgent = $request->headers->get('User-Agent');
+            $key = $request->query->get('key');
             $app['api']->setClientIpAddress($ipAddress);
             $app['api']->setClientUserAgent($userAgent);
+            $app['api']->setKey($key);
         });
 
         // home

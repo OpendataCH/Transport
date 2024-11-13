@@ -35,6 +35,8 @@ class API
 
     protected $clientUserAgent;
 
+    protected $key;
+
     public function __construct(Browser $browser = null, $lang = 'EN')
     {
         $this->browser = $browser ?: new Browser();
@@ -49,6 +51,11 @@ class API
     public function setClientUserAgent($clientUserAgent)
     {
         $this->clientUserAgent = $clientUserAgent;
+    }
+
+    public function setKey($key)
+    {
+        $this->key = $key;
     }
 
     /**
@@ -93,6 +100,10 @@ class API
         $formRequest = $query->toFormRequest();
         $formRequest->setField('ip_address', $this->clientIpAddress);
         $formRequest->setField('user_agent', $this->clientUserAgent);
+
+        if ($this->key) {
+            $formRequest->setField('key', $this->key);
+        }
 
         return $this->browser->send($formRequest);
     }
