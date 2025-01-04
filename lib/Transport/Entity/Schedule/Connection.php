@@ -154,7 +154,7 @@ class Connection
             $obj->to->platform = $json->legs[count($json->legs) - 2]->exit->track;
         }
 
-        $obj->duration = gmdate('0z\dH:i:s', $json->duration);
+        $obj->duration = gmdate('0z\dH:i:s', $json->duration ?? 0);
 
         $numberOfVehicles = 0;
         foreach ($json->legs as $leg) {
