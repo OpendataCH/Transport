@@ -32,4 +32,13 @@ def test_openapi_lives_under_the_prefix(client):
     # FastAPI emits OpenAPI 3.1; /v1 serves a generated Swagger 2.0 document
     # from the PHP application. Two documents, two addresses, on purpose.
     assert document.json()["openapi"].startswith("3.1")
-    assert set(document.json()["paths"]) == {"/v2/health"}
+    # Every route, whatever the stage has added, lives under the prefix.
+    assert all(path.startswith("/v2/") for path in document.json()["paths"])
+    assert "/v2/health" in document.json()["paths"]
+
+
+def test_a_browser_may_call_it_from_anywhere(client):
+    """As /v1 has always allowed - half its callers are web pages."""
+    response = client.get("/v2/health", headers={"Origin": "https://example.org"})
+
+    assert response.headers["access-control-allow-origin"] == "*"

@@ -19,7 +19,12 @@ TIMEZONE = "Europe/Zurich"
 # build time; a working copy says "dev".
 VERSION = os.environ.get("SERVICE_VERSION", "dev")
 
-# Where the upstream timetable lives. Not used yet - S1 is the first stage that
-# calls it - but named here because it is the one address the whole service is
-# about.
+# Where the upstream timetable lives - the one address the whole service is
+# about. Overridable so that a replay stub can take its place in a test run
+# without touching anything else.
 UPSTREAM_URL = os.environ.get("UPSTREAM_URL", "https://timetable.search.ch/api/")
+
+# Seconds to wait for search.ch. It has taken up to a second under load, and
+# the vhost gives us sixty; ten is far past "slow" and well short of holding a
+# worker for a minute.
+UPSTREAM_TIMEOUT = float(os.environ.get("UPSTREAM_TIMEOUT", "10"))

@@ -34,8 +34,7 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 --start-period=10s \
     CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/v2/health', timeout=3).status == 200 else 1)"
 
-# --proxy-headers with the forwarded address trusted: the caller's IP and
-# User-Agent are what search.ch applies its rate limit to, so losing them puts
-# every caller in the world into one bucket. The container is never published
-# directly, only reached through the proxy on the compose network.
-CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips='*' --workers ${WEB_CONCURRENCY:-2}"]
+# The forwarded-header handling is inside the application, not a flag here -
+# see main.py, where it is explained and tested. The container is never
+# published directly, only reached through the proxy in front of it.
+CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY:-2}"]
