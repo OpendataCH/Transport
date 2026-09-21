@@ -19,6 +19,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from .coordinates import lv03_to_wgs84
+from .query import isset
 
 ZURICH = ZoneInfo("Europe/Zurich")
 
@@ -71,18 +72,6 @@ def transportation_types(transportations: list[str] | None) -> str | None:
     return ",".join(translated)
 
 
-def truthy(value: str | None) -> bool:
-    """PHP truthiness of a query parameter.
-
-    `if ($query || ($x && $y))` and `$request->get("station") ?: ...` treat an
-    empty string and the string `"0"` as absent. A coordinate of exactly zero
-    is in the Gulf of Guinea, so that has never mattered in practice - but it
-    is what the old endpoint does, and the differential test compares answers,
-    not intentions.
-    """
-    return value is not None and value != "" and value != "0"
-
-
 # --------------------------------------------------------------------------
 # Locations
 # --------------------------------------------------------------------------
@@ -118,12 +107,12 @@ def _location(entry: dict, *, is_address: bool) -> dict:
         # has not been asked since the switch to search.ch.
         "score": None,
         "coordinate": _coordinate(entry),
-        "distance": entry["dist"] if "dist" in entry else None,
+        "distance": entry["dist"] if isset(entry, "dist") else None,
     }
 
     # Addresses are a different class in the PHP and never carry an icon, not
     # even a null one.
-    if not is_address and "iconclass" in entry:
+    if not is_address and isset(entry, "iconclass"):
         location["icon"] = ICONS.get(entry["iconclass"])
 
     return location
@@ -169,7 +158,13 @@ def _coordinate(entry: dict) -> dict:
 
 
 def parse_time(value: str) -> datetime:
-    """`2016-12-23 14:30:00` and the like, in Zurich time."""
+    """`2016-12-23 14:30:00` and the like, in Zurich time.
+
+    An empty string is *now*, because that is what PHP's `new DateTime("")`
+    makes of it - and search.ch does send empty times.
+    """
+    if value == "":
+        return datetime.now(ZURICH).replace(microsecond=0)
     return datetime.fromisoformat(value).replace(tzinfo=ZURICH)
 
 
@@ -244,7 +239,7 @@ def _first_time(entry: dict, fields: tuple[str, ...]) -> datetime | None:
     """
     found = None
     for field in fields:
-        if entry.get(field):
+        if isset(entry, field):
             found = parse_time(entry[field])
     return found
 
@@ -259,9 +254,9 @@ def _prognosis_of(entry: dict, arrival: datetime | None, departure: datetime | N
         "capacity2nd": None,
     }
 
-    if "arr_delay" in entry:
+    if isset(entry, "arr_delay"):
         prognosis["arrival"] = iso(_delayed(arrival, php_int(entry["arr_delay"])))
-    if "dep_delay" in entry:
+    if isset(entry, "dep_delay"):
         prognosis["departure"] = iso(_delayed(departure, php_int(entry["dep_delay"])))
 
     return prognosis
@@ -312,15 +307,15 @@ def journey_of(entry: dict) -> dict:
     number = None
     category = None
 
-    if "number" in entry:
+    if isset(entry, "number"):
         name = number = entry["number"]
-    if "*Z" in entry:
+    if isset(entry, "*Z"):
         name = number = entry["*Z"]
-    if "*L" in entry:
+    if isset(entry, "*L"):
         number = entry["*L"]
-    if "line" in entry:
+    if isset(entry, "line"):
         category = entry["line"]
-    if "*G" in entry:
+    if isset(entry, "*G"):
         category = entry["*G"]
 
     terminal = entry.get("terminal")
@@ -385,9 +380,12 @@ def connection_of(entry: dict) -> dict:
     # The last leg carries no platform of its own; the one before it knows
     # where the train got in and out.
     if destination is not None and not destination["platform"] and len(legs) >= 2:
-        track = (legs[-2].get("exit") or {}).get("track")
-        if track:
-            destination["platform"] = track
+        exit_ = legs[-2].get("exit") or {}
+        if isset(exit_, "track"):
+            # `isset`, not "is it worth having": search.ch sends an empty
+            # string for a stop without a platform, and /v1 copies it. A null
+            # here instead of an empty string is a difference in the answer.
+            destination["platform"] = exit_["track"]
 
     return {
         "from": origin,
@@ -400,7 +398,7 @@ def connection_of(entry: dict) -> dict:
         # Set from the HAFAS answer only, so always null here - and null, not
         # an empty object.
         "service": None,
-        "products": [leg["line"] for leg in legs if "line" in leg],
+        "products": [leg["line"] for leg in legs if isset(leg, "line")],
         "capacity1st": None,
         "capacity2nd": None,
         "sections": _sections(legs),
@@ -413,14 +411,14 @@ def _sections(legs: list[dict]) -> list[dict] | None:
     A connection whose legs carry no `type` at all therefore has `sections`
     null rather than an empty list - the PHP never creates the array.
     """
-    sections = [section_of(leg) for leg in legs if "type" in leg]
+    sections = [section_of(leg) for leg in legs if isset(leg, "type")]
     return sections or None
 
 
 def section_of(leg: dict) -> dict:
     """`Section::createFromJson` - one leg, as /v1 shapes it."""
     return {
-        "journey": journey_of(leg) if "tripid" in leg else None,
+        "journey": journey_of(leg) if isset(leg, "tripid") else None,
         "walk": {"duration": leg.get("normal_time")} if leg.get("type") == "walk" else None,
         "departure": stop_of(leg),
         "arrival": stop_of(leg["exit"]) if leg.get("exit") else None,

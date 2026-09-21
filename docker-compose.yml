@@ -22,6 +22,11 @@ services:
       - redis
     volumes:
       - .:/var/www/html
+      # Without this the working copy has no config.php, the application falls
+      # back to debug=true, and every error comes back as a Symfony HTML page
+      # instead of the JSON envelope. That makes a local comparison against
+      # /v2 lie about exactly the cases worth comparing.
+      - ./config.php.docker:/var/www/html/config.php:ro
     environment:
       REDIS_HOST: redis
       REDIS_PORT: "6379"

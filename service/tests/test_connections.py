@@ -238,3 +238,70 @@ def test_the_parameters_that_do_nothing_still_do_nothing(client, search_ch):
     assert response.status_code == 200
     sent = search_ch.last.url.params
     assert not [name for name in sent if name in ("direct", "sleeper", "bike", "accessibility")]
+
+
+def test_a_repeated_via_without_brackets_keeps_only_the_last(client, search_ch):
+    """PHP's parse_str overwrites, so `via=a&via=b&via=c` is just `c`.
+
+    Found by replaying real traffic: a client sends three unbracketed vias, and
+    reading them as a list of three routed the journey somewhere else entirely
+    - a different destination in the answer, not a subtle field.
+    """
+    search_ch.returns({"connections": []})
+
+    client.get(
+        "/v2/connections",
+        params=[
+            ("from", "Machilly"),
+            ("to", "Genève-Champel"),
+            ("via", "Annemasse"),
+            ("via", "Chêne-bourg"),
+            ("via", "Eaux-vives"),
+        ],
+    )
+
+    sent = search_ch.last.url.params
+    assert sent["via[0]"] == "Eaux-vives"
+    assert "via[1]" not in sent
+
+
+def test_a_repeated_transportations_without_brackets_does_the_same(client, search_ch):
+    search_ch.returns({"connections": []})
+
+    client.get(
+        "/v2/connections",
+        params=[
+            ("from", "Bern"),
+            ("to", "Genève"),
+            ("transportations", "bus"),
+            ("transportations", "tram"),
+        ],
+    )
+
+    assert search_ch.last.url.params["transportation_types"] == "tram"
+
+
+def test_an_empty_platform_stays_an_empty_string(client, search_ch):
+    """`isset`, not truthiness.
+
+    search.ch sends `"track": ""` for a stop with no platform. /v1 copies it
+    onto the connection's arrival, so the field is an empty string there and
+    null everywhere else. Found by replaying real traffic.
+    """
+    search_ch.returns(
+        {
+            "connections": [
+                {
+                    "duration": 60,
+                    "legs": [
+                        {"departure": "2026-09-24 09:00:00", "type": "bus", "exit": {"track": ""}},
+                        {"arrival": "2026-09-24 09:01:00"},
+                    ],
+                }
+            ]
+        }
+    )
+
+    body = client.get("/v2/connections", params={"from": "a", "to": "b"}).json()
+
+    assert body["connections"][0]["to"]["platform"] == ""

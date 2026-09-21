@@ -9,12 +9,14 @@ service, the answer is `/v1`'s, oddities included; the mapping itself lives in
 from datetime import datetime
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from . import errors
-from .mapping import ZURICH, station_board_journey_of, station_of, transportation_types, truthy
+from .fields import Fields
+from .mapping import ZURICH, station_board_journey_of, station_of, transportation_types
 from .models import Errors, StationBoardResponse
+from .query import as_list, parameter, truthy
 from .upstream import ClientIdentity, Upstream, get_upstream
 
 router = APIRouter()
@@ -35,8 +37,10 @@ MAX_LIMIT = 420
     },
 )
 async def station_board(
+    request: Request,
     upstream: Annotated[Upstream, Depends(get_upstream)],
     identity: Annotated[ClientIdentity, Depends(ClientIdentity.of)],
+    fields: Annotated[Fields, Depends(Fields.of)],
     station: Annotated[
         str | None,
         Query(description="The stop to report on (e.g. `Aarau`)."),
@@ -63,15 +67,8 @@ async def station_board(
             alias="transportations[]",
             description="Means of transport: one or more of `train`, `tram`, "
             "`ship`, `bus`, `cableway`. Array notation "
-            "(`transportations[]=tram&transportations[]=bus`).",
-        ),
-    ] = None,
-    transportations_single: Annotated[
-        list[str] | None,
-        Query(
-            alias="transportations",
-            description="The same, without the brackets. PHP folds both "
-            "spellings into one parameter, so /v1 accepts either.",
+            "(`transportations[]=tram&transportations[]=bus`). Without the "
+            "brackets only the last value counts - see `query.parameter`.",
         ),
     ] = None,
     datetime_: Annotated[
@@ -88,6 +85,17 @@ async def station_board(
     type: Annotated[  # noqa: A002 - the name is part of the /v1 contract
         str | None,
         Query(description="`departure` (default) or `arrival`."),
+    ] = None,
+    fields_: Annotated[
+        list[str] | None,
+        Query(
+            alias="fields[]",
+            description="Keep only these parts of the answer. A `/`-separated "
+            "path of object keys; lists are transparent, so "
+            "`connections/from/departure` reaches into every connection. "
+            "A narrower path beats a broader one, and an object left with no "
+            "keys comes back as `[]`.",
+        ),
     ] = None,
     key: Annotated[
         str | None,
@@ -107,7 +115,7 @@ async def station_board(
 
     stop = station if truthy(station) else id
     if not truthy(stop):
-        return JSONResponse(content={"station": None, "stationboard": []})
+        return JSONResponse(content=fields.apply({"station": None, "stationboard": []}))
 
     when = _when(date or datetime_)
 
@@ -116,7 +124,7 @@ async def station_board(
         when=when,
         mode="arrival" if type == "arrival" else "depart",
         limit=limit,
-        transportation_types=transportation_types(transportations or transportations_single),
+        transportation_types=transportation_types(as_list(parameter(request, "transportations"))),
         identity=identity,
     )
 
@@ -131,7 +139,7 @@ async def station_board(
         journey["stop"]["station"] = board_station
         journeys.append(journey)
 
-    return JSONResponse(content={"station": board_station, "stationboard": journeys})
+    return JSONResponse(content=fields.apply({"station": board_station, "stationboard": journeys}))
 
 
 def _over_the_limit(limit: str) -> bool:

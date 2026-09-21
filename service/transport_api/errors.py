@@ -6,9 +6,11 @@ this; everything else the upstream does wrong becomes a 500 with a message
 naming search.ch, exactly as the PHP application answers today.
 """
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+
+from .fields import NotAList
 
 
 class ApiError(Exception):
@@ -49,6 +51,12 @@ def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
     async def _api_error(_: Request, exc: ApiError) -> JSONResponse:
         return exc.response()
+
+    @app.exception_handler(NotAList)
+    async def _not_a_list(_: Request, exc: NotAList) -> Response:
+        # Empty body, text/html, 500 - what a TypeError escaping Silex looks
+        # like from outside. See fields.NotAList.
+        return Response(status_code=500, media_type="text/html; charset=UTF-8")
 
     @app.exception_handler(RequestValidationError)
     async def _validation(_: Request, exc: RequestValidationError) -> JSONResponse:

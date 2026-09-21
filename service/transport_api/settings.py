@@ -24,7 +24,11 @@ VERSION = os.environ.get("SERVICE_VERSION", "dev")
 # without touching anything else.
 UPSTREAM_URL = os.environ.get("UPSTREAM_URL", "https://timetable.search.ch/api/")
 
-# Seconds to wait for search.ch. It has taken up to a second under load, and
-# the vhost gives us sixty; ten is far past "slow" and well short of holding a
-# worker for a minute.
-UPSTREAM_TIMEOUT = float(os.environ.get("UPSTREAM_TIMEOUT", "10"))
+# Seconds to wait for search.ch, just inside the 60 the vhost allows.
+#
+# /v1 sets no timeout at all, and a cross-border query has been measured at
+# nine seconds - so a shorter limit here would answer 500 where /v1 answers
+# data, which is a difference we would have introduced ourselves. Waiting is
+# cheap in this service in a way it is not in the old one: the request is
+# awaited, not blocking a process.
+UPSTREAM_TIMEOUT = float(os.environ.get("UPSTREAM_TIMEOUT", "55"))

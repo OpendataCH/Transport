@@ -8,8 +8,14 @@ service exists.
 The plan and its stages are in the wiki:
 [Plan: a Python service beside the PHP one](https://gitlab.com/opendata.ch/Transport/-/wikis/Plan-v2-FastAPI).
 Stages done here: **S0** (the routing, both services alive at once), **S1**
-(`/v2/locations`), **S2** (`/v2/stationboard`) and **S3** (`/v2/connections`).
-All four routes of `/v1` are answered; its own description is at `/v2/docs`.
+(`/v2/locations`), **S2** (`/v2/stationboard`), **S3** (`/v2/connections`) and
+the `fields[]` filter. All four routes of `/v1` are answered; its own
+description is at `/v2/docs`.
+
+What is **not** here, on purpose: the website around the API - `/docs.html`,
+`/swagger.json`, `/examples/`, `/showcase.html`, `robots.txt`. Those are served
+by the PHP container and will still need serving on the day `/v1` is routed
+here.
 
 ## Running it
 
@@ -43,6 +49,18 @@ order-blind for object keys, `null` kept apart from missing and `int` from
 ```sh
 python tools/diff_v1_v2.py https://test-transport-new.opendata.ch
 26 of 26 answers identical
+```
+
+`tools/shadow.py` does the same with **real traffic**: it samples the live
+access log by request *shape* rather than popularity, then replays the corpus
+against both. `--noise-floor` asks `/v1` twice instead, which says how much of
+what is left is the data moving rather than the code differing.
+
+```sh
+ssh OPEN-NINE 'cat ~/logs/transport.opendata.ch.access.log' \
+    | python tools/shadow.py sample --limit 40 > corpus.txt
+python tools/shadow.py compare corpus.txt \
+    --v1 https://transport.opendata.ch --v2 https://transport-new.opendata.ch
 ```
 
 The board and connection queries ask for a fixed minute two days out,
@@ -82,6 +100,10 @@ sits in the code:
 - `icon` is **absent**, not null, when the upstream sends no icon class - the
   "null versus missing" trap, and cheaper to reproduce than to find out which
   client depends on it;
+- `fields[]` filters the answer, narrow paths beating broad ones, and an object
+  left with no keys comes back as `[]` rather than `{}`;
+- a repeated parameter without brackets keeps only its **last** value, because
+  that is what PHP's `parse_str` does;
 - an empty question answers an empty list, not a 400;
 - errors keep the `{"errors": [{"message": …}]}` envelope, and an upstream
   `429` is passed through as a `429`.

@@ -14,8 +14,10 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
 
-from .mapping import location_of, truthy
+from .fields import Fields
+from .mapping import location_of
 from .models import Errors, LocationsResponse
+from .query import truthy
 from .upstream import ClientIdentity, Upstream, get_upstream
 
 router = APIRouter()
@@ -30,6 +32,7 @@ router = APIRouter()
 async def search_locations(
     upstream: Annotated[Upstream, Depends(get_upstream)],
     identity: Annotated[ClientIdentity, Depends(ClientIdentity.of)],
+    fields: Annotated[Fields, Depends(Fields.of)],
     query: Annotated[
         str | None,
         Query(description="Location name to search for (e.g. `Bern`)."),
@@ -48,6 +51,17 @@ async def search_locations(
             description="Accepted and ignored. The upstream completion "
             "endpoint has no type filter, so `/v1` has never narrowed "
             "anything with it either.",
+        ),
+    ] = None,
+    fields_: Annotated[
+        list[str] | None,
+        Query(
+            alias="fields[]",
+            description="Keep only these parts of the answer. A `/`-separated "
+            "path of object keys; lists are transparent, so "
+            "`connections/from/departure` reaches into every connection. "
+            "A narrower path beats a broader one, and an object left with no "
+            "keys comes back as `[]`.",
         ),
     ] = None,
     key: Annotated[
@@ -74,4 +88,4 @@ async def search_locations(
         )
         stations = [location_of(entry) for entry in entries]
 
-    return JSONResponse(content={"stations": stations})
+    return JSONResponse(content=fields.apply({"stations": stations}))

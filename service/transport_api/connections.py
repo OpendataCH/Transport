@@ -9,11 +9,13 @@ parameters that are accepted and then never used.
 from datetime import datetime
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import JSONResponse
 
-from .mapping import ZURICH, connection_of, location_of, transportation_types, truthy
+from .fields import Fields
+from .mapping import ZURICH, connection_of, location_of, transportation_types
 from .models import ConnectionsResponse, Errors
+from .query import as_list, parameter, truthy
 from .upstream import ClientIdentity, Upstream, get_upstream
 
 router = APIRouter()
@@ -40,8 +42,10 @@ WINDOW = 16
     },
 )
 async def search_connections(
+    request: Request,
     upstream: Annotated[Upstream, Depends(get_upstream)],
     identity: Annotated[ClientIdentity, Depends(ClientIdentity.of)],
+    fields: Annotated[Fields, Depends(Fields.of)],
     from_: Annotated[
         str | None,
         Query(alias="from", description="Where the journey starts (e.g. `Lausanne`)."),
@@ -55,12 +59,9 @@ async def search_connections(
         Query(
             alias="via[]",
             description="Up to five places to pass through. With more than "
-            "one, array notation is required.",
+            "one, array notation is required: repeating `via=` without the "
+            "brackets keeps only the last value, as PHP reads it.",
         ),
-    ] = None,
-    via_single: Annotated[
-        list[str] | None,
-        Query(alias="via", description="The same, without the brackets."),
     ] = None,
     date: Annotated[
         str | None,
@@ -93,10 +94,6 @@ async def search_connections(
         list[str] | None,
         Query(alias="transportations[]", description="Means of transport to allow."),
     ] = None,
-    transportations_single: Annotated[
-        list[str] | None,
-        Query(alias="transportations", description="The same, without the brackets."),
-    ] = None,
     direct: Annotated[str | None, Query(description="Accepted and ignored on this path.")] = None,
     sleeper: Annotated[str | None, Query(description="Accepted and ignored on this path.")] = None,
     couchette: Annotated[
@@ -109,6 +106,17 @@ async def search_connections(
     bike: Annotated[str | None, Query(description="Accepted and ignored on this path.")] = None,
     accessibility: Annotated[
         str | None, Query(description="Accepted and ignored on this path.")
+    ] = None,
+    fields_: Annotated[
+        list[str] | None,
+        Query(
+            alias="fields[]",
+            description="Keep only these parts of the answer. A `/`-separated "
+            "path of object keys; lists are transparent, so "
+            "`connections/from/departure` reaches into every connection. "
+            "A narrower path beats a broader one, and an object left with no "
+            "keys comes back as `[]`.",
+        ),
     ] = None,
     key: Annotated[
         str | None, Query(description="A search.ch API key, forwarded unchanged.")
@@ -123,15 +131,17 @@ async def search_connections(
     """
     if not (truthy(from_) and truthy(to)):
         return JSONResponse(
-            content={
-                "connections": [],
-                "from": None,
-                "to": None,
-                "stations": {"from": [], "to": []},
-            }
+            content=fields.apply(
+                {
+                    "connections": [],
+                    "from": None,
+                    "to": None,
+                    "stations": {"from": [], "to": []},
+                }
+            )
         )
 
-    places = via or via_single or []
+    places = as_list(parameter(request, "via"))
     limit_value = _number(limit, DEFAULT_LIMIT)
     page_value = _number(page, DEFAULT_PAGE)
 
@@ -155,7 +165,7 @@ async def search_connections(
         time_type="arrival" if arrival else "departure",
         num=(window_page + 1) * limit_value if window_page >= 0 else None,
         pre=abs(window_page) * limit_value if window_page < 0 else None,
-        transportation_types=transportation_types(transportations or transportations_single),
+        transportation_types=transportation_types(as_list(parameter(request, "transportations"))),
         identity=identity,
     )
 
@@ -171,12 +181,14 @@ async def search_connections(
         stations = {"from": [origin], "to": [destination]}
 
     return JSONResponse(
-        content={
-            "connections": connections,
-            "from": origin,
-            "to": destination,
-            "stations": stations,
-        }
+        content=fields.apply(
+            {
+                "connections": connections,
+                "from": origin,
+                "to": destination,
+                "stations": stations,
+            }
+        )
     )
 
 
