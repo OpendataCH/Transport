@@ -272,11 +272,16 @@ def _delayed(scheduled: datetime | None, minutes: int) -> datetime:
     with the consequence that this one field cannot be compared between two
     requests, only within one.
     """
-    if scheduled is None:
-        return datetime.now(ZURICH).replace(microsecond=0)
+    # The delay is added whether or not there was a time to add it to. A
+    # departure board's head stop has no arrival, so its arrival prognosis
+    # comes back as "now plus the delay" - five minutes into the future of the
+    # request, every time. Leaving the delay off in that case was a bug in this
+    # port, and one that only replaying real traffic showed.
+    base = scheduled if scheduled is not None else datetime.now(ZURICH).replace(microsecond=0)
+
     # A negative delay is read and then ignored: only a positive one moves the
     # time. So an early departure is announced as punctual.
-    return scheduled + timedelta(minutes=minutes) if minutes > 0 else scheduled
+    return base + timedelta(minutes=minutes) if minutes > 0 else base
 
 
 def _delay(

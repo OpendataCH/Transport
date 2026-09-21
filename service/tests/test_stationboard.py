@@ -1,6 +1,7 @@
 """`/v2/stationboard`, against the answer /v1 is recorded to give."""
 
 import json
+from datetime import datetime
 
 import pytest
 from conftest import fixture
@@ -211,3 +212,27 @@ def test_the_board_station_replaces_the_one_on_the_journeys_stop(client, search_
 
     assert journey["stop"]["station"]["name"] == "Zürich HB"
     assert journey["passList"][0]["station"]["name"] is None
+
+
+def test_a_prognosis_without_a_scheduled_time_still_gets_the_delay(client, search_ch):
+    """ "Now plus the delay", not just "now".
+
+    /v1 builds the date from a missing scheduled time - which PHP reads as the
+    current moment - and then adds the delay to it anyway. So a departure
+    board's head stop reports an arrival prognosis five minutes into the future
+    of the request. Replaying real traffic is what showed it.
+    """
+    search_ch.returns(
+        {
+            "stop": {"id": "1", "name": "Somewhere"},
+            "connections": [{"time": "2026-09-22 00:51:00", "arr_delay": "+5"}],
+        }
+    )
+
+    stop = client.get("/v2/stationboard", params={"station": "x"}).json()["stationboard"][0]["stop"]
+
+    prognosis = datetime.fromisoformat(stop["prognosis"]["arrival"])
+    ahead = (prognosis - datetime.now(prognosis.tzinfo)).total_seconds()
+
+    assert stop["arrival"] is None
+    assert 4 * 60 < ahead <= 5 * 60 + 1, stop["prognosis"]["arrival"]
