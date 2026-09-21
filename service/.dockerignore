@@ -1,0 +1,7 @@
+# Keep the build context to what the image runs.
+tests
+.pytest_cache
+.ruff_cache
+.venv
+__pycache__
+*.pyc

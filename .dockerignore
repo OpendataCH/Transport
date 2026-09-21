@@ -10,4 +10,7 @@ var/cache/*
 var/logs/*
 config.php
 docker-compose.yml
+# The Python service is its own image, built from service/ with its own
+# Dockerfile. It has no business inside the PHP one.
+service
 *.md

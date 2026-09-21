@@ -38,17 +38,41 @@ test:php8.2:
   extends: .php
   image: php:8.2-cli
 
+# The Python service that answers /v2. It lives in service/ and is tested,
+# linted and built separately from the PHP application - the two deploy and
+# roll back independently, and nothing about /v1 depends on this job.
+test:service:
+  stage: test
+  image: python:3.13-slim
+  before_script:
+    - pip install --disable-pip-version-check --no-cache-dir -e './service[dev]'
+  script:
+    - cd service
+    - ruff check .
+    - ruff format --check .
+    - pytest -q
+
 # Kaniko rather than docker-in-docker: it needs no privileged runner, and this
 # project has no reason to ask for one.
-build:image:
+.kaniko:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  script:
+  before_script:
     - mkdir -p /kaniko/.docker
     - |
       echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf '%s:%s' "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+  rules:
+    # Only the default branch moves `latest`. A branch build would otherwise
+    # hand a server something nobody reviewed.
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Two images out of one commit, at the same short SHA. They are deployed and
+# rolled back separately; the shared tag only says which commit they came from.
+build:image:
+  extends: .kaniko
+  script:
     # Two tags, on purpose. The short SHA is the one to roll back to; `latest`
     # is the one a server pulls when nobody has decided otherwise.
     - >-
@@ -57,7 +81,16 @@ build:image:
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
       --destination "${CI_REGISTRY_IMAGE}:latest"
-  rules:
-    # Only the default branch moves `latest`. A branch build would otherwise
-    # hand a server something nobody reviewed.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+build:image:service:
+  extends: .kaniko
+  script:
+    # SERVICE_VERSION is baked in so that /v2/health names the build that is
+    # answering, without anyone having to read the compose file on the host.
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/service"
+      --dockerfile "${CI_PROJECT_DIR}/service/Dockerfile"
+      --build-arg "SERVICE_VERSION=${CI_COMMIT_SHORT_SHA}"
+      --destination "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
+      --destination "${CI_REGISTRY_IMAGE}/service:latest"
