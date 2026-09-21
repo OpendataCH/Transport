@@ -8,8 +8,8 @@ service exists.
 The plan and its stages are in the wiki:
 [Plan: a Python service beside the PHP one](https://gitlab.com/opendata.ch/Transport/-/wikis/Plan-v2-FastAPI).
 Stages done here: **S0** (the routing, both services alive at once), **S1**
-(`/v2/locations`) and **S2** (`/v2/stationboard`). Its own description is at
-`/v2/docs`.
+(`/v2/locations`), **S2** (`/v2/stationboard`) and **S3** (`/v2/connections`).
+All four routes of `/v1` are answered; its own description is at `/v2/docs`.
 
 ## Running it
 
@@ -42,10 +42,11 @@ order-blind for object keys, `null` kept apart from missing and `int` from
 
 ```sh
 python tools/diff_v1_v2.py https://test-transport-new.opendata.ch
-16 of 16 answers identical
+26 of 26 answers identical
 ```
 
-The station board queries ask for a fixed minute two days out, deliberately.
+The board and connection queries ask for a fixed minute two days out,
+deliberately.
 A board for *now* carries real-time delays that change between the two calls,
 and the two requests can land either side of a minute boundary and see
 different departures - so two live boards are not comparable at all, not even

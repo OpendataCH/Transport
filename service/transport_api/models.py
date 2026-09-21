@@ -129,6 +129,56 @@ class StationBoardResponse(BaseModel):
     stationboard: list[StationBoardJourney]
 
 
+class Walk(BaseModel):
+    """How long a section is walked for, when it is walked."""
+
+    duration: str | None
+
+
+class Section(BaseModel):
+    """One leg of a connection: a vehicle, or a walk."""
+
+    journey: Journey | None = Field(description="Null for a walk.")
+    walk: Walk | None = Field(description="Null for anything with a vehicle.")
+    departure: Stop
+    arrival: Stop | None = Field(description="Null on a leg the upstream does not end.")
+
+
+class Connection(BaseModel):
+    """One way of getting from A to B."""
+
+    from_: Stop | None = Field(alias="from", description="Where the journey starts.")
+    to: Stop | None
+    duration: str = Field(
+        description="`00d00:43:00` - a literal zero, the days, `d`, then the clock.",
+        examples=["00d00:43:00"],
+    )
+    transfers: int
+    service: None = Field(description="Only ever null on this path; it came from HAFAS.")
+    products: list[str] = Field(description="The lines used, in order.")
+    capacity1st: int | None = Field(description="Only ever null on this path.")
+    capacity2nd: int | None = Field(description="Only ever null on this path.")
+    sections: list[Section] | None = Field(
+        description="Null - not an empty list - when no leg says what it is."
+    )
+
+
+class Stations(BaseModel):
+    """The places the query resolved to, each as a list of one."""
+
+    from_: list[Location] = Field(alias="from")
+    to: list[Location]
+
+
+class ConnectionsResponse(BaseModel):
+    """The answer of `/v2/connections`."""
+
+    connections: list[Connection]
+    from_: Location | None = Field(alias="from", description="Departure of the search.")
+    to: Location | None = Field(description="Arrival of the search.")
+    stations: Stations
+
+
 class ErrorMessage(BaseModel):
     message: str
 

@@ -23,7 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from . import errors, locations, settings, stationboard, upstream
+from . import connections, errors, locations, settings, stationboard, upstream
 from .models import ApiInfo
 
 PREFIX = "/v2"
@@ -117,5 +117,6 @@ def info() -> ApiInfo:
 
 router.include_router(locations.router, tags=["locations"])
 router.include_router(stationboard.router, tags=["stationboard"])
+router.include_router(connections.router, tags=["connections"])
 
 app.include_router(router)

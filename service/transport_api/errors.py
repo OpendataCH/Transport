@@ -26,6 +26,9 @@ class ApiError(Exception):
         )
 
 
+# The messages are the PHP's, word for word, including the upstream body
+# appended whole - untrimmed and untruncated. Two recorded fixtures assert
+# exactly these strings, which is reason enough not to tidy them.
 def rate_limited(detail: str) -> ApiError:
     return ApiError(429, f"Rate limit error from timetable.search.ch: {detail}")
 

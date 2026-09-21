@@ -57,6 +57,28 @@ def stationboard_queries() -> list[str]:
     ]
 
 
+def connection_queries() -> list[str]:
+    """Journeys for a fixed minute two days out, for the same reason.
+
+    Connections carry real-time delays too, and a connection search run twice
+    around a minute boundary returns a different first departure.
+    """
+    when = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    return [
+        f"/connections?from=Bern&to=Z%C3%BCrich&date={when}&time=09:00",
+        f"/connections?from=Lausanne&to=Gen%C3%A8ve&date={when}&time=09:00&limit=6",
+        f"/connections?from=Bern&to=Z%C3%BCrich&date={when}&time=09:00&page=2&limit=3",
+        f"/connections?from=Bern&to=Z%C3%BCrich&date={when}&time=09:00&isArrivalTime=1",
+        f"/connections?from=Bern&to=Gen%C3%A8ve&via[]=Fribourg&date={when}&time=09:00",
+        f"/connections?from=Z%C3%BCrich%20HB&to=Uetliberg&date={when}&time=09:00",
+        f"/connections?from=Bern&to=Z%C3%BCrich&date={when}&time=09:00&transportations[]=train",
+        # The shapes that never reach search.ch, and the one that fails there.
+        "/connections?from=Bern&to=Z%C3%BCrich&limit=17",
+        "/connections?from=Bern",
+        "/connections?from=xyzzy-nowhere&to=zzzz-nowhere",
+    ]
+
+
 def fetch(url: str):
     """The status and the body - as data when it is JSON, as text when it is not.
 
@@ -104,7 +126,7 @@ def main() -> int:
     parser.add_argument("--quiet", action="store_true", help="only the tally")
     args = parser.parse_args()
 
-    queries = LOCATION_QUERIES + stationboard_queries()
+    queries = LOCATION_QUERIES + stationboard_queries() + connection_queries()
 
     identical = 0
     for query in queries:

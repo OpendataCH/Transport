@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse, PlainTextResponse
 
 from . import errors
-from .mapping import ZURICH, station_board_journey_of, station_of, truthy
+from .mapping import ZURICH, station_board_journey_of, station_of, transportation_types, truthy
 from .models import Errors, StationBoardResponse
 from .upstream import ClientIdentity, Upstream, get_upstream
 
@@ -23,25 +23,6 @@ router = APIRouter()
 # refuses. Both are the PHP's.
 DEFAULT_LIMIT = "40"
 MAX_LIMIT = 420
-
-# The old transportation names, and what search.ch calls them now. /v1 accepts
-# both and translates on the way out.
-DEPRECATED_TYPES = {
-    "ice_tgv_rj": "train",
-    "ec_ic": "train",
-    "ir": "train",
-    "re_d": "train",
-    "ship": "ship",
-    "s_sn_r": "train",
-    "bus": "bus",
-    "cableway": "cableway",
-    "arz_ext": "train",
-    "tramway_underground": "tram",
-    "tramway": "tram",
-    "direct": "train",
-    "direct_sleeper": "train",
-    "direct_couchette": "train",
-}
 
 
 @router.get(
@@ -135,7 +116,7 @@ async def station_board(
         when=when,
         mode="arrival" if type == "arrival" else "depart",
         limit=limit,
-        transportation_types=_transportation_types(transportations or transportations_single),
+        transportation_types=transportation_types(transportations or transportations_single),
         identity=identity,
     )
 
@@ -188,20 +169,3 @@ def _when(given: str | None) -> datetime:
     # /v1 lets the DateTime constructor throw here, which its error handler
     # turns into a 500 naming the string it could not read.
     raise errors.ApiError(500, f"DateTime::__construct(): Failed to parse time string ({given})")
-
-
-def _transportation_types(transportations: list[str] | None) -> str | None:
-    """The comma-separated list search.ch wants, or nothing at all.
-
-    `all` - the default - means the filter is left out entirely rather than
-    sent as every value.
-    """
-    if not transportations or transportations[0] == "all":
-        return None
-
-    translated = []
-    for transportation in transportations:
-        name = DEPRECATED_TYPES.get(transportation, transportation)
-        if name not in translated:
-            translated.append(name)
-    return ",".join(translated)

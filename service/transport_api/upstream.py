@@ -122,6 +122,52 @@ class Upstream:
             )
         return payload
 
+    async def route(
+        self,
+        *,
+        origin: str,
+        destination: str,
+        via: list[str],
+        when: datetime,
+        time_type: str,
+        num: int | None,
+        pre: int | None,
+        transportation_types: str | None,
+        identity: ClientIdentity,
+    ) -> dict:
+        """`route.json` - connections from one place to another.
+
+        `num` asks for everything up to the end of the requested page and `pre`
+        for results before the given time; /v1 then cuts its page out of the
+        answer itself.
+        """
+        params = {
+            "from": origin,
+            "to": destination,
+            "date": when.strftime("%Y-%m-%d"),
+            "time": when.strftime("%H:%M"),
+            "time_type": time_type,
+            "show_delays": "1",
+        }
+        # Indexed, not repeated: the PHP flattens the array into via[0], via[1]
+        # and so on, and search.ch reads it that way.
+        for index, place in enumerate(via):
+            params[f"via[{index}]"] = place
+        if num is not None:
+            params["num"] = str(num)
+        if pre is not None:
+            params["pre"] = str(pre)
+        if transportation_types:
+            params["transportation_types"] = transportation_types
+        params.update(identity.fields())
+
+        payload = await self._get("route.json", params)
+        if not isinstance(payload, dict):
+            raise errors.server_error(
+                f"Expected an object from route.json, got {type(payload).__name__}."
+            )
+        return payload
+
     async def _get(self, path: str, params: dict[str, str]):
         try:
             response = await self._client.get(path, params=params)
@@ -134,18 +180,18 @@ class Upstream:
             raise errors.server_error(str(exc) or "The request failed.") from exc
 
         if response.status_code == 429:
-            raise errors.rate_limited(response.text.strip()[:200])
+            raise errors.rate_limited(response.text)
         if response.status_code >= 500:
             raise errors.server_error(f"{response.status_code} {response.reason_phrase}")
 
         try:
             payload = response.json()
         except ValueError as exc:
-            raise errors.invalid_json(response.text.strip()[:200]) from exc
+            raise errors.invalid_json(response.text) from exc
 
         # search.ch reports some failures in a 200 body.
         if isinstance(payload, dict) and payload.get("error"):
-            raise errors.upstream_error(str(payload["error"])[:200])
+            raise errors.upstream_error(str(payload["error"]))
 
         return payload
 

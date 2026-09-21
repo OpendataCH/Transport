@@ -34,6 +34,43 @@ ICONS = {
 }
 
 
+# The old transportation names, and what search.ch calls them now. /v1 accepts
+# both and translates on the way out.
+DEPRECATED_TYPES = {
+    "ice_tgv_rj": "train",
+    "ec_ic": "train",
+    "ir": "train",
+    "re_d": "train",
+    "ship": "ship",
+    "s_sn_r": "train",
+    "bus": "bus",
+    "cableway": "cableway",
+    "arz_ext": "train",
+    "tramway_underground": "tram",
+    "tramway": "tram",
+    "direct": "train",
+    "direct_sleeper": "train",
+    "direct_couchette": "train",
+}
+
+
+def transportation_types(transportations: list[str] | None) -> str | None:
+    """The comma-separated list search.ch wants, or nothing at all.
+
+    `all` - the default - means the filter is left out entirely rather than
+    sent as every value.
+    """
+    if not transportations or transportations[0] == "all":
+        return None
+
+    translated = []
+    for transportation in transportations:
+        name = DEPRECATED_TYPES.get(transportation, transportation)
+        if name not in translated:
+            translated.append(name)
+    return ",".join(translated)
+
+
 def truthy(value: str | None) -> bool:
     """PHP truthiness of a query parameter.
 
@@ -325,3 +362,81 @@ def station_board_journey_of(entry: dict) -> dict:
     """
     journey = journey_of(entry)
     return {"stop": stop_of(entry), **journey}
+
+
+# --------------------------------------------------------------------------
+# Connections
+# --------------------------------------------------------------------------
+
+
+def connection_of(entry: dict) -> dict:
+    """`Connection::createFromJson` - one way of getting from A to B.
+
+    A leg is a stop with what happens after it. The first leg is the departure,
+    the last one is nothing but an arrival, and everything in between is a
+    change. /v1 reads them twice over: once as the two ends of the connection,
+    once as its sections.
+    """
+    legs = entry.get("legs") or []
+
+    origin = stop_of(legs[0]) if legs else None
+    destination = stop_of(legs[-1]) if legs else None
+
+    # The last leg carries no platform of its own; the one before it knows
+    # where the train got in and out.
+    if destination is not None and not destination["platform"] and len(legs) >= 2:
+        track = (legs[-2].get("exit") or {}).get("track")
+        if track:
+            destination["platform"] = track
+
+    return {
+        "from": origin,
+        "to": destination,
+        "duration": duration_of(entry.get("duration") or 0),
+        # Only a leg that says what it is counts. The last leg of a
+        # connection is a bare arrival with no type, and counting it would
+        # add a change that nobody makes.
+        "transfers": max(sum(1 for leg in legs if leg.get("type", "walk") != "walk") - 1, 0),
+        # Set from the HAFAS answer only, so always null here - and null, not
+        # an empty object.
+        "service": None,
+        "products": [leg["line"] for leg in legs if "line" in leg],
+        "capacity1st": None,
+        "capacity2nd": None,
+        "sections": _sections(legs),
+    }
+
+
+def _sections(legs: list[dict]) -> list[dict] | None:
+    """Only legs that say what they are become sections.
+
+    A connection whose legs carry no `type` at all therefore has `sections`
+    null rather than an empty list - the PHP never creates the array.
+    """
+    sections = [section_of(leg) for leg in legs if "type" in leg]
+    return sections or None
+
+
+def section_of(leg: dict) -> dict:
+    """`Section::createFromJson` - one leg, as /v1 shapes it."""
+    return {
+        "journey": journey_of(leg) if "tripid" in leg else None,
+        "walk": {"duration": leg.get("normal_time")} if leg.get("type") == "walk" else None,
+        "departure": stop_of(leg),
+        "arrival": stop_of(leg["exit"]) if leg.get("exit") else None,
+    }
+
+
+def duration_of(seconds: int) -> str:
+    """`00d00:43:00` - PHP's `gmdate("0z\\dH:i:s")`.
+
+    A literal zero, then the day of the year (zero-based, so a duration under
+    24 hours gives `0`), then `d`, then the clock. Two days look like `02d`;
+    ten look like `010d`, because `z` is not padded. Nobody would design this,
+    and it is what every client parses.
+    """
+    seconds = int(seconds)
+    days, rest = divmod(seconds, 86400)
+    hours, rest = divmod(rest, 3600)
+    minutes, secs = divmod(rest, 60)
+    return f"0{days}d{hours:02d}:{minutes:02d}:{secs:02d}"
