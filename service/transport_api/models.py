@@ -65,6 +65,70 @@ class LocationsResponse(BaseModel):
     stations: list[Location]
 
 
+class Prognosis(BaseModel):
+    """The real-time picture of a stop, such as the upstream gives it."""
+
+    platform: str | None = Field(description="Only ever null on this path.")
+    arrival: str | None = Field(
+        description="Expected arrival, ISO 8601 with a `+0100`-style offset. "
+        "**Dated now** when the stop has no scheduled arrival - a quirk of "
+        "/v1 that is reproduced here on purpose."
+    )
+    departure: str | None = Field(description="Expected departure, same format.")
+    capacity1st: int | None = Field(description="Only ever null on this path.")
+    capacity2nd: int | None = Field(description="Only ever null on this path.")
+
+
+class Stop(BaseModel):
+    """One checkpoint of a journey."""
+
+    station: Location | None = Field(
+        description="Deprecated in /v1's own documentation, and still sent."
+    )
+    arrival: str | None = Field(description="ISO 8601 with a `+0100`-style offset.")
+    arrivalTimestamp: int | None = Field(description="The same moment, in seconds.")  # noqa: N815
+    departure: str | None
+    departureTimestamp: int | None  # noqa: N815
+    delay: float | None = Field(description="Minutes late, from the prognosis.")
+    platform: str | None
+    prognosis: Prognosis
+    realtimeAvailability: str | None = Field(  # noqa: N815
+        description="Only ever null on this path; it came from HAFAS."
+    )
+    location: Location = Field(
+        description="Built from the same upstream object as `station` but by "
+        "different rules, so the two can disagree."
+    )
+
+
+class Journey(BaseModel):
+    """A line, and every stop of it the upstream mentions."""
+
+    name: str | None
+    category: str | None
+    subcategory: str | None = Field(description="Only ever null on this path.")
+    categoryCode: int | None = Field(description="Only ever null on this path.")  # noqa: N815
+    number: str | None
+    operator: str | None
+    to: str | None = Field(description="The final destination of the line.")
+    passList: list[Stop]  # noqa: N815
+    capacity1st: int | None = Field(description="Only ever null on this path.")
+    capacity2nd: int | None = Field(description="Only ever null on this path.")
+
+
+class StationBoardJourney(Journey):
+    """A line of a station board: a journey, plus the stop it makes here."""
+
+    stop: Stop
+
+
+class StationBoardResponse(BaseModel):
+    """The answer of `/v2/stationboard`."""
+
+    station: Location | None = Field(description="Null when no stop was asked for.")
+    stationboard: list[StationBoardJourney]
+
+
 class ErrorMessage(BaseModel):
     message: str
 

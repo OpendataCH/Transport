@@ -16,12 +16,14 @@ search.ch once each. Anything that needs volume belongs against a stub.
 import argparse
 import json
 import sys
+import urllib.error
 import urllib.request
+from datetime import datetime, timedelta
 
 # Enough shapes to catch a mapping mistake: a plain name, a name with an
 # umlaut, one that matches nothing, a coordinate search (distances, an address
 # entry without coordinates), and the empty question.
-QUERIES = [
+LOCATION_QUERIES = [
     "/locations?query=Bern",
     "/locations?query=Z%C3%BCrich%20HB",
     "/locations?query=Gen%C3%A8ve",
@@ -33,9 +35,45 @@ QUERIES = [
 ]
 
 
+def stationboard_queries() -> list[str]:
+    """Boards for a fixed minute two days out.
+
+    Deliberately not "now". A live board carries real-time delays that change
+    between the two calls, and /v1 dates a missing prognosis to the moment of
+    the request - so comparing two live boards compares two different seconds.
+    Two days ahead there is no real-time data, the timetable is fixed, and any
+    difference that shows up is a difference in the mapping.
+    """
+    when = (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")
+    return [
+        f"/stationboard?station=Bern&limit=5&datetime={when}%2009:00",
+        f"/stationboard?station=Z%C3%BCrich%20HB&limit=3&datetime={when}%2009:00",
+        f"/stationboard?id=8503000&limit=3&datetime={when}%2009:00",
+        f"/stationboard?station=Bern&limit=3&type=arrival&datetime={when}%2009:00",
+        f"/stationboard?station=Bern&limit=3&transportations[]=tram&datetime={when}%2009:00",
+        f"/stationboard?station=Lugano&limit=2&datetime={when}%2023:50",
+        "/stationboard?station=Bern&limit=421",
+        "/stationboard",
+    ]
+
+
 def fetch(url: str):
-    with urllib.request.urlopen(url, timeout=30) as response:
-        return response.status, json.load(response)
+    """The status and the body - as data when it is JSON, as text when it is not.
+
+    Not every answer is a document: /v1 refuses an over-large `limit` with a
+    bare string, and that refusal has to match too.
+    """
+    try:
+        with urllib.request.urlopen(url, timeout=30) as response:
+            return response.status, _body(response.read(), response.headers)
+    except urllib.error.HTTPError as error:
+        return error.code, _body(error.read(), error.headers)
+
+
+def _body(raw: bytes, headers) -> object:
+    if "json" in headers.get("Content-Type", ""):
+        return json.loads(raw)
+    return raw.decode("utf-8", "replace").strip()
 
 
 def differences(left, right, path: str = ""):
@@ -66,8 +104,10 @@ def main() -> int:
     parser.add_argument("--quiet", action="store_true", help="only the tally")
     args = parser.parse_args()
 
+    queries = LOCATION_QUERIES + stationboard_queries()
+
     identical = 0
-    for query in QUERIES:
+    for query in queries:
         v1_status, v1_body = fetch(args.host + "/v1" + query)
         v2_status, v2_body = fetch(args.host + "/v2" + query)
 
@@ -84,8 +124,8 @@ def main() -> int:
             for difference in found[:20]:
                 print(f"          {difference}")
 
-    print(f"\n{identical} of {len(QUERIES)} answers identical")
-    return 0 if identical == len(QUERIES) else 1
+    print(f"\n{identical} of {len(queries)} answers identical")
+    return 0 if identical == len(queries) else 1
 
 
 if __name__ == "__main__":

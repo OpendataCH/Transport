@@ -15,6 +15,7 @@ in the shape of /v1, error bodies included.
 """
 
 from dataclasses import dataclass
+from datetime import datetime
 
 import httpx
 from fastapi import Request
@@ -85,6 +86,42 @@ class Upstream:
             )
         return payload
 
+    async def stationboard(
+        self,
+        *,
+        stop: str,
+        when: datetime,
+        mode: str,
+        limit: str,
+        transportation_types: str | None,
+        identity: ClientIdentity,
+    ) -> dict:
+        """`stationboard.json` - the departures or arrivals of one stop.
+
+        The three `show_` flags are what make the answer usable: without them
+        there are no platforms, no onward stops and no delays.
+        """
+        params = {
+            "stop": stop,
+            "date": when.strftime("%Y-%m-%d"),
+            "time": when.strftime("%H:%M"),
+            "mode": mode,
+            "limit": limit,
+            "show_tracks": "1",
+            "show_subsequent_stops": "1",
+            "show_delays": "1",
+        }
+        if transportation_types:
+            params["transportation_types"] = transportation_types
+        params.update(identity.fields())
+
+        payload = await self._get("stationboard.json", params)
+        if not isinstance(payload, dict):
+            raise errors.server_error(
+                f"Expected an object from stationboard.json, got {type(payload).__name__}."
+            )
+        return payload
+
     async def _get(self, path: str, params: dict[str, str]):
         try:
             response = await self._client.get(path, params=params)
@@ -111,6 +148,11 @@ class Upstream:
             raise errors.upstream_error(str(payload["error"])[:200])
 
         return payload
+
+
+def get_upstream(request: Request) -> Upstream:
+    """The shared connection pool, as a seam a test can replace."""
+    return Upstream(request.app.state.http)
 
 
 def build_client() -> httpx.AsyncClient:

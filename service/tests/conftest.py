@@ -12,7 +12,8 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from transport_api import locations, settings
+from transport_api import settings
+from transport_api import upstream as upstream_module
 from transport_api.main import app
 from transport_api.upstream import Upstream
 
@@ -72,6 +73,6 @@ def client() -> TestClient:
 @pytest.fixture
 def search_ch():
     fake = FakeSearchCh()
-    app.dependency_overrides[locations.get_upstream] = fake.upstream
+    app.dependency_overrides[upstream_module.get_upstream] = fake.upstream
     yield fake
     app.dependency_overrides.clear()

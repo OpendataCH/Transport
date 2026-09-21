@@ -7,9 +7,9 @@ service exists.
 
 The plan and its stages are in the wiki:
 [Plan: a Python service beside the PHP one](https://gitlab.com/opendata.ch/Transport/-/wikis/Plan-v2-FastAPI).
-Stages done here: **S0** (the routing, both services alive at once) and **S1**
-(`/v2/locations`). It answers `/v2/health` and `/v2/locations`; its own
-description is at `/v2/docs`.
+Stages done here: **S0** (the routing, both services alive at once), **S1**
+(`/v2/locations`) and **S2** (`/v2/stationboard`). Its own description is at
+`/v2/docs`.
 
 ## Running it
 
@@ -34,6 +34,22 @@ curl -s 'localhost:8000/v2/locations?query=Bern'
 The tests read the recorded search.ch answers from `test/fixtures/` in the
 repository root - the same corpus the PHP suite uses. Nothing in the suite
 touches the network.
+
+`tools/diff_v1_v2.py <host>` asks both implementations the same questions on a
+running host and compares the answers structurally: order-aware for lists,
+order-blind for object keys, `null` kept apart from missing and `int` from
+`float`.
+
+```sh
+python tools/diff_v1_v2.py https://test-transport-new.opendata.ch
+16 of 16 answers identical
+```
+
+The station board queries ask for a fixed minute two days out, deliberately.
+A board for *now* carries real-time delays that change between the two calls,
+and the two requests can land either side of a minute boundary and see
+different departures - so two live boards are not comparable at all, not even
+`/v1` against itself.
 
 Or through the development compose project at the repository root, which brings
 up the PHP application and this one together on port 8000, exactly as the
