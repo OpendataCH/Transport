@@ -9,6 +9,10 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN a2enmod rewrite
 
+# Opcache ships with the image but keeps revalidating file timestamps, which is
+# pointless when the filesystem is immutable. See docker/opcache.ini.
+COPY docker/opcache.ini "$PHP_INI_DIR/conf.d/zz-opcache.ini"
+
 RUN sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/web#' /etc/apache2/sites-available/000-default.conf
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -19,4 +23,7 @@ COPY config.php.docker /var/www/html/config.php
 
 RUN chown -R www-data /var/www/html/var
 
-RUN composer install --prefer-dist --no-dev --no-interaction
+# --optimize-autoloader: a classmap instead of a PSR-4 directory search on every
+# class load. The application autoloads on every request; the deployment on the
+# old host has always passed this and the image never did.
+RUN composer install --prefer-dist --no-dev --no-interaction --optimize-autoloader
