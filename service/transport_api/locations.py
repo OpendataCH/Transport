@@ -1,37 +1,35 @@
-"""`/v2/locations` - search for stops and addresses.
+"""`/v2/locations` - the location search, in the shape of `/v1`.
 
-One upstream call, one list out. The mapping is small enough to read in one
-sitting, which is the point: everything that could surprise a reader is named
-here rather than left in the shape of the data.
+Same endpoint, same parameters, same JSON. What is different is underneath: one
+upstream call to `completion.json`, and a mapping small enough to read in one
+sitting.
+
+The mapping is written against the PHP it replaces, oddities included, because
+every one of them is either load-bearing for a client or indistinguishable from
+one. They are named where they sit.
 """
 
-from typing import Annotated, Literal
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Query, Request, Response
+from fastapi import APIRouter, Depends, Query, Request
+from fastapi.responses import JSONResponse
 
-from . import problems
-from .models import Category, Coordinate, Location, LocationKind, LocationsResponse
+from .coordinates import lv03_to_wgs84
+from .models import Errors, LocationsResponse
 from .upstream import ClientIdentity, Upstream
 
 router = APIRouter()
 
-# search.ch names the means of transport in a CSS class. These five are the
-# ones with a meaning; anything else - including the address marker below -
-# leaves `category` null rather than inventing a word for it.
-CATEGORIES: dict[str, Category] = {
+# search.ch names the means of transport in a CSS class. /v1 knows these five
+# and answers null for anything else - including addresses, whose class is
+# `sl-icon-type-adr`.
+ICONS = {
     "sl-icon-type-train": "train",
     "sl-icon-type-tram": "tram",
     "sl-icon-type-funicular": "cableway",
     "sl-icon-type-bus": "bus",
     "sl-icon-type-ship": "ship",
 }
-
-ADDRESS_ICON = "sl-icon-type-adr"
-
-# A stop lookup is worth caching for an hour: the list of places served in
-# Switzerland changes with the timetable, not with the minute. The departures
-# of a single stop are a different matter and will say so themselves.
-CACHE_CONTROL = "public, max-age=3600"
 
 
 def get_upstream(request: Request) -> Upstream:
@@ -41,53 +39,33 @@ def get_upstream(request: Request) -> Upstream:
 
 @router.get(
     "/locations",
-    summary="Search for stops and addresses",
+    summary="Search for stations and locations",
     response_model=LocationsResponse,
-    responses={
-        400: {"description": "Neither a query nor a complete coordinate."},
-        429: {"description": "search.ch is rate limiting this caller."},
-        502: {"description": "search.ch answered in a way this service cannot use."},
-        504: {"description": "search.ch did not answer in time."},
-    },
+    responses={429: {"model": Errors, "description": "search.ch is rate limiting."}},
 )
 async def search_locations(
-    response: Response,
     upstream: Annotated[Upstream, Depends(get_upstream)],
     identity: Annotated[ClientIdentity, Depends(ClientIdentity.of)],
     query: Annotated[
         str | None,
+        Query(description="Location name to search for (e.g. `Bern`)."),
+    ] = None,
+    x: Annotated[
+        str | None,
+        Query(description="Latitude to search around (e.g. `47.476001`). Requires `y`."),
+    ] = None,
+    y: Annotated[
+        str | None,
+        Query(description="Longitude to search around (e.g. `8.306130`). Requires `x`."),
+    ] = None,
+    type: Annotated[  # noqa: A002 - the name is part of the /v1 contract
+        str | None,
         Query(
-            description="Name to search for, complete or not (e.g. `Bern`).",
-            examples=["Bern"],
+            description="Accepted and ignored. The upstream completion "
+            "endpoint has no type filter, so `/v1` has never narrowed "
+            "anything with it either.",
         ),
     ] = None,
-    lat: Annotated[
-        float | None,
-        Query(
-            ge=-90,
-            le=90,
-            description="Latitude to search around. Requires `lon`.",
-            examples=[47.002347],
-        ),
-    ] = None,
-    lon: Annotated[
-        float | None,
-        Query(
-            ge=-180,
-            le=180,
-            description="Longitude to search around. Requires `lat`.",
-            examples=[8.379934],
-        ),
-    ] = None,
-    kind: Annotated[
-        Literal["all", "station", "address"],
-        Query(
-            alias="type",
-            description="Narrow the answer to one kind of place. Filtered "
-            "here, not upstream, so it never changes which places are found - "
-            "only which are returned.",
-        ),
-    ] = "all",
     key: Annotated[
         str | None,
         Query(
@@ -95,69 +73,94 @@ async def search_locations(
             "one, the caller's IP address is what search.ch rate limits on.",
         ),
     ] = None,
-) -> LocationsResponse:
-    """Find places by name, or the places nearest a coordinate.
+) -> Any:
+    """Find locations by name, or the locations nearest a coordinate.
 
-    Either `query` or both `lat` and `lon`. /v1 answers an empty list when
-    given neither, which reads as "nothing found" for what is really "nothing
-    asked"; here it is a 400.
+    Either `query`, or both `x` and `y`. Given neither, the answer is an empty
+    list rather than an error - as in `/v1`, where a client that has always
+    received `{"stations": []}` for a half-filled form would break on a 400.
     """
-    _validate(query, lat, lon)
+    stations: list[dict] = []
 
-    entries = await upstream.completion(
-        term=query,
-        latlon=f"{lat},{lon}" if lat is not None and lon is not None else None,
-        identity=identity,
-    )
+    if _set(query) or (_set(x) and _set(y)):
+        entries = await upstream.completion(
+            term=query,
+            latlon=f"{x},{y}" if _set(x) and _set(y) else None,
+            identity=identity,
+        )
+        stations = [to_station(entry) for entry in entries]
 
-    locations = [mapped for entry in entries if (mapped := to_location(entry))]
-    if kind != "all":
-        locations = [location for location in locations if location.type == kind]
-
-    response.headers["Cache-Control"] = CACHE_CONTROL
-    return LocationsResponse(locations=locations)
+    return JSONResponse(content={"stations": stations})
 
 
-def _validate(query: str | None, lat: float | None, lon: float | None) -> None:
-    if (lat is None) != (lon is None):
-        raise problems.bad_request("lat and lon go together; give both or neither.")
-    if not query and lat is None:
-        raise problems.bad_request("Give either query, or lat and lon.")
+def _set(value: str | None) -> bool:
+    """PHP truthiness, because that is what decides this in `/v1`.
 
-
-def to_location(entry: dict) -> Location | None:
-    """Map one entry of `completion.json`.
-
-    Returns None for an entry with no name. That is not a place anyone can use,
-    and passing it on as `"name": null` would make every client check.
+    `if ($query || ($x && $y))` treats an empty string and the string `"0"` as
+    absent. A coordinate of exactly zero is in the Gulf of Guinea, so the
+    second case has never mattered - but it is what the old endpoint does, and
+    the differential test compares answers, not intentions.
     """
-    name = entry.get("label") or entry.get("text") or entry.get("name")
-    if not name:
-        return None
-
-    icon = entry.get("iconclass")
-    is_address = bool(entry.get("isaddress")) or icon == ADDRESS_ICON
-    kind: LocationKind = "address" if is_address else "station"
-
-    return Location(
-        type=kind,
-        id=str(entry["id"]) if entry.get("id") else None,
-        name=name,
-        coordinate=_coordinate(entry),
-        distance=float(entry["dist"]) if entry.get("dist") is not None else None,
-        category=None if is_address else CATEGORIES.get(icon or ""),
-    )
+    return value is not None and value != "" and value != "0"
 
 
-def _coordinate(entry: dict) -> Coordinate | None:
-    """The WGS84 degrees the upstream already carries.
+def to_station(entry: dict) -> dict:
+    """Map one entry of `completion.json` into the /v1 location shape.
 
-    /v1 ignores these and computes the pair from the Swiss grid values `x` and
-    `y` with the swisstopo approximation, which lands a metre or so away. The
-    numbers are therefore *not* identical between the two versions, and that is
-    deliberate - see the compatibility layer, which keeps the old arithmetic.
+    The key order is the order of the PHP properties, and every key is present
+    with `null` where /v1 has null - with one exception, `icon`, which /v1
+    leaves out entirely when the upstream sends no icon class. That asymmetry
+    is deliberate here; it is the "null versus missing" trap the plan names,
+    and reproducing it is cheaper than finding out which client depends on it.
     """
-    lat, lon = entry.get("lat"), entry.get("lon")
-    if lat is None or lon is None:
-        return None
-    return Coordinate(lat=float(lat), lon=float(lon))
+    is_address = bool(entry.get("isaddress"))
+
+    station: dict[str, Any] = {
+        "id": _id(entry, is_address),
+        "name": _name(entry),
+        # Never set on this path: the score comes from the HAFAS answer, which
+        # has not been asked since the switch to search.ch.
+        "score": None,
+        "coordinate": _coordinate(entry),
+        "distance": entry["dist"] if "dist" in entry else None,
+    }
+
+    # Addresses are a different class in the PHP and never carry an icon, not
+    # even a null one.
+    if not is_address and "iconclass" in entry:
+        station["icon"] = ICONS.get(entry["iconclass"])
+
+    return station
+
+
+def _id(entry: dict, is_address: bool) -> str | None:
+    """The identifier, in the precedence the PHP applies by assigning in turn."""
+    terminal = entry.get("terminal") or {}
+    if is_address:
+        # An address only ever picks up an id from a terminal.
+        return _as_id(terminal.get("id"))
+    for candidate in (terminal.get("id"), entry.get("stopid"), entry.get("id")):
+        if candidate is not None:
+            return _as_id(candidate)
+    return None
+
+
+def _as_id(value: Any) -> str | None:
+    return None if value is None else str(value)
+
+
+def _name(entry: dict) -> str | None:
+    """`name` beats `label` beats `text` - the order the PHP overwrites in."""
+    for field in ("name", "label", "text"):
+        if entry.get(field) is not None:
+            return entry[field]
+    return None
+
+
+def _coordinate(entry: dict) -> dict:
+    """Always an object, even when there is nothing to put in it."""
+    if entry.get("x") is None or entry.get("y") is None:
+        return {"type": "WGS84", "x": None, "y": None}
+
+    lat, lon = lv03_to_wgs84(int(entry["x"]), int(entry["y"]))
+    return {"type": "WGS84", "x": lat, "y": lon}

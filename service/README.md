@@ -26,9 +26,9 @@ curl -s localhost:8000/v2/health
 {"status":"ok","version":"dev","timezone":"Europe/Zurich","time":"2026-09-21T23:41:02.123456+02:00"}
 
 curl -s 'localhost:8000/v2/locations?query=Bern'
-{"locations":[{"type":"station","id":"8507000","name":"Bern",
-               "coordinate":{"lat":46.948823,"lon":7.439123},
-               "distance":null,"category":"train"}, …]}
+{"stations":[{"id":"8507000","name":"Bern","score":null,
+              "coordinate":{"type":"WGS84","x":46.948832,"y":7.439136},
+              "distance":null,"icon":"train"}, …]}
 ```
 
 The tests read the recorded search.ch answers from `test/fixtures/` in the
@@ -45,23 +45,34 @@ curl -s localhost:8000/v1/locations?query=Bern   # PHP
 curl -s localhost:8000/v2/health                 # this
 ```
 
-## Where /v2 differs from /v1, and why
+## /v2 is /v1, served by something else
 
-Only where the difference earns itself:
+Same endpoints, same parameters, same JSON. That is the design, not a stage of
+it: two shapes would mean two contracts to maintain forever, and no way to test
+the new one against the old. Because the shapes are identical, every answer can
+be compared request by request - and once they have been identical on real
+traffic for long enough, `/v1` is routed here and the PHP stack is retired.
 
-- the list is called `locations`, not `stations`, because it has always
-  contained addresses too, and each entry says which it is (`type`); `type=`
-  narrows the answer;
-- a coordinate is `{lat, lon}` in degrees taken straight from the upstream,
-  instead of `x` and `y` computed from the Swiss grid - `x` was the latitude,
-  which is the wrong way round, and the conversion lands about a metre off;
-- `score` is gone: on this path it was always `null`;
-- every field is always present, `null` when unknown, instead of keys that come
-  and go;
-- an empty question is a `400`, not an empty list that reads as "nothing
-  found";
-- errors are RFC 9457 problem documents, one shape for all of them, and an
-  upstream `429` stays a `429` rather than becoming a fault of ours.
+So the oddities of `/v1` are reproduced on purpose, each one named where it
+sits in the code:
+
+- `stations` is the key, although the list carries addresses too;
+- a coordinate is `x` (latitude) and `y` (longitude), computed from the Swiss
+  grid with the swisstopo approximation - not the WGS84 degrees the upstream
+  also sends, which differ by about a metre;
+- `score` is always `null` here; it came from HAFAS, which has not been asked
+  since the switch to search.ch;
+- `icon` is **absent**, not null, when the upstream sends no icon class - the
+  "null versus missing" trap, and cheaper to reproduce than to find out which
+  client depends on it;
+- an empty question answers an empty list, not a 400;
+- errors keep the `{"errors": [{"message": …}]}` envelope, and an upstream
+  `429` is passed through as a `429`.
+
+What is deliberately *not* the same: `/v2/` reports version `2.0`, and the
+machine-readable description is OpenAPI 3.1 at `/v2/openapi.json` rather than
+the generated Swagger 2.0 document `/v1` serves. Neither is part of the data a
+client reads.
 
 ## Three things this service must keep doing
 

@@ -6,9 +6,11 @@ outside that prefix is served - a request for /v1 arriving here is a routing
 mistake, and answering it would silently shadow the contract the PHP
 application owns.
 
-The /v1 compatibility layer planned for stage S4 will be a second router in
-this same application, mounted deliberately and routed only once it has been
-proven identical.
+/v2 answers the same questions in the same shape as /v1. That is the whole
+design: the two can then be compared request by request, and once they have
+been identical on real traffic for long enough, /v1 is routed here and the PHP
+stack is retired. A cleaner shape would have meant a second contract to
+maintain forever, and no way to test the first one.
 """
 
 from contextlib import asynccontextmanager
@@ -21,7 +23,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from . import locations, problems, settings, upstream
+from . import errors, locations, settings, upstream
+from .models import ApiInfo
 
 PREFIX = "/v2"
 
@@ -41,9 +44,10 @@ app = FastAPI(
     version=settings.VERSION,
     summary="The Swiss public transport API",
     description=(
-        "Version 2, served beside the unchanged `/v1` by a separate service.\n\n"
-        "Data comes from [search.ch](https://timetable.search.ch/). This service "
-        "translates; it stores nothing."
+        "The same API as `/v1` - same endpoints, same parameters, same JSON - "
+        "served beside it by a separate service written in Python.\n\n"
+        "Data comes from [search.ch](https://timetable.search.ch/). This "
+        "service translates; it stores nothing."
     ),
     lifespan=lifespan,
     # FastAPI's own documents are served under the prefix as well, so that the
@@ -72,7 +76,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-problems.install(app)
+errors.install(app)
 
 router = APIRouter(prefix=PREFIX)
 
@@ -98,6 +102,16 @@ def health() -> Health:
         version=settings.VERSION,
         timezone=settings.TIMEZONE,
         time=datetime.now(ZoneInfo(settings.TIMEZONE)),
+    )
+
+
+@router.get("/", summary="What this API is")
+def info() -> ApiInfo:
+    """The same answer `/v1/` gives, with its own version number."""
+    return ApiInfo(
+        date=datetime.now(ZoneInfo(settings.TIMEZONE)).isoformat(timespec="seconds"),
+        author="Opendata.ch",
+        version="2.0",
     )
 
 

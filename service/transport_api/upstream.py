@@ -9,9 +9,9 @@ shares one bucket and throttles each other; the only symptom is a rise in 429s.
 That is why it is a named type passed explicitly rather than something read
 from a global.
 
-**Error mapping.** An upstream 429 stays a 429, because it is the caller's
-problem to retry. Everything else the upstream does wrong becomes a 502 or a
-504 - never a 500, which would claim the fault is here.
+**Error mapping.** The same as /v1: an upstream 429 is passed through as a
+429, everything else becomes a 500 whose message names search.ch. /v2 answers
+in the shape of /v1, error bodies included.
 """
 
 from dataclasses import dataclass
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 import httpx
 from fastapi import Request
 
-from . import problems, settings
+from . import errors, settings
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,7 @@ class Upstream:
 
         payload = await self._get("completion.json", params)
         if not isinstance(payload, list):
-            raise problems.upstream_failed(
+            raise errors.server_error(
                 f"Expected a list from completion.json, got {type(payload).__name__}."
             )
         return payload
@@ -89,23 +89,26 @@ class Upstream:
         try:
             response = await self._client.get(path, params=params)
         except httpx.TimeoutException as exc:
-            raise problems.upstream_timeout(str(exc) or "No answer in time.") from exc
+            # /v1 sets no timeout at all and would hold the worker until the
+            # socket gives up. The answer is the same either way: a 500 naming
+            # the upstream.
+            raise errors.server_error(str(exc) or "No answer in time.") from exc
         except httpx.HTTPError as exc:
-            raise problems.upstream_failed(str(exc) or "The request failed.") from exc
+            raise errors.server_error(str(exc) or "The request failed.") from exc
 
         if response.status_code == 429:
-            raise problems.upstream_rate_limited(response.text.strip()[:200])
+            raise errors.rate_limited(response.text.strip()[:200])
         if response.status_code >= 500:
-            raise problems.upstream_failed(f"{response.status_code} {response.reason_phrase}")
+            raise errors.server_error(f"{response.status_code} {response.reason_phrase}")
 
         try:
             payload = response.json()
         except ValueError as exc:
-            raise problems.upstream_failed(f"Invalid JSON: {response.text.strip()[:200]}") from exc
+            raise errors.invalid_json(response.text.strip()[:200]) from exc
 
         # search.ch reports some failures in a 200 body.
         if isinstance(payload, dict) and payload.get("error"):
-            raise problems.upstream_failed(str(payload["error"])[:200])
+            raise errors.upstream_error(str(payload["error"])[:200])
 
         return payload
 

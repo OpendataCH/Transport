@@ -1,62 +1,83 @@
-"""What /v2 answers with.
+"""The shapes /v2 answers with - the shapes of /v1.
 
-Every field is always present. Where /v1 lets keys appear and vanish depending
-on what the upstream happened to send, /v2 states the shape once and uses
-`null` for "not known" - a client can then read a field without asking whether
-it exists.
+`/v2` is the same API as `/v1`, served by a different implementation. Its
+endpoints, parameters and JSON are the ones tens of thousands of unattended
+clients already speak, which is what makes the two comparable request by
+request - and what will let `/v1` be routed here once they have been proven
+identical for long enough.
+
+These models exist for the OpenAPI document. The route builds its answer as
+plain data, because some of this shape cannot be expressed by a model: `icon`
+is absent rather than null when the upstream sends no icon class, and a
+distance stays the integer it arrived as. A test validates every mapped answer
+against the models here, so the description cannot drift away from the thing.
 """
-
-from typing import Literal
 
 from pydantic import BaseModel, Field
 
-# The means of transport a station is served by, as search.ch names them in its
-# icon classes. The same five the /v1 shape knows; anything else is null rather
-# than invented.
-Category = Literal["train", "tram", "bus", "ship", "cableway"]
-
-LocationKind = Literal["station", "address"]
-
 
 class Coordinate(BaseModel):
-    """A point in WGS84, named rather than numbered.
+    """A point, in the naming /v1 uses.
 
-    /v1 calls latitude `x` and longitude `y`, which is the wrong way round for
-    anyone who has seen a coordinate pair before, and then computes both from
-    the Swiss grid values with an approximation. The upstream answer carries
-    proper WGS84 degrees already, so /v2 passes those through: fewer steps,
-    smaller error, and names that say which is which.
+    `x` is the latitude and `y` the longitude - the other way round from what
+    most people expect, and kept because changing it would break every client
+    that reads them.
+
+    Both are computed from the Swiss grid values with the swisstopo
+    approximation, not taken from the WGS84 degrees the upstream also sends.
+    The two differ by about a metre; see `coordinates.py`.
     """
 
-    lat: float = Field(description="Latitude in degrees.", examples=[46.948823])
-    lon: float = Field(description="Longitude in degrees.", examples=[7.439123])
+    type: str = Field(description="Always `WGS84`.", examples=["WGS84"])
+    x: float | None = Field(description="Latitude.", examples=[46.948832])
+    y: float | None = Field(description="Longitude.", examples=[7.439136])
 
 
 class Location(BaseModel):
-    """A place one can search for: a stop, or a street address near one."""
+    """A station, address or point of interest."""
 
-    type: LocationKind = Field(description="What kind of place this is.")
-    id: str | None = Field(
-        description="The stop identifier, as used by `station=` elsewhere. Addresses have none."
+    id: str | None = Field(description="The stop identifier. Null for an address.")
+    name: str | None = Field(description="The name as search.ch spells it.")
+    score: int | None = Field(
+        description="Match quality. Always null on this path - the field is a "
+        "leftover of the HAFAS era, kept because it has always been sent."
     )
-    name: str = Field(description="The name as search.ch spells it.")
-    coordinate: Coordinate | None = Field(
-        description="Where it is, or null when the upstream gives no position."
-    )
+    coordinate: Coordinate
     distance: float | None = Field(
-        description="Metres from the searched point. Null unless the search was by coordinate."
+        description="Metres from the searched point, when the search was by "
+        "coordinate. Null otherwise."
     )
-    category: Category | None = Field(
-        description="Means of transport serving the stop, where known."
+    icon: str | None = Field(
+        None,
+        description="One of `train`, `tram`, `bus`, `ship`, `cableway`; null "
+        "for anything else. **Absent entirely** when the upstream entry "
+        "carries no icon class at all.",
     )
 
 
 class LocationsResponse(BaseModel):
     """The answer of `/v2/locations`.
 
-    Called `locations`, not `stations`: the list has always contained addresses
-    too, and /v1 calling them stations is one of the small untruths this
-    version is free to drop.
+    The key is `stations` although the list also carries addresses. That is how
+    /v1 names it.
     """
 
-    locations: list[Location]
+    stations: list[Location]
+
+
+class ErrorMessage(BaseModel):
+    message: str
+
+
+class Errors(BaseModel):
+    """The error envelope of /v1, unchanged."""
+
+    errors: list[ErrorMessage]
+
+
+class ApiInfo(BaseModel):
+    """What `/v2/` says about the API."""
+
+    date: str = Field(description="Now, ISO 8601 with offset.")
+    author: str
+    version: str

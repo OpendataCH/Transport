@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""Ask /v1 and /v2 the same thing and report where they disagree.
+
+The middle layer of the testing plan, in its smallest useful form: a request is
+sent to both implementations of the same host and the two JSON answers are
+compared structurally - order-aware for lists, order-insensitive for object
+keys, and `null` kept strictly apart from a missing key.
+
+    python tools/diff_v1_v2.py https://test-transport-new.opendata.ch
+    python tools/diff_v1_v2.py https://transport-new.opendata.ch --quiet
+
+It is not a load test: the queries below are a handful, and both sides call
+search.ch once each. Anything that needs volume belongs against a stub.
+"""
+
+import argparse
+import json
+import sys
+import urllib.request
+
+# Enough shapes to catch a mapping mistake: a plain name, a name with an
+# umlaut, one that matches nothing, a coordinate search (distances, an address
+# entry without coordinates), and the empty question.
+QUERIES = [
+    "/locations?query=Bern",
+    "/locations?query=Z%C3%BCrich%20HB",
+    "/locations?query=Gen%C3%A8ve",
+    "/locations?query=xyzzy-nothing-matches",
+    "/locations?x=47.002347&y=8.379934",
+    "/locations?x=46.388653&y=6.238729",
+    "/locations?query=Bern&type=station",
+    "/locations",
+]
+
+
+def fetch(url: str):
+    with urllib.request.urlopen(url, timeout=30) as response:
+        return response.status, json.load(response)
+
+
+def differences(left, right, path: str = ""):
+    """Every place the two answers are not the same thing."""
+    if isinstance(left, dict) and isinstance(right, dict):
+        for key in sorted(set(left) | set(right)):
+            where = f"{path}.{key}"
+            if key not in left:
+                yield f"{where}: only in /v2 ({right[key]!r})"
+            elif key not in right:
+                yield f"{where}: only in /v1 ({left[key]!r})"
+            else:
+                yield from differences(left[key], right[key], where)
+    elif isinstance(left, list) and isinstance(right, list):
+        if len(left) != len(right):
+            yield f"{path}: {len(left)} entries in /v1, {len(right)} in /v2"
+        for index, (one, other) in enumerate(zip(left, right, strict=False)):
+            yield from differences(one, other, f"{path}[{index}]")
+    elif type(left) is not type(right) or left != right:
+        # Types are compared too: 9 and 9.0 are the same number and a
+        # different answer, and null is not the same as absent.
+        yield f"{path}: /v1 {left!r} != /v2 {right!r}"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("host", help="e.g. https://test-transport-new.opendata.ch")
+    parser.add_argument("--quiet", action="store_true", help="only the tally")
+    args = parser.parse_args()
+
+    identical = 0
+    for query in QUERIES:
+        v1_status, v1_body = fetch(args.host + "/v1" + query)
+        v2_status, v2_body = fetch(args.host + "/v2" + query)
+
+        found = list(differences(v1_body, v2_body))
+        if v1_status != v2_status:
+            found.insert(0, f": status {v1_status} in /v1, {v2_status} in /v2")
+
+        if not found:
+            identical += 1
+            if not args.quiet:
+                print(f"  same  {query}")
+        else:
+            print(f"  DIFF  {query}")
+            for difference in found[:20]:
+                print(f"          {difference}")
+
+    print(f"\n{identical} of {len(QUERIES)} answers identical")
+    return 0 if identical == len(QUERIES) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
