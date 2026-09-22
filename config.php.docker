@@ -2,7 +2,14 @@
 
 $app['debug'] = false;
 $app['http_cache'] = false;
-$app['buzz.client'] = new Buzz\Client\Curl();
+// Buzz's own default is five seconds, which is shorter than search.ch
+// occasionally needs: a cross-border connection search has been measured at
+// ten. The live deployment on the old host has always set sixty, and a
+// deployment that gives up sooner answers 500 where the same query elsewhere
+// answers data.
+$client = new Buzz\Client\Curl();
+$client->setTimeout(60);
+$app['buzz.client'] = $client;
 $app['monolog.level'] = Monolog\Logger::ERROR;
 $app['redis.config'] = getenv('REDIS_HOST') ? ['host' => getenv('REDIS_HOST'), 'port' => getenv('REDIS_PORT'), 'password' => getenv('REDIS_PASSWORD') ?: null] : [];
 $app['stats.config'] = getenv('STATS_ENABLED') ? ['enabled' => true] : ['enabled' => false];
