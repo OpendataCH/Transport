@@ -7,15 +7,22 @@ service exists.
 
 The plan and its stages are in the wiki:
 [Plan: a Python service beside the PHP one](https://gitlab.com/opendata.ch/Transport/-/wikis/Plan-v2-FastAPI).
-Stages done here: **S0** (the routing, both services alive at once), **S1**
-(`/v2/locations`), **S2** (`/v2/stationboard`), **S3** (`/v2/connections`) and
-the `fields[]` filter. All four routes of `/v1` are answered; its own
-description is at `/v2/docs`.
+
+**This service answers `/v1`** - the contract every client already speaks -
+and `/v2` as an alias of the same routes. The PHP implementation keeps
+answering under **`/v1-old`**, unrouted from the name clients use, so the two
+can still be compared and one line of nginx puts it back.
+
+| | |
+| --- | --- |
+| `/v1/locations`, `/v1/stationboard`, `/v1/connections`, `/v1/` | the API |
+| `/v1/health` | which build is running, and in which timezone |
+| `/v1/docs`, `/v1/documentation`, `/v1/openapi.json` | Swagger UI, ReDoc, OpenAPI 3.1 |
+| `/v2/…` | the same routes, undocumented, so old bookmarks keep working |
 
 What is **not** here, on purpose: the website around the API - `/docs.html`,
-`/swagger.json`, `/examples/`, `/showcase.html`, `robots.txt`. Those are served
-by the PHP container and will still need serving on the day `/v1` is routed
-here.
+`/swagger.json` (the generated Swagger 2.0 document), `/examples/`,
+`/showcase.html`, `robots.txt`. Those still come from the PHP container.
 
 ## Running it
 
@@ -28,10 +35,10 @@ uvicorn transport_api.main:app --reload --port 8000
 ```
 
 ```sh
-curl -s localhost:8000/v2/health
+curl -s localhost:8000/v1/health
 {"status":"ok","version":"dev","timezone":"Europe/Zurich","time":"2026-09-21T23:41:02.123456+02:00"}
 
-curl -s 'localhost:8000/v2/locations?query=Bern'
+curl -s 'localhost:8000/v1/locations?query=Bern'
 {"stations":[{"id":"8507000","name":"Bern","score":null,
               "coordinate":{"type":"WGS84","x":46.948832,"y":7.439136},
               "distance":null,"icon":"train"}, …]}
@@ -76,8 +83,9 @@ servers arrange them:
 
 ```sh
 docker compose up --build
-curl -s localhost:8000/v1/locations?query=Bern   # PHP
-curl -s localhost:8000/v2/health                 # this
+curl -s 'localhost:8000/v1/locations?query=Bern'      # this
+curl -s 'localhost:8000/v1-old/locations?query=Bern'  # PHP
+curl -s localhost:8000/docs.html                      # PHP, the website
 ```
 
 ## /v2 is /v1, served by something else
@@ -104,6 +112,9 @@ sits in the code:
   left with no keys comes back as `[]` rather than `{}`;
 - a repeated parameter without brackets keeps only its **last** value, because
   that is what PHP's `parse_str` does;
+- the JSON is encoded as `json_encode` encodes it - non-ASCII escaped, forward
+  slashes escaped - so the answer is not merely the same document but the same
+  bytes;
 - an empty question answers an empty list, not a 400;
 - errors keep the `{"errors": [{"message": …}]}` envelope, and an upstream
   `429` is passed through as a `429`.
@@ -115,10 +126,10 @@ client reads.
 
 ## Three things this service must keep doing
 
-- **Only `/v2`.** Every route lives under that prefix and `tests/test_routing.py`
-  asserts that the `/v1` surface returns 404 here. A location block written too
-  broadly would otherwise shadow the contract the PHP application owns with a
-  half-built answer.
+- **Not the website.** Every route lives under `/v1` or `/v2`, and
+  `tests/test_routing.py` asserts that `/`, `/docs.html`, `/swagger.json` and
+  the rest return 404 here. They are the PHP container's, and still have to be
+  served by something.
 - **Europe/Zurich.** The image installs `tzdata` and sets `TZ`; `/v2/health`
   reports the zone and a timestamp with its offset, so a container that came up
   on UTC says so in the smoke test rather than in the data months later.

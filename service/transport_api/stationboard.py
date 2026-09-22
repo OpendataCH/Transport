@@ -10,9 +10,10 @@ from datetime import datetime
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query, Request
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import PlainTextResponse
 
 from . import errors
+from .encoding import PhpJson
 from .fields import Fields
 from .mapping import ZURICH, station_board_journey_of, station_of, transportation_types
 from .models import Errors, StationBoardResponse
@@ -115,7 +116,7 @@ async def station_board(
 
     stop = station if truthy(station) else id
     if not truthy(stop):
-        return JSONResponse(content=fields.apply({"station": None, "stationboard": []}))
+        return PhpJson(content=fields.apply({"station": None, "stationboard": []}))
 
     when = _when(date or datetime_)
 
@@ -139,7 +140,7 @@ async def station_board(
         journey["stop"]["station"] = board_station
         journeys.append(journey)
 
-    return JSONResponse(content=fields.apply({"station": board_station, "stationboard": journeys}))
+    return PhpJson(content=fields.apply({"station": board_station, "stationboard": journeys}))
 
 
 def _over_the_limit(limit: str) -> bool:

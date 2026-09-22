@@ -104,13 +104,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("host", help="e.g. https://test-transport-new.opendata.ch")
     parser.add_argument("--quiet", action="store_true", help="only the tally")
+    parser.add_argument(
+        "--v1-prefix",
+        default="/v1",
+        help="where the PHP implementation answers; /v1-old once /v1 has been flipped",
+    )
     args = parser.parse_args()
 
     queries = LOCATION_QUERIES + stationboard_queries() + connection_queries()
 
     identical = 0
     for query in queries:
-        v1_status, v1_body = fetch(args.host + "/v1" + query)
+        v1_status, v1_body = fetch(args.host + args.v1_prefix + query)
         v2_status, v2_body = fetch(args.host + "/v2" + query)
 
         found = list(differences(v1_body, v2_body))

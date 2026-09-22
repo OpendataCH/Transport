@@ -12,8 +12,8 @@ one. They are named where they sit.
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query
-from fastapi.responses import JSONResponse
 
+from .encoding import PhpJson
 from .fields import Fields
 from .mapping import location_of
 from .models import Errors, LocationsResponse
@@ -88,4 +88,4 @@ async def search_locations(
         )
         stations = [location_of(entry) for entry in entries]
 
-    return JSONResponse(content=fields.apply({"stations": stations}))
+    return PhpJson(content=fields.apply({"stations": stations}))

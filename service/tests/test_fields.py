@@ -60,7 +60,7 @@ def test_the_filter_reaches_into_a_real_answer(client, search_ch):
     search_ch.returns(fixture("locations/searchch_response.json"))
 
     body = client.get(
-        "/v2/locations",
+        "/v1/locations",
         params=[("query", "Be"), ("fields[]", "stations/name"), ("fields[]", "stations/icon")],
     ).json()
 
@@ -70,14 +70,14 @@ def test_the_filter_reaches_into_a_real_answer(client, search_ch):
 def test_a_field_nobody_has_empties_the_whole_document(client, search_ch):
     search_ch.returns(fixture("locations/searchch_response.json"))
 
-    body = client.get("/v2/locations", params={"query": "Be", "fields[]": "nonexistent"}).json()
+    body = client.get("/v1/locations", params={"query": "Be", "fields[]": "nonexistent"}).json()
 
     assert body == []
 
 
 def test_fields_without_brackets_is_a_bare_500(client, search_ch):
     """What a TypeError escaping Silex looks like from outside: empty body."""
-    response = client.get("/v2/locations", params={"query": "Be", "fields": "abc"})
+    response = client.get("/v1/locations", params={"query": "Be", "fields": "abc"})
 
     assert response.status_code == 500
     assert response.content == b""

@@ -121,16 +121,18 @@ def compare(arguments) -> int:
         request = target if arguments.as_is else pin(target, pinned)
 
         for attempt in range(3):
-            v1_status, v1_body = fetch(arguments.v1 + request)
+            v1_status, v1_body, v1_raw = fetch(arguments.v1 + _v1(request, arguments))
             time.sleep(arguments.delay)
             if arguments.noise_floor:
                 # Ask /v1 twice instead. Whatever differs is not a difference
                 # between the implementations - it is the real-time data
                 # moving underneath, and it is the floor this corpus can
                 # measure to.
-                v2_status, v2_body = fetch(arguments.v1 + request)
+                v2_status, v2_body, v2_raw = fetch(arguments.v1 + _v1(request, arguments))
             else:
-                v2_status, v2_body = fetch(arguments.v2 + request.replace("/v1/", "/v2/", 1))
+                v2_status, v2_body, v2_raw = fetch(
+                    arguments.v2 + request.replace("/v1/", "/v2/", 1)
+                )
 
             # Both sides name the same caller to search.ch, so a pair spends
             # the quota twice and the loser is whichever asked second. That is
@@ -144,7 +146,7 @@ def compare(arguments) -> int:
         found = list(differences(v1_body, v2_body))
         if v1_status != v2_status:
             found.insert(0, f"(status): /v1 {v1_status} != /v2 {v2_status}")
-        return request, found
+        return request, found, v1_raw == v2_raw
 
     if arguments.workers > 1:
         with ThreadPoolExecutor(max_workers=arguments.workers) as pool:
@@ -154,7 +156,9 @@ def compare(arguments) -> int:
 
     fields: Counter[str] = Counter()
     identical = 0
-    for request, found in results:
+    byte_identical = 0
+    for request, found, same_bytes in results:
+        byte_identical += same_bytes
         if not found:
             identical += 1
             if not arguments.quiet:
@@ -167,6 +171,7 @@ def compare(arguments) -> int:
             fields[field(difference)] += 1
 
     print(f"\n{identical} of {len(results)} answers identical")
+    print(f"{byte_identical} of {len(results)} identical byte for byte")
     if throttled:
         print(f"({throttled} pairs were retried after a 429 from search.ch)")
     if fields:
@@ -174,6 +179,16 @@ def compare(arguments) -> int:
         for name, count in fields.most_common(20):
             print(f"  {count:6}  {name}")
     return 0 if identical == len(results) else 1
+
+
+def _v1(request: str, arguments) -> str:
+    """Where the PHP implementation answers.
+
+    After the flip it is no longer `/v1` - that name now belongs to the Python
+    service - so the old one is reachable under `/v1-old` on the same host and
+    this is how the tool is pointed at it.
+    """
+    return request.replace("/v1/", arguments.v1_prefix + "/", 1)
 
 
 def pin(target: str, when: datetime) -> str:
@@ -197,14 +212,21 @@ def pin(target: str, when: datetime) -> str:
 
 
 def fetch(url: str):
-    """The status and the body - as data when it is JSON, as text when it is not."""
+    """The status, the body as data, and the body as it came over the wire.
+
+    The raw bytes matter: two answers can be the same document and not the same
+    text. `json_encode` escapes non-ASCII and forward slashes, and a client
+    matching on bytes would notice the day that stopped.
+    """
     try:
         with urllib.request.urlopen(url, timeout=40) as response:
-            return response.status, body(response.read(), response.headers)
+            raw = response.read()
+            return response.status, body(raw, response.headers), raw
     except urllib.error.HTTPError as error:
-        return error.code, body(error.read(), error.headers)
+        raw = error.read()
+        return error.code, body(raw, error.headers), raw
     except Exception as error:  # noqa: BLE001 - a transport failure is a result too
-        return 0, f"{type(error).__name__}: {error}"
+        return 0, f"{type(error).__name__}: {error}", b""
 
 
 def body(raw: bytes, headers) -> object:
@@ -227,6 +249,11 @@ def main() -> int:
     comparer.add_argument("corpus")
     comparer.add_argument("--v2", required=True, help="base URL of the Python service")
     comparer.add_argument("--v1", help="base URL of the PHP one (default: the same host)")
+    comparer.add_argument(
+        "--v1-prefix",
+        default="/v1",
+        help="where the PHP one answers; /v1-old once /v1 has been flipped",
+    )
     comparer.add_argument("--as-is", action="store_true", help="do not pin the time")
     comparer.add_argument(
         "--noise-floor",

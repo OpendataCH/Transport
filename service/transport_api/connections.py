@@ -10,8 +10,8 @@ from datetime import datetime
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query, Request
-from fastapi.responses import JSONResponse
 
+from .encoding import PhpJson
 from .fields import Fields
 from .mapping import ZURICH, connection_of, location_of, transportation_types
 from .models import ConnectionsResponse, Errors
@@ -130,7 +130,7 @@ async def search_connections(
     to a client that has always sent them would be a change of behaviour.
     """
     if not (truthy(from_) and truthy(to)):
-        return JSONResponse(
+        return PhpJson(
             content=fields.apply(
                 {
                     "connections": [],
@@ -149,7 +149,7 @@ async def search_connections(
     if problems:
         # A list of strings, not of objects. /v1 uses a different error shape
         # here than for its exceptions, and both are in the wild.
-        return JSONResponse(status_code=400, content={"errors": problems})
+        return PhpJson(status_code=400, content={"errors": problems})
 
     arrival = _is_arrival_time(isArrivalTime)
     when = _when(datetime_, date, time)
@@ -180,7 +180,7 @@ async def search_connections(
         destination = location_of(points[1])
         stations = {"from": [origin], "to": [destination]}
 
-    return JSONResponse(
+    return PhpJson(
         content=fields.apply(
             {
                 "connections": connections,

@@ -8,8 +8,8 @@ naming search.ch, exactly as the PHP application answers today.
 
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 
+from .encoding import PhpJson
 from .fields import NotAList
 
 
@@ -21,8 +21,8 @@ class ApiError(Exception):
         self.status_code = status_code
         self.message = message
 
-    def response(self) -> JSONResponse:
-        return JSONResponse(
+    def response(self) -> PhpJson:
+        return PhpJson(
             status_code=self.status_code,
             content={"errors": [{"message": self.message}]},
         )
@@ -49,7 +49,7 @@ def upstream_error(detail: str) -> ApiError:
 
 def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
-    async def _api_error(_: Request, exc: ApiError) -> JSONResponse:
+    async def _api_error(_: Request, exc: ApiError) -> PhpJson:
         return exc.response()
 
     @app.exception_handler(NotAList)
@@ -59,7 +59,7 @@ def install(app: FastAPI) -> None:
         return Response(status_code=500, media_type="text/html; charset=UTF-8")
 
     @app.exception_handler(RequestValidationError)
-    async def _validation(_: Request, exc: RequestValidationError) -> JSONResponse:
+    async def _validation(_: Request, exc: RequestValidationError) -> PhpJson:
         # /v1 validates almost nothing and never answers 422. This is here so
         # that if a route ever does declare a constraint, what comes back is
         # still the one envelope every client already parses.

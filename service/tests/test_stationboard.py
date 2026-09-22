@@ -1,4 +1,4 @@
-"""`/v2/stationboard`, against the answer /v1 is recorded to give."""
+"""`/v1/stationboard`, against the answer the PHP implementation is recorded to give."""
 
 import json
 from datetime import datetime
@@ -15,7 +15,7 @@ def test_the_answer_is_the_one_v1_records(client, search_ch):
     """The recorded pair the PHP suite asserts, asserted here."""
     search_ch.returns(fixture("stationboard/searchch_response_2016-12-23.json"))
 
-    body = client.get("/v2/stationboard", params=PARAMS).json()
+    body = client.get("/v1/stationboard", params=PARAMS).json()
 
     assert body == fixture("stationboard/response_2016-12-23.json")
 
@@ -23,7 +23,7 @@ def test_the_answer_is_the_one_v1_records(client, search_ch):
 def test_the_answer_matches_its_own_description(client, search_ch):
     search_ch.returns(fixture("stationboard/searchch_response_2016-12-23.json"))
 
-    body = client.get("/v2/stationboard", params=PARAMS).json()
+    body = client.get("/v1/stationboard", params=PARAMS).json()
 
     StationBoardResponse.model_validate(body)
 
@@ -31,7 +31,7 @@ def test_the_answer_matches_its_own_description(client, search_ch):
 def test_the_keys_are_in_the_order_v1_writes_them(client, search_ch):
     search_ch.returns(fixture("stationboard/searchch_response_2016-12-23.json"))
 
-    journey = client.get("/v2/stationboard", params=PARAMS).json()["stationboard"][0]
+    journey = client.get("/v1/stationboard", params=PARAMS).json()["stationboard"][0]
 
     assert list(journey) == [
         "stop",
@@ -63,7 +63,7 @@ def test_the_keys_are_in_the_order_v1_writes_them(client, search_ch):
 def test_the_upstream_is_asked_the_way_v1_asks(client, search_ch):
     search_ch.returns(fixture("stationboard/searchch_response_2016-12-23.json"))
 
-    client.get("/v2/stationboard", params=PARAMS)
+    client.get("/v1/stationboard", params=PARAMS)
 
     sent = search_ch.last.url.params
     assert sent["stop"] == "008591052"
@@ -79,25 +79,25 @@ def test_the_upstream_is_asked_the_way_v1_asks(client, search_ch):
 
 
 def test_arrivals_are_a_mode_not_a_filter(client, search_ch):
-    client.get("/v2/stationboard", params={"station": "Bern", "type": "arrival"})
+    client.get("/v1/stationboard", params={"station": "Bern", "type": "arrival"})
 
     assert search_ch.last.url.params["mode"] == "arrival"
 
 
 def test_the_id_parameter_stands_in_for_the_station(client, search_ch):
-    client.get("/v2/stationboard", params={"id": "8503000"})
+    client.get("/v1/stationboard", params={"id": "8503000"})
 
     assert search_ch.last.url.params["stop"] == "8503000"
 
 
 def test_a_station_wins_over_an_id(client, search_ch):
-    client.get("/v2/stationboard", params={"station": "Bern", "id": "8503000"})
+    client.get("/v1/stationboard", params={"station": "Bern", "id": "8503000"})
 
     assert search_ch.last.url.params["stop"] == "Bern"
 
 
 def test_without_a_stop_the_board_is_empty(client, search_ch):
-    response = client.get("/v2/stationboard")
+    response = client.get("/v1/stationboard")
 
     assert response.status_code == 200
     assert response.json() == {"station": None, "stationboard": []}
@@ -106,7 +106,7 @@ def test_without_a_stop_the_board_is_empty(client, search_ch):
 
 def test_a_limit_above_420_is_refused_in_plain_text(client, search_ch):
     """/v1 answers this one with a bare string, not the error envelope."""
-    response = client.get("/v2/stationboard", params={"station": "Bern", "limit": "421"})
+    response = client.get("/v1/stationboard", params={"station": "Bern", "limit": "421"})
 
     assert response.status_code == 400
     assert response.text == "Invalid value for Parameter `limit`."
@@ -116,7 +116,7 @@ def test_a_limit_above_420_is_refused_in_plain_text(client, search_ch):
 def test_the_ceiling_itself_is_allowed(client, search_ch):
     search_ch.returns({"stop": None, "connections": []})
 
-    response = client.get("/v2/stationboard", params={"station": "Bern", "limit": "420"})
+    response = client.get("/v1/stationboard", params={"station": "Bern", "limit": "420"})
 
     assert response.status_code == 200
     assert search_ch.last.url.params["limit"] == "420"
@@ -130,7 +130,7 @@ def test_either_spelling_of_transportations_is_accepted(client, search_ch, spell
     """PHP folds `transportations[]` and `transportations` into one parameter."""
     search_ch.returns({"stop": None, "connections": []})
 
-    client.get("/v2/stationboard", params=[("station", "Bern"), (spelling, "tram")])
+    client.get("/v1/stationboard", params=[("station", "Bern"), (spelling, "tram")])
 
     assert search_ch.last.url.params["transportation_types"] == "tram"
 
@@ -150,7 +150,7 @@ def test_transportations_are_translated_on_the_way_out(
 ):
     search_ch.returns({"stop": None, "connections": []})
     client.get(
-        "/v2/stationboard",
+        "/v1/stationboard",
         params=[("station", "Bern")] + [("transportations[]", t) for t in transportations],
     )
 
@@ -176,7 +176,7 @@ def test_a_prognosis_without_a_scheduled_time_is_dated_now(client, search_ch):
         }
     )
 
-    stop = client.get("/v2/stationboard", params={"station": "Bern"}).json()["stationboard"][0][
+    stop = client.get("/v1/stationboard", params={"station": "Bern"}).json()["stationboard"][0][
         "stop"
     ]
 
@@ -196,7 +196,7 @@ def test_a_negative_delay_is_read_and_ignored(client, search_ch):
         }
     )
 
-    stop = client.get("/v2/stationboard", params={"station": "x"}).json()["stationboard"][0]["stop"]
+    stop = client.get("/v1/stationboard", params={"station": "x"}).json()["stationboard"][0]["stop"]
 
     assert stop["prognosis"]["departure"] == "2026-09-21T23:47:00+0200"
     assert stop["delay"] == 0
@@ -208,7 +208,7 @@ def test_the_board_station_replaces_the_one_on_the_journeys_stop(client, search_
         json.loads(json.dumps(fixture("stationboard/searchch_response_2016-12-23.json")))
     )
 
-    journey = client.get("/v2/stationboard", params=PARAMS).json()["stationboard"][0]
+    journey = client.get("/v1/stationboard", params=PARAMS).json()["stationboard"][0]
 
     assert journey["stop"]["station"]["name"] == "Zürich HB"
     assert journey["passList"][0]["station"]["name"] is None
@@ -229,7 +229,7 @@ def test_a_prognosis_without_a_scheduled_time_still_gets_the_delay(client, searc
         }
     )
 
-    stop = client.get("/v2/stationboard", params={"station": "x"}).json()["stationboard"][0]["stop"]
+    stop = client.get("/v1/stationboard", params={"station": "x"}).json()["stationboard"][0]["stop"]
 
     prognosis = datetime.fromisoformat(stop["prognosis"]["arrival"])
     ahead = (prognosis - datetime.now(prognosis.tzinfo)).total_seconds()
