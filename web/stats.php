@@ -263,7 +263,8 @@ function statsWindow(Transport\Statistics $stats, $window)
     $top = function ($kind) use ($stats, $dates) {
         $result = [];
         foreach ($stats->getTop($kind, $dates) as $name => $requests) {
-            $result[] = ['name' => $name, 'requests' => (int) $requests];
+            // PHP turns a numeric member such as a stop id into an integer key.
+            $result[] = ['name' => (string) $name, 'requests' => (int) $requests];
         }
 
         return $result;
