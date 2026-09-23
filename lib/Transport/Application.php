@@ -151,9 +151,13 @@ class Application extends \Silex\Application
         // statistics
         $app['stats'] = new \Transport\Statistics($redis, $app['stats.config']['enabled']);
         $app->after(function (Request $request, Response $response) use ($app) {
+            $app['stats']->client($request->getClientIp(), $request->headers->get('User-Agent'));
             if ($response->getStatusCode() !== 429) {
                 $app['stats']->call();
                 $app['stats']->resource($request->getPathInfo());
+                if ($response->getStatusCode() < 400) {
+                    $app['stats']->places($request->getPathInfo(), $request->query->all());
+                }
             } else {
                 $app['stats']->rateLimited();
             }

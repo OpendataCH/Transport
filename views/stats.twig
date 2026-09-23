@@ -175,7 +175,7 @@
                     </ul>
                 </div>
                 <div class="col-sm-4">
-                    <h2 title="Top 5 since 10. Aug. 2012">Stations</h2>
+                    <h2 title="Counted from 10. Aug. 2012 until 8. June 2017, when the API moved to timetable.search.ch">Stations <small>2012–2017</small></h2>
                     <ul class="list-unstyled">
                         {% for station in stations %}
                         <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format(0, ".", "'") }}</span></li>
@@ -244,6 +244,63 @@
                     </thead>
                     <tbody id="statsRows"></tbody>
                 </table>
+            </div>
+
+            <h2 id="clients">Who calls</h2>
+            <p class="text-muted" id="statsClientsNote"></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Kind of client</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th class="text-right">Requests</th>
+                                <th class="text-right">Share</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsClientKinds"></tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Distinct clients per day</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th class="text-right">Clients</th>
+                                <th class="text-right" title="The fewest clients that together made half of the requests">Half of the requests from</th>
+                                <th class="text-right" title="The fewest clients that together made 90 % of the requests">90 % from</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsClientDays"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Requests by hour of the day</h3>
+            <p class="text-muted"><small>Average requests per hour, rate-limited ones included, over the hours of the window that were recorded.</small></p>
+            <div style="position: relative;">
+                <canvas id="statsProfile" width="800" height="160" style="width: 100%;"></canvas>
+            </div>
+
+            <h2 id="places">What is asked for</h2>
+            <p class="text-muted"><small>Stations and places as the clients wrote them, not resolved: «Bern» and «8507000» are two entries. Rate-limited and failed requests are not counted.</small></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Station boards</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>Station</th><th class="text-right">Requests</th></tr></thead>
+                        <tbody id="statsStations"></tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Connections</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>From → to</th><th class="text-right">Requests</th></tr></thead>
+                        <tbody id="statsRoutes"></tbody>
+                    </table>
+                </div>
             </div>
 
             <script>
@@ -319,6 +376,93 @@
                             '</tr>';
                     });
                     $('#statsRows').html(rows.join(''));
+
+                    renderClients(data);
+                    renderPlaces(data);
+                    renderProfile(data);
+                }
+
+                function empty(columns, message) {
+                    return '<tr><td colspan="' + columns + '" class="text-muted">' + message + '</td></tr>';
+                }
+
+                function renderClients(data) {
+                    $('#statsClientsNote').text(data.kindsTotal
+                        ? 'All requests of the window, rate-limited ones included. A client is one address on one day; addresses are counted as hashes that change every day and are not stored.'
+                        : 'Kinds of client and distinct clients are recorded from 24. September 2026 on.');
+
+                    var kinds = $.map(data.clientKinds, function (k) {
+                        return '<tr>' +
+                            '<td>' + text(k.label) + '</td>' +
+                            '<td class="text-right stats-number">' + number(k.requests) + '</td>' +
+                            '<td class="text-right stats-number">' + percent(k.requests, data.kindsTotal, 1) + '</td>' +
+                            '</tr>';
+                    });
+                    $('#statsClientKinds').html(kinds.length ? kinds.join('') : empty(3, 'Nothing recorded in this window yet.'));
+
+                    var today = moment().format('YYYY-MM-DD');
+                    var days = $.map(data.clientDays, function (d) {
+                        return '<tr>' +
+                            '<td class="stats-number">' + moment(d.date).format('DD.MM.YYYY') + (d.date === today ? ' <small class="text-muted">(so far)</small>' : '') + '</td>' +
+                            '<td class="text-right stats-number">' + number(d.clients) + '</td>' +
+                            '<td class="text-right stats-number">' + number(d.half) + ' <small class="text-muted">' + percent(d.half, d.clients, 1) + '</small></td>' +
+                            '<td class="text-right stats-number">' + number(d.ninety) + ' <small class="text-muted">' + percent(d.ninety, d.clients, 1) + '</small></td>' +
+                            '</tr>';
+                    });
+                    $('#statsClientDays').html(days.length ? days.join('') : empty(4, 'Nothing recorded in this window yet.'));
+                }
+
+                function renderPlaces(data) {
+                    function rows(list) {
+                        return $.map(list, function (p) {
+                            return '<tr><td>' + text(p.name) + '</td><td class="text-right stats-number">' + number(p.requests) + '</td></tr>';
+                        });
+                    }
+                    var stations = rows(data.stations);
+                    var routes = rows(data.routes);
+                    var none = 'Recorded from 24. September 2026 on; nothing in this window yet.';
+                    $('#statsStations').html(stations.length ? stations.join('') : empty(2, none));
+                    $('#statsRoutes').html(routes.length ? routes.join('') : empty(2, none));
+                }
+
+                var profileChart = null;
+
+                function renderProfile(data) {
+                    var labels = [];
+                    for (var h = 0; h < 24; h++) {
+                        labels.push((h < 10 ? '0' : '') + h + ':00');
+                    }
+                    if (profileChart) {
+                        profileChart.data.datasets[0].data = data.profile;
+                        profileChart.update();
+                        return;
+                    }
+                    profileChart = new Chart($('#statsProfile'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Requests per hour',
+                                data: data.profile,
+                                backgroundColor: '#ddeddc',
+                                borderColor: '#008000',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            tooltips: {
+                                callbacks: {
+                                    label: function (item) {
+                                        return number(item.yLabel) + ' requests per hour on average';
+                                    }
+                                }
+                            },
+                            scales: {
+                                yAxes: [{ticks: {beginAtZero: true, callback: number}}]
+                            }
+                        }
+                    });
                 }
 
                 var select = $('#statsWindowSelect');

@@ -175,9 +175,9 @@ class Upstream:
             # /v1 sets no timeout at all and would hold the worker until the
             # socket gives up. The answer is the same either way: a 500 naming
             # the upstream.
-            raise errors.server_error(str(exc) or "No answer in time.") from exc
+            raise errors.unreachable(str(exc) or "No answer in time.") from exc
         except httpx.HTTPError as exc:
-            raise errors.server_error(str(exc) or "The request failed.") from exc
+            raise errors.unreachable(str(exc) or "The request failed.") from exc
 
         if response.status_code == 429:
             raise errors.rate_limited(response.text)

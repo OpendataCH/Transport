@@ -32,3 +32,12 @@ UPSTREAM_URL = os.environ.get("UPSTREAM_URL", "https://timetable.search.ch/api/"
 # cheap in this service in a way it is not in the old one: the request is
 # awaited, not blocking a process.
 UPSTREAM_TIMEOUT = float(os.environ.get("UPSTREAM_TIMEOUT", "55"))
+
+# The Redis that /stats.php reads, e.g. `redis://redis:6379/0` - the same one
+# the PHP application writes to, so that one history runs across both. Unset,
+# nothing is counted; that is what a test run and a working copy want.
+REDIS_URL = os.environ.get("REDIS_URL") or None
+
+# Seconds a statistics write may take before it is given up. Counting is never
+# worth holding an answer for.
+REDIS_TIMEOUT = float(os.environ.get("REDIS_TIMEOUT", "0.25"))

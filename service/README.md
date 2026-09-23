@@ -124,7 +124,7 @@ machine-readable description is OpenAPI 3.1 at `/v2/openapi.json` rather than
 the generated Swagger 2.0 document `/v1` serves. Neither is part of the data a
 client reads.
 
-## Three things this service must keep doing
+## Four things this service must keep doing
 
 - **Not the website.** Every route lives under `/v1` or `/v2`, and
   `tests/test_routing.py` asserts that `/`, `/docs.html`, `/swagger.json` and
@@ -138,6 +138,14 @@ client reads.
   the world shares one bucket and throttles each other, with a rise in 429s as
   the only symptom. `X-Forwarded-For` is read in the application, not by a
   uvicorn flag, so that a test can exercise it.
+- **Count for /stats.php.** With `REDIS_URL` set (the Redis the PHP writes to,
+  e.g. `redis://redis:6379/0`), every answered request is counted in the PHP's
+  own keys - calls, errors under the PHP exception names, resources, hourly
+  buckets with the 429s - plus the kind of client, the stations and pairs
+  asked for, and distinct clients as day-keyed hashes. `statistics.py` explains
+  each; the client kinds are listed there and in `lib/Transport/Statistics.php`
+  and must stay the same in both. Unset, nothing is counted. A Redis failure
+  never costs an answer.
 
 ## The image
 

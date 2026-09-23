@@ -29,7 +29,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from . import connections, errors, locations, settings, stationboard, upstream
+from . import connections, errors, locations, settings, stationboard, statistics, upstream
 from .models import ApiInfo
 
 # The prefix a client should use, and the one it may. Both answer the same
@@ -46,10 +46,14 @@ API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0"}
 async def lifespan(app: FastAPI):
     """One connection pool for the life of the process, not one per request."""
     app.state.http = upstream.build_client()
+    redis = statistics.connect()
+    app.state.statistics = statistics.Statistics(redis) if redis is not None else None
     try:
         yield
     finally:
         await app.state.http.aclose()
+        if redis is not None:
+            await redis.aclose()
 
 
 app = FastAPI(
@@ -73,6 +77,14 @@ app = FastAPI(
     openapi_url=f"{PREFIX}/openapi.json",
     docs_url=f"{PREFIX}/docs",
     redoc_url=f"{PREFIX}/documentation",
+)
+
+# Counting for /stats.php. Added before the proxy-headers middleware so that it
+# runs inside it: Starlette wraps the last one added outermost, and only inside
+# is the client address the caller's rather than nginx's.
+app.add_middleware(
+    statistics.StatisticsMiddleware,
+    statistics_of=lambda: getattr(app.state, "statistics", None),
 )
 
 # X-Forwarded-For becomes the request's client address. This is the single

@@ -117,6 +117,24 @@ function statsWindows()
 }
 
 /**
+ * What the kinds of client in Statistics::CLIENT_KINDS are called on the page.
+ *
+ * @return array
+ */
+function statsClientKinds()
+{
+    return [
+        'homeassistant'   => 'Home Assistant',
+        'browser'         => 'Browsers and displays',
+        'script'          => 'Scripts and servers',
+        'microcontroller' => 'Microcontrollers (ESP32 …)',
+        'app'             => 'Mobile apps',
+        'none'            => 'No user agent',
+        'other'           => 'Other',
+    ];
+}
+
+/**
  * Errors by class, and calls, errors and rate-limited requests over time, for one window.
  *
  * Hour windows are read from the hourly buckets alone. Day windows are calendar days: calls
@@ -197,6 +215,65 @@ function statsWindow(Transport\Statistics $stats, $window)
         $exceptions[] = $exception;
     }
 
+    // the calendar days the window touches, oldest first
+    $dates = [];
+    if ($unit == 'h') {
+        foreach ($buckets as $bucket) {
+            $dates[substr($bucket['hour'], 0, 10)] = true;
+        }
+        $dates = array_keys($dates);
+    } else {
+        $dates = array_keys($daily);
+    }
+
+    // requests by kind of client, rate-limited ones included
+    $kinds = [];
+    foreach ($buckets as $bucket) {
+        foreach ($bucket['clients'] as $kind => $count) {
+            $kinds[$kind] = (isset($kinds[$kind]) ? $kinds[$kind] : 0) + $count;
+        }
+    }
+    arsort($kinds);
+    $kindsTotal = array_sum($kinds);
+    $clientKinds = [];
+    foreach ($kinds as $kind => $count) {
+        $clientKinds[] = [
+            'kind'     => $kind,
+            'label'    => isset(statsClientKinds()[$kind]) ? statsClientKinds()[$kind] : $kind,
+            'requests' => $count,
+            'share'    => $kindsTotal > 0 ? 100 * $count / $kindsTotal : 0,
+        ];
+    }
+
+    // average calls per hour of the day, over the hours that were recorded
+    $profileSums = array_fill(0, 24, 0);
+    $profileHours = array_fill(0, 24, 0);
+    foreach ($buckets as $bucket) {
+        if ($bucket['recorded']) {
+            $hourOfDay = (int) substr($bucket['hour'], 11, 2);
+            $profileSums[$hourOfDay] += $bucket['calls'] + $bucket['ratelimited'];
+            $profileHours[$hourOfDay]++;
+        }
+    }
+    $profile = [];
+    foreach ($profileSums as $hourOfDay => $sum) {
+        $profile[] = $profileHours[$hourOfDay] > 0 ? (int) round($sum / $profileHours[$hourOfDay]) : null;
+    }
+
+    $top = function ($kind) use ($stats, $dates) {
+        $result = [];
+        foreach ($stats->getTop($kind, $dates) as $name => $requests) {
+            $result[] = ['name' => $name, 'requests' => (int) $requests];
+        }
+
+        return $result;
+    };
+
+    $clientDays = [];
+    foreach ($stats->getClientDays($dates) as $date => $summary) {
+        $clientDays[] = ['date' => $date] + $summary;
+    }
+
     // first hour of the window with an hourly bucket, if any
     $since = null;
     foreach ($buckets as $bucket) {
@@ -220,6 +297,12 @@ function statsWindow(Transport\Statistics $stats, $window)
         'classTotal'  => $classTotal,
         'exceptions'  => $exceptions,
         'rows'        => array_reverse($rows),
+        'clientKinds' => $clientKinds,
+        'kindsTotal'  => $kindsTotal,
+        'clientDays'  => array_reverse($clientDays),
+        'stations'    => $top('stations'),
+        'routes'      => $top('routes'),
+        'profile'     => $profile,
     ];
 }
 
@@ -244,6 +327,7 @@ function describeException(array $error)
         'Predis\ClientException'                                               => ['500', 'Statistics store (Redis) rejected a command'],
         'Predis\Response\ServerException'                                      => ['500', 'Statistics store (Redis) returned an error'],
         'Predis\Connection\ConnectionException'                                => ['500', 'Statistics store (Redis) unreachable'],
+        'TypeError'                                                            => ['500', 'A single value where the API expects a list, e.g. fields= without brackets'],
     ];
 
     $class = $error['exception'];

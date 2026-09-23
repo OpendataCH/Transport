@@ -9,6 +9,7 @@ naming search.ch, exactly as the PHP application answers today.
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 
+from . import statistics
 from .encoding import PhpJson
 from .fields import NotAList
 
@@ -16,10 +17,12 @@ from .fields import NotAList
 class ApiError(Exception):
     """An error that is answered in the /v1 envelope."""
 
-    def __init__(self, status_code: int, message: str) -> None:
+    def __init__(self, status_code: int, message: str, stats_exception: str | None = None) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.message = message
+        # The class /stats.php counts this under, when the status alone does not say.
+        self.stats_exception = stats_exception
 
     def response(self) -> PhpJson:
         return PhpJson(
@@ -39,6 +42,15 @@ def server_error(detail: str) -> ApiError:
     return ApiError(500, f"Server error from timetable.search.ch: {detail}")
 
 
+def unreachable(detail: str) -> ApiError:
+    """search.ch did not answer at all: the same 500 as server_error, counted apart."""
+    return ApiError(
+        500,
+        f"Server error from timetable.search.ch: {detail}",
+        stats_exception=statistics.REQUEST_EXCEPTION,
+    )
+
+
 def invalid_json(detail: str) -> ApiError:
     return ApiError(500, f"Invalid JSON from timetable.search.ch: {detail}")
 
@@ -49,11 +61,14 @@ def upstream_error(detail: str) -> ApiError:
 
 def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
-    async def _api_error(_: Request, exc: ApiError) -> PhpJson:
+    async def _api_error(request: Request, exc: ApiError) -> PhpJson:
+        if exc.stats_exception is not None:
+            request.state.stats_exception = exc.stats_exception
         return exc.response()
 
     @app.exception_handler(NotAList)
-    async def _not_a_list(_: Request, exc: NotAList) -> Response:
+    async def _not_a_list(request: Request, exc: NotAList) -> Response:
+        request.state.stats_exception = statistics.TYPE_ERROR
         # Empty body, text/html, 500 - what a TypeError escaping Silex looks
         # like from outside. See fields.NotAList.
         return Response(status_code=500, media_type="text/html; charset=UTF-8")
