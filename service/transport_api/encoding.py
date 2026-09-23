@@ -14,6 +14,7 @@ starts answering from here, the bytes should be the ones it has always sent.
 """
 
 import json
+import re
 from typing import Any
 
 from fastapi.responses import JSONResponse
@@ -33,3 +34,33 @@ class PhpJson(JSONResponse):
         # inside a string literal - JSON's own syntax has no use for it. So
         # escaping every one of them is safe without parsing.
         return text.replace("/", "\\/").encode("ascii")
+
+
+# A JSON string literal, escapes included.
+_STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
+# Inside one: an escape pair, or a character PHP's HEX flags replace.
+_HEX = re.compile(r"\\(.)|([<>&'])")
+_HEX_OF = {'"': "\\u0022", "<": "\\u003C", ">": "\\u003E", "&": "\\u0026", "'": "\\u0027"}
+
+
+def _hex(match: re.Match) -> str:
+    escaped, bare = match.groups()
+    if bare is not None:
+        return _HEX_OF[bare]
+    return _HEX_OF['"'] if escaped == '"' else "\\" + escaped
+
+
+class PhpErrorJson(PhpJson):
+    """An error envelope, encoded as Silex's `$app->json()` encodes it.
+
+    The error handler and the validation answers of /v1 go through Symfony's
+    JsonResponse, which adds JSON_HEX_TAG, JSON_HEX_APOS, JSON_HEX_AMP and
+    JSON_HEX_QUOT to json_encode: `"` inside a string becomes `\\u0022`, `<`
+    becomes `\\u003C`, and so on. It shows wherever a message quotes something
+    - the rate-limit message carries search.ch's JSON body whole, and that is
+    one answer in six.
+    """
+
+    def render(self, content: Any) -> bytes:
+        text = super().render(content).decode("ascii")
+        return _STRING.sub(lambda token: _HEX.sub(_hex, token.group(0)), text).encode("ascii")

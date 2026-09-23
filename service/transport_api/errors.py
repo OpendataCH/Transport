@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 
 from . import statistics
-from .encoding import PhpJson
+from .encoding import PhpErrorJson
 from .fields import NotAList
 
 
@@ -24,8 +24,8 @@ class ApiError(Exception):
         # The class /stats.php counts this under, when the status alone does not say.
         self.stats_exception = stats_exception
 
-    def response(self) -> PhpJson:
-        return PhpJson(
+    def response(self) -> PhpErrorJson:
+        return PhpErrorJson(
             status_code=self.status_code,
             content={"errors": [{"message": self.message}]},
         )
@@ -61,7 +61,7 @@ def upstream_error(detail: str) -> ApiError:
 
 def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
-    async def _api_error(request: Request, exc: ApiError) -> PhpJson:
+    async def _api_error(request: Request, exc: ApiError) -> PhpErrorJson:
         if exc.stats_exception is not None:
             request.state.stats_exception = exc.stats_exception
         return exc.response()
@@ -74,7 +74,7 @@ def install(app: FastAPI) -> None:
         return Response(status_code=500, media_type="text/html; charset=UTF-8")
 
     @app.exception_handler(RequestValidationError)
-    async def _validation(_: Request, exc: RequestValidationError) -> PhpJson:
+    async def _validation(_: Request, exc: RequestValidationError) -> PhpErrorJson:
         # /v1 validates almost nothing and never answers 422. This is here so
         # that if a route ever does declare a constraint, what comes back is
         # still the one envelope every client already parses.

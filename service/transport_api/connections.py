@@ -11,7 +11,8 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query, Request
 
-from .encoding import PhpJson
+from . import phptime
+from .encoding import PhpErrorJson, PhpJson
 from .fields import Fields
 from .mapping import ZURICH, connection_of, location_of, transportation_types
 from .models import ConnectionsResponse, Errors
@@ -149,7 +150,7 @@ async def search_connections(
     if problems:
         # A list of strings, not of objects. /v1 uses a different error shape
         # here than for its exceptions, and both are in the wild.
-        return PhpJson(status_code=400, content={"errors": problems})
+        return PhpErrorJson(status_code=400, content={"errors": problems})
 
     arrival = _is_arrival_time(isArrivalTime)
     when = _when(datetime_, date, time)
@@ -239,12 +240,13 @@ def _when(combined: str | None, date: str | None, time: str | None) -> datetime:
     """
     now = datetime.now(ZURICH)
 
+    # What cannot be read becomes the epoch, not now: strtotime() says false
+    # and /v1 formats that as 1970-01-01 01:00.
     if truthy(combined):
-        parsed = _parse(combined)
-        return parsed if parsed else now
+        return _parse(combined) or phptime.EPOCH
 
-    day = _parse(date) if truthy(date) else None
-    clock = _parse(time, reference=day or now) if truthy(time) else None
+    day = (_parse(date) or phptime.EPOCH) if truthy(date) else None
+    clock = (_parse(time, reference=day or now) or phptime.EPOCH) if truthy(time) else None
 
     return (day or now).replace(
         hour=(clock or now).hour,
@@ -258,17 +260,4 @@ def _parse(value: str | None, reference: datetime | None = None) -> datetime | N
     """What `strtotime()` would make of it, for the shapes clients send."""
     if not value:
         return None
-    reference = reference or datetime.now(ZURICH)
-    try:
-        return datetime.fromisoformat(value).replace(tzinfo=ZURICH)
-    except ValueError:
-        pass
-    for pattern in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%d", "%H:%M:%S", "%H:%M"):
-        try:
-            parsed = datetime.strptime(value, pattern)
-        except ValueError:
-            continue
-        if pattern.startswith("%H"):
-            parsed = parsed.replace(year=reference.year, month=reference.month, day=reference.day)
-        return parsed.replace(tzinfo=ZURICH)
-    return None
+    return phptime.parse(value, reference or datetime.now(ZURICH), convert_offset=True)

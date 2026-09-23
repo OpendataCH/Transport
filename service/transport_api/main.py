@@ -29,7 +29,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from . import connections, errors, locations, settings, stationboard, statistics, upstream
+from . import compat, connections, errors, locations, settings, stationboard, statistics, upstream
 from .models import ApiInfo
 
 # The prefix a client should use, and the one it may. Both answer the same
@@ -105,6 +105,11 @@ app.add_middleware(
 )
 
 errors.install(app)
+compat.install(app)
+
+# Outermost, so that its headers reach every answer, CORS preflights and the
+# errors of the middlewares inside included.
+app.add_middleware(compat.PhpCompatMiddleware)
 
 
 class Health(BaseModel):

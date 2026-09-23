@@ -12,7 +12,7 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import PlainTextResponse
 
-from . import errors
+from . import errors, phptime
 from .encoding import PhpJson
 from .fields import Fields
 from .mapping import ZURICH, station_board_journey_of, station_of, transportation_types
@@ -159,21 +159,12 @@ def _over_the_limit(limit: str) -> bool:
 
 def _when(given: str | None) -> datetime:
     """The moment to ask about: what was given, or now, in Zurich."""
+    now = datetime.now(ZURICH)
     if not given:
-        return datetime.now(ZURICH)
-    try:
-        return datetime.fromisoformat(given).replace(tzinfo=ZURICH)
-    except ValueError:
-        pass
-    for pattern in ("%Y-%m-%d %H:%M", "%Y-%m-%d", "%H:%M", "%H:%M:%S"):
-        try:
-            parsed = datetime.strptime(given, pattern)
-        except ValueError:
-            continue
-        if pattern in ("%H:%M", "%H:%M:%S"):
-            today = datetime.now(ZURICH)
-            parsed = parsed.replace(year=today.year, month=today.month, day=today.day)
-        return parsed.replace(tzinfo=ZURICH)
+        return now
+    parsed = phptime.parse(given, now, convert_offset=False)
+    if parsed is not None:
+        return parsed
 
     # /v1 lets the DateTime constructor throw here, which its error handler
     # turns into a 500 naming the string it could not read.
