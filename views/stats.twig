@@ -186,10 +186,68 @@
                     <h2 title="Top 5 since 22. November 2015">Errors</h2>
                     <ul class="list-unstyled">
                         {% for error in errors %}
-                            <li><span class="value">{{ error.exception }}</span> <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
+                            <li title="{{ error.exception }}{% if error.description %} – {{ error.description }}{% endif %}"><span class="value">{{ error.name }}</span>{% if error.status %} <span class="label label-default">{{ error.status }}</span>{% endif %} <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
                         {% endfor %}
                     </ul>
+                    <p><small><a href="#error-details">All errors in detail</a></small></p>
                 </div>
+            </div>
+
+            <h2 id="error-details">Errors in detail</h2>
+            <p class="text-muted">
+                Every error the API has recorded since 22. November 2015, {{ exceptionsTotal | number_format(0, ".", "'") }} in total.
+                Requests rejected because of rate limiting (HTTP 429, by this API or by timetable.search.ch) are not counted here.
+            </p>
+            <div class="table-responsive">
+                <table class="table table-condensed stats-table">
+                    <thead>
+                        <tr>
+                            <th>Error</th>
+                            <th>Status</th>
+                            <th>Meaning</th>
+                            <th class="text-right">Count</th>
+                            <th class="text-right">Share</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exception in exceptions %}
+                        <tr>
+                            <td class="stats-exception">
+                                {{ exception.name }}
+                                {% if exception.namespace %}<br/><small class="text-muted">{{ exception.namespace }}</small>{% endif %}
+                            </td>
+                            <td>{{ exception.status }}</td>
+                            <td>{{ exception.description }}</td>
+                            <td class="text-right stats-number">{{ exception.calls | number_format(0, ".", "'") }}</td>
+                            <td class="text-right stats-number">{{ exception.share | number_format(exception.share < 1 ? 2 : 1, ".", "'") }}&nbsp;%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Last 14 days</h3>
+            <div class="table-responsive">
+                <table class="table table-condensed stats-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th class="text-right">Calls</th>
+                            <th class="text-right">Errors</th>
+                            <th class="text-right">Error rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day in days %}
+                        <tr>
+                            <td class="stats-number">{{ day.date | date("d.m.Y") }}{% if loop.first %} <small class="text-muted">(today, so far)</small>{% endif %}</td>
+                            <td class="text-right stats-number">{{ day.calls | number_format(0, ".", "'") }}</td>
+                            <td class="text-right stats-number">{{ day.errors | number_format(0, ".", "'") }}</td>
+                            <td class="text-right stats-number">{{ day.rate | number_format(3, ".", "'") }}&nbsp;%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </article>
 

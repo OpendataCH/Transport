@@ -89,3 +89,14 @@ table.connections tr.section {
     background-color: #f5f5f5;
     cursor: default;
 }
+
+/* Statistics: long exception class names must wrap instead of overflowing the column */
+.list-unstyled .value,
+.stats-exception {
+    overflow-wrap: anywhere;
+}
+
+.stats-table .stats-number {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}

@@ -70,22 +70,75 @@ if ($app['redis.config']) {
         // get top resources, stations and errors
         $resources = $app['stats']->getTopResources();
         $stations = $app['stats']->getTopStations();
-        $errors = $app['stats']->getTopExceptions();
+        $errors = array_map('describeException', $app['stats']->getTopExceptions());
+
+        // all exception classes with their share of all recorded errors
+        $exceptions = array_map('describeException', $app['stats']->getExceptions());
+        $exceptionsTotal = array_sum(array_column($exceptions, 'calls'));
+        foreach ($exceptions as &$exception) {
+            $exception['share'] = $exceptionsTotal > 0 ? 100 * $exception['calls'] / $exceptionsTotal : 0;
+        }
+        unset($exception);
+
+        // calls and errors of the last 14 days, newest first
+        $days = [];
+        foreach (array_slice(array_reverse($data), 0, 14) as $day) {
+            $day['rate'] = $day['calls'] > 0 ? 100 * $day['errors'] / $day['calls'] : 0;
+            $days[] = $day;
+        }
 
         return $app['twig']->render('stats.twig', [
-            'total'     => $total,
-            'avg'       => $avg,
-            'max'       => $max,
-            'calls'     => $calls,
-            'resources' => $resources,
-            'stations'  => $stations,
-            'errors'    => $errors,
+            'total'           => $total,
+            'avg'             => $avg,
+            'max'             => $max,
+            'calls'           => $calls,
+            'resources'       => $resources,
+            'stations'        => $stations,
+            'errors'          => $errors,
+            'exceptions'      => $exceptions,
+            'exceptionsTotal' => $exceptionsTotal,
+            'days'            => $days,
         ]);
     });
 } else {
     $app->get('/', function () {
         return 'No Redis configured. See section "Statistics" in README.md.';
     });
+}
+
+/**
+ * Adds a short name, the HTTP status and a plain explanation to an exception counter.
+ *
+ * @param array $error ['exception' => class name, 'calls' => count]
+ *
+ * @return array
+ */
+function describeException(array $error)
+{
+    $known = [
+        'Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException' => ['405', 'Request used an HTTP method other than GET'],
+        'Exception'                                                            => ['500', 'timetable.search.ch answered with a server error, an error message or invalid JSON'],
+        'Buzz\Exception\RequestException'                                      => ['500', 'Connection to timetable.search.ch failed or timed out'],
+        'Buzz\Exception\ClientException'                                       => ['500', 'HTTP client error while calling timetable.search.ch'],
+        'Symfony\Component\Debug\Exception\ContextErrorException'              => ['500', 'PHP warning or notice inside the API (a bug)'],
+        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'         => ['404', 'Unknown path'],
+        'Symfony\Component\HttpKernel\Exception\BadRequestHttpException'       => ['400', 'Missing or invalid parameters'],
+        'Symfony\Component\HttpKernel\Exception\HttpException'                 => ['4xx', 'Other HTTP error raised by the API'],
+        'Predis\ClientException'                                               => ['500', 'Statistics store (Redis) rejected a command'],
+        'Predis\Response\ServerException'                                      => ['500', 'Statistics store (Redis) returned an error'],
+        'Predis\Connection\ConnectionException'                                => ['500', 'Statistics store (Redis) unreachable'],
+    ];
+
+    $class = $error['exception'];
+    $position = strrpos($class, '\\');
+
+    $error['name'] = $position === false ? $class : substr($class, $position + 1);
+    $error['namespace'] = $position === false ? '' : substr($class, 0, $position);
+    $error['status'] = isset($known[$class]) ? $known[$class][0] : '';
+    $error['description'] = isset($known[$class]) ? $known[$class][1] : '';
+    $error['calls'] = (int) $error['calls'];
+
+    return $error;
 }
 
 // run

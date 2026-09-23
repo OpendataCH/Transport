@@ -124,14 +124,23 @@ class Statistics
     }
 
     /**
+     * All recorded exception classes, most frequent first.
+     */
+    public function getExceptions()
+    {
+        return $this->top('stats:exceptions', ['exception', 'calls'], 100);
+    }
+
+    /**
      * @param string   $key
      * @param string[] $fields
+     * @param int      $limit
      */
-    protected function top($key, $fields)
+    protected function top($key, $fields, $limit = 5)
     {
         $result = $this->redis->sort($key, [
             'by'    => '*->calls',
-            'limit' => [0, 5],
+            'limit' => [0, $limit],
             'get'   => array_map(function ($value) {
                 return "*->$value";
             }, $fields),
