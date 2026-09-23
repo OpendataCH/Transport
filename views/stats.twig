@@ -194,10 +194,27 @@
             </div>
 
             <h2 id="error-details">Errors in detail</h2>
-            <p class="text-muted">
-                Every error the API has recorded since 22. November 2015, {{ exceptionsTotal | number_format(0, ".", "'") }} in total.
-                Requests rejected because of rate limiting (HTTP 429, by this API or by timetable.search.ch) are not counted here.
-            </p>
+
+            <form class="form-inline stats-window" onsubmit="return false;">
+                <label for="statsWindowSelect" class="sr-only">Time window</label>
+                <select id="statsWindowSelect" class="form-control input-sm">
+                    {% for key, label in windows %}
+                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
+                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
+            </form>
+
+            <div class="row stats-summary">
+                <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Errors<br/><span class="lead" id="statsSumErrors"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Error rate<br/><span class="lead" id="statsSumRate"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)<br/><span class="lead" id="statsSumRateLimited"></span></p></div>
+            </div>
+
+            <p class="text-muted" id="statsWindowNote"></p>
+
             <div class="table-responsive">
                 <table class="table table-condensed stats-table">
                     <thead>
@@ -209,46 +226,136 @@
                             <th class="text-right">Share</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for exception in exceptions %}
-                        <tr>
-                            <td class="stats-exception">
-                                {{ exception.name }}
-                                {% if exception.namespace %}<br/><small class="text-muted">{{ exception.namespace }}</small>{% endif %}
-                            </td>
-                            <td>{{ exception.status }}</td>
-                            <td>{{ exception.description }}</td>
-                            <td class="text-right stats-number">{{ exception.calls | number_format(0, ".", "'") }}</td>
-                            <td class="text-right stats-number">{{ exception.share | number_format(exception.share < 1 ? 2 : 1, ".", "'") }}&nbsp;%</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                    <tbody id="statsExceptions"></tbody>
                 </table>
             </div>
 
-            <h3>Last 14 days</h3>
+            <h3 id="statsRowsTitle"></h3>
             <div class="table-responsive">
                 <table class="table table-condensed stats-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th id="statsRowsHead">Date</th>
                             <th class="text-right">Calls</th>
                             <th class="text-right">Errors</th>
                             <th class="text-right">Error rate</th>
+                            <th class="text-right" title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for day in days %}
-                        <tr>
-                            <td class="stats-number">{{ day.date | date("d.m.Y") }}{% if loop.first %} <small class="text-muted">(today, so far)</small>{% endif %}</td>
-                            <td class="text-right stats-number">{{ day.calls | number_format(0, ".", "'") }}</td>
-                            <td class="text-right stats-number">{{ day.errors | number_format(0, ".", "'") }}</td>
-                            <td class="text-right stats-number">{{ day.rate | number_format(3, ".", "'") }}&nbsp;%</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                    <tbody id="statsRows"></tbody>
                 </table>
             </div>
+
+            <script>
+            (function () {
+                var windows = {{ windows | keys | json_encode | raw }};
+                var initial = {{ window | json_encode | raw }};
+
+                function number(value) {
+                    if (value === null) {
+                        return '–';
+                    }
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+                }
+
+                function percent(part, whole, digits) {
+                    if (!whole) {
+                        return '–';
+                    }
+                    var value = 100 * part / whole;
+                    if (value > 0 && value < Math.pow(10, -digits)) {
+                        return '&lt;&nbsp;' + Math.pow(10, -digits).toFixed(digits) + '&nbsp;%';
+                    }
+                    return value.toFixed(digits) + '&nbsp;%';
+                }
+
+                function text(value) {
+                    return $('<div>').text(value).html();
+                }
+
+                function render(data) {
+                    // the all-time view has totals by class only; its rows are the last 14 days
+                    $('.stats-summary').toggle(data.window !== 'all');
+                    var calls = data.calls + (data.ratelimited || 0);
+                    $('#statsSumCalls').text(number(data.calls));
+                    $('#statsSumErrors').text(number(data.errors));
+                    $('#statsSumRate').html(percent(data.errors, data.calls, 3));
+                    $('#statsSumRateLimited').html(data.ratelimited === null ? '–' : number(data.ratelimited) + ' <small class="text-muted">' + percent(data.ratelimited, calls, 1) + '</small>');
+
+                    var note;
+                    if (data.window === 'all') {
+                        note = 'Every error the API has recorded since 22. November 2015, ' + number(data.classTotal) + ' in total. Calls and errors below are for the last 14 days.';
+                    } else if (data.since === null) {
+                        note = 'No hourly data for this window yet: the split by error class and the rate-limited requests are recorded hourly from 23. September 2026 on.';
+                    } else {
+                        note = 'Split by error class and rate-limited requests recorded hourly since ' + moment(data.since).format('DD.MM.YYYY HH:mm') + '.';
+                    }
+                    $('#statsWindowNote').text(note + ' Rate-limited requests (HTTP 429) are neither calls nor errors.');
+
+                    var exceptions = $.map(data.exceptions, function (e) {
+                        return '<tr>' +
+                            '<td class="stats-exception" title="' + text(e.exception) + '">' + text(e.name) + (e.namespace ? '<br/><small class="text-muted">' + text(e.namespace) + '</small>' : '') + '</td>' +
+                            '<td>' + text(e.status) + '</td>' +
+                            '<td>' + text(e.description) + '</td>' +
+                            '<td class="text-right stats-number">' + number(e.calls) + '</td>' +
+                            '<td class="text-right stats-number">' + percent(e.calls, data.classTotal, 1) + '</td>' +
+                            '</tr>';
+                    });
+                    $('#statsExceptions').html(exceptions.length ? exceptions.join('') : '<tr><td colspan="5" class="text-muted">No errors recorded in this window.</td></tr>');
+
+                    var hourly = data.granularity === 'hour';
+                    $('#statsRowsTitle').text(hourly ? 'By hour' : (data.window === 'all' ? 'Last 14 days' : 'By day'));
+                    $('#statsRowsHead').text(hourly ? 'Hour' : 'Date');
+                    var rows = $.map(data.rows, function (row, index) {
+                        var label = hourly
+                            ? moment(row.start).format('DD.MM.YYYY HH:mm') + '–' + moment(row.start).add(1, 'hour').format('HH:mm')
+                            : moment(row.start).format('DD.MM.YYYY');
+                        return '<tr>' +
+                            '<td class="stats-number">' + label + (index === 0 ? ' <small class="text-muted">(so far)</small>' : '') + '</td>' +
+                            '<td class="text-right stats-number">' + number(row.calls) + '</td>' +
+                            '<td class="text-right stats-number">' + number(row.errors) + '</td>' +
+                            '<td class="text-right stats-number">' + percent(row.errors, row.calls, 3) + '</td>' +
+                            '<td class="text-right stats-number">' + number(row.ratelimited) + '</td>' +
+                            '</tr>';
+                    });
+                    $('#statsRows').html(rows.join(''));
+                }
+
+                var select = $('#statsWindowSelect');
+                var slider = $('#statsWindowSlider');
+                var request = null;
+                var timer = null;
+
+                function load(key) {
+                    if (request) {
+                        request.abort();
+                    }
+                    $('#statsWindowLoading').show();
+                    request = $.getJSON('?format=window&window=' + encodeURIComponent(key), function (data) {
+                        render(data);
+                    }).always(function () {
+                        $('#statsWindowLoading').hide();
+                    });
+                }
+
+                select.on('change', function () {
+                    slider.val(windows.indexOf(select.val()));
+                    load(select.val());
+                });
+
+                // the slider follows the select while dragging and loads once it rests
+                slider.on('input change', function () {
+                    select.val(windows[slider.val()]);
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        load(select.val());
+                    }, 250);
+                });
+
+                slider.val(windows.indexOf(initial.window));
+                render(initial);
+            })();
+            </script>
         </article>
 
         <footer class="footer">

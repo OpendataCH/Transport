@@ -100,3 +100,22 @@ table.connections tr.section {
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
+
+.stats-window {
+    margin-bottom: 20px;
+}
+
+.stats-window input[type="range"] {
+    display: inline-block;
+    width: 260px;
+    max-width: 100%;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@media screen and (max-width: 767px) {
+    .stats-window input[type="range"] {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+}

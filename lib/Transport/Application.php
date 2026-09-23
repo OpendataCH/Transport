@@ -154,6 +154,8 @@ class Application extends \Silex\Application
             if ($response->getStatusCode() !== 429) {
                 $app['stats']->call();
                 $app['stats']->resource($request->getPathInfo());
+            } else {
+                $app['stats']->rateLimited();
             }
         });
 
