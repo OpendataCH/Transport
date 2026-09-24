@@ -141,6 +141,33 @@ def test_a_day_window_joins_the_daily_counters_and_the_buckets(client, redis):
     ]
 
 
+def test_the_places_name_the_calendar_days_they_cover(client, redis):
+    now = datetime.now(ZONE)
+    two_days_ago = (now - timedelta(days=2)).date().isoformat()
+    redis.zadd(f"stats:top:stations:{two_days_ago}", {"Bern": 3})
+    redis.zadd(f"stats:top:routes:{now:%Y-%m-%d}", {"Bern → Zug": 1})
+
+    data = client.get("/stats.php", params={"format": "window", "window": "7d"}).json()
+
+    assert data["placesDays"] == {"from": two_days_ago, "to": f"{now:%Y-%m-%d}", "untilNow": True}
+
+
+def test_an_hour_window_shows_the_whole_day_of_places(client, redis):
+    now = datetime.now(ZONE)
+    redis.zadd(f"stats:top:stations:{now:%Y-%m-%d}", {"Bern": 3})
+
+    data = client.get("/stats.php", params={"format": "window", "window": "1h"}).json()
+
+    assert data["granularity"] == "hour"
+    assert data["placesDays"]["from"] == data["placesDays"]["to"] == f"{now:%Y-%m-%d}"
+
+
+def test_without_counted_places_there_are_no_days(client, redis):
+    data = client.get("/stats.php", params={"format": "window", "window": "7d"}).json()
+
+    assert data["placesDays"] is None
+
+
 def test_the_window_json_is_escaped_as_symfony_escapes_it(client, redis):
     now = datetime.now(ZONE)
     redis.zadd(f"stats:top:routes:{now:%Y-%m-%d}", {"Bern → Zug": 1})

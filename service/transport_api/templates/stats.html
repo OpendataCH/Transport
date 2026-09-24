@@ -286,6 +286,7 @@
 
             <h2 id="places">What is asked for</h2>
             <p class="text-muted"><small>Stations and places as the clients wrote them, not resolved: «Bern» and «8507000» are two entries. Rate-limited and failed requests are not counted.</small></p>
+            <p id="statsPlacesDays"></p>
             <div class="row">
                 <div class="col-sm-6">
                     <h3>Station boards</h3>
@@ -423,6 +424,20 @@
                     var none = 'Recorded from 24. September 2026 on; nothing in this window yet.';
                     $('#statsStations').html(stations.length ? stations.join('') : empty(2, none));
                     $('#statsRoutes').html(routes.length ? routes.join('') : empty(2, none));
+
+                    // counted per calendar day: say which days the tables cover
+                    var days = data.placesDays;
+                    var span = '';
+                    if (days) {
+                        var from = moment(days.from).format('DD.MM.YYYY');
+                        var to = moment(days.to).format('DD.MM.YYYY');
+                        span = '<strong>' + (from === to ? to : from + ' – ' + to) + '</strong>'
+                            + (days.untilNow ? ' (today up to now)' : '')
+                            + '. <small class="text-muted">Counted per calendar day from 24. September 2026 on'
+                            + (data.granularity === 'hour' ? '; a window shorter than a day shows its whole days' : '')
+                            + '.</small>';
+                    }
+                    $('#statsPlacesDays').html(span);
                 }
 
                 var profileChart = null;

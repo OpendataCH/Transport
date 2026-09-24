@@ -237,6 +237,14 @@ class Reader:
         union = await self._redis.zunion(keys, withscores=True)
         return list(reversed(union))[:count]
 
+    async def recorded_place_days(self, dates: list[str]) -> list[str]:
+        """The days among `dates` that have any station or pair counted, oldest first."""
+        return [
+            d
+            for d in dates
+            if await self._redis.exists(f"stats:top:stations:{d}", f"stats:top:routes:{d}")
+        ]
+
     async def client_days(self, dates: list[str], today: str) -> dict[str, dict]:
         """Distinct clients per day: a finished day's summary, today counted live."""
         result = {}
@@ -357,6 +365,19 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
         for date, summary in (await reader.client_days(dates, now.date().isoformat())).items()
     ]
 
+    # The places are counted per calendar day, so the tables cover whole days
+    # whatever the window says; the page names the days it actually shows.
+    place_days = await reader.recorded_place_days(dates)
+    places_days = (
+        {
+            "from": place_days[0],
+            "to": place_days[-1],
+            "untilNow": place_days[-1] == now.date().isoformat(),
+        }
+        if place_days
+        else None
+    )
+
     since = next((b["hour"] for b in buckets if b["recorded"]), None)
     return {
         "window": key,
@@ -374,6 +395,7 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
         "clientDays": list(reversed(client_days)),
         "stations": await top("stations"),
         "routes": await top("routes"),
+        "placesDays": places_days,
         "profile": profile,
     }
 
