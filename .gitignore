@@ -1,9 +1,9 @@
-/config.php
-/var/cache/
-/var/logs/
-/vendor/
-/id_rsa
 /service/.venv/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+/id_rsa
+# Left behind in working copies from the PHP application.
+/config.php
+/var/
+/vendor/

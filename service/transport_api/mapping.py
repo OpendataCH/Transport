@@ -1,9 +1,9 @@
 """Turning search.ch answers into the entities of /v1.
 
-This is the PHP `lib/Transport/Entity` tree, read once and written down as
-functions. Everything here is deliberate reproduction, including the parts that
-are plainly wrong: /v2 is the same API as /v1, so a fixed bug would be a
-difference, and a difference is what the whole plan is built to notice.
+This was the PHP application's `lib/Transport/Entity` tree, read once and
+written down as functions. Everything here is deliberate reproduction, including
+the parts that are plainly wrong: /v1 must answer as it always has, so a fixed
+bug would be a difference every unattended client might notice.
 
 The oddities are named where they sit. The two that will surprise a reader
 most:

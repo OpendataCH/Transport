@@ -1,42 +1,18 @@
----
-# Development only. The servers run their own compose file - this one mounts
-# the working copy over the image, which is right on a laptop and wrong
-# anywhere else.
+# Development only. The servers run their own compose file with images pulled
+# from the registry; this one builds from the working copy.
 #
-# The proxy is here so the shape of the deployment is visible locally: one
-# address, /v2/ to the Python service and everything else to PHP.
+# One service answers everything - the API under /v1 and the website around
+# it - and Redis holds the counters behind /stats.php.
 services:
-  proxy:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
-    volumes:
-      - ./docker/dev-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - web
-      - service
-
-  web:
-    build: .
-    depends_on:
-      - redis
-    volumes:
-      - .:/var/www/html
-      # Without this the working copy has no config.php, the application falls
-      # back to debug=true, and every error comes back as a Symfony HTML page
-      # instead of the JSON envelope. That makes a local comparison against
-      # /v2 lie about exactly the cases worth comparing.
-      - ./config.php.docker:/var/www/html/config.php:ro
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: "6379"
-      STATS_ENABLED: "true"
-      RATE_LIMITING_ENABLED: "true"
-
   service:
     build: ./service
+    ports:
+      - "8000:8000"
     environment:
       SERVICE_VERSION: dev
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - redis
 
   redis:
-    image: redis
+    image: redis:8-alpine

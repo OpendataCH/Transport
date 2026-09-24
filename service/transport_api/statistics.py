@@ -1,19 +1,17 @@
-"""The counters behind /stats.php, written the way the PHP application writes them.
+"""The counters behind /stats.php, written the way the PHP application wrote them.
 
-`stats.php` is PHP and stays PHP: it reads Redis and draws the page. Until this
-module existed only the PHP API wrote to Redis, so moving `/v1` to this service
-would have frozen the page at the moment of the switch. The keys below are
-therefore the PHP's, byte for byte - the daily sets and counters, the hashes per
-resource and per exception class, and the hourly buckets - so that one history
-runs on across the two implementations.
+The keys are the PHP's, byte for byte - the daily sets and counters, the hashes
+per resource and per exception class, and the hourly buckets - so that one
+history runs on from 2012 across the change of implementation. The page itself
+is `stats_page.py`.
 
 The exception classes are recorded under the names the PHP gave them, where
 the failure is the same one: a timeout of search.ch is still a
 `Buzz\\Exception\\RequestException` on the page, because what the reader wants
 to know is how often search.ch did not answer, not which library noticed.
 
-On top of what the PHP always counted there are four things (written by both
-implementations, with the same rules):
+On top of what the PHP always counted there are four things (the PHP counted
+them too in its last weeks, with the same rules):
 
 - the kind of client per hour, from the User-Agent;
 - the stations and the from → to pairs asked for, per day;
@@ -67,9 +65,8 @@ HTTP_EXCEPTION = "Symfony\\Component\\HttpKernel\\Exception\\HttpException"
 # TypeError there and never reached its counter; here it is counted.
 TYPE_ERROR = "TypeError"
 
-# Kinds of client, first match wins. The same list, in the same order, is in
-# lib/Transport/Statistics.php - change both or the two halves of one history
-# disagree about what a client is.
+# Kinds of client, first match wins. The PHP application used the same list in
+# the same order; changing it changes what the history before and after means.
 CLIENT_KINDS = [
     ("homeassistant", re.compile(r"homeassistant", re.I)),
     ("microcontroller", re.compile(r"esp32|esp8266|arduino|micropython", re.I)),

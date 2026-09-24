@@ -1,4 +1,0 @@
-preset: recommended
-
-disabled:
-  - no_alternative_syntax

@@ -1,7 +1,7 @@
 # Build the container image here instead of on the servers.
 #
 # The image is what gets deployed: the servers pull a tag from this project's
-# registry rather than running `git pull` and `composer install` themselves.
+# registry rather than building anything themselves.
 # That keeps the build off machines whose job is to answer requests, and it
 # makes a deployment reproducible - a tag is a fixed thing, a working copy is
 # not.
@@ -13,34 +13,6 @@ stages:
   - test
   - build
 
-# Composer needs git and unzip; the base images carry neither.
-.php:
-  stage: test
-  before_script:
-    - apt-get update -qq && apt-get install -y -qq git unzip > /dev/null
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - composer install --prefer-dist --no-progress --no-interaction
-  script:
-    - vendor/bin/phpunit
-  cache:
-    key:
-      files: [composer.lock]
-    paths: [vendor/]
-
-# The image runs 8.3; 8.2 stays in the matrix because the deployment on the old
-# host does, and a test that only covers what we happen to run today tells us
-# nothing on the day we change it.
-test:php8.3:
-  extends: .php
-  image: php:8.3-cli
-
-test:php8.2:
-  extends: .php
-  image: php:8.2-cli
-
-# The Python service that answers /v2. It lives in service/ and is tested,
-# linted and built separately from the PHP application - the two deploy and
-# roll back independently, and nothing about /v1 depends on this job.
 test:service:
   stage: test
   image: python:3.13-slim
@@ -68,20 +40,7 @@ test:service:
     # hand a server something nobody reviewed.
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-# Two images out of one commit, at the same short SHA. They are deployed and
-# rolled back separately; the shared tag only says which commit they came from.
-build:image:
-  extends: .kaniko
-  script:
-    # Two tags, on purpose. The short SHA is the one to roll back to; `latest`
-    # is the one a server pulls when nobody has decided otherwise.
-    - >-
-      /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
-      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
-      --destination "${CI_REGISTRY_IMAGE}:latest"
-
+# The one image: the API and the website around it.
 build:image:service:
   extends: .kaniko
   script:
