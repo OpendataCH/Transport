@@ -89,7 +89,8 @@ def checks(base: str, version: str | None, redis: bool):
         assert body["version"] == "1.0" and body["author"] == "Opendata.ch", body
 
     def website():
-        for path in ("/", "/docs.html", "/examples/", "/showcase.html", "/robots.txt"):
+        pages = ("/", "/docs.html", "/privacy.html", "/examples/", "/showcase.html", "/robots.txt")
+        for path in pages:
             answer = get(base, path)
             assert answer.status == 200, f"{path}: {answer.status}"
         assert "Transport" in get(base, "/").text

@@ -12,6 +12,7 @@ from transport_api.main import app
         ("/", "text/html"),
         ("/index.html", "text/html"),
         ("/docs.html", "text/html"),
+        ("/privacy.html", "text/html"),
         ("/showcase.html", "text/html"),
         ("/examples/", "text/html"),
         ("/examples/connections.html", "text/html"),
@@ -96,3 +97,17 @@ def test_the_website_is_not_counted(client):
     # An unknown path is still a counted 404, as it was in the PHP.
     assert recorder.paths == ["/nothing"]
     assert statistics.exception_for(404, None) == statistics.NOT_FOUND
+
+
+@pytest.mark.parametrize(
+    "path", ["/", "/docs.html", "/showcase.html", "/examples/", "/examples/connections.html"]
+)
+def test_every_page_links_the_privacy_policy_in_its_footer(client, path):
+    page = client.get(path).text
+
+    assert 'href="/privacy.html"' in page[page.index("<footer") :]
+
+
+def test_the_privacy_policy_is_its_own_page_not_a_docs_section(client):
+    assert 'id="privacy"' in client.get("/privacy.html").text
+    assert 'id="privacy"' not in client.get("/docs.html").text
