@@ -151,6 +151,12 @@ class Application extends \Silex\Application
         // statistics
         $app['stats'] = new \Transport\Statistics($redis, $app['stats.config']['enabled']);
         $app->after(function (Request $request, Response $response) use ($app) {
+            // A request from the machine itself is the container's health
+            // check, never a client: no real caller arrives from loopback.
+            if (in_array($request->getClientIp(), ['127.0.0.1', '::1'], true)) {
+                return;
+            }
+
             $app['stats']->client($request->getClientIp(), $request->headers->get('User-Agent'));
             if ($response->getStatusCode() !== 429) {
                 $app['stats']->call();
