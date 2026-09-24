@@ -322,8 +322,23 @@
                 </div>
             </div>
 
-            <h2 id="error-rates">Error rate by year</h2>
+            <h2 id="error-rates">Calls and errors by year</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Calls per year</h3>
+                    <div style="position: relative;">
+                        <canvas id="statsYearCalls" width="400" height="220" style="width: 100%;" role="img" aria-label="Calls per year, bar chart; the table below has the figures"></canvas>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Error rate per year</h3>
+                    <div style="position: relative;">
+                        <canvas id="statsYearRate" width="400" height="220" style="width: 100%;" role="img" aria-label="Error rate per year, bar chart; the table below has the figures"></canvas>
+                    </div>
+                </div>
+            </div>
+            <p class="text-muted"><small>The paler bar is the year so far. The calls are whole years; the rate for 2015 counts from 22. November on, and there is none before.</small></p>
             <div class="row">
                 <div class="col-sm-8">
                     <table class="table table-condensed stats-table">
@@ -336,6 +351,73 @@
                     </table>
                 </div>
             </div>
+
+            <script>
+            (function () {
+                // two charts over one axis of years rather than one chart with two scales
+                var years = {{ years_json | safe }};
+                var labels = $.map(years, function (y) { return y.year; });
+                var current = String(new Date().getFullYear());
+
+                function fills(strong, pale) {
+                    return $.map(years, function (y) { return y.year === current ? pale : strong; });
+                }
+
+                function thousands(value) {
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+                }
+
+                function title(items) {
+                    var y = years[items[0].index];
+                    return y.year + (y.year === current ? ' (so far)' : '');
+                }
+
+                function yearChart(canvas, data, options) {
+                    return new Chart(canvas, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: fills('#ddeddc', '#f1f7f0'),
+                                borderColor: '#008000',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            legend: {display: false},
+                            tooltips: {callbacks: {title: title, label: options.label}},
+                            scales: {
+                                xAxes: [{gridLines: {display: false}}],
+                                yAxes: [{ticks: {beginAtZero: true, callback: options.tick}}]
+                            }
+                        }
+                    });
+                }
+
+                yearChart($('#statsYearCalls'), $.map(years, function (y) { return y.calls; }), {
+                    tick: function (value) {
+                        return value >= 1e6 ? thousands(value / 1e6) + ' M' : thousands(value);
+                    },
+                    label: function (item) {
+                        return thousands(item.yLabel) + ' calls';
+                    }
+                });
+
+                yearChart($('#statsYearRate'), years.map(function (y) { return y.rate; }), {
+                    tick: function (value) {
+                        return value + ' %';
+                    },
+                    label: function (item) {
+                        var y = years[item.index];
+                        if (y.rate === null) {
+                            return 'errors not counted';
+                        }
+                        return y.rate.toFixed(3) + ' % errors' + (y.since ? ' (from ' + moment(y.since).format('DD.MM.') + ')' : '');
+                    }
+                });
+            })();
+            </script>
 
             <script>
             (function () {

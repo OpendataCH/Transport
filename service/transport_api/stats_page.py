@@ -152,6 +152,7 @@ async def stats_page(request: Request) -> Response:
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
             error_years=error_years,
+            years_json=twig_json(years_chart(data, error_years)),
             windows=WINDOWS,
             windows_json=twig_json(list(WINDOWS)),
             window=initial,
@@ -509,6 +510,30 @@ def by_year(data: list[dict]) -> list[dict]:
         if year["errors"] is None:
             year["calls"] = sum(r["calls"] for r in data if r["date"][:4] == key)
     return list(reversed(years.values()))
+
+
+def years_chart(data: list[dict], years: list[dict]) -> list[dict]:
+    """The yearly figures for the two charts above the table, oldest first.
+
+    The calls are the whole year's, unlike the table's: the table counts the
+    year errors began in only from then on, so that its rate compares like with
+    like, but as a bar that year would look like a slump. The rate stays the
+    table's, as a number of percent, and None where errors were not counted.
+    """
+    calls: dict[str, int] = {}
+    for row in data:
+        calls[row["date"][:4]] = calls.get(row["date"][:4], 0) + row["calls"]
+    return [
+        {
+            "year": y["year"],
+            "calls": calls[y["year"]],
+            "rate": None
+            if y["errors"] is None or not y["calls"]
+            else 100 * y["errors"] / y["calls"],
+            "since": y["since"],
+        }
+        for y in reversed(years)
+    ]
 
 
 def rate(errors: int | None, calls: int) -> str:

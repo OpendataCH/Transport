@@ -263,3 +263,28 @@ def test_years_before_errors_were_counted_say_so():
     assert years["2015"] == {"year": "2015", "calls": 100, "errors": 1, "since": "2015-11-22"}
     assert years["2016"]["since"] is None
     assert stats_page.rate(None, 100) == "–"
+
+
+def test_the_year_charts_count_the_whole_year_but_keep_the_rate():
+    data = [
+        {"date": "2014-06-01", "calls": 100, "errors": 0},
+        {"date": "2015-11-21", "calls": 900, "errors": 0},
+        {"date": "2015-11-22", "calls": 100, "errors": 1},
+    ]
+
+    chart = stats_page.years_chart(data, stats_page.by_year(data))
+
+    assert chart == [
+        {"year": "2014", "calls": 100, "rate": None, "since": None},
+        # All 1000 calls of 2015 as a bar, the rate from 22 November on: 1 of 100.
+        {"year": "2015", "calls": 1000, "rate": 1.0, "since": "2015-11-22"},
+    ]
+
+
+def test_the_page_carries_the_years_for_the_charts(client, redis):
+    day(redis, "2025-06-01", 1000, errors=10)
+
+    page = client.get("/stats").text
+
+    assert 'id="statsYearCalls"' in page
+    assert '"calls":1000' in page
