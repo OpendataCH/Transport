@@ -196,29 +196,8 @@
                 </div>
             </div>
 
-            <h2 id="details">In detail</h2>
-
-            <form class="form-inline stats-window" onsubmit="return false;">
-                <label for="statsWindowSelect" class="sr-only">Time window</label>
-                <select id="statsWindowSelect" class="form-control input-sm">
-                    {% for key, label in windows.items() %}
-                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
-                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
-            </form>
-
-            <div class="row stats-summary">
-                <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p>Errors<br/><span class="lead" id="statsSumErrors"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p>Error rate<br/><span class="lead" id="statsSumRate"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)<br/><span class="lead" id="statsSumRateLimited"></span></p></div>
-            </div>
-
-            <p class="text-muted" id="statsWindowNote"></p>
-
             <h2 id="clients">Who calls</h2>
+            <p class="text-muted"><small>Time window: <span class="stats-window-label"></span> · <a href="#error-details">change</a></small></p>
             <p class="text-muted" id="statsClientsNote"></p>
             <div class="row">
                 <div class="col-sm-6">
@@ -257,6 +236,7 @@
             </div>
 
             <h2 id="places">What is asked for</h2>
+            <p class="text-muted"><small>Time window: <span class="stats-window-label"></span> · <a href="#error-details">change</a></small></p>
             <p class="text-muted"><small>Counted exactly as the clients wrote them. A station can be asked for by its name or by its number, the Swiss stop ID (8507000 is Bern), and the count does not look either up: «Bern», «bern» and «8507000» are three entries for the same station, and a station may therefore rank lower than it is asked for. Rate-limited and failed requests are not counted.</small></p>
             <p id="statsPlacesDays"></p>
             <div class="row">
@@ -292,7 +272,28 @@
             </div>
 
             <h2 id="error-details">Errors in detail</h2>
-            <p class="text-muted"><small>For the time window chosen under <a href="#details">In detail</a>.</small></p>
+
+
+            <form class="form-inline stats-window" onsubmit="return false;">
+                <label for="statsWindowSelect" class="sr-only">Time window</label>
+                <select id="statsWindowSelect" class="form-control input-sm">
+                    {% for key, label in windows.items() %}
+                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
+                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
+            </form>
+
+            <div class="row stats-summary">
+                <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Errors<br/><span class="lead" id="statsSumErrors"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Error rate<br/><span class="lead" id="statsSumRate"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)<br/><span class="lead" id="statsSumRateLimited"></span></p></div>
+            </div>
+
+            <p class="text-muted" id="statsWindowNote"></p>
+
             <div class="table-responsive">
                 <table class="table table-condensed stats-table">
                     <thead>
@@ -451,6 +452,7 @@
                 function render(data) {
                     // the all-time view has totals by class only; its rows are the last 14 days
                     $('.stats-summary').toggle(data.window !== 'all');
+                    $('.stats-window-label').text(data.label);
                     var calls = data.calls + (data.ratelimited || 0);
                     $('#statsSumCalls').text(number(data.calls));
                     $('#statsSumErrors').text(number(data.errors));

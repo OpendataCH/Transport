@@ -290,17 +290,18 @@ def test_the_page_carries_the_years_for_the_charts(client, redis):
     assert '"calls":1000' in page
 
 
-def test_the_error_tables_sit_at_the_bottom_and_the_window_choice_on_top(client, redis):
-    """The window select drives every section, so it stays above them all."""
+def test_the_errors_in_detail_are_one_block_at_the_bottom(client, redis):
+    """The window choice belongs to the errors; the sections above name the window."""
     page = client.get("/stats").text
 
     order = [
-        page.index('id="statsWindowSelect"'),
         page.index('id="clients"'),
         page.index('id="places"'),
         page.index('id="error-details"'),
+        page.index('id="statsWindowSelect"'),
         page.index('id="statsExceptions"'),
         page.index('id="statsRows"'),
         page.index('id="error-rates"'),
     ]
     assert order == sorted(order)
+    assert page.count('class="stats-window-label"') == 2
