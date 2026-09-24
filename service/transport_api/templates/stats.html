@@ -271,44 +271,6 @@
                 </div>
             </div>
 
-            <h2 id="error-details">Errors in detail</h2>
-
-
-            <form class="form-inline stats-window" onsubmit="return false;">
-                <label for="statsWindowSelect" class="sr-only">Time window</label>
-                <select id="statsWindowSelect" class="form-control input-sm">
-                    {% for key, label in windows.items() %}
-                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
-                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
-            </form>
-
-            <div class="row stats-summary">
-                <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p>Errors<br/><span class="lead" id="statsSumErrors"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p>Error rate<br/><span class="lead" id="statsSumRate"></span></p></div>
-                <div class="col-xs-6 col-sm-3"><p title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)<br/><span class="lead" id="statsSumRateLimited"></span></p></div>
-            </div>
-
-            <p class="text-muted" id="statsWindowNote"></p>
-
-            <div class="table-responsive">
-                <table class="table table-condensed stats-table">
-                    <thead>
-                        <tr>
-                            <th>Error</th>
-                            <th>Status</th>
-                            <th>Meaning</th>
-                            <th class="text-right">Count</th>
-                            <th class="text-right">Share</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statsExceptions"></tbody>
-                </table>
-            </div>
-
             <h2 id="error-rates">Calls and errors</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
             <div class="btn-group btn-group-sm stats-range" role="group" aria-label="Range of the chart">
@@ -423,6 +385,44 @@
                 });
             })();
             </script>
+
+            <h2 id="error-details">Errors in detail</h2>
+
+
+            <form class="form-inline stats-window" onsubmit="return false;">
+                <label for="statsWindowSelect" class="sr-only">Time window</label>
+                <select id="statsWindowSelect" class="form-control input-sm">
+                    {% for key, label in windows.items() %}
+                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
+                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
+            </form>
+
+            <div class="row stats-summary">
+                <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Errors<br/><span class="lead" id="statsSumErrors"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p>Error rate<br/><span class="lead" id="statsSumRate"></span></p></div>
+                <div class="col-xs-6 col-sm-3"><p title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)<br/><span class="lead" id="statsSumRateLimited"></span></p></div>
+            </div>
+
+            <p class="text-muted" id="statsWindowNote"></p>
+
+            <div class="table-responsive">
+                <table class="table table-condensed stats-table">
+                    <thead>
+                        <tr>
+                            <th>Error</th>
+                            <th>Status</th>
+                            <th>Meaning</th>
+                            <th class="text-right">Count</th>
+                            <th class="text-right">Share</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsExceptions"></tbody>
+                </table>
+            </div>
 
             <script>
             (function () {

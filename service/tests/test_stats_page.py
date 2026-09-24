@@ -286,16 +286,17 @@ def test_the_page_carries_the_years_for_the_charts(client, redis):
 
 
 def test_the_errors_in_detail_are_one_block_at_the_bottom(client, redis):
-    """The window choice belongs to the errors; the sections above name the window."""
+    """Last on the page: the errors in detail with their window choice, which the
+    sections above name."""
     page = client.get("/stats").text
 
     order = [
         page.index('id="clients"'),
         page.index('id="places"'),
+        page.index('id="error-rates"'),
         page.index('id="error-details"'),
         page.index('id="statsWindowSelect"'),
         page.index('id="statsExceptions"'),
-        page.index('id="error-rates"'),
     ]
     assert order == sorted(order)
     assert page.count('class="stats-window-label"') == 2
