@@ -151,7 +151,6 @@ async def stats_page(request: Request) -> Response:
             errors=[
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
-            error_years=error_years,
             years_json=twig_json(years_chart(data, error_years)),
             windows=WINDOWS,
             windows_json=twig_json(list(WINDOWS)),
@@ -513,12 +512,13 @@ def by_year(data: list[dict]) -> list[dict]:
 
 
 def years_chart(data: list[dict], years: list[dict]) -> list[dict]:
-    """The yearly figures for the two charts above the table, oldest first.
+    """The yearly figures for the chart, oldest first.
 
-    The calls are the whole year's, unlike the table's: the table counts the
-    year errors began in only from then on, so that its rate compares like with
-    like, but as a bar that year would look like a slump. The rate stays the
-    table's, as a number of percent, and None where errors were not counted.
+    One bar per year, the whole year's calls, with the errors stacked inside
+    it: one scale, no second axis. The rate goes into the tooltip and is
+    by_year's, which in the year errors began in counts only from then on, so
+    that it compares like with like. Where errors were not counted, errors and
+    rate are None.
     """
     calls: dict[str, int] = {}
     for row in data:
@@ -527,6 +527,7 @@ def years_chart(data: list[dict], years: list[dict]) -> list[dict]:
         {
             "year": y["year"],
             "calls": calls[y["year"]],
+            "errors": y["errors"],
             "rate": None
             if y["errors"] is None or not y["calls"]
             else 100 * y["errors"] / y["calls"],
@@ -534,16 +535,3 @@ def years_chart(data: list[dict], years: list[dict]) -> list[dict]:
         }
         for y in reversed(years)
     ]
-
-
-def rate(errors: int | None, calls: int) -> str:
-    """An error rate as the page shows it: three decimals, a dash without calls."""
-    if errors is None or not calls:
-        return "–"
-    value = 100 * errors / calls
-    if 0 < value < 0.001:
-        return "< 0.001 %"
-    return f"{value:.3f} %"
-
-
-TEMPLATES.filters["rate"] = rate

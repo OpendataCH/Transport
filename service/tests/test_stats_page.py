@@ -237,15 +237,10 @@ def test_the_error_rate_by_year_is_at_the_bottom(client, redis):
 
     bottom = page[page.index('id="error-rates"') :]
     assert "Stations 2012–2017" not in bottom
-    assert bottom.index(">2026") < bottom.index(">2025")
-    assert "1.000 %" in bottom
-    assert "0.025 %" in bottom
-
-
-def test_rates_are_formatted_like_the_rest_of_the_page():
-    assert stats_page.rate(0, 0) == "–"
-    assert stats_page.rate(1, 3) == "33.333 %"
-    assert stats_page.rate(1, 10_000_000) == "< 0.001 %"
+    assert 'id="statsYears"' in bottom
+    # The figures are in the chart's data, oldest first; there is no table.
+    assert bottom.index('"year":"2025"') < bottom.index('"year":"2026"')
+    assert "<table" not in bottom[: bottom.index("<script>")]
 
 
 def test_years_before_errors_were_counted_say_so():
@@ -262,7 +257,6 @@ def test_years_before_errors_were_counted_say_so():
     # Only the days since counting began, so 1 of 100 rather than 1 of 1000.
     assert years["2015"] == {"year": "2015", "calls": 100, "errors": 1, "since": "2015-11-22"}
     assert years["2016"]["since"] is None
-    assert stats_page.rate(None, 100) == "–"
 
 
 def test_the_year_charts_count_the_whole_year_but_keep_the_rate():
@@ -275,9 +269,9 @@ def test_the_year_charts_count_the_whole_year_but_keep_the_rate():
     chart = stats_page.years_chart(data, stats_page.by_year(data))
 
     assert chart == [
-        {"year": "2014", "calls": 100, "rate": None, "since": None},
+        {"year": "2014", "calls": 100, "errors": None, "rate": None, "since": None},
         # All 1000 calls of 2015 as a bar, the rate from 22 November on: 1 of 100.
-        {"year": "2015", "calls": 1000, "rate": 1.0, "since": "2015-11-22"},
+        {"year": "2015", "calls": 1000, "errors": 1, "rate": 1.0, "since": "2015-11-22"},
     ]
 
 
@@ -286,7 +280,7 @@ def test_the_page_carries_the_years_for_the_charts(client, redis):
 
     page = client.get("/stats").text
 
-    assert 'id="statsYearCalls"' in page
+    assert 'id="statsYears"' in page
     assert '"calls":1000' in page
 
 

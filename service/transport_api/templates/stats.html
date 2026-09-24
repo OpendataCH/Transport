@@ -327,96 +327,78 @@
 
             <h2 id="error-rates">Calls and errors by year</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h3>Calls per year</h3>
-                    <div style="position: relative;">
-                        <canvas id="statsYearCalls" width="400" height="220" style="width: 100%;" role="img" aria-label="Calls per year, bar chart; the table below has the figures"></canvas>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <h3>Error rate per year</h3>
-                    <div style="position: relative;">
-                        <canvas id="statsYearRate" width="400" height="220" style="width: 100%;" role="img" aria-label="Error rate per year, bar chart; the table below has the figures"></canvas>
-                    </div>
-                </div>
+            <div style="position: relative;">
+                <canvas id="statsYears" width="800" height="260" style="width: 100%;" role="img" aria-label="Calls per year as bars, with the errors stacked inside them; each bar's tooltip has the figures"></canvas>
             </div>
-            <p class="text-muted"><small>The paler bar is the year so far. The calls are whole years; the rate for 2015 counts from 22. November on, and there is none before.</small></p>
-            <div class="row">
-                <div class="col-sm-8">
-                    <table class="table table-condensed stats-table">
-                        <thead><tr><th>Year</th><th class="text-right">Calls</th><th class="text-right">Errors</th><th class="text-right">Error rate</th></tr></thead>
-                        <tbody>
-                            {% for year in error_years %}
-                            <tr><td class="stats-number">{{ year.year }}{% if loop.first %} <small class="text-muted">(so far)</small>{% elif year.since %} <small class="text-muted">(from {{ year.since[8:10] }}.{{ year.since[5:7] }}.)</small>{% endif %}</td><td class="text-right stats-number">{{ year.calls | number }}</td><td class="text-right stats-number">{% if year.errors is none %}<span class="text-muted">not counted</span>{% else %}{{ year.errors | number }}{% endif %}</td><td class="text-right stats-number">{{ year.errors | rate(year.calls) }}</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <p class="text-muted"><small>Each bar is a year's calls, the red part its errors. Hover a bar for the figures and the error rate. The paler bar is the year so far; the rate for 2015 counts from 22. November on, and there is none before.</small></p>
 
             <script>
             (function () {
-                // two charts over one axis of years rather than one chart with two scales
+                // one chart, one scale: the errors are part of the calls, so they stack inside the bar
                 var years = {{ years_json | safe }};
-                var labels = $.map(years, function (y) { return y.year; });
                 var current = String(new Date().getFullYear());
-
-                function fills(strong, pale) {
-                    return $.map(years, function (y) { return y.year === current ? pale : strong; });
-                }
 
                 function thousands(value) {
                     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
                 }
 
-                function title(items) {
-                    var y = years[items[0].index];
-                    return y.year + (y.year === current ? ' (so far)' : '');
+                function fills(strong, pale) {
+                    return $.map(years, function (y) { return y.year === current ? pale : strong; });
                 }
 
-                function yearChart(canvas, data, options) {
-                    return new Chart(canvas, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                data: data,
-                                backgroundColor: fills('#ddeddc', '#f1f7f0'),
-                                borderColor: '#008000',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            legend: {display: false},
-                            tooltips: {callbacks: {title: title, label: options.label}},
-                            scales: {
-                                xAxes: [{gridLines: {display: false}}],
-                                yAxes: [{ticks: {beginAtZero: true, callback: options.tick}}]
+                new Chart($('#statsYears'), {
+                    type: 'bar',
+                    data: {
+                        labels: $.map(years, function (y) { return y.year; }),
+                        datasets: [{
+                            label: 'Answered',
+                            data: $.map(years, function (y) { return y.calls - (y.errors || 0); }),
+                            backgroundColor: fills('#ddeddc', '#f1f7f0'),
+                            borderColor: '#008000',
+                            borderWidth: 1
+                        }, {
+                            label: 'Errors',
+                            data: $.map(years, function (y) { return y.errors || 0; }),
+                            backgroundColor: fills('#f2dede', '#f9eeee'),
+                            borderColor: '#a20d0d',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        legend: {display: true, position: 'bottom'},
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function (items) {
+                                    var y = years[items[0].index];
+                                    return y.year + (y.year === current ? ' (so far)' : '');
+                                },
+                                label: function (item) {
+                                    var y = years[item.index];
+                                    if (item.datasetIndex === 0) {
+                                        return thousands(y.calls) + ' calls';
+                                    }
+                                    if (y.errors === null) {
+                                        return 'errors not counted';
+                                    }
+                                    return thousands(y.errors) + ' errors, ' + y.rate.toFixed(3) + ' %' +
+                                        (y.since ? ' (from ' + moment(y.since).format('DD.MM.') + ')' : '');
+                                }
                             }
+                        },
+                        scales: {
+                            xAxes: [{stacked: true, gridLines: {display: false}}],
+                            yAxes: [{
+                                stacked: true,
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) {
+                                        return value >= 1e6 ? thousands(value / 1e6) + ' M' : thousands(value);
+                                    }
+                                }
+                            }]
                         }
-                    });
-                }
-
-                yearChart($('#statsYearCalls'), $.map(years, function (y) { return y.calls; }), {
-                    tick: function (value) {
-                        return value >= 1e6 ? thousands(value / 1e6) + ' M' : thousands(value);
-                    },
-                    label: function (item) {
-                        return thousands(item.yLabel) + ' calls';
-                    }
-                });
-
-                yearChart($('#statsYearRate'), years.map(function (y) { return y.rate; }), {
-                    tick: function (value) {
-                        return value + ' %';
-                    },
-                    label: function (item) {
-                        var y = years[item.index];
-                        if (y.rate === null) {
-                            return 'errors not counted';
-                        }
-                        return y.rate.toFixed(3) + ' % errors' + (y.since ? ' (from ' + moment(y.since).format('DD.MM.') + ')' : '');
                     }
                 });
             })();
