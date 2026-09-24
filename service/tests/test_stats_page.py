@@ -221,6 +221,8 @@ def test_the_station_box_shows_the_last_30_days_not_2017(client, redis):
     page = client.get("/stats").text
 
     assert "last 30 days" in page
-    assert "Innertkirchen" not in page
     assert "Olten" not in page
     assert page.index(">Bern<") < page.index(">Zug<")
+    # The frozen list is still on the page, as history further down.
+    assert page.index("Stations 2012–2017") < page.index("Innertkirchen, Grimseltor")
+    assert page.index(">Zug<") < page.index("Innertkirchen, Grimseltor")

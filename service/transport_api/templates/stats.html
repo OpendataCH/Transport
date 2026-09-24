@@ -307,6 +307,21 @@
                 </div>
             </div>
 
+            <h2 id="history">Stations 2012–2017</h2>
+            <p class="text-muted"><small>The most asked-for stations from 10. August 2012 until 8. June 2017, when the API moved to timetable.search.ch and this count stopped.</small></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>Station</th><th class="text-right">Requests</th></tr></thead>
+                        <tbody>
+                            {% for station in historic_stations %}
+                            <tr title="{{ station.y }}, {{ station.x }}"><td>{{ station.name }}</td><td class="text-right stats-number">{{ station.calls | number }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <script>
             (function () {
                 var windows = {{ windows_json | safe }};

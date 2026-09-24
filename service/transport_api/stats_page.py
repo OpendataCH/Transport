@@ -144,6 +144,8 @@ async def stats_page(request: Request) -> Response:
             max=max(values, default=0),
             resources=await reader.top("stats:resources", ["path", "calls"]),
             stations=await recent_stations(reader, datetime.now(ZONE).date()),
+            # The PHP's all-time list, frozen since June 2017, kept as history.
+            historic_stations=await reader.top("stats:stations", ["name", "x", "y", "calls"], 10),
             errors=[
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
