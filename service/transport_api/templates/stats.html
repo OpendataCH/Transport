@@ -175,12 +175,15 @@
                     </ul>
                 </div>
                 <div class="col-sm-4">
-                    <h2 title="Counted from 10. Aug. 2012 until 8. June 2017, when the API moved to timetable.search.ch">Stations <small>2012–2017</small></h2>
+                    <h2 title="Station boards asked for, as the clients wrote them. Counted from 24. September 2026 on.">Stations <small>last 30 days</small></h2>
                     <ul class="list-unstyled">
                         {% for station in stations %}
-                        <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number }}</span></li>
+                        <li><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number }}</span></li>
+                        {% else %}
+                        <li class="text-muted">Nothing recorded yet.</li>
                         {% endfor %}
                     </ul>
+                    <p><small><a href="#places">More stations and connections</a></small></p>
                 </div>
                 <div class="col-sm-4">
                     <h2 title="Top 5 since 22. November 2015">Errors</h2>

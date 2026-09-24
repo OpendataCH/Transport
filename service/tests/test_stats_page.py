@@ -208,3 +208,19 @@ def test_stats_and_stats_php_answer_the_same(client, redis, fmt):
     assert new.status_code == old.status_code == 200
     if fmt != "window":
         assert new.content == old.content
+
+
+def test_the_station_box_shows_the_last_30_days_not_2017(client, redis):
+    now = datetime.now(ZONE)
+    redis.hset("stats:stations:8507000", mapping={"name": "Innertkirchen, Grimseltor", "calls": 9})
+    redis.sadd("stats:stations", "stats:stations:8507000")
+    redis.zadd(f"stats:top:stations:{now:%Y-%m-%d}", {"Bern": 5})
+    redis.zadd(f"stats:top:stations:{(now - timedelta(days=3)):%Y-%m-%d}", {"Bern": 2, "Zug": 4})
+    redis.zadd(f"stats:top:stations:{(now - timedelta(days=40)):%Y-%m-%d}", {"Olten": 99})
+
+    page = client.get("/stats").text
+
+    assert "last 30 days" in page
+    assert "Innertkirchen" not in page
+    assert "Olten" not in page
+    assert page.index(">Bern<") < page.index(">Zug<")

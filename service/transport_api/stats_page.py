@@ -143,7 +143,7 @@ async def stats_page(request: Request) -> Response:
             avg=total / max(len(values), 1),
             max=max(values, default=0),
             resources=await reader.top("stats:resources", ["path", "calls"]),
-            stations=await reader.top("stats:stations", ["name", "x", "y", "calls"]),
+            stations=await recent_stations(reader, datetime.now(ZONE).date()),
             errors=[
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
@@ -153,6 +153,24 @@ async def stats_page(request: Request) -> Response:
             window_json=twig_json(initial),
         )
     )
+
+
+# How far back the station box on the page looks.
+RECENT_DAYS = 30
+
+
+async def recent_stations(reader: "Reader", today) -> list[dict]:
+    """The station boards most asked for over the last RECENT_DAYS days.
+
+    This replaces the PHP's all-time list, which stopped counting on 8 June
+    2017 when the API moved to search.ch and had shown the same five names ever
+    since. The daily lists behind it are counted from 24 September 2026 on.
+    """
+    dates = [(today - timedelta(days=i)).isoformat() for i in range(RECENT_DAYS - 1, -1, -1)]
+    return [
+        {"name": str(name), "calls": int(requests)}
+        for name, requests in await reader.top_places("stations", dates, 5)
+    ]
 
 
 class Reader:
