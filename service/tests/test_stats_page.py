@@ -226,3 +226,40 @@ def test_the_station_box_shows_the_last_30_days_not_2017(client, redis):
     # The frozen list is still on the page, as history further down.
     assert page.index("Stations 2012–2017") < page.index("Innertkirchen, Grimseltor")
     assert page.index(">Zug<") < page.index("Innertkirchen, Grimseltor")
+
+
+def test_the_error_rate_by_year_is_at_the_bottom(client, redis):
+    day(redis, "2025-06-01", 1000, errors=10)
+    day(redis, "2025-06-02", 1000, errors=10)
+    day(redis, "2026-01-01", 4000, errors=1)
+
+    page = client.get("/stats").text
+
+    bottom = page[page.index('id="error-rates"') :]
+    assert "Stations 2012–2017" not in bottom
+    assert bottom.index(">2026") < bottom.index(">2025")
+    assert "1.000 %" in bottom
+    assert "0.025 %" in bottom
+
+
+def test_rates_are_formatted_like_the_rest_of_the_page():
+    assert stats_page.rate(0, 0) == "–"
+    assert stats_page.rate(1, 3) == "33.333 %"
+    assert stats_page.rate(1, 10_000_000) == "< 0.001 %"
+
+
+def test_years_before_errors_were_counted_say_so():
+    data = [
+        {"date": "2014-06-01", "calls": 100, "errors": 0},
+        {"date": "2015-11-21", "calls": 900, "errors": 0},
+        {"date": "2015-11-22", "calls": 100, "errors": 1},
+        {"date": "2016-01-01", "calls": 50, "errors": 0},
+    ]
+
+    years = {y["year"]: y for y in stats_page.by_year(data)}
+
+    assert years["2014"] == {"year": "2014", "calls": 100, "errors": None, "since": None}
+    # Only the days since counting began, so 1 of 100 rather than 1 of 1000.
+    assert years["2015"] == {"year": "2015", "calls": 100, "errors": 1, "since": "2015-11-22"}
+    assert years["2016"]["since"] is None
+    assert stats_page.rate(None, 100) == "–"

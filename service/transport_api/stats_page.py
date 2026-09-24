@@ -133,6 +133,8 @@ async def stats_page(request: Request) -> Response:
     if format_ == "json":
         return PhpErrorJson({"data": data})
 
+    error_years = by_year(data)
+
     values = [_int(value) for value in calls.values()]
     total = sum(values)
     page = TEMPLATES.get_template("stats.html")
@@ -149,6 +151,7 @@ async def stats_page(request: Request) -> Response:
             errors=[
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
+            error_years=error_years,
             windows=WINDOWS,
             windows_json=twig_json(list(WINDOWS)),
             window=initial,
@@ -478,3 +481,44 @@ def _descending(counts: dict[str, int]) -> dict[str, int]:
 
 
 TEMPLATES.filters["number"] = number
+
+
+# Errors were counted from this day on; before it, a day's 0 means "not counted".
+ERRORS_SINCE = "2015-11-22"
+
+
+def by_year(data: list[dict]) -> list[dict]:
+    """Calls, errors and the error rate per year, newest first.
+
+    A year before ERRORS_SINCE has no errors (None, not 0). In the year it falls
+    in, only the days from then on count, so the rate compares like with like.
+    """
+    years: dict[str, dict] = {}
+    for row in data:
+        key = row["date"][:4]
+        year = years.setdefault(key, {"year": key, "calls": 0, "errors": None, "since": None})
+        if row["date"] < ERRORS_SINCE:
+            continue
+        if year["errors"] is None:
+            year["errors"] = 0
+            if row["date"][5:] != "01-01":
+                year["since"] = row["date"]
+        year["calls"] += row["calls"]
+        year["errors"] += row["errors"]
+    for key, year in years.items():
+        if year["errors"] is None:
+            year["calls"] = sum(r["calls"] for r in data if r["date"][:4] == key)
+    return list(reversed(years.values()))
+
+
+def rate(errors: int | None, calls: int) -> str:
+    """An error rate as the page shows it: three decimals, a dash without calls."""
+    if errors is None or not calls:
+        return "–"
+    value = 100 * errors / calls
+    if 0 < value < 0.001:
+        return "< 0.001 %"
+    return f"{value:.3f} %"
+
+
+TEMPLATES.filters["rate"] = rate

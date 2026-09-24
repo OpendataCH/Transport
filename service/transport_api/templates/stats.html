@@ -322,6 +322,21 @@
                 </div>
             </div>
 
+            <h2 id="error-rates">Error rate by year</h2>
+            <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
+            <div class="row">
+                <div class="col-sm-8">
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>Year</th><th class="text-right">Calls</th><th class="text-right">Errors</th><th class="text-right">Error rate</th></tr></thead>
+                        <tbody>
+                            {% for year in error_years %}
+                            <tr><td class="stats-number">{{ year.year }}{% if loop.first %} <small class="text-muted">(so far)</small>{% elif year.since %} <small class="text-muted">(from {{ year.since[8:10] }}.{{ year.since[5:7] }}.)</small>{% endif %}</td><td class="text-right stats-number">{{ year.calls | number }}</td><td class="text-right stats-number">{% if year.errors is none %}<span class="text-muted">not counted</span>{% else %}{{ year.errors | number }}{% endif %}</td><td class="text-right stats-number">{{ year.errors | rate(year.calls) }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <script>
             (function () {
                 var windows = {{ windows_json | safe }};
