@@ -48,6 +48,9 @@
                 <li>
                     <a href="#limit-response">Limit response</a>
                 </li>
+                <li>
+                    <a href="#privacy">Privacy</a>
+                </li>
             </ul>
 
             <h3 id="rate-limiting">Rate Limit</h3>
@@ -910,6 +913,20 @@
     // ...
 }
             </pre>
+
+        <h3 id="privacy">Privacy</h3>
+
+        <p>What happens to the data in a request - for your own privacy notice, or if you simply want to know.</p>
+
+        <ul>
+            <li><strong>Forwarded to search.ch.</strong> Every request is passed on to <a href="https://timetable.search.ch/api/help">timetable.search.ch</a>, which provides the timetable. It receives the parameters of the request - for <code>/locations</code> with <code>x</code> and <code>y</code>, the coordinates - together with the caller's IP address, User-Agent and <code>key</code>, if one is given, because search.ch applies its rate limit per caller. What search.ch keeps, and for how long, is governed by its own privacy policy.</li>
+            <li><strong>Access log.</strong> The server logs each request: the time, the IP address, the full request URL with its parameters (coordinates included), the status and the User-Agent. The log is kept for 30 days and used only to run the service: to find faults, to spot abuse and to judge the load.</li>
+            <li><strong>Statistics.</strong> The public <a href="stats">statistics</a> count requests, errors and kinds of client, and list the station boards and connections asked for as they were written, without any link to a caller; these lists are deleted after 35 days. Distinct callers per day are counted as hashes of the IP address under a key that changes every day; once the day is over, only their number remains. Coordinates are not part of the statistics.</li>
+            <li><strong>Nothing else.</strong> The API has no accounts, sets no cookies and does no tracking. Nothing is passed on to anyone but search.ch, and nothing is sold. The service is hosted in Switzerland.</li>
+        </ul>
+
+        <p>Questions: <a href="mailto:transport@opendata.ch">transport@opendata.ch</a>.</p>
+
         </article>
 
         <footer class="footer">
