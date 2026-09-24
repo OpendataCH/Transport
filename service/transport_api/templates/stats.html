@@ -138,19 +138,19 @@
                 <div class="col-sm-4">
                     <p>
                         Total calls<br/>
-                        <span class="lead">{{ total | number_format(0, ".", "'") }}</span>
+                        <span class="lead">{{ total | number }}</span>
                     </p>
                 </div>
                 <div class="col-sm-4">
                     <p>
                         Average calls per day<br/>
-                        <span class="lead">{{ avg | number_format(0, ".", "'") }}</span>
+                        <span class="lead">{{ avg | number }}</span>
                     </p>
                 </div>
                 <div class="col-sm-4">
                     <p>
                         Max calls for one day<br/>
-                        <span class="lead">{{ max | number_format(0, ".", "'") }}</span>
+                        <span class="lead">{{ max | number }}</span>
                     </p>
                 </div>
             </div>
@@ -170,7 +170,7 @@
                     <h2 title="Top 5 since 10. Aug. 2012">Resources</h2>
                     <ul class="list-unstyled">
                         {% for resource in resources %}
-                        <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number_format(0, ".", "'") }}</span></li>
+                        <li><span class="value">{{ resource.path }}</span> <span class="text-disabled">{{ resource.calls | number }}</span></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -178,7 +178,7 @@
                     <h2 title="Counted from 10. Aug. 2012 until 8. June 2017, when the API moved to timetable.search.ch">Stations <small>2012–2017</small></h2>
                     <ul class="list-unstyled">
                         {% for station in stations %}
-                        <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number_format(0, ".", "'") }}</span></li>
+                        <li title="{{ station.y }}, {{ station.x }}"><span class="value">{{ station.name }}</span> <span class="text-disabled">{{ station.calls | number }}</span></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -186,7 +186,7 @@
                     <h2 title="Top 5 since 22. November 2015">Errors</h2>
                     <ul class="list-unstyled">
                         {% for error in errors %}
-                            <li title="{{ error.exception }}{% if error.description %} – {{ error.description }}{% endif %}"><span class="value">{{ error.name }}</span>{% if error.status %} <span class="label label-default">{{ error.status }}</span>{% endif %} <span class="text-disabled">{{ error.calls | number_format(0, ".", "'") }}</span></li>
+                            <li title="{{ error.exception }}{% if error.description %} – {{ error.description }}{% endif %}"><span class="value">{{ error.name }}</span>{% if error.status %} <span class="label label-default">{{ error.status }}</span>{% endif %} <span class="text-disabled">{{ error.calls | number }}</span></li>
                         {% endfor %}
                     </ul>
                     <p><small><a href="#error-details">All errors in detail</a></small></p>
@@ -198,7 +198,7 @@
             <form class="form-inline stats-window" onsubmit="return false;">
                 <label for="statsWindowSelect" class="sr-only">Time window</label>
                 <select id="statsWindowSelect" class="form-control input-sm">
-                    {% for key, label in windows %}
+                    {% for key, label in windows.items() %}
                     <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
@@ -305,8 +305,8 @@
 
             <script>
             (function () {
-                var windows = {{ windows | keys | json_encode | raw }};
-                var initial = {{ window | json_encode | raw }};
+                var windows = {{ windows_json | safe }};
+                var initial = {{ window_json | safe }};
 
                 function number(value) {
                     if (value === null) {

@@ -11,11 +11,15 @@ A comparison of every path and method against the live host on 24. September
 - **An unknown path or method is answered in the error envelope**, with
   Symfony's wording: `No route found for "GET /v1/nothing"`.
 - **A trailing slash is a different path** (404), not a redirect.
+
+A path routing does not know may still be a file of the website (website.py);
+only if it is not does the 404 go out.
 """
 
 from fastapi import FastAPI, Request
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from . import website
 from .encoding import PhpErrorJson
 
 HEADERS = [(b"access-control-allow-origin", b"*"), (b"cache-control", b"no-cache")]
@@ -55,6 +59,9 @@ def install(app: FastAPI) -> None:
     async def _no_route(request: Request, exc: StarletteHTTPException):
         path = request.scope.get("path", "")
         if exc.status_code == 404:
+            page = website.response_for(request)
+            if page is not None:
+                return page
             message = f'No route found for "{request.method} {path}"'
         elif exc.status_code == 405:
             message = (

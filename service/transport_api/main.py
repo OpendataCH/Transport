@@ -28,7 +28,17 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from . import compat, connections, errors, locations, settings, stationboard, statistics, upstream
+from . import (
+    compat,
+    connections,
+    errors,
+    locations,
+    settings,
+    stationboard,
+    statistics,
+    stats_page,
+    upstream,
+)
 from .models import ApiInfo
 
 # The prefix a client should use, and the one it may. Both answer the same
@@ -69,8 +79,9 @@ app = FastAPI(
     lifespan=lifespan,
     # Under the prefix, so that the nginx location block is the only thing that
     # has to know about it. The Swagger 2.0 document the PHP application
-    # generates stays where it is, at /swagger.json; this is a different
-    # document in a different dialect and the two never meet.
+    # generated stays where it was, at /swagger.json, as a file of the website;
+    # this is a different document in a different dialect and the two never
+    # meet.
     openapi_url=f"{PREFIX}/openapi.json",
     docs_url=f"{PREFIX}/docs",
     redoc_url=f"{PREFIX}/documentation",
@@ -153,6 +164,9 @@ for prefix, api_version in API_VERSIONS.items():
     router.include_router(stationboard.router, tags=["stationboard"])
     router.include_router(connections.router, tags=["connections"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
+
+
+app.include_router(stats_page.router)
 
 
 # The alias gets the same three documents, at its own addresses, so that a

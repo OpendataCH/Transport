@@ -130,6 +130,11 @@ class Statistics:
         self._secret: bytes | None = None
         self._rolled_over: str | None = None
 
+    @property
+    def redis(self):
+        """The client, for the statistics page to read with."""
+        return self._redis
+
     async def record(
         self,
         *,
@@ -315,6 +320,10 @@ class StatisticsMiddleware:
     async def _record(self, scope, status: int) -> None:
         statistics = self._statistics_of()
         if statistics is None:
+            return
+        # The website and the statistics page mark their answers: they are not
+        # the API, and the PHP never counted them either.
+        if (scope.get("state") or {}).get("stats_skip"):
             return
         headers = dict(scope.get("headers") or [])
         client = scope.get("client")

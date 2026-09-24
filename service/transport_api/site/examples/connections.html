@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>Transport</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../media/css/layout.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script>
+        // The whole example runs in the browser against the public API: read the
+        // form from the query string, ask /v1/connections, draw the table.
+        $(function () {
+
+            var params = new URLSearchParams(window.location.search);
+            var from = params.get('from') || '';
+            var to = params.get('to') || '';
+            var via = params.get('via') || '';
+            var datetime = params.get('datetime') || '';
+            var page = params.has('page') ? (parseInt(params.get('page'), 10) || 0) - 1 : 0;
+            var c = params.has('c') ? parseInt(params.get('c'), 10) : 0;
+
+            $('input[name=from]').val(from);
+            $('input[name=to]').val(to);
+            $('input[name=datetime]').val(datetime);
+
+            function escape(value) {
+                return $('<div>').text(value === null || value === undefined ? '' : value).html();
+            }
+
+            function time(value) {
+                return value ? moment(value).format('HH:mm') : '';
+            }
+
+            function delay(value) {
+                return value ? ' <span style="color: #a20d0d;">+' + escape(value) + '</span>' : '';
+            }
+
+            function platform(stop) {
+                if (stop.prognosis && stop.prognosis.platform) {
+                    return '<span style="color: #a20d0d;">' + escape(stop.prognosis.platform) + '</span>';
+                }
+                return escape(stop.platform);
+            }
+
+            function capacity(value) {
+                if (!(value > 0)) {
+                    return '';
+                }
+                var icons = '';
+                for (var i = 0; i < 3; i++) {
+                    icons += '<span class="glyphicon glyphicon-user ' + (i < value ? 'text-muted' : 'text-disabled') + '"></span>';
+                }
+                return '<small title="Expected occupancy 2nd class">' + icons + '</small>';
+            }
+
+            // "00d01:05:00" -> "1:05′", "01d02:00:00" -> "1d 2:00′"
+            function duration(value) {
+                var days = parseInt(value.substr(0, 2), 10);
+                var hours = parseInt(value.substr(3, 2), 10);
+                return (days > 0 ? days + 'd ' : '') + hours + value.substr(5, 3) + '′';
+            }
+
+            function link(query) {
+                return 'connections.html?' + $.param(query);
+            }
+
+            function render(response) {
+                if (response.from) {
+                    from = response.from.name;
+                    $('input[name=from]').val(from);
+                }
+                if (response.to) {
+                    to = response.to.name;
+                    $('input[name=to]').val(to);
+                }
+                document.title = from + ' – ' + to;
+
+                var connections = response.connections || [];
+                if (!connections.length) {
+                    return;
+                }
+
+                var body = '';
+                $.each(connections, function (index, connection) {
+                    var j = index + 1;
+                    var hidden = ' style="display: none;"';
+                    body += '<tbody>' +
+                        '<tr class="connection"' + (j === c ? hidden : '') + ' data-c="' + j + '">' +
+                        '<td>' + time(connection.from.departure) + delay(connection.from.delay) + '<br/>' +
+                        time(connection.to.arrival) + delay(connection.to.delay) + '</td>' +
+                        '<td>' + escape(duration(connection.duration)) + '<br/>' +
+                        '<span class="muted">' + escape((connection.products || []).join(', ')) + '</span></td>' +
+                        '<td>' + platform(connection.from) + '<br/>' + capacity(connection.capacity2nd) + '</td>' +
+                        '</tr>';
+
+                    $.each(connection.sections || [], function (_, section) {
+                        var shown = j === c ? '' : hidden;
+                        var journey = section.journey;
+                        body += '<tr class="section"' + shown + '>' +
+                            '<td rowspan="2">' + time(section.departure.departure) + delay(section.departure.delay) + '</td>' +
+                            '<td>' + escape(section.departure.station.name) + '</td>' +
+                            '<td>' + platform(section.departure) + '</td>' +
+                            '</tr>' +
+                            '<tr class="section"' + shown + '>' +
+                            '<td style="border-top: 0; padding: 4px 8px;"><span class="muted">' + (journey ? escape(journey.name) : 'Walk') + '</span></td>' +
+                            '<td style="border-top: 0; padding: 4px 8px;">' + (journey ? capacity(journey.capacity2nd) : '') + '</td>' +
+                            '</tr>' +
+                            '<tr class="section"' + shown + '>' +
+                            '<td style="border-top: 0;">' + time(section.arrival.arrival) + delay(section.arrival.delay) + '</td>' +
+                            '<td style="border-top: 0;">' + escape(section.arrival.station.name) + '</td>' +
+                            '<td style="border-top: 0;">' + platform(section.arrival) + '</td>' +
+                            '</tr>';
+                    });
+                    body += '</tbody>';
+                });
+
+                $('table.connections').append(body).show();
+
+                var when = datetime || moment().format('YYYY-MM-DDTHH:mm');
+                $('#earlier').attr('href', link({from: from, to: to, datetime: when, page: page}));
+                $('#later').attr('href', link({from: from, to: to, datetime: when, page: page + 2}));
+                $('.pager-links').show();
+
+                $('table.connections tr.connection').on('click', function () {
+                    $('table.connections tr.connection').show();
+                    $('table.connections tr.section').hide();
+                    var $this = $(this);
+                    $this.hide();
+                    $this.nextAll('tr.section').show();
+                    if ('replaceState' in window.history) {
+                        history.replaceState({}, '', link({from: from, to: to, datetime: when, page: page + 1, c: $this.data('c')}));
+                    }
+                });
+            }
+
+            if (from && to) {
+                var query = {from: from, to: to, page: page, limit: 6};
+                if (datetime) {
+                    var moment_ = moment(datetime);
+                    query.date = moment_.format('YYYY-MM-DD');
+                    query.time = moment_.format('HH:mm');
+                }
+                if (via) {
+                    query.via = via;
+                }
+                $.getJSON('../v1/connections', query, render).fail(function (xhr) {
+                    $('#error').text('Error from API: ' + xhr.status + ' ' + xhr.statusText).show();
+                });
+            } else if (navigator.geolocation) {
+                // no search yet: fill "From" with the nearest station
+                var input = $('input[name=from]');
+                var i = 0;
+                var interval = setInterval(function () {
+                    i = (i + 1) % 4;
+                    input.attr('placeholder', 'Locating' + '...'.substr(0, i));
+                }, 400);
+
+                var watch = navigator.geolocation.watchPosition(function (position) {
+                    if (position.coords.accuracy < 100) {
+                        navigator.geolocation.clearWatch(watch);
+                        $.get('../v1/locations', {x: position.coords.latitude, y: position.coords.longitude}, function (data) {
+                            clearInterval(interval);
+                            input.attr('placeholder', 'From');
+                            if (!input.val() && data.stations && data.stations.length) {
+                                input.val(data.stations[0].name);
+                            }
+                        });
+                    }
+                }, function () {
+                    clearInterval(interval);
+                    input.attr('placeholder', 'From');
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 10000,
+                    timeout: 30000
+                });
+            }
+
+            $('.station input').on('focus', function () {
+                var that = this;
+                setTimeout(function () {
+                    that.setSelectionRange(0, 9999);
+                }, 10);
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1><a href="../">Transport</a></h1>
+        <p>Swiss public transport API</p>
+    </header>
+
+    <p class="pull-right">
+        <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank">
+            <span class="glyphicon glyphicon-new-window"></span>
+            Source Code
+        </a>
+    </p>
+    <h3>Connection Search Example</h3>
+    <br>
+
+    <div class="row">
+        <div class="col-sm-5">
+
+            <form method="get" action="">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group station">
+                            <input type="text" class="form-control" name="from" placeholder="From" autocapitalize="on" />
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group station">
+                            <input type="text" name="to" class="form-control" placeholder="To" autocapitalize="on" autofocus />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="datetime-local" class="form-control" name="datetime" placeholder="Date and time (optional)" step="300" />
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Search" />
+                            <a class="btn btn-link" href="connections.html">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-sm-7">
+
+            <p id="error" class="text-danger" style="display: none;"></p>
+
+            <table class="table connections" style="display: none;">
+                <colgroup>
+                    <col width="20%">
+                    <col width="57%">
+                    <col width="23%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Journey</th>
+                        <th>
+                            <span class="visible-xs-inline">Pl.</span>
+                            <span class="hidden-xs">Platform</span>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+
+            <div class="row pager-links" style="display: none;">
+                <div class="col-xs-6">
+                    <a id="earlier" href="#">Earlier connections</a>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a id="later" href="#">Later connections</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <hr>
+        <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+    </footer>
+
+</div>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

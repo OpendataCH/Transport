@@ -3,11 +3,8 @@
 Until stage S6 the rule here was the opposite one: the service refused the
 whole `/v1` surface, so that a location block written too broadly could not
 shadow the old contract with a half-built answer. S6 is the deliberate end of
-that guard - `/v1` is now this service's own prefix, `/v2` is an alias of it,
-and the PHP application serves only the website.
-
-What has *not* changed is the other half: the website around the API is not
-served here.
+that guard - `/v1` is now this service's own prefix and `/v2` an alias of it.
+The website around the API is served here too; see test_website.py.
 """
 
 import pytest
@@ -36,30 +33,13 @@ def test_the_api_version_is_the_one_the_prefix_promises(client):
     assert client.get("/v2/").json()["version"] == "2.0"
 
 
-@pytest.mark.parametrize(
-    "path",
-    [
-        "/",
-        "/docs.html",
-        "/showcase.html",
-        "/examples/",
-        "/swagger.json",
-        "/stats",
-        "/robots.txt",
-    ],
-)
-def test_the_website_around_the_api_is_not_served_here(client, path):
-    """It comes from the PHP container, and still has to on the day of the flip."""
-    assert client.get(path).status_code == 404
-
-
 def test_the_documents_live_under_the_documented_prefix(client):
     assert client.get("/openapi.json").status_code == 404
 
     document = client.get("/v1/openapi.json")
     assert document.status_code == 200
-    # FastAPI emits OpenAPI 3.1; the PHP application generates a Swagger 2.0
-    # document at /swagger.json. Two documents, two addresses, on purpose.
+    # FastAPI emits OpenAPI 3.1; the Swagger 2.0 document the PHP application
+    # generated stays at /swagger.json. Two documents, two addresses, on purpose.
     assert document.json()["openapi"].startswith("3.1")
 
     paths = document.json()["paths"]
