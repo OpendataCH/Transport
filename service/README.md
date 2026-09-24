@@ -61,6 +61,16 @@ the PHP one.
   in the keys the PHP application used (`statistics.py`). The website and the
   statistics page are not counted. A Redis failure never costs an answer.
 
+## Checks
+
+- `pytest` in CI, with a JUnit report and coverage (at least 90 %) shown in
+  GitLab.
+- `tools/smoke.py <base URL>` asks a running instance what breaks silently:
+  build and timezone, website, statistics page, error envelope, one question to
+  search.ch. CI runs it against the image it just built (`smoke:image`), and
+  offers it as buttons against staging and production after a deploy
+  (`smoke:staging`, `smoke:production`).
+
 ## The image
 
 Built by `.gitlab-ci.yml` on the default branch into

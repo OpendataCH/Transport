@@ -2,6 +2,9 @@
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+.coverage
+coverage.xml
+report.xml
 /id_rsa
 # Left behind in working copies from the PHP application.
 /config.php

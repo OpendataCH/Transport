@@ -12,6 +12,7 @@
 stages:
   - test
   - build
+  - verify
 
 test:service:
   stage: test
@@ -22,7 +23,21 @@ test:service:
     - cd service
     - ruff check .
     - ruff format --check .
-    - pytest -q
+    # The report and the coverage show up in merge requests and on the
+    # pipeline; below 90 % the job fails.
+    - >-
+      pytest -q
+      --junitxml=report.xml
+      --cov=transport_api --cov-report=term --cov-report=xml:coverage.xml
+      --cov-fail-under=90
+  coverage: '/^TOTAL.*\s(\d+)%$/'
+  artifacts:
+    when: always
+    reports:
+      junit: service/report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: service/coverage.xml
 
 # Kaniko rather than docker-in-docker: it needs no privileged runner, and this
 # project has no reason to ask for one.
@@ -53,3 +68,44 @@ build:image:service:
       --build-arg "SERVICE_VERSION=${CI_COMMIT_SHORT_SHA}"
       --destination "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
       --destination "${CI_REGISTRY_IMAGE}/service:latest"
+
+# The image just built, started as a container and asked what matters: that it
+# comes up, reports this build and Europe/Zurich, serves the website and the
+# statistics page, answers in the /v1 error envelope and reaches search.ch.
+# No Redis here, so the statistics page is checked in its "not configured"
+# form. The servers deploy by SHA tag, so an image that fails here is never
+# rolled out by accident - but `latest` has already moved; do not deploy
+# `latest`.
+smoke:image:
+  stage: verify
+  image: python:3.13-slim
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  services:
+    - name: "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
+      alias: transport
+  script:
+    - python service/tools/smoke.py http://transport:8000 --version "${CI_COMMIT_SHORT_SHA}" --no-redis
+
+# The same checks against the servers, after a deploy there. Buttons, since
+# deploying is a step on the server and not part of this pipeline.
+.smoke:host:
+  stage: verify
+  image: python:3.13-slim
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  allow_failure: true
+  script:
+    - python service/tools/smoke.py "${HOST}" --version "${CI_COMMIT_SHORT_SHA}"
+
+smoke:staging:
+  extends: .smoke:host
+  variables:
+    HOST: https://test-transport-new.opendata.ch
+
+smoke:production:
+  extends: .smoke:host
+  variables:
+    HOST: https://transport-new.opendata.ch
+
