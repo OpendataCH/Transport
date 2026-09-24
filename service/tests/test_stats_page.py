@@ -195,3 +195,16 @@ def test_shares_are_integers_when_they_divide_evenly():
     assert stats_page._share(1, 4) == 25
     assert isinstance(stats_page._share(1, 4), int)
     assert stats_page._share(1, 3) == 100 / 3
+
+
+@pytest.mark.parametrize("fmt", ["json", "csv", "window"])
+def test_stats_and_stats_php_answer_the_same(client, redis, fmt):
+    """/stats is the name now; the old address keeps answering, without a redirect."""
+    day(redis, "2012-03-30", 4)
+
+    new = client.get("/stats", params={"format": fmt}, follow_redirects=False)
+    old = client.get("/stats.php", params={"format": fmt}, follow_redirects=False)
+
+    assert new.status_code == old.status_code == 200
+    if fmt != "window":
+        assert new.content == old.content

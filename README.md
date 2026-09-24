@@ -5,7 +5,7 @@ The Swiss public transport API behind **https://transport.opendata.ch**, run by
 [timetable.search.ch](https://timetable.search.ch/api/help).
 
 - API documentation: https://transport.opendata.ch/docs.html
-- Statistics: https://transport.opendata.ch/stats.php
+- Statistics: https://transport.opendata.ch/stats
 - Operations: the [wiki](https://gitlab.com/opendata.ch/Transport/-/wikis/home)
 
 The application is in [`service/`](service/): FastAPI, serving the API under

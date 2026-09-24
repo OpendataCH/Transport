@@ -1,6 +1,6 @@
-"""`/stats.php`, the statistics page, answered the way the PHP page answered it.
+"""`/stats`, the statistics page, answered the way the PHP page `/stats.php` did.
 
-The address and its four shapes are a contract of their own: `?format=json`
+The old address and its four shapes are a contract of their own: `?format=json`
 (calls and errors per day since 2012), `?format=csv` (the same as a file),
 `?format=window&window=…` (one time window in detail) and, without a format,
 the page. Scripts and dashboards elsewhere read the first three, so they keep
@@ -97,6 +97,10 @@ KNOWN_EXCEPTIONS = {
 }
 
 
+# /stats is the name; /stats.php is where the page has always been, and keeps
+# answering the same - not by redirect, because a script fetching
+# ?format=json with a plain HTTP client may not follow one.
+@router.get("/stats", include_in_schema=False)
 @router.get("/stats.php", include_in_schema=False)
 async def stats_page(request: Request) -> Response:
     # The website is not the API; the statistics middleware leaves it uncounted.

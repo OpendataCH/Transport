@@ -9,7 +9,7 @@ The API and the website around it, in one FastAPI application.
 | `/v1/docs`, `/v1/documentation`, `/v1/openapi.json` | Swagger UI, ReDoc, OpenAPI 3.1 |
 | `/v2/…` | the same routes, undocumented |
 | `/`, `/docs.html`, `/examples/`, `/showcase.html`, `/swagger.json` | the website, from `transport_api/site/` |
-| `/stats.php` | the statistics page, read from Redis |
+| `/stats` (and the old `/stats.php`) | the statistics page, read from Redis |
 
 Documentation for operators is in the
 [wiki](https://gitlab.com/opendata.ch/Transport/-/wikis/home).
