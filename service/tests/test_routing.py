@@ -4,7 +4,7 @@ Until stage S6 the rule here was the opposite one: the service refused the
 whole `/v1` surface, so that a location block written too broadly could not
 shadow the old contract with a half-built answer. S6 is the deliberate end of
 that guard - `/v1` is now this service's own prefix, `/v2` is an alias of it,
-and the PHP application answers on `/v1-old` while the two are compared.
+and the PHP application serves only the website.
 
 What has *not* changed is the other half: the website around the API is not
 served here.
@@ -51,11 +51,6 @@ def test_the_api_version_is_the_one_the_prefix_promises(client):
 def test_the_website_around_the_api_is_not_served_here(client, path):
     """It comes from the PHP container, and still has to on the day of the flip."""
     assert client.get(path).status_code == 404
-
-
-def test_the_v1_old_prefix_belongs_to_the_other_implementation(client):
-    """nginx sends it to PHP; nothing here may answer it."""
-    assert client.get("/v1-old/locations").status_code == 404
 
 
 def test_the_documents_live_under_the_documented_prefix(client):

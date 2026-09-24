@@ -9,9 +9,8 @@ The plan and its stages are in the wiki:
 [Plan: a Python service beside the PHP one](https://gitlab.com/opendata.ch/Transport/-/wikis/Plan-v2-FastAPI).
 
 **This service answers `/v1`** - the contract every client already speaks -
-and `/v2` as an alias of the same routes. The PHP implementation keeps
-answering under **`/v1-old`**, unrouted from the name clients use, so the two
-can still be compared and one line of nginx puts it back.
+and `/v2` as an alias of the same routes. The PHP application serves only the
+website around the API.
 
 | | |
 | --- | --- |
@@ -83,8 +82,7 @@ servers arrange them:
 
 ```sh
 docker compose up --build
-curl -s 'localhost:8000/v1/locations?query=Bern'      # this
-curl -s 'localhost:8000/v1-old/locations?query=Bern'  # PHP
+curl -s 'localhost:8000/v1/locations?query=Bern'      # this service
 curl -s localhost:8000/docs.html                      # PHP, the website
 ```
 

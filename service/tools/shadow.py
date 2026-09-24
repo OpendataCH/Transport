@@ -182,12 +182,7 @@ def compare(arguments) -> int:
 
 
 def _v1(request: str, arguments) -> str:
-    """Where the PHP implementation answers.
-
-    After the flip it is no longer `/v1` - that name now belongs to the Python
-    service - so the old one is reachable under `/v1-old` on the same host and
-    this is how the tool is pointed at it.
-    """
+    """Where the reference implementation answers, under its own prefix."""
     return request.replace("/v1/", arguments.v1_prefix + "/", 1)
 
 
@@ -252,7 +247,7 @@ def main() -> int:
     comparer.add_argument(
         "--v1-prefix",
         default="/v1",
-        help="where the PHP one answers; /v1-old once /v1 has been flipped",
+        help="the prefix the reference implementation answers under",
     )
     comparer.add_argument("--as-is", action="store_true", help="do not pin the time")
     comparer.add_argument(

@@ -107,7 +107,7 @@ def main() -> int:
     parser.add_argument(
         "--v1-prefix",
         default="/v1",
-        help="where the PHP implementation answers; /v1-old once /v1 has been flipped",
+        help="the prefix the reference implementation answers under",
     )
     args = parser.parse_args()
 

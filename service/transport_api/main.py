@@ -8,9 +8,8 @@ replaces.
 Stage S6 is what made `/v1` the documented prefix here. Until then this service
 refused the whole `/v1` surface on purpose, so that a routing mistake could not
 shadow the old contract with a half-built answer. That guard has done its work
-and is now deliberately retired; the PHP application keeps answering on
-`/v1-old`, unrouted from the name clients use, so the two can still be compared
-and one line of nginx puts it back.
+and is retired; the PHP application now serves only the website around the
+API.
 
 The machine-readable description covers `/v1`. The `/v2` routes are the same
 objects mounted twice and are kept out of the document, because a client
@@ -65,9 +64,7 @@ app = FastAPI(
         "[search.ch](https://timetable.search.ch/). This service translates; "
         "it stores nothing.\n\n"
         "The same routes answer under `/v2`, which is an alias and not a "
-        "second version.\n\n"
-        "The previous implementation of this API, in PHP, still answers under "
-        "`/v1-old` while the two are being compared."
+        "second version."
     ),
     lifespan=lifespan,
     # Under the prefix, so that the nginx location block is the only thing that
