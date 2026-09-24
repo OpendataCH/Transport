@@ -196,7 +196,7 @@
                 </div>
             </div>
 
-            <h2 id="error-details">Errors in detail</h2>
+            <h2 id="details">In detail</h2>
 
             <form class="form-inline stats-window" onsubmit="return false;">
                 <label for="statsWindowSelect" class="sr-only">Time window</label>
@@ -217,37 +217,6 @@
             </div>
 
             <p class="text-muted" id="statsWindowNote"></p>
-
-            <div class="table-responsive">
-                <table class="table table-condensed stats-table">
-                    <thead>
-                        <tr>
-                            <th>Error</th>
-                            <th>Status</th>
-                            <th>Meaning</th>
-                            <th class="text-right">Count</th>
-                            <th class="text-right">Share</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statsExceptions"></tbody>
-                </table>
-            </div>
-
-            <h3 id="statsRowsTitle"></h3>
-            <div class="table-responsive">
-                <table class="table table-condensed stats-table">
-                    <thead>
-                        <tr>
-                            <th id="statsRowsHead">Date</th>
-                            <th class="text-right">Calls</th>
-                            <th class="text-right">Errors</th>
-                            <th class="text-right">Error rate</th>
-                            <th class="text-right" title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statsRows"></tbody>
-                </table>
-            </div>
 
             <h2 id="clients">Who calls</h2>
             <p class="text-muted" id="statsClientsNote"></p>
@@ -320,6 +289,39 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <h2 id="error-details">Errors in detail</h2>
+            <p class="text-muted"><small>For the time window chosen under <a href="#details">In detail</a>.</small></p>
+            <div class="table-responsive">
+                <table class="table table-condensed stats-table">
+                    <thead>
+                        <tr>
+                            <th>Error</th>
+                            <th>Status</th>
+                            <th>Meaning</th>
+                            <th class="text-right">Count</th>
+                            <th class="text-right">Share</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsExceptions"></tbody>
+                </table>
+            </div>
+
+            <h3 id="statsRowsTitle"></h3>
+            <div class="table-responsive">
+                <table class="table table-condensed stats-table">
+                    <thead>
+                        <tr>
+                            <th id="statsRowsHead">Date</th>
+                            <th class="text-right">Calls</th>
+                            <th class="text-right">Errors</th>
+                            <th class="text-right">Error rate</th>
+                            <th class="text-right" title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsRows"></tbody>
+                </table>
             </div>
 
             <h2 id="error-rates">Calls and errors by year</h2>
