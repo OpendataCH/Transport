@@ -309,22 +309,6 @@
                 </table>
             </div>
 
-            <h3 id="statsRowsTitle"></h3>
-            <div class="table-responsive">
-                <table class="table table-condensed stats-table">
-                    <thead>
-                        <tr>
-                            <th id="statsRowsHead">Date</th>
-                            <th class="text-right">Calls</th>
-                            <th class="text-right">Errors</th>
-                            <th class="text-right">Error rate</th>
-                            <th class="text-right" title="Requests rejected with HTTP 429, by this API or by timetable.search.ch">Rate limited (429)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statsRows"></tbody>
-                </table>
-            </div>
-
             <h2 id="error-rates">Calls and errors</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
             <div class="btn-group btn-group-sm stats-range" role="group" aria-label="Range of the chart">
@@ -479,7 +463,7 @@
 
                     var note;
                     if (data.window === 'all') {
-                        note = 'Every error the API has recorded since 22. November 2015, ' + number(data.classTotal) + ' in total. Calls and errors below are for the last 14 days.';
+                        note = 'Every error the API has recorded since 22. November 2015, ' + number(data.classTotal) + ' in total.';
                     } else if (data.since === null) {
                         note = 'No hourly data for this window yet: the split by error class and the rate-limited requests are recorded hourly from 23. September 2026 on.';
                     } else {
@@ -497,23 +481,6 @@
                             '</tr>';
                     });
                     $('#statsExceptions').html(exceptions.length ? exceptions.join('') : '<tr><td colspan="5" class="text-muted">No errors recorded in this window.</td></tr>');
-
-                    var hourly = data.granularity === 'hour';
-                    $('#statsRowsTitle').text(hourly ? 'By hour' : (data.window === 'all' ? 'Last 14 days' : 'By day'));
-                    $('#statsRowsHead').text(hourly ? 'Hour' : 'Date');
-                    var rows = $.map(data.rows, function (row, index) {
-                        var label = hourly
-                            ? moment(row.start).format('DD.MM.YYYY HH:mm') + '–' + moment(row.start).add(1, 'hour').format('HH:mm')
-                            : moment(row.start).format('DD.MM.YYYY');
-                        return '<tr>' +
-                            '<td class="stats-number">' + label + (index === 0 ? ' <small class="text-muted">(so far)</small>' : '') + '</td>' +
-                            '<td class="text-right stats-number">' + number(row.calls) + '</td>' +
-                            '<td class="text-right stats-number">' + number(row.errors) + '</td>' +
-                            '<td class="text-right stats-number">' + percent(row.errors, row.calls, 3) + '</td>' +
-                            '<td class="text-right stats-number">' + number(row.ratelimited) + '</td>' +
-                            '</tr>';
-                    });
-                    $('#statsRows').html(rows.join(''));
 
                     renderClients(data);
                     renderPlaces(data);

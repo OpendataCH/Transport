@@ -295,11 +295,12 @@ def test_the_errors_in_detail_are_one_block_at_the_bottom(client, redis):
         page.index('id="error-details"'),
         page.index('id="statsWindowSelect"'),
         page.index('id="statsExceptions"'),
-        page.index('id="statsRows"'),
         page.index('id="error-rates"'),
     ]
     assert order == sorted(order)
     assert page.count('class="stats-window-label"') == 2
+    # The calls and errors per hour or day are the chart's now, not a table.
+    assert 'id="statsRows"' not in page
 
 
 def test_the_day_view_has_the_last_30_days_with_the_429s(client, redis):
