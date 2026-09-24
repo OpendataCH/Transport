@@ -37,4 +37,8 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=5 --start-period=10s \
 # The forwarded-header handling is inside the application, not a flag here -
 # see main.py, where it is explained and tested. The container is never
 # published directly, only reached through the proxy in front of it.
-CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY:-2}"]
+# --no-access-log: the proxy in front keeps the access log, for a set number of
+# days. uvicorn's own would be a second copy of every caller's address and
+# query - coordinates included - in the container log, with no say over how
+# long it stays.
+CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY:-2} --no-access-log"]
