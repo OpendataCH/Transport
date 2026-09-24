@@ -1,5 +1,6 @@
 """/stats.php, read from the keys the PHP application and this service write."""
 
+import json
 from datetime import datetime, timedelta
 
 import fakeredis
@@ -299,3 +300,24 @@ def test_the_errors_in_detail_are_one_block_at_the_bottom(client, redis):
     ]
     assert order == sorted(order)
     assert page.count('class="stats-window-label"') == 2
+
+
+def test_the_day_view_has_the_last_30_days_with_the_429s(client, redis):
+    now = datetime.now(ZONE)
+    today = now.date().isoformat()
+    day(redis, today, 1000, errors=5)
+    redis.hset(f"stats:hourly:{now:%Y-%m-%dT%H}", mapping={"calls": 1, "ratelimited": 40})
+
+    page = client.get("/stats").text
+
+    assert 'data-range="days"' in page
+    days = json.loads(page.split("days: ", 1)[1].split("\n", 1)[0])
+    assert len(days) == 30
+    assert days[-1] == {
+        "date": today,
+        "calls": 1000,
+        "errors": 5,
+        "rate": 0.5,
+        "ratelimited": 40,
+    }
+    assert days[0]["calls"] == 0 and days[0]["rate"] is None

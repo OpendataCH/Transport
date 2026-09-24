@@ -325,45 +325,67 @@
                 </table>
             </div>
 
-            <h2 id="error-rates">Calls and errors by year</h2>
+            <h2 id="error-rates">Calls and errors</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
-            <div style="position: relative;">
-                <canvas id="statsYears" width="800" height="260" style="width: 100%;" role="img" aria-label="Calls per year as bars, with the errors stacked inside them; each bar's tooltip has the figures"></canvas>
+            <div class="btn-group btn-group-sm stats-range" role="group" aria-label="Range of the chart">
+                <button type="button" class="btn btn-default active" data-range="years" aria-pressed="true">By year</button>
+                <button type="button" class="btn btn-default" data-range="days" aria-pressed="false">Last 30 days</button>
             </div>
-            <p class="text-muted"><small>Each bar is a year's calls, the red part its errors. Hover a bar for the figures and the error rate. The paler bar is the year so far; the rate for 2015 counts from 22. November on, and there is none before.</small></p>
+            <div style="position: relative; margin-top: 10px;">
+                <canvas id="statsYears" width="800" height="260" style="width: 100%;" role="img" aria-label="Calls as bars, with the errors stacked inside them; each bar's tooltip has the figures"></canvas>
+            </div>
+            <p class="text-muted"><small>Each bar is the calls of a year or a day, the red part its errors. Hover a bar for the figures and the error rate. The paler bar is the year or day so far; the rate for 2015 counts from 22. November on, and there is none before.</small></p>
 
             <script>
             (function () {
                 // one chart, one scale: the errors are part of the calls, so they stack inside the bar
-                var years = {{ years_json | safe }};
-                var current = String(new Date().getFullYear());
+                var ranges = {
+                    years: {{ years_json | safe }},
+                    days: {{ days_json | safe }}
+                };
+                var thisYear = String(new Date().getFullYear());
+                var today = moment().format('YYYY-MM-DD');
+                var range = 'years';
 
                 function thousands(value) {
                     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
                 }
 
-                function fills(strong, pale) {
-                    return $.map(years, function (y) { return y.year === current ? pale : strong; });
+                function rows() {
+                    return ranges[range];
                 }
 
-                new Chart($('#statsYears'), {
+                function current(row) {
+                    return range === 'years' ? row.year === thisYear : row.date === today;
+                }
+
+                function label(row) {
+                    return range === 'years' ? row.year : moment(row.date).format('DD.MM.');
+                }
+
+                function fills(strong, pale) {
+                    return $.map(rows(), function (row) { return current(row) ? pale : strong; });
+                }
+
+                function datasets() {
+                    return [{
+                        label: 'Answered',
+                        data: $.map(rows(), function (row) { return row.calls - (row.errors || 0); }),
+                        backgroundColor: fills('#ddeddc', '#f1f7f0'),
+                        borderColor: '#008000',
+                        borderWidth: 1
+                    }, {
+                        label: 'Errors',
+                        data: $.map(rows(), function (row) { return row.errors || 0; }),
+                        backgroundColor: fills('#f2dede', '#f9eeee'),
+                        borderColor: '#a20d0d',
+                        borderWidth: 1
+                    }];
+                }
+
+                var chart = new Chart($('#statsYears'), {
                     type: 'bar',
-                    data: {
-                        labels: $.map(years, function (y) { return y.year; }),
-                        datasets: [{
-                            label: 'Answered',
-                            data: $.map(years, function (y) { return y.calls - (y.errors || 0); }),
-                            backgroundColor: fills('#ddeddc', '#f1f7f0'),
-                            borderColor: '#008000',
-                            borderWidth: 1
-                        }, {
-                            label: 'Errors',
-                            data: $.map(years, function (y) { return y.errors || 0; }),
-                            backgroundColor: fills('#f2dede', '#f9eeee'),
-                            borderColor: '#a20d0d',
-                            borderWidth: 1
-                        }]
-                    },
+                    data: {labels: $.map(rows(), label), datasets: datasets()},
                     options: {
                         legend: {display: true, position: 'bottom'},
                         tooltips: {
@@ -371,19 +393,24 @@
                             intersect: false,
                             callbacks: {
                                 title: function (items) {
-                                    var y = years[items[0].index];
-                                    return y.year + (y.year === current ? ' (so far)' : '');
+                                    var row = rows()[items[0].index];
+                                    var name = range === 'years' ? row.year : moment(row.date).format('DD.MM.YYYY');
+                                    return name + (current(row) ? ' (so far)' : '');
                                 },
                                 label: function (item) {
-                                    var y = years[item.index];
+                                    var row = rows()[item.index];
                                     if (item.datasetIndex === 0) {
-                                        return thousands(y.calls) + ' calls';
+                                        return thousands(row.calls) + ' calls';
                                     }
-                                    if (y.errors === null) {
+                                    if (row.errors === null) {
                                         return 'errors not counted';
                                     }
-                                    return thousands(y.errors) + ' errors, ' + y.rate.toFixed(3) + ' %' +
-                                        (y.since ? ' (from ' + moment(y.since).format('DD.MM.') + ')' : '');
+                                    return thousands(row.errors) + ' errors, ' + (row.rate === null ? '–' : row.rate.toFixed(3) + ' %') +
+                                        (row.since ? ' (from ' + moment(row.since).format('DD.MM.') + ')' : '');
+                                },
+                                footer: function (items) {
+                                    var row = rows()[items[0].index];
+                                    return row.ratelimited ? thousands(row.ratelimited) + ' rate limited (429)' : '';
                                 }
                             }
                         },
@@ -394,12 +421,21 @@
                                 ticks: {
                                     beginAtZero: true,
                                     callback: function (value) {
-                                        return value >= 1e6 ? thousands(value / 1e6) + ' M' : thousands(value);
+                                        return value === 0 ? '0' : thousands(value / 1e6) + ' M';
                                     }
                                 }
                             }]
                         }
                     }
+                });
+
+                $('.stats-range button').on('click', function () {
+                    range = $(this).data('range');
+                    $('.stats-range button').removeClass('active').attr('aria-pressed', 'false');
+                    $(this).addClass('active').attr('aria-pressed', 'true');
+                    chart.data.labels = $.map(rows(), label);
+                    chart.data.datasets = datasets();
+                    chart.update();
                 });
             })();
             </script>

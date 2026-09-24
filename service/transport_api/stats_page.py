@@ -152,6 +152,7 @@ async def stats_page(request: Request) -> Response:
                 describe(e) for e in await reader.top("stats:exceptions", ["exception", "calls"])
             ],
             years_json=twig_json(years_chart(data, error_years)),
+            days_json=twig_json(await days_chart(reader, data, datetime.now(ZONE))),
             windows=WINDOWS,
             windows_json=twig_json(list(WINDOWS)),
             window=initial,
@@ -509,6 +510,36 @@ def by_year(data: list[dict]) -> list[dict]:
         if year["errors"] is None:
             year["calls"] = sum(r["calls"] for r in data if r["date"][:4] == key)
     return list(reversed(years.values()))
+
+
+async def days_chart(reader: "Reader", data: list[dict], now: datetime) -> list[dict]:
+    """The last RECENT_DAYS days for the chart, oldest first, today included.
+
+    Calls and errors from the daily counters; the rate-limited requests from the
+    hourly buckets, where the day has any (None before 23 September 2026).
+    """
+    today = now.date()
+    dates = [(today - timedelta(days=i)).isoformat() for i in range(RECENT_DAYS - 1, -1, -1)]
+    counted = {row["date"]: row for row in data}
+    ratelimited: dict[str, int] = {}
+    for bucket in await reader.hourly((RECENT_DAYS - 1) * 24 + now.hour + 1, now.timestamp()):
+        if bucket["recorded"]:
+            day = bucket["hour"][:10]
+            ratelimited[day] = ratelimited.get(day, 0) + bucket["ratelimited"]
+    result = []
+    for date in dates:
+        row = counted.get(date, {"calls": 0, "errors": 0})
+        calls, errors = row["calls"], row["errors"]
+        result.append(
+            {
+                "date": date,
+                "calls": calls,
+                "errors": errors,
+                "rate": 100 * errors / calls if calls else None,
+                "ratelimited": ratelimited.get(date),
+            }
+        )
+    return result
 
 
 def years_chart(data: list[dict], years: list[dict]) -> list[dict]:
