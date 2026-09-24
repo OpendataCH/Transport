@@ -27,8 +27,8 @@ uvicorn transport_api.main:app --reload --port 8000
 Or with Redis, from the repository root: `docker compose up --build`, then
 `http://localhost:8000/`.
 
-The tests read the recorded search.ch answers from `test/fixtures/` in the
-repository root. Nothing in the suite touches the network.
+The tests read recorded search.ch answers from `tests/fixtures/`. Nothing in
+the suite touches the network.
 
 ## /v1 does not change
 

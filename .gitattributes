@@ -1,3 +1,3 @@
 /.gitattributes export-ignore
 /.gitignore export-ignore
-/test export-ignore
+/service/tests export-ignore

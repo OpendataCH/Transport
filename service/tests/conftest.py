@@ -1,8 +1,8 @@
 """Test fixtures, including the recorded search.ch answers.
 
-The JSON fixtures are the ones the PHP suite uses, read from `test/fixtures/`
-in the repository root rather than copied here. They are the corpus this whole
-rewrite rests on, and two copies of a corpus are one corpus and one lie.
+`fixtures/` holds recorded search.ch answers paired with the answer /v1 gave
+to each - the corpus the PHP suite was built on, and the proof that this
+service answers as that implementation did.
 """
 
 import json
@@ -17,7 +17,7 @@ from transport_api import upstream as upstream_module
 from transport_api.main import app
 from transport_api.upstream import Upstream
 
-FIXTURES = Path(__file__).resolve().parents[2] / "test" / "fixtures"
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 
 def fixture(name: str):
