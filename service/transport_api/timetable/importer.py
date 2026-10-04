@@ -254,14 +254,17 @@ WINDOW_PREFIX = "window_"
 WHOLE = ("agency.txt", "routes.txt", "stops.txt", "feed_info.txt")
 
 
-def write_window_feed(source: Path, target: Path, first: date, last: date) -> dict[str, int]:
+def write_window_feed(
+    source: Path, target: Path, first: date, last: date, walk_sets_transfer: bool = False
+) -> dict[str, int]:
     """A GTFS zip with only the trips that run between `first` and `last`.
 
     For the router: MOTIS reads the whole feed into memory before it looks at
     any date, and the year's 42 million stop times need more than 3.5 GB to
     import - more than either server can spare. The window that the database
     holds is a quarter of that. Written to a temporary name and renamed, so
-    that the router never sees half a file.
+    that the router never sees half a file. `walk_sets_transfer`: see
+    walks_set_transfer_times.
     """
     low, high = first.strftime("%Y%m%d"), last.strftime("%Y%m%d")
     with zipfile.ZipFile(source) as feed:
@@ -286,18 +289,20 @@ def write_window_feed(source: Path, target: Path, first: date, last: date) -> di
             "frequencies.txt": lambda r, c: r[c["trip_id"]] in trips,
             "transfers.txt": lambda r, c: trip_ok(r, c, "from_trip_id", "to_trip_id"),
         }
+        rewrite = {"transfers.txt": walks_set_transfer_times} if walk_sets_transfer else {}
         partial = target.with_name(target.name + ".part")
         counts = {}
         with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as out:
             for name in feed.namelist():
                 if name not in WHOLE and name not in keep:
                     continue
-                counts[name] = _copy_rows(feed, out, name, keep.get(name))
+                counts[name] = _copy_rows(feed, out, name, keep.get(name), rewrite.get(name))
     partial.rename(target)
     return counts
 
 
-def _copy_rows(feed: zipfile.ZipFile, out: zipfile.ZipFile, name: str, keep) -> int:
+def _copy_rows(feed: zipfile.ZipFile, out: zipfile.ZipFile, name: str, keep, rewrite=None) -> int:
+    """Copy the rows that `keep` accepts; `rewrite` gets all of them at once."""
     kept = 0
     with feed.open(name) as raw, out.open(name, "w") as sink:
         reader = csv.reader(io.TextIOWrapper(raw, encoding="utf-8-sig", newline=""))
@@ -306,18 +311,89 @@ def _copy_rows(feed: zipfile.ZipFile, out: zipfile.ZipFile, name: str, keep) -> 
         header = next(reader)
         col = {name: index for index, name in enumerate(header)}
         writer.writerow(header)
-        for row in reader:
-            if keep is None or keep(row, col):
-                writer.writerow(row)
-                kept += 1
+        selected = (row for row in reader if keep is None or keep(row, col))
+        if rewrite is not None:
+            selected = iter(rewrite(list(selected), col))
+        for row in selected:
+            writer.writerow(row)
+            kept += 1
         text.flush()
         text.detach()
     return kept
 
 
-def window_feed_name(version: str | None, first: date) -> str:
-    """Changes with the feed and with the window, so the router follows both."""
-    return f"{WINDOW_PREFIX}{version or 'feed'}_{first:%Y%m%d}.zip"
+# What the router assumes for a stop without a transfer time of its own.
+ROUTER_TRANSFER_SECONDS = 120
+
+# A stop's transfer time is not lowered below this: a zero would let the
+# router change between any two platforms of the stop at no cost.
+LEAST_TRANSFER_SECONDS = 60
+
+
+def walks_set_transfer_times(transfers: list[list[str]], col: dict[str, int]) -> list[list[str]]:
+    """Lower each stop's transfer time to the shortest walk that touches it.
+
+    MOTIS times a walk between two stops as the longest of the walk and the
+    transfer times at both ends, so a 5-minute walk from a station with a
+    10-minute transfer time costs 10 minutes. In HAFAS, whose data this is,
+    the walk replaces the transfer time. Lowering the transfer time of each
+    stop to its shortest walk - leaving and arriving - makes the router take
+    the walks as given, at the price of a tighter transfer within that stop.
+
+    Only rows that hold for every trip count: walks (`transfer_type` 2
+    between two stops) and transfer times (a stop to itself). A stop that
+    has no transfer time of its own gets a row.
+    """
+
+    def plain(row: list[str]) -> bool:
+        return all(
+            name not in col or row[col[name]] == ""
+            for name in ("from_route_id", "to_route_id", "from_trip_id", "to_trip_id")
+        )
+
+    def seconds(row: list[str]) -> int | None:
+        value = row[col["min_transfer_time"]] if "min_transfer_time" in col else ""
+        return int(value) if value.isdigit() else None
+
+    a, b = col["from_stop_id"], col["to_stop_id"]
+    own: dict[str, int] = {}
+    walk: dict[str, int] = {}
+    for row in transfers:
+        if not plain(row) or row[col["transfer_type"]] != "2" or (time := seconds(row)) is None:
+            continue
+        if row[a] == row[b]:
+            own[row[a]] = time
+        else:
+            for stop in (row[a], row[b]):
+                walk[stop] = min(walk.get(stop, time), time)
+
+    lowered = {
+        stop: max(time, LEAST_TRANSFER_SECONDS)
+        for stop, time in walk.items()
+        if max(time, LEAST_TRANSFER_SECONDS) < own.get(stop, ROUTER_TRANSFER_SECONDS)
+    }
+    result, written = [], set()
+    for row in transfers:
+        if plain(row) and row[a] == row[b] and row[a] in lowered and seconds(row) is not None:
+            row = list(row)
+            row[col["min_transfer_time"]] = str(lowered[row[a]])
+            written.add(row[a])
+        result.append(row)
+    for stop, time in lowered.items():
+        if stop in written:
+            continue
+        row = [""] * len(col)
+        row[a] = row[b] = stop
+        row[col["transfer_type"]] = "2"
+        row[col["min_transfer_time"]] = str(time)
+        result.append(row)
+    return result
+
+
+def window_feed_name(version: str | None, first: date, walk_sets_transfer: bool = False) -> str:
+    """Changes with the feed, the window and the transfers, so the router follows all three."""
+    walks = "_walks" if walk_sets_transfer else ""
+    return f"{WINDOW_PREFIX}{version or 'feed'}_{first:%Y%m%d}{walks}.zip"
 
 
 def publish_window(source: Path, directory: Path, counts: dict) -> Path:
@@ -327,8 +403,9 @@ def publish_window(source: Path, directory: Path, counts: dict) -> Path:
     after the zip is complete. The window before stays, in case the router is
     still importing it; older ones go.
     """
-    target = directory / window_feed_name(counts.get("version"), counts["first"])
-    write_window_feed(source, target, counts["first"], counts["last"])
+    walks = settings.GTFS_WALK_SETS_TRANSFER
+    target = directory / window_feed_name(counts.get("version"), counts["first"], walks)
+    write_window_feed(source, target, counts["first"], counts["last"], walks)
     (directory / "CURRENT").write_text(target.name + "\n")
     windows = sorted(directory.glob(WINDOW_PREFIX + "*.zip"), key=lambda p: p.stat().st_mtime)
     for old in windows[:-2]:
@@ -553,9 +630,27 @@ async def current_feed(connection: asyncpg.Connection) -> asyncpg.Record | None:
     return await connection.fetchrow("SELECT * FROM gtfs.feed_info")
 
 
-async def main(source: str | None, window_dir: str | None) -> None:
-    path = Path(source) if source else download(settings.GTFS_URL, Path(settings.GTFS_CACHE))
+async def main(source: str | None, window_dir: str | None, window_only: bool = False) -> None:
     connection = await asyncpg.connect(settings.DATABASE_URL)
+    if window_only:
+        # The window the database holds, written again from its cached feed:
+        # for a change to the router's feed that should not wait for the next
+        # timetable.
+        try:
+            loaded = await current_feed(connection)
+        finally:
+            await connection.close()
+        if loaded is None:
+            raise SystemExit("no timetable loaded")
+        counts = {
+            "version": loaded["version"],
+            "first": loaded["window_from"],
+            "last": loaded["window_to"],
+        }
+        path = Path(source) if source else Path(settings.GTFS_CACHE) / loaded["feed_file"]
+        publish_window(path, Path(window_dir or settings.GTFS_CACHE), counts)
+        return
+    path = Path(source) if source else download(settings.GTFS_URL, Path(settings.GTFS_CACHE))
     try:
         counts = await load(
             connection,
@@ -578,6 +673,12 @@ if __name__ == "__main__":
         metavar="DIR",
         help="Also write the loaded window as a GTFS zip for the router, and CURRENT.",
     )
+    parser.add_argument(
+        "--window-only",
+        action="store_true",
+        help="Do not import: write the loaded window for the router again (into --window-feed,"
+        " default GTFS_CACHE).",
+    )
     arguments = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    asyncio.run(main(arguments.feed, arguments.window_feed))
+    asyncio.run(main(arguments.feed, arguments.window_feed, arguments.window_only))

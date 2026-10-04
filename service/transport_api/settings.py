@@ -84,6 +84,14 @@ MOTIS_URL = os.environ.get("MOTIS_URL") or None
 OSM_URL = os.environ.get("OSM_URL") or None
 OSM_MAX_AGE_DAYS = int(os.environ.get("OSM_MAX_AGE_DAYS", "30"))
 
+# The router (MOTIS) times a walk between two stops as the longest of the
+# walk and the transfer times of both stops; HAFAS, which the Swiss data is
+# written for, lets the walk replace them. On, the router's window lowers a
+# stop's transfer time to its shortest walk, so that the walk counts as given
+# (Grindelwald: 5 minutes to the bus, not the station's 10). Off, the feed's
+# transfers go to the router unchanged.
+GTFS_WALK_SETS_TRANSFER = os.environ.get("GTFS_WALK_SETS_TRANSFER", "1") not in ("0", "false", "")
+
 # How long a connection may walk from where it starts to its first vehicle,
 # and from its last vehicle to where it ends. The router's own default is
 # 15 minutes, which loses connections search.ch finds with a 16-minute walk

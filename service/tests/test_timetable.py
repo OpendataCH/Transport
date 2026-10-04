@@ -193,5 +193,55 @@ def test_publish_window_points_the_router_at_it(tmp_path):
     source = write_feed(tmp_path)
     counts = {"version": "20261001", "first": TODAY, "last": TODAY + timedelta(days=14)}
     target = importer.publish_window(source, tmp_path, counts)
-    assert target.name == "window_20261001_20261005.zip"
+    assert target.name == "window_20261001_20261005_walks.zip"
     assert (tmp_path / "CURRENT").read_text().strip() == target.name
+
+
+TRANSFER_HEADER = "from_stop_id,to_stop_id,from_trip_id,to_trip_id,transfer_type,min_transfer_time"
+
+
+def _transfers(*lines):
+    rows = [line.split(",") for line in lines]
+    col = {name: i for i, name in enumerate(TRANSFER_HEADER.split(","))}
+    return rows, col
+
+
+def test_a_shorter_walk_lowers_the_transfer_time():
+    rows, col = _transfers(
+        # Grindelwald: 10 minutes in the station, 5 to the bus stop.
+        "grw,grw,,,2,600",
+        "grw,bus,,,2,300",
+        # A stop with no time of its own and a one-minute walk.
+        "a,b,,,2,60",
+        # A walk longer than the transfer time changes nothing.
+        "x,x,,,2,120",
+        "x,y,,,2,300",
+        # A trip-bound transfer is neither a walk nor a transfer time.
+        "grw,grw,t1,t2,2,30",
+        # A zero walk lowers to the floor, not to nothing.
+        "z,w,,,2,0",
+    )
+    result = importer.walks_set_transfer_times(rows, col)
+    own = {r[0]: r[5] for r in result if r[0] == r[1] and not r[2]}
+    assert own["grw"] == "300"
+    # The bus stop's default of two minutes is shorter than the walk already.
+    assert "bus" not in own
+    # Both ends of a one-minute walk get one minute.
+    assert own["a"] == own["b"] == "60"
+    assert own["x"] == "120"
+    assert "y" not in own
+    assert own["z"] == own["w"] == "60"
+    # The trip-bound row is left as it was, and nothing is lost.
+    assert ["grw", "grw", "t1", "t2", "2", "30"] in result
+    assert len(result) == 7 + 4  # rows for a, b, z, w added
+
+
+def test_the_window_rewrites_transfers_only_when_asked(tmp_path, monkeypatch):
+    source = write_feed(tmp_path)
+    with zipfile.ZipFile(source, "a") as feed:
+        feed.writestr("transfers.txt", TRANSFER_HEADER + "\nch:1:sloid:1,ch:1:sloid:2,,,2,60\n")
+    for walks, expected in ((False, 1), (True, 3)):
+        target = tmp_path / f"window-{walks}.zip"
+        importer.write_window_feed(source, target, TODAY, TODAY + timedelta(days=2), walks)
+        with zipfile.ZipFile(target) as feed:
+            assert len(list(importer.rows(feed, "transfers.txt"))) == expected
