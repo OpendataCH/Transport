@@ -69,17 +69,27 @@ WHERE t.idx = ANY($1::int[])
 """
 
 # The calls of the listed trips, with the delays known for them on the day
-# asked about.
+# asked about. GTFS-RT reports a delay at some stops and means it to hold
+# until the next report, so each call takes the latest report at or before
+# it. A report at the stop itself gives both of its times; one carried over
+# from an earlier stop is that stop's departure delay.
 CALLS = """
 SELECT st.trip, st.seq, st.arr_s, st.dep_s, s.platform,
        stn.id, stn.name, stn.lat, stn.lon,
-       d.arrival_delay, d.departure_delay
+       CASE WHEN d.seq = st.seq THEN coalesce(d.arrival_delay, d.departure_delay)
+            ELSE coalesce(d.departure_delay, d.arrival_delay) END AS arrival_delay,
+       coalesce(d.departure_delay, d.arrival_delay) AS departure_delay
 FROM gtfs.stop_times st
 JOIN gtfs.trips t ON t.idx = st.trip
 JOIN gtfs.stops s ON s.idx = st.stop
 JOIN gtfs.station stn ON stn.idx = s.station
-LEFT JOIN rt.stop_delay d
-       ON d.trip_id = t.trip_id AND d.day = ANY($2::date[]) AND d.seq = st.seq
+LEFT JOIN LATERAL (
+    SELECT r.seq, r.arrival_delay, r.departure_delay
+    FROM rt.stop_delay r
+    WHERE r.trip_id = t.trip_id AND r.day = ANY($2::date[]) AND r.seq <= st.seq
+    ORDER BY r.seq DESC
+    LIMIT 1
+) d ON true
 WHERE st.trip = ANY($1::int[])
 ORDER BY st.trip, st.seq
 """

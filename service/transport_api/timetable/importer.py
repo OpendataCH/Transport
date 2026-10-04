@@ -39,6 +39,10 @@ log = logging.getLogger("transport_api.timetable.importer")
 ZURICH = ZoneInfo(settings.TIMEZONE)
 
 
+def sql(name: str) -> str:
+    return resources.files(__package__).joinpath(name).read_text()
+
+
 # --------------------------------------------------------------------------
 # Reading the feed
 # --------------------------------------------------------------------------
@@ -256,7 +260,8 @@ async def load(connection: asyncpg.Connection, path: Path, today: date, days: in
         first = max(first, feed_start)
         last = feed_end if days <= 0 else min(today + timedelta(days=days), feed_end)
 
-        await connection.execute(resources.files(__package__).joinpath("schema.sql").read_text())
+        await connection.execute(sql("schema.sql"))
+        await connection.execute(sql("realtime.sql"))
         state = Feed()
 
         running = service_days(feed, first, last)
@@ -401,7 +406,7 @@ async def load(connection: asyncpg.Connection, path: Path, today: date, days: in
         )
 
     log.info("indexing")
-    await connection.execute(resources.files(__package__).joinpath("finish.sql").read_text())
+    await connection.execute(sql("finish.sql"))
     await swap(connection)
 
     counts = {

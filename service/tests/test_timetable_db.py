@@ -196,3 +196,13 @@ def test_v1_is_untouched(api, search_ch):
     search_ch.returns([])
     api.get("/v1/locations", params={"query": "Bern"})
     assert search_ch.requests, "/v1 still asks search.ch"
+
+
+def test_a_delay_holds_until_the_next_report(api):
+    # Reported at the first stop only; GTFS-RT means it to carry on.
+    run(_sql("INSERT INTO rt.stop_delay VALUES ('t-morning', $1, 1, NULL, 4)", TODAY))
+    answer = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00")
+    beta, gamma = answer["stationboard"][0]["passList"][1:]
+    assert beta["prognosis"]["arrival"] == "2026-10-05T08:14:00+0200"
+    assert beta["prognosis"]["departure"] == "2026-10-05T08:16:00+0200"
+    assert gamma["delay"] == 4

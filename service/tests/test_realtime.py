@@ -1,0 +1,182 @@
+"""GTFS-RT parsing, and the ingest loop's decision about which feed to load."""
+
+import asyncio
+import os
+from datetime import date
+from pathlib import Path
+
+import asyncpg
+import pytest
+from google.transit import gtfs_realtime_pb2 as rt
+
+from transport_api.timetable import ingest, realtime
+
+
+def feed(*updates, version="20261001", timestamp=1791100000) -> bytes:
+    message = rt.FeedMessage()
+    message.header.gtfs_realtime_version = "2.0"
+    message.header.timestamp = timestamp
+    if version and hasattr(message.header, "feed_version"):
+        message.header.feed_version = version
+    for number, (trip_id, start_date, relationship, stops) in enumerate(updates):
+        entity = message.entity.add()
+        entity.id = str(number)
+        entity.trip_update.trip.trip_id = trip_id
+        if start_date:
+            entity.trip_update.trip.start_date = start_date
+        entity.trip_update.trip.schedule_relationship = relationship
+        for sequence, arrival, departure, stop_relationship in stops:
+            update = entity.trip_update.stop_time_update.add()
+            if sequence is not None:
+                update.stop_sequence = sequence
+            if arrival is not None:
+                update.arrival.delay = arrival
+            if departure is not None:
+                update.departure.delay = departure
+            update.schedule_relationship = stop_relationship
+    return message.SerializeToString()
+
+
+SCHEDULED = rt.TripDescriptor.SCHEDULED
+CANCELED = rt.TripDescriptor.CANCELED
+STOP_SCHEDULED = rt.TripUpdate.StopTimeUpdate.SCHEDULED
+SKIPPED = rt.TripUpdate.StopTimeUpdate.SKIPPED
+
+
+def test_parse_turns_seconds_into_minutes():
+    snapshot = realtime.parse(
+        feed(("t-1", "20261005", SCHEDULED, [(1, None, 90, STOP_SCHEDULED), (2, 29, 31, 0)]))
+    )
+    assert snapshot.delays == [
+        ("t-1", date(2026, 10, 5), 1, None, 2),
+        ("t-1", date(2026, 10, 5), 2, 0, 1),
+    ]
+    assert snapshot.trips == 1
+
+
+def test_parse_rounds_early_trains_symmetrically():
+    snapshot = realtime.parse(feed(("t-1", "20261005", SCHEDULED, [(1, -90, -29, 0)])))
+    assert snapshot.delays[0][3:] == (-2, 0)
+
+
+def test_parse_collects_cancellations_and_skips_what_cannot_be_placed():
+    snapshot = realtime.parse(
+        feed(
+            ("t-cancelled", "20261005", CANCELED, []),
+            ("t-no-date", "", SCHEDULED, [(1, 60, 60, 0)]),
+            (
+                "t-2",
+                "20261005",
+                SCHEDULED,
+                [(None, 60, 60, 0), (3, 60, 60, SKIPPED), (4, None, None, 0)],
+            ),
+        )
+    )
+    assert snapshot.cancelled == [("t-cancelled", date(2026, 10, 5))]
+    assert snapshot.delays == []
+
+
+@pytest.mark.parametrize(
+    ("name", "version"),
+    [("gtfs_fp2026_20260930.zip", "20260930"), ("feed.zip", None)],
+)
+def test_version_of_reads_the_date_in_the_file_name(name, version):
+    assert ingest.version_of(name) == version
+
+
+class FakeConnection:
+    pass
+
+
+@pytest.fixture
+def decide(monkeypatch, tmp_path):
+    """Run refresh_timetable with the network and the loader replaced."""
+    loads = []
+
+    def run(loaded, newest, realtime_version, cached=()):
+        for name in cached:
+            (tmp_path / name).write_bytes(b"")
+
+        async def current_feed(_):
+            return loaded
+
+        async def load(_, path, today, days):
+            loads.append(path.name)
+
+        monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
+        monkeypatch.setattr(ingest.importer, "current_feed", current_feed)
+        monkeypatch.setattr(ingest.importer, "feed_name", lambda url: newest)
+        monkeypatch.setattr(ingest.importer, "download", lambda url, cache: Path(cache) / newest)
+        monkeypatch.setattr(ingest.importer, "load", load)
+        asyncio.run(ingest.refresh_timetable(FakeConnection(), realtime_version))
+        return loads
+
+    return run
+
+
+def _loaded(name, window_from):
+    return {"feed_file": name, "window_from": window_from}
+
+
+def test_first_import_takes_the_newest(decide):
+    assert decide(None, "gtfs_20261001.zip", None) == ["gtfs_20261001.zip"]
+
+
+def test_a_new_feed_waits_for_real_time(decide):
+    today = ingest.datetime.now(ingest.importer.ZURICH).date()
+    loaded = _loaded("gtfs_20260930.zip", today)
+    assert decide(loaded, "gtfs_20261002.zip", "20260930") == []
+    assert decide(loaded, "gtfs_20261002.zip", "20261002") == ["gtfs_20261002.zip"]
+
+
+def test_without_real_time_the_newest_feed_is_taken(decide):
+    today = ingest.datetime.now(ingest.importer.ZURICH).date()
+    assert decide(_loaded("gtfs_20260930.zip", today), "gtfs_20261002.zip", None) == [
+        "gtfs_20261002.zip"
+    ]
+
+
+def test_the_window_moves_on_daily(decide):
+    old = date(2026, 1, 1)
+    loads = decide(
+        _loaded("gtfs_20260930.zip", old),
+        "gtfs_20261002.zip",
+        "20260930",
+        cached=["gtfs_20260930.zip"],
+    )
+    assert loads == ["gtfs_20260930.zip"]
+
+
+def test_nothing_to_do(decide):
+    today = ingest.datetime.now(ingest.importer.ZURICH).date()
+    assert decide(_loaded("gtfs_20260930.zip", today), "gtfs_20260930.zip", None) == []
+
+
+DATABASE = os.environ.get("TEST_DATABASE_URL")
+
+
+@pytest.mark.skipif(not DATABASE, reason="TEST_DATABASE_URL is not set")
+def test_store_replaces_the_previous_snapshot():
+    async def scenario():
+        connection = await asyncpg.connect(DATABASE)
+        try:
+            await connection.execute(ingest.importer.sql("realtime.sql"))
+            first = realtime.parse(
+                feed(
+                    ("t-1", "20261005", SCHEDULED, [(1, 60, 60, 0)]),
+                    ("t-x", "20261005", CANCELED, []),
+                )
+            )
+            await realtime.store(connection, first)
+            second = realtime.parse(feed(("t-2", "20261005", SCHEDULED, [(1, 120, 120, 0)])))
+            await realtime.store(connection, second)
+            delays = await connection.fetch("SELECT trip_id, departure_delay FROM rt.stop_delay")
+            cancelled = await connection.fetchval("SELECT count(*) FROM rt.trip_cancelled")
+            await connection.execute("TRUNCATE rt.stop_delay, rt.trip_cancelled")
+            return [tuple(r) for r in delays], cancelled
+        finally:
+            await connection.close()
+
+    delays, cancelled = asyncio.run(scenario())
+    assert delays == [("t-2", 2)]
+    assert cancelled == 0
