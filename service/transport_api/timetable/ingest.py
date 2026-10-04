@@ -99,6 +99,12 @@ async def import_feed(path: Path) -> None:
 
 
 async def run() -> None:
+    # The real-time tables are created once, here: two tasks doing it at the
+    # same time on an empty database collide in Postgres' catalogue, even with
+    # IF NOT EXISTS.
+    connection = await _connect()
+    await connection.execute(importer.sql("realtime.sql"))
+    await connection.close()
     state: dict[str, str | None] = {"version": None}
     await asyncio.gather(_realtime(state), _timetable(state))
 
@@ -150,9 +156,7 @@ async def _connect() -> asyncpg.Connection:
     """Wait for the database rather than crash while it starts."""
     while True:
         try:
-            connection = await asyncpg.connect(settings.DATABASE_URL)
-            await connection.execute(importer.sql("realtime.sql"))
-            return connection
+            return await asyncpg.connect(settings.DATABASE_URL)
         except (OSError, asyncpg.CannotConnectNowError) as exc:
             log.info("waiting for the database: %r", exc)
             await asyncio.sleep(2)
