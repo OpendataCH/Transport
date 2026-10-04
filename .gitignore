@@ -10,3 +10,6 @@ report.xml
 /config.php
 /var/
 /vendor/
+
+# Local secrets (OTD_API_KEY) for the development compose file.
+/.env

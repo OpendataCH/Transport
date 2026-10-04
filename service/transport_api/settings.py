@@ -41,3 +41,29 @@ REDIS_URL = os.environ.get("REDIS_URL") or None
 # Seconds a statistics write may take before it is given up. Counting is never
 # worth holding an answer for.
 REDIS_TIMEOUT = float(os.environ.get("REDIS_TIMEOUT", "0.25"))
+
+# The timetable database behind /v2/locations and /v2/stationboard, e.g.
+# `postgresql://transport:transport@db:5432/transport`. Unset, those two routes
+# answer 503 and everything else works as before.
+DATABASE_URL = os.environ.get("DATABASE_URL") or None
+
+# The national GTFS feed. The permalink redirects to the newest file and needs
+# no key; the CKAN API next to it does.
+GTFS_URL = os.environ.get(
+    "GTFS_URL",
+    "https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020/permalink",
+)
+
+# Days of service loaded ahead of today. The full feed is a year of 42 million
+# stop times; a window keeps the database at a fraction of that, and the feed
+# is re-read twice a week anyway. Zero loads everything.
+GTFS_DAYS = int(os.environ.get("GTFS_DAYS", "14"))
+
+# Where a downloaded feed is kept between runs, so that an unchanged file is
+# not fetched again.
+GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
+
+# The real-time feed and its key from api-manager.opentransportdata.swiss.
+# Without a key the ingest loop loads the timetable and skips real time.
+GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
+OTD_API_KEY = os.environ.get("OTD_API_KEY") or None

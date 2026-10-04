@@ -2,7 +2,9 @@
 # from the registry; this one builds from the working copy.
 #
 # One service answers everything - the API under /v1 and the website around
-# it - and Redis holds the counters behind /stats.php.
+# it - and Redis holds the counters behind /stats.php. /v2/locations and
+# /v2/stationboard read the timetable from Postgres, which `ingest` keeps
+# loaded from opentransportdata.swiss.
 services:
   service:
     build: ./service
@@ -11,8 +13,54 @@ services:
     environment:
       SERVICE_VERSION: dev
       REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://transport:transport@db:5432/transport
     depends_on:
       - redis
+      - db
+
+  # The timetable loader: the GTFS feed when a new one appears, real time
+  # every 30 seconds when OTD_API_KEY is set in .env.
+  ingest:
+    build: ./service
+    command: ["python", "-m", "transport_api.timetable.ingest"]
+    environment:
+      DATABASE_URL: postgresql://transport:transport@db:5432/transport
+      GTFS_CACHE: /cache
+      GTFS_DAYS: ${GTFS_DAYS:-14}
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      # The downloaded feed survives a rebuild, so it is fetched once.
+      - ./var/gtfs:/cache
+    depends_on:
+      - db
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: transport
+      POSTGRES_DB: transport
+    # Tuned for the bulk load; a lost transaction here is reloaded anyway.
+    command:
+      - postgres
+      - -c
+      - maintenance_work_mem=1GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - synchronous_commit=off
+      - -c
+      - max_wal_size=4GB
+    shm_size: 1g
+    ports:
+      - "5434:5432"
+    volumes:
+      - timetable:/var/lib/postgresql
 
   redis:
     image: redis:8-alpine
+
+volumes:
+  timetable:

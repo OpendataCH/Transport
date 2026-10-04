@@ -17,6 +17,16 @@ stages:
 test:service:
   stage: test
   image: python:3.13-slim
+  # The /v2 timetable tests need a real Postgres; without one they skip, and
+  # the coverage below would fall short for the wrong reason.
+  services:
+    - name: postgres:18-alpine
+      alias: db
+  variables:
+    POSTGRES_USER: transport
+    POSTGRES_PASSWORD: transport
+    POSTGRES_DB: transport_test
+    TEST_DATABASE_URL: postgresql://transport:transport@db:5432/transport_test
   before_script:
     - pip install --disable-pip-version-check --no-cache-dir -e './service[dev]'
   script:
