@@ -125,11 +125,24 @@ def _minutes(forecast: str, scheduled: datetime) -> int | float:
     return seconds // 60 if seconds % 60 == 0 else seconds / 60
 
 
-def line_number(short_name: str | None, category: str | None) -> str | None:
-    """`S10` with category `S` is line `10`, as search.ch numbers it."""
-    if short_name and category and short_name.startswith(category) and short_name != category:
-        return short_name[len(category) :]
+def line_number(
+    short_name: str | None, category: str | None, trip_short_name: str | None
+) -> str | None:
+    """`S10` with category `S` is line `10`, as search.ch numbers it.
+
+    A train without a line - an ICE, a TER, whose short name is just its
+    category - is numbered by search.ch with its train number instead.
+    """
+    if short_name and category and short_name.startswith(category):
+        if short_name != category:
+            return short_name[len(category) :]
+        return journey_name(trip_short_name) or short_name
     return short_name
+
+
+def destination(headsign: str | None) -> str | None:
+    """`Neuchâtel | Avenches` - a train that splits - is `Neuchâtel` on search.ch."""
+    return headsign.split(" | ", 1)[0] if headsign else headsign
 
 
 def journey_name(trip_short_name: str | None) -> str | None:
@@ -153,9 +166,9 @@ def journey(
         "category": category,
         "subcategory": None,
         "categoryCode": None,
-        "number": line_number(route_short_name, category),
+        "number": line_number(route_short_name, category, trip_short_name),
         "operator": operator,
-        "to": headsign,
+        "to": destination(headsign),
         "passList": pass_list,
         "capacity1st": None,
         "capacity2nd": None,

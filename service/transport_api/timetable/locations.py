@@ -24,12 +24,12 @@ LIMIT = 10
 
 # Exact name, then names that start with the query or have a word that does;
 # within those, the busier station first, so that Bern, Bahnhof comes before a
-# stop nothing calls at. A train counts four times: a tram stop in Basel sees
+# stop nothing calls at. A train counts five times: a tram stop in Basel sees
 # more departures than Basel SBB, and is not what "Basel" means. Names that
 # merely resemble the query follow by trigram similarity.
 BY_NAME = """
 SELECT id, name, lat, lon, mode
-FROM (SELECT *, departures * CASE mode WHEN 'train' THEN 4 ELSE 1 END AS weight
+FROM (SELECT *, departures * CASE mode WHEN 'train' THEN 5 ELSE 1 END AS weight
       FROM gtfs.station) station
 WHERE name_norm LIKE $2 OR name_norm % $1
 ORDER BY name_norm = $1 DESC,

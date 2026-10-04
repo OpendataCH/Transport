@@ -10,6 +10,7 @@ from transport_api.mapping import ZURICH
 from transport_api.timetable import importer
 from transport_api.timetable import stationboard as board
 from transport_api.timetable.mapping import (
+    destination,
     journey_name,
     line_number,
     moment,
@@ -100,10 +101,20 @@ def test_normalize_folds_accents_and_case():
 
 
 def test_line_number_drops_the_category():
-    assert line_number("S10", "S") == "10"
-    assert line_number("IC1", "IC") == "1"
-    assert line_number("10", "B") == "10"
-    assert line_number("S", "S") == "S"
+    assert line_number("S10", "S", "12824") == "10"
+    assert line_number("IC1", "IC", "719") == "1"
+    assert line_number("10", "B", "2001") == "10"
+
+
+def test_a_train_without_a_line_is_numbered_by_its_train_number():
+    assert line_number("ICE", "ICE", "271") == "000271"
+    assert line_number("S", "S", None) == "S"
+
+
+def test_a_splitting_train_is_named_by_its_first_destination():
+    assert destination("Neuchâtel | Avenches") == "Neuchâtel"
+    assert destination("Bern") == "Bern"
+    assert destination(None) is None
 
 
 def test_journey_name_is_six_digits_wide():
