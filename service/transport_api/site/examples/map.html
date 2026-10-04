@@ -290,7 +290,7 @@
                 color: zoom < 11 || reach ? '#fff' : colour, weight: zoom < 11 || reach ? 1 : 1.5,
                 fillColor: reach ? colour : (zoom < 11 ? colour : '#fff'), fillOpacity: reach ? 0.9 : (zoom < 11 ? fill : 0.9)
             }).bindTooltip(s[1] + (reach && reach.stops[s[0]] ? ' · ' + reach.stops[s[0]].minutes + ' min' : ''))
-              .on('click', function () { openStation(s); })
+              .on('click', function (e) { L.DomEvent.stopPropagation(e); openStation(s); })
               .addTo(stationLayer);
         });
     }
@@ -399,7 +399,7 @@
                     radius: s.kind === 'train' ? 7 : 5.5, color: '#fff', weight: 2,
                     fillColor: MODE_COLOURS[s.kind], fillOpacity: 1
                 }).addTo(vehicleLayer);
-                m.on('click', function () { openTrip(m.segment); });
+                m.on('click', function (e) { L.DomEvent.stopPropagation(e); openTrip(m.segment); });
                 markers[s.trip] = m;
             }
             m.segment = s;
