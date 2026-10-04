@@ -23,6 +23,9 @@ services:
   ingest:
     build: ./service
     command: ["python", "-m", "transport_api.timetable.ingest"]
+    # The image's check asks the API on port 8000, which this process is not.
+    healthcheck:
+      disable: true
     environment:
       DATABASE_URL: postgresql://transport:transport@db:5432/transport
       GTFS_DAYS: ${GTFS_DAYS:-14}
