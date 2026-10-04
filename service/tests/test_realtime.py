@@ -43,20 +43,20 @@ STOP_SCHEDULED = rt.TripUpdate.StopTimeUpdate.SCHEDULED
 SKIPPED = rt.TripUpdate.StopTimeUpdate.SKIPPED
 
 
-def test_parse_turns_seconds_into_minutes():
+def test_parse_turns_seconds_into_whole_minutes():
     snapshot = realtime.parse(
         feed(("t-1", "20261005", SCHEDULED, [(1, None, 90, STOP_SCHEDULED), (2, 29, 31, 0)]))
     )
     assert snapshot.delays == [
-        ("t-1", date(2026, 10, 5), 1, None, 2),
-        ("t-1", date(2026, 10, 5), 2, 0, 1),
+        ("t-1", date(2026, 10, 5), 1, None, 1),
+        ("t-1", date(2026, 10, 5), 2, 0, 0),
     ]
     assert snapshot.trips == 1
 
 
-def test_parse_rounds_early_trains_symmetrically():
+def test_parse_cuts_the_seconds_off_both_ways():
     snapshot = realtime.parse(feed(("t-1", "20261005", SCHEDULED, [(1, -90, -29, 0)])))
-    assert snapshot.delays[0][3:] == (-2, 0)
+    assert snapshot.delays[0][3:] == (-1, 0)
 
 
 def test_parse_collects_cancellations_and_skips_what_cannot_be_placed():

@@ -102,11 +102,14 @@ def parse(payload: bytes) -> Snapshot:
 
 
 def _minutes(event) -> int | None:
-    """Seconds late, rounded to the minute; half a minute rounds away from zero."""
+    """Whole minutes late, the seconds cut off - as search.ch counts them.
+
+    Rounding instead put /v2 a minute above /v1 on two departures in five.
+    """
     if not event.HasField("delay"):
         return None
     seconds = event.delay
-    minutes = (abs(seconds) + 30) // 60
+    minutes = abs(seconds) // 60
     return minutes if seconds >= 0 else -minutes
 
 
