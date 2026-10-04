@@ -100,14 +100,14 @@ def decide(monkeypatch, tmp_path):
         async def current_feed(_):
             return loaded
 
-        async def load(_, path, today, days):
+        async def import_feed(path):
             loads.append(path.name)
 
         monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
         monkeypatch.setattr(ingest.importer, "current_feed", current_feed)
         monkeypatch.setattr(ingest.importer, "feed_name", lambda url: newest)
         monkeypatch.setattr(ingest.importer, "download", lambda url, cache: Path(cache) / newest)
-        monkeypatch.setattr(ingest.importer, "load", load)
+        monkeypatch.setattr(ingest, "import_feed", import_feed)
         asyncio.run(ingest.refresh_timetable(FakeConnection(), realtime_version))
         return loads
 

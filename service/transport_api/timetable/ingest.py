@@ -4,7 +4,9 @@
 
 One process, in its own container: the API runs several workers, and each
 polling on its own would multiply the requests against a limit of five a
-minute.
+minute. Timetable and real time are two tasks of it, and an import runs in a
+child process, so that real time keeps coming in while a feed is read - which
+takes ten minutes on a slow disk and happens every day.
 
 - **Timetable**, checked hourly. A new feed is imported once the real-time
   feed has moved to its version - the trip ids of real time belong to one
@@ -17,6 +19,7 @@ minute.
 import asyncio
 import logging
 import re
+import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -73,43 +76,65 @@ async def refresh_timetable(connection: asyncpg.Connection, realtime_version: st
             log.warning("%s is no longer in the cache; the window stays where it is", target)
             return
 
-    await importer.load(connection, path, today, settings.GTFS_DAYS)
+    await import_feed(path)
+
+
+async def import_feed(path: Path) -> None:
+    """Run the importer as a child process; its log lines go to ours."""
+    process = await asyncio.create_subprocess_exec(
+        sys.executable, "-m", "transport_api.timetable.importer", str(path)
+    )
+    code = await process.wait()
+    if code != 0:
+        raise RuntimeError(f"the import of {path.name} exited with {code}")
 
 
 async def run() -> None:
-    connection = await _connect()
-    realtime_version: str | None = None
-    next_timetable = 0.0
-    next_realtime = 0.0
+    state: dict[str, str | None] = {"version": None}
+    await asyncio.gather(_realtime(state), _timetable(state))
 
+
+async def _realtime(state: dict[str, str | None]) -> None:
+    if not settings.OTD_API_KEY:
+        log.info("no OTD_API_KEY: real time is off")
+        return
+    connection = await _connect()
     async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
         while True:
-            now = time.monotonic()
-
-            if settings.OTD_API_KEY and now >= next_realtime:
-                next_realtime = now + REALTIME_EVERY
-                try:
-                    snapshot = realtime.parse(await realtime.fetch(client))
-                    realtime_version = snapshot.version or realtime_version
-                    await realtime.store(connection, snapshot)
-                except realtime.RateLimited as exc:
-                    log.warning("real time rate limited (%s); waiting", exc)
-                    next_realtime = now + BACKOFF
-                except (httpx.HTTPError, asyncpg.PostgresError, OSError) as exc:
-                    log.warning("real time failed: %r", exc)
-
-            if now >= next_timetable:
-                next_timetable = now + TIMETABLE_EVERY
-                try:
-                    await refresh_timetable(connection, realtime_version)
-                except (httpx.HTTPError, asyncpg.PostgresError, OSError, ValueError) as exc:
-                    log.exception("timetable refresh failed: %r", exc)
-                    next_timetable = now + 600
-
+            started = time.monotonic()
+            wait = REALTIME_EVERY
+            try:
+                snapshot = realtime.parse(await realtime.fetch(client))
+                state["version"] = snapshot.version or state["version"]
+                await realtime.store(connection, snapshot)
+            except realtime.RateLimited as exc:
+                log.warning("real time rate limited (%s); waiting", exc)
+                wait = BACKOFF
+            except (httpx.HTTPError, asyncpg.PostgresError, OSError) as exc:
+                log.warning("real time failed: %r", exc)
             if connection.is_closed():
                 connection = await _connect()
+            await asyncio.sleep(max(0.0, wait - (time.monotonic() - started)))
 
-            await asyncio.sleep(1)
+
+async def _timetable(state: dict[str, str | None]) -> None:
+    connection = await _connect()
+    # With a key, learn real time's version first: a feed imported before
+    # real time has moved to it would match no delay for hours.
+    for _ in range(24):
+        if state["version"] or not settings.OTD_API_KEY:
+            break
+        await asyncio.sleep(5)
+    while True:
+        wait = TIMETABLE_EVERY
+        try:
+            await refresh_timetable(connection, state["version"])
+        except (httpx.HTTPError, asyncpg.PostgresError, OSError, RuntimeError) as exc:
+            log.error("timetable refresh failed: %r", exc)
+            wait = 600
+        if connection.is_closed():
+            connection = await _connect()
+        await asyncio.sleep(wait)
 
 
 async def _connect() -> asyncpg.Connection:
