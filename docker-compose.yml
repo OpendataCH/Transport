@@ -25,12 +25,11 @@ services:
     command: ["python", "-m", "transport_api.timetable.ingest"]
     environment:
       DATABASE_URL: postgresql://transport:transport@db:5432/transport
-      GTFS_CACHE: /cache
       GTFS_DAYS: ${GTFS_DAYS:-14}
       OTD_API_KEY: ${OTD_API_KEY:-}
     volumes:
       # The downloaded feed survives a rebuild, so it is fetched once.
-      - ./var/gtfs:/cache
+      - ./var/gtfs:/var/cache/gtfs
     depends_on:
       - db
 

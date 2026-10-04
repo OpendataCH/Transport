@@ -27,6 +27,12 @@ ARG SERVICE_VERSION=dev
 ENV SERVICE_VERSION=${SERVICE_VERSION}
 
 RUN useradd --system --no-create-home --uid 10001 transport
+
+# Where the ingest loop keeps the downloaded GTFS feed. Created here, owned by
+# the service user, so that a named volume mounted on it starts out writable.
+RUN mkdir -p /var/cache/gtfs && chown transport /var/cache/gtfs
+ENV GTFS_CACHE=/var/cache/gtfs
+
 USER transport
 
 EXPOSE 8000
