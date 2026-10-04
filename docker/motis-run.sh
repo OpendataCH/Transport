@@ -20,6 +20,11 @@ FAILED=""
 
 trap 'if [ -n "$SERVER" ]; then kill "$SERVER" 2>/dev/null; wait "$SERVER" 2>/dev/null; fi; exit 0' TERM INT
 
+# The window file already holds only the days the database has; MOTIS just
+# has to look far enough back (MOTIS_PAST_DAYS, like GTFS_PAST_DAYS) and ahead
+# (MOTIS_DAYS) not to cut it again.
+first_day() { date -u -d "@$(( $(date +%s) - ${MOTIS_PAST_DAYS:-1} * 86400 ))" +%Y-%m-%d; }
+
 wanted() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
 
@@ -32,8 +37,8 @@ build() {
         echo "server:"
         echo "  port: 8080"
         echo "timetable:"
-        echo "  first_day: TODAY"
-        echo "  num_days: 30"
+        echo "  first_day: $(first_day)"
+        echo "  num_days: ${MOTIS_DAYS:-150}"
         echo "  railviz: false"
         echo "  with_shapes: false"
         echo "  update_interval: 60"

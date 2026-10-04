@@ -208,3 +208,16 @@ def test_the_import_runs_as_a_child_that_also_writes_the_window(monkeypatch, tmp
         with pytest.raises(RuntimeError):
             asyncio.run(ingest.import_feed(feed_path))
     assert calls[0][-3:] == (str(feed_path), "--window-feed", str(tmp_path))
+
+
+def test_a_week_back_is_not_a_stale_window(decide, monkeypatch):
+    monkeypatch.setattr(ingest.settings, "GTFS_PAST_DAYS", 7)
+    today = ingest.datetime.now(ingest.importer.ZURICH).date()
+    loaded = _loaded("gtfs_20260930.zip", today - ingest.timedelta(days=7))
+    assert decide(loaded, "gtfs_20260930.zip", None) == []
+
+
+def test_a_window_to_the_end_of_the_feed_only_changes_with_the_feed(decide, monkeypatch):
+    monkeypatch.setattr(ingest.settings, "GTFS_DAYS", 0)
+    old = date(2026, 1, 1)
+    assert decide(_loaded("gtfs_20260930.zip", old), "gtfs_20260930.zip", None) == []

@@ -57,10 +57,12 @@ async def refresh_timetable(connection: asyncpg.Connection, realtime_version: st
             log.info("%s waits for real time to leave version %s", newest, realtime_version)
             target = loaded["feed_file"]
 
+    # A window that ends a fixed number of days ahead moves on daily; one that
+    # runs to the end of the feed only changes with the feed.
     stale = (
         loaded is not None
         and settings.GTFS_DAYS > 0
-        and loaded["window_from"] < today - timedelta(days=1)
+        and loaded["window_from"] < today - timedelta(days=settings.GTFS_PAST_DAYS)
     )
     if loaded is not None and target == loaded["feed_file"] and not stale:
         return

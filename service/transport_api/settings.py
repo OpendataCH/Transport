@@ -59,6 +59,11 @@ GTFS_URL = os.environ.get(
 # is re-read twice a week anyway. Zero loads everything.
 GTFS_DAYS = int(os.environ.get("GTFS_DAYS", "14"))
 
+# Days of service loaded before today. One keeps the trips of yesterday's
+# service day that run past midnight; more answers questions about the recent
+# past, at the cost of a few more trips per day kept.
+GTFS_PAST_DAYS = max(int(os.environ.get("GTFS_PAST_DAYS", "1")), 1)
+
 # Where a downloaded feed is kept between runs, so that an unchanged file is
 # not fetched again.
 GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")

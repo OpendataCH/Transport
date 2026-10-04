@@ -7,10 +7,10 @@ The rows go into a fresh schema, `gtfs_next`, and that schema replaces `gtfs`
 in one transaction at the end. A request never sees half a timetable, and an
 import that fails leaves the previous one answering.
 
-Only the days in the window are loaded (`GTFS_DAYS`, from yesterday): a trip
-that runs on none of them is skipped, along with its stop times. Yesterday is
-in because a trip of yesterday's service day can still be running after
-midnight.
+Only the days in the window are loaded (`GTFS_PAST_DAYS` back, `GTFS_DAYS`
+ahead, or to the end of the feed when that is 0): a trip that runs on none of
+them is skipped, along with its stop times. At least yesterday is in, because
+a trip of yesterday's service day can still be running after midnight.
 """
 
 import argparse
@@ -342,10 +342,12 @@ def publish_window(source: Path, directory: Path, counts: dict) -> Path:
 # --------------------------------------------------------------------------
 
 
-async def load(connection: asyncpg.Connection, path: Path, today: date, days: int) -> dict:
+async def load(
+    connection: asyncpg.Connection, path: Path, today: date, days: int, past: int = 1
+) -> dict:
     """Read the feed at `path` into `gtfs_next` and swap it in. Returns counts."""
     started = time.monotonic()
-    first = today - timedelta(days=1)
+    first = today - timedelta(days=past)
 
     with zipfile.ZipFile(path) as feed:
         info = next(rows(feed, "feed_info.txt"), {})
@@ -555,7 +557,13 @@ async def main(source: str | None, window_dir: str | None) -> None:
     path = Path(source) if source else download(settings.GTFS_URL, Path(settings.GTFS_CACHE))
     connection = await asyncpg.connect(settings.DATABASE_URL)
     try:
-        counts = await load(connection, path, datetime.now(ZURICH).date(), settings.GTFS_DAYS)
+        counts = await load(
+            connection,
+            path,
+            datetime.now(ZURICH).date(),
+            settings.GTFS_DAYS,
+            settings.GTFS_PAST_DAYS,
+        )
     finally:
         await connection.close()
     if window_dir:
