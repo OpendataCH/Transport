@@ -23,6 +23,9 @@
             --late: #c60018;
         }
 
+        /* Bootstrap's .form-control sets display, which beats the attribute. */
+        [hidden] { display: none !important; }
+
         .search {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
@@ -73,7 +76,7 @@
         }
         .connection > button {
             display: grid;
-            grid-template-columns: 8.5em 4.5em 1fr auto;
+            grid-template-columns: minmax(11em, max-content) 5.5em 1fr auto;
             gap: 12px;
             align-items: center;
             width: 100%;
@@ -116,10 +119,10 @@
         .legs { list-style: none; margin: 0; padding: 10px 14px 14px; }
         .leg {
             display: grid;
-            grid-template-columns: 4em 14px 1fr auto;
+            grid-template-columns: 6em 14px 1fr auto;
             column-gap: 10px;
         }
-        .leg .t { font-variant-numeric: tabular-nums; text-align: right; }
+        .leg .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
         .leg .rail { position: relative; }
         .leg .rail::before {
             content: "";
@@ -136,7 +139,8 @@
         .leg .ride { padding: 6px 0 10px; color: var(--muted); font-size: 13px; }
         .leg .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
         .leg .last .rail::before { display: none; }
-        .transfer { margin: 2px 0 8px 5.6em; font-size: 12px; color: var(--muted); }
+        .transfer { margin: 2px 0 8px 7.6em; font-size: 12px; color: var(--muted); }
+        .transfer .late { font-size: inherit; }
 
         .more { display: flex; justify-content: space-between; margin: 12px 0; }
         .loading { color: var(--muted); padding: 12px 0; }
@@ -263,6 +267,10 @@
         return hours ? hours + 'h ' + m[3] + '′' : parseInt(m[3], 10) + '′';
     }
 
+    function minutesBetween(a, b) {
+        return Math.round((parse(b) - parse(a)) / 60000);
+    }
+
     function delay(minutes) {
         return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes + '′'}) : null;
     }
@@ -326,11 +334,21 @@
             list.appendChild(item);
             list.appendChild(end);
 
-            // The time between this vehicle and the next one.
+            // The time between this vehicle and the next one, as planned and,
+            // when real time knows better, as it will be.
             var next = sections[index + 1];
             if (next && journey && next.journey) {
-                var wait = Math.round((parse(next.departure.departure) - parse(arr.arrival)) / 60000);
-                list.appendChild(el('li', {class: 'transfer', text: 'Change · ' + wait + '′'}));
+                var planned = minutesBetween(arr.arrival, next.departure.departure);
+                var expected = minutesBetween(
+                    (arr.prognosis && arr.prognosis.arrival) || arr.arrival,
+                    (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
+                );
+                list.appendChild(el('li', {class: 'transfer'}, [
+                    'Change · ' + planned + '′',
+                    expected !== planned
+                        ? el('span', {class: 'late', text: ' (' + expected + '′ with delays)'})
+                        : null
+                ]));
             }
         });
         return list;
