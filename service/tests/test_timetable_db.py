@@ -146,6 +146,14 @@ def test_board_reaches_back_into_yesterdays_service_day(api):
     assert answer["stationboard"][0]["name"] == "001299"
 
 
+def test_board_reaches_into_tomorrows_service_day(api):
+    # Nothing runs on Tuesday afternoon; the next departure is Wednesday's
+    # first, on the next service day but within the board's horizon.
+    tuesday = TODAY + timedelta(days=1)
+    answer = _board(api, id="8500001", limit="1", datetime=f"{tuesday} 13:00")
+    assert answer["stationboard"][0]["stop"]["departure"] == "2026-10-07T08:00:00+0200"
+
+
 def test_board_skips_a_removed_day(api):
     tuesday = TODAY + timedelta(days=1)  # "daily" is removed on the 6th
     answer = _board(api, id="8500001", limit="3", datetime=f"{tuesday} 07:00")

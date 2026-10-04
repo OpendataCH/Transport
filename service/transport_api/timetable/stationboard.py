@@ -1,8 +1,9 @@
 """`/v2/stationboard` from the timetable database, in the shape of `/v1`.
 
 A board is the stop times at the platforms of one station, on the service
-days that can reach the requested moment: today's, and yesterday's for the
-trips that run past midnight. Real-time delays come from `rt.stop_delay`,
+days that can reach the requested moment and the day after it: today's,
+yesterday's for the trips that run past midnight, and tomorrow's for a stop
+that is quiet until the morning. Real-time delays come from `rt.stop_delay`,
 which the ingest loop keeps current.
 """
 
@@ -193,7 +194,10 @@ async def _calls_at(
     instant = int(when.timestamp())
     args: list[Any] = [platforms, modes]
     halves = []
-    for day in (when.date() - timedelta(days=1), when.date()):
+    # Yesterday's service day for the trips past midnight, tomorrow's for a
+    # stop whose next departure is in the morning: the horizon reaches it.
+    for offset in (-1, 0, 1):
+        day = when.date() + timedelta(days=offset)
         base = int(service_day_start(day).timestamp())
         start = len(args) + 1
         args += [day, base, instant - base, instant - base + HORIZON]
