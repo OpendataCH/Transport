@@ -9,6 +9,10 @@
 # without routing, twice a week. The real-time key comes from OTD_API_KEY and
 # is written only into the configuration inside /data.
 #
+# With MOTIS_OSM naming an OpenStreetMap extract (fetched by ingest), the
+# router also walks along streets between stops where the timetable has no
+# transfer; the extract changing (its size) rebuilds just like a new feed.
+#
 # Meant as the entrypoint of the official image (ghcr.io/motis-project/motis),
 # which ships busybox: `sh /motis-run.sh`.
 set -eu
@@ -25,23 +29,42 @@ trap 'if [ -n "$SERVER" ]; then kill "$SERVER" 2>/dev/null; wait "$SERVER" 2>/de
 # (MOTIS_DAYS) not to cut it again.
 first_day() { date -u -d "@$(( $(date +%s) - ${MOTIS_PAST_DAYS:-1} * 86400 ))" +%Y-%m-%d; }
 
-wanted() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
+feed() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
+osm() { if [ -n "${MOTIS_OSM:-}" ] && [ -s "$MOTIS_OSM" ]; then echo "$MOTIS_OSM"; fi; }
+# What the router should be built from: the window, and the street network
+# with its size when there is one.
+wanted() {
+    f=$(feed)
+    [ -n "$f" ] || return 0
+    o=$(osm)
+    if [ -n "$o" ]; then echo "$f+osm$(wc -c < "$o" | tr -d ' ')"; else echo "$f"; fi
+}
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
 
 build() {
-    feed=$(wanted)
-    echo "motis-run: importing $feed"
+    target=$(wanted)
+    feed=$(feed)
+    street=$(osm)
+    echo "motis-run: importing $target"
     rm -rf "$DATA/next"
     mkdir -p "$DATA/next"
     {
         echo "server:"
         echo "  port: 8080"
+        if [ -n "$street" ]; then
+            echo "osm: $street"
+            echo "street_routing: true"
+        fi
         echo "timetable:"
         echo "  first_day: $(first_day)"
         echo "  num_days: ${MOTIS_DAYS:-150}"
         echo "  railviz: false"
         echo "  with_shapes: false"
         echo "  update_interval: 60"
+        if [ -n "$street" ]; then
+            # Keep the timetable's own transfers; add street walks where it has none.
+            echo "  extend_missing_footpaths: true"
+        fi
         echo "  datasets:"
         echo "    ch:"
         echo "      path: $FEEDS/$feed"
@@ -55,7 +78,7 @@ build() {
     # Explicitly: `set -e` does not hold inside a function called as an `if`
     # condition, and a half-imported directory must never be swapped in.
     /motis import -c "$DATA/config.yml" -d "$DATA/next" || return 1
-    echo "$feed" > "$DATA/next/FEED"
+    echo "$target" > "$DATA/next/FEED"
 }
 
 swap() {

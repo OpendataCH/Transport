@@ -221,3 +221,39 @@ def test_a_window_to_the_end_of_the_feed_only_changes_with_the_feed(decide, monk
     monkeypatch.setattr(ingest.settings, "GTFS_DAYS", 0)
     old = date(2026, 1, 1)
     assert decide(_loaded("gtfs_20260930.zip", old), "gtfs_20260930.zip", None) == []
+
+
+def test_the_street_network_is_fetched_when_missing_and_renewed_when_old(monkeypatch, tmp_path):
+    fetched = []
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def raise_for_status(self):
+            pass
+
+        def iter_bytes(self, size):
+            fetched.append(size)
+            yield b"pbf"
+
+    monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
+    monkeypatch.setattr(ingest.settings, "OSM_URL", "https://example.org/ch.osm.pbf")
+    monkeypatch.setattr(ingest.httpx, "stream", lambda *a, **k: Response())
+
+    path = ingest.refresh_osm(now=1_000_000_000)
+    assert path.read_bytes() == b"pbf"
+    assert len(fetched) == 1
+    # Fresh: left alone. Older than the limit: fetched again.
+    ingest.refresh_osm(now=path.stat().st_mtime + 86400)
+    assert len(fetched) == 1
+    ingest.refresh_osm(now=path.stat().st_mtime + 31 * 86400)
+    assert len(fetched) == 2
+
+
+def test_without_an_osm_url_nothing_is_fetched(monkeypatch):
+    monkeypatch.setattr(ingest.settings, "OSM_URL", None)
+    assert ingest.refresh_osm() is None

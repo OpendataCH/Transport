@@ -81,6 +81,33 @@ async def refresh_timetable(connection: asyncpg.Connection, realtime_version: st
     await import_feed(path)
 
 
+OSM_FILE = "osm/switzerland.osm.pbf"
+
+
+def refresh_osm(now: float | None = None) -> Path | None:
+    """The street network for the router, fetched when missing or too old.
+
+    docker/motis-run.sh notices the new file by its size and rebuilds; until
+    the first download it routes without streets, as before.
+    """
+    if not settings.OSM_URL:
+        return None
+    target = Path(settings.GTFS_CACHE) / OSM_FILE
+    now = time.time() if now is None else now
+    if target.exists() and now - target.stat().st_mtime < settings.OSM_MAX_AGE_DAYS * 86400:
+        return target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    partial = target.with_name(target.name + ".part")
+    with httpx.stream("GET", settings.OSM_URL, follow_redirects=True, timeout=600) as response:
+        response.raise_for_status()
+        with partial.open("wb") as out:
+            for chunk in response.iter_bytes(1 << 20):
+                out.write(chunk)
+    partial.rename(target)
+    log.info("street network for the router: %d MB", target.stat().st_size >> 20)
+    return target
+
+
 async def import_feed(path: Path) -> None:
     """Run the importer as a child process; its log lines go to ours."""
     # The child also writes the loaded window for the router and points
@@ -144,6 +171,7 @@ async def _timetable(state: dict[str, str | None]) -> None:
         wait = TIMETABLE_EVERY
         try:
             await refresh_timetable(connection, state["version"])
+            await asyncio.to_thread(refresh_osm)
         except (httpx.HTTPError, asyncpg.PostgresError, OSError, RuntimeError) as exc:
             log.error("timetable refresh failed: %r", exc)
             wait = 600

@@ -76,3 +76,10 @@ OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 # The router behind /v2/connections (MOTIS, on the same feed), e.g.
 # `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
+
+# The Swiss OpenStreetMap extract, for the router's walks between stops - a
+# bus stop and a station are rarely linked in the timetable itself. Unset, the
+# router walks only where the timetable says it may. The ingest loop fetches
+# it into GTFS_CACHE/osm/ and renews it after OSM_MAX_AGE_DAYS.
+OSM_URL = os.environ.get("OSM_URL") or None
+OSM_MAX_AGE_DAYS = int(os.environ.get("OSM_MAX_AGE_DAYS", "30"))
