@@ -15,6 +15,9 @@ API.
 
 The machine-readable description covers `/v1`. `/v2` is an experiment and is
 kept out of the document until it has been compared long enough.
+
+With V1_FROM_TIMETABLE on, the timetable answers `/v1` as well, and the
+search.ch translation moves to `/v1-old`.
 """
 
 from contextlib import asynccontextmanager
@@ -51,10 +54,12 @@ from .timetable import stationboard as timetable_stationboard
 # thing; only the first is described.
 PREFIX = "/v1"
 ALIAS = "/v2"
+# The search.ch translation, once /v1 answers from the timetable.
+OLD = "/v1-old"
 
 # What `/v1/` and `/v2/` report about themselves. /v1 says 1.0 because that is
 # what it has always said and the answer is compared byte for byte.
-API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0"}
+API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0", OLD: "1.0"}
 
 
 @asynccontextmanager
@@ -86,7 +91,11 @@ app = FastAPI(
     version=settings.VERSION,
     summary="The Swiss public transport API",
     description=(
-        "Timetable data for Swiss public transport, from "
+        "Timetable data for Swiss public transport, from the national timetable "
+        "and its real-time feed on [opentransportdata.swiss](https://opentransportdata.swiss/). "
+        "The answers of search.ch, which this API translated before, stay at `/v1-old`."
+        if settings.V1_FROM_TIMETABLE
+        else "Timetable data for Swiss public transport, from "
         "[search.ch](https://timetable.search.ch/). This service translates; "
         "it stores nothing."
     ),
@@ -170,11 +179,16 @@ def info_of(api_version: str):
     return info
 
 
+def from_search_ch(prefix: str) -> bool:
+    """Whether a prefix is answered by the search.ch translation."""
+    return prefix == OLD or (prefix == PREFIX and not settings.V1_FROM_TIMETABLE)
+
+
 for prefix, api_version in API_VERSIONS.items():
     router = APIRouter(prefix=prefix)
     router.add_api_route("/", info_of(api_version), summary="What this API is")
     router.add_api_route("/health", health, summary="Liveness and identity of the service")
-    if prefix == PREFIX:
+    if from_search_ch(prefix):
         router.include_router(locations.router, tags=["locations"])
         router.include_router(stationboard.router, tags=["stationboard"])
         router.include_router(connections.router, tags=["connections"])

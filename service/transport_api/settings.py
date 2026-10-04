@@ -77,6 +77,11 @@ OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 # `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
 
+# Which source answers /v1. On, /v1 (and its alias /v2) answer from our own
+# timetable and router, and the search.ch translation moves to /v1-old. Off,
+# /v1 asks search.ch as it always has, and /v2 is the timetable experiment.
+V1_FROM_TIMETABLE = os.environ.get("V1_FROM_TIMETABLE", "0") not in ("0", "false", "")
+
 # The Swiss OpenStreetMap extract, for the router's walks between stops - a
 # bus stop and a station are rarely linked in the timetable itself. Unset, the
 # router walks only where the timetable says it may. The ingest loop fetches

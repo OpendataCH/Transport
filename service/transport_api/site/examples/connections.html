@@ -199,8 +199,8 @@
             <span class="spacer"></span>
             <label class="api">API
                 <select class="form-control" name="api">
-                    <option value="v2">v2 (opentransportdata.swiss)</option>
-                    <option value="v1">v1 (search.ch)</option>
+                    <option value="v1">v1 (opentransportdata.swiss)</option>
+                    <option value="v1-old">v1-old (search.ch)</option>
                 </select>
             </label>
         </div>
@@ -404,7 +404,7 @@
         document.getElementById('later-row').hidden = !any;
     }
 
-    function api() { return field('api').value === 'v2' ? 'v2' : 'v1'; }
+    function api() { return field('api').value === 'v1-old' ? 'v1-old' : 'v1'; }
 
     function ask(query) {
         var params = new URLSearchParams();
@@ -480,7 +480,7 @@
         var params = new URLSearchParams();
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
-        if (api() === 'v1') params.set('api', 'v1');
+        if (api() === 'v1-old') params.set('api', 'v1-old');
         history.replaceState({}, '', '?' + params);
     }
 
@@ -550,7 +550,7 @@
     if (!field('date').value) setNow();
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
-    field('api').value = params.get('api') === 'v1' ? 'v1' : 'v2';
+    field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
 
     if (field('from').value && field('to').value) {
         search();
