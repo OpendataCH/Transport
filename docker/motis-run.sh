@@ -33,7 +33,7 @@ feed() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
 osm() { if [ -n "${MOTIS_OSM:-}" ] && [ -s "$MOTIS_OSM" ]; then echo "$MOTIS_OSM"; fi; }
 # Raise when the configuration written below changes: a running router
 # rebuilds only when what it is built from changes, and this is part of it.
-CONFIG_REVISION=2
+CONFIG_REVISION=3
 
 # What the router should be built from: the window, the street network with
 # its size when there is one, and the configuration.
@@ -63,7 +63,10 @@ build() {
         echo "timetable:"
         echo "  first_day: $(first_day)"
         echo "  num_days: ${MOTIS_DAYS:-150}"
-        echo "  railviz: false"
+        # Vehicles on the map (/api/v6/map/trips), for the map example. The
+        # Swiss feed has no shapes.txt, so they move in straight lines
+        # between stops.
+        echo "  railviz: true"
         echo "  with_shapes: false"
         echo "  update_interval: 60"
         # Longer than the default 15: MOTIS leaves out a walk of exactly the

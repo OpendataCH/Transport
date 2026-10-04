@@ -79,8 +79,12 @@ class Motis:
         self._client = client
 
     async def plan(self, params: dict[str, str]) -> dict:
+        return await self.get("/api/v6/plan", params)
+
+    async def get(self, path: str, params: dict[str, str]) -> dict | list:
+        """One call to the router's API; its failures in the /v1 envelope."""
         try:
-            response = await self._client.get("/api/v6/plan", params=params)
+            response = await self._client.get(path, params=params)
         except httpx.HTTPError as exc:
             raise errors.ApiError(503, f"The router is not reachable: {exc}") from exc
         if response.status_code >= 400:

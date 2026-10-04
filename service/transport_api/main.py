@@ -48,6 +48,7 @@ from .models import ApiInfo
 from .timetable import connections as timetable_connections
 from .timetable import db as timetable_db
 from .timetable import locations as timetable_locations
+from .timetable import map as timetable_map
 from .timetable import stationboard as timetable_stationboard
 
 # The prefix a client should use, and the one it may. Both answer the same
@@ -201,6 +202,9 @@ for prefix, api_version in API_VERSIONS.items():
         )
     app.include_router(router, include_in_schema=prefix == PREFIX)
 
+
+# What the map example draws: shaped for a map, not part of the /v1 contract.
+app.include_router(timetable_map.router, prefix=ALIAS, include_in_schema=False)
 
 app.include_router(stats_page.router)
 
