@@ -63,10 +63,37 @@ def test_modes_translate_to_motis():
     assert v2._modes(["all"]) is None
 
 
-@pytest.mark.parametrize(("page", "expected"), [(0, ["c", "d"]), (1, ["e", "f"]), (2, ["e", "f"])])
+def trip(start, end):
+    return {"startTime": f"2026-10-05T{start}:00Z", "endTime": f"2026-10-05T{end}:00Z"}
+
+
+class PagingMotis:
+    """Arrivals before 09:00 first, then two later windows behind a cursor."""
+
+    def __init__(self) -> None:
+        self.calls = []
+
+    async def plan(self, params):
+        self.calls.append(params)
+        windows = {
+            None: [trip("05:00", "06:30"), trip("06:00", "07:30"), trip("07:00", "08:30")],
+            "next-1": [trip("07:30", "09:10"), trip("08:00", "09:40")],
+            "next-2": [trip("08:30", "10:10"), trip("09:00", "10:40")],
+        }
+        cursor = params.get("pageCursor")
+        following = {None: "next-1", "next-1": "next-2", "next-2": None}[cursor]
+        return {"itineraries": windows[cursor], "nextPageCursor": following}
+
+
+@pytest.mark.parametrize(
+    ("page", "expected"),
+    [(0, ["07:30", "08:30"]), (1, ["09:10", "09:40"]), (2, ["10:10", "10:40"])],
+)
 def test_arrival_pages_are_cut_as_v1_cuts_them(page, expected):
-    itineraries = list("abcdef")
-    assert v2._arrival_page(itineraries, 2, page) == expected
+    """Page 0 arrives last before the time, page 1 is the next ones after it."""
+    motis = PagingMotis()
+    got = asyncio.run(v2._arrival_page(motis, {"arriveBy": "true"}, 2, page))
+    assert [i["endTime"][11:16] for i in got] == expected
 
 
 DATABASE = os.environ.get("TEST_DATABASE_URL")
@@ -258,3 +285,25 @@ def test_unknown_places_give_the_empty_answer(api):
         "stations": {"from": [], "to": []},
     }
     assert api.motis.params is None
+
+
+@needs_database
+def test_with_a_via_stop_v1_names_it_as_to(api):
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "Alpha", "to": "8500003", "via[]": "Beta", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    assert api.motis.params["via"] == "ch_ch:1:sloid:2"
+    assert answer["to"]["name"] == "Beta"
+    assert answer["stations"]["to"][0]["name"] == "Beta"
+
+
+def test_a_walk_between_stations_is_its_seconds():
+    leg = {
+        "mode": "WALK",
+        "duration": 180,
+        "from": {"stopId": "ch_a", "parentId": "ch_A", "name": "A"},
+        "to": {"stopId": "ch_b", "parentId": "ch_B", "name": "B"},
+    }
+    section = v2._section(leg, {}, {}, None)
+    assert section["walk"] == {"duration": 180}

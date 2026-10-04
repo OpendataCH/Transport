@@ -95,9 +95,17 @@ def test_mode_of_extended_route_types(route_type, mode):
     assert mode_of(route_type) == mode
 
 
-def test_normalize_folds_accents_and_case():
-    assert normalize("  Genève,   Gare ") == "geneve, gare"
+def test_normalize_folds_accents_case_and_punctuation():
+    assert normalize("  Genève,   Gare ") == "geneve gare"
     assert normalize("Zürich HB") == "zurich hb"
+    assert normalize("Luzern, Verkehrshaus") == normalize("Luzern Verkehrshaus")
+    assert normalize("Biel/Bienne") == "biel bienne"
+
+
+def test_normalize_abbreviates_saint_as_the_stops_do():
+    assert normalize("Sainte-Croix") == normalize("Ste-Croix") == "ste croix"
+    assert normalize("Saint-Cergue") == normalize("St-Cergue")
+    assert normalize("Sankt Gallen") == normalize("St. Gallen")
 
 
 def test_line_number_drops_the_category():

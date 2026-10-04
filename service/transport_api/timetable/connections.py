@@ -160,14 +160,12 @@ async def search_connections(
 
     arrival = _is_arrival_time(isArrivalTime)
     when = _when(datetime_, date, time)
-    wanted = _wanted(arrival, page_value, limit_value)
-
     params = {
         "fromPlace": await _place(pool, origin),
         "toPlace": await _place(pool, destination),
         "time": when.astimezone(ZURICH).isoformat(),
         "arriveBy": "true" if arrival else "false",
-        "numItineraries": str(wanted),
+        "numItineraries": str(limit_value if arrival else (page_value + 1) * limit_value),
         # Walking all the way is not a connection /v1 has ever offered.
         "directModes": "",
         "detailedTransfers": "false",
@@ -178,18 +176,19 @@ async def search_connections(
     if modes:
         params["transitModes"] = ",".join(modes)
 
-    plan = await motis.plan(params)
-    itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
     if arrival:
-        itineraries = _arrival_page(itineraries, limit_value, page_value)
+        itineraries = await _arrival_page(motis, params, limit_value, page_value)
     else:
+        plan = await motis.plan(params)
+        itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
         itineraries = _page(itineraries, limit_value, page_value)
     page_of = await _connections(pool, itineraries)
 
     origin_location = location(origin["id"], origin["name"], origin["lat"], origin["lon"])
-    destination_location = location(
-        destination["id"], destination["name"], destination["lat"], destination["lon"]
-    )
+    # /v1 names the second of search.ch's points as `to`, and with a via stop
+    # that is the first via, not the destination. Reproduced.
+    second = stops_via[0] if stops_via else destination
+    destination_location = location(second["id"], second["name"], second["lat"], second["lon"])
     return PhpJson(
         content=fields.apply(
             {
@@ -202,28 +201,32 @@ async def search_connections(
     )
 
 
-def _wanted(arrival: bool, page: int, limit: int) -> int:
-    """How many itineraries the page is cut from - see `_arrival_page`."""
-    if not arrival:
-        return (page + 1) * limit
-    return 2 * limit if page == 0 else page * limit
+async def _arrival_page(motis: "Motis", params: dict, limit: int, page: int) -> list[dict]:
+    """The page /v1 shows for an arrival search.
 
-
-def _arrival_page(itineraries: list[dict], limit: int, page: int) -> list[dict]:
-    """The page /v1 shows for an arrival search, which is not the obvious one.
-
-    /v1 shifts arrival searches one page back: page 0 asks search.ch for a
-    page of connections *before* the ones nearest the arrival time and shows
-    those first; page 1 is the connections nearest the arrival time, and so
-    is every page after it, because the window it is cut from ends there.
-    Reproduced, because the order is what the clients have always received.
+    Page 0 is the `limit` connections that arrive last before the time asked
+    for; page 1 is the next ones, arriving after it, and so on - read off the
+    live /v1, which asks search.ch one page back. Later pages come from the
+    router's own cursor to the next time window.
     """
+    plan = await motis.plan(params)
+    first = sorted(plan.get("itineraries") or [], key=lambda i: i["endTime"])
     if page == 0:
-        window = itineraries[-2 * limit :]
-        return window[:limit]
-    window = itineraries[-page * limit :]
-    offset = min((page - 1) * limit, max(len(window) - limit, 0))
-    return window[offset : offset + limit]
+        return sorted(first[-limit:], key=lambda i: i["startTime"])
+    later: list[dict] = []
+    seen = {i["startTime"] + i["endTime"] for i in first}
+    cursor = plan.get("nextPageCursor")
+    for _ in range(page * 3):
+        if len(later) >= page * limit or not cursor:
+            break
+        more = await motis.plan({**params, "pageCursor": cursor})
+        for itinerary in sorted(more.get("itineraries") or [], key=lambda i: i["endTime"]):
+            key = itinerary["startTime"] + itinerary["endTime"]
+            if key not in seen:
+                seen.add(key)
+                later.append(itinerary)
+        cursor = more.get("nextPageCursor")
+    return sorted(later[(page - 1) * limit : page * limit], key=lambda i: i["startTime"])
 
 
 async def _place(pool: asyncpg.Pool, station: asyncpg.Record) -> str:
@@ -287,7 +290,8 @@ def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
     if not leg.get("tripId"):
         return {
             "journey": None,
-            "walk": {"duration": duration_of(leg.get("duration") or 0)},
+            # Seconds, as an integer: what /v1 passes on from search.ch.
+            "walk": {"duration": int(leg.get("duration") or 0)},
             "departure": departure,
             "arrival": arrival,
         }

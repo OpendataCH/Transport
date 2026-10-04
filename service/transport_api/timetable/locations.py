@@ -22,19 +22,25 @@ router = APIRouter()
 
 LIMIT = 10
 
-# Exact name, then names that start with the query or have a word that does;
-# within those, the busier station first, so that Bern, Bahnhof comes before a
-# stop nothing calls at. A train counts five times: a tram stop in Basel sees
-# more departures than Basel SBB, and is not what "Basel" means. Names that
-# merely resemble the query follow by trigram similarity.
+# Exact name first. Then every name that contains the query, ranked by how
+# busy it is - a match at the start of the name counting four times, one at the
+# start of a later word once, one inside a word a fifth. That keeps Tesserete,
+# Stazione above Lugano, Via Tesserete and Zürich, Bellevue above a quiet
+# Bellevue GE, Ermitage, as search.ch ranks them, and a stop nothing calls at
+# last. A train counts five times: a tram stop in Basel sees more departures
+# than Basel SBB, and is not what "Basel" means. Names that merely resemble
+# the query follow by trigram similarity, a Swiss stop before a foreign one.
 BY_NAME = """
 SELECT id, name, lat, lon, mode
 FROM (SELECT *, departures * CASE mode WHEN 'train' THEN 5 ELSE 1 END AS weight
       FROM gtfs.station) station
 WHERE name_norm LIKE $2 OR name_norm % $1
 ORDER BY name_norm = $1 DESC,
-         (name_norm LIKE $3 OR name_norm LIKE $4) DESC,
-         CASE WHEN name_norm LIKE $2 THEN weight ELSE 0 END DESC,
+         CASE WHEN name_norm LIKE $3 THEN weight * 4.0
+              WHEN name_norm LIKE $4 THEN weight * 1.0
+              WHEN name_norm LIKE $2 THEN weight * 0.2
+              ELSE 0 END DESC,
+         id LIKE '85%' DESC,
          similarity(name_norm, $1) DESC,
          departures DESC
 LIMIT $5

@@ -1,17 +1,27 @@
 """Text and modes, shared by the importer and the routes that query its tables."""
 
+import re
 import unicodedata
+
+# Swiss stop names abbreviate where people do not: Ste-Croix, St-Cergue.
+ABBREVIATIONS = [(re.compile(r"\bsainte\b"), "ste"), (re.compile(r"\b(saint|sankt)\b"), "st")]
 
 
 def normalize(name: str) -> str:
-    """What a name is searched by: lower case, accents off, spacing collapsed.
+    """What a name is searched by: lower case, accents and punctuation off.
 
-    Done in Python on both sides rather than with Postgres' `unaccent`, which
-    is not immutable and so cannot back an index.
+    Punctuation goes because people and timetables place it differently -
+    `Luzern Verkehrshaus` is the station, `Luzern, Verkehrshaus/Lido` the bus
+    stop, and someone typing `Luzern, Verkehrshaus` means the first. Done in
+    Python on both sides rather than with Postgres' `unaccent`, which is not
+    immutable and so cannot back an index.
     """
     decomposed = unicodedata.normalize("NFKD", name)
-    bare = "".join(c for c in decomposed if not unicodedata.combining(c))
-    return " ".join(bare.casefold().split())
+    bare = "".join(c for c in decomposed if not unicodedata.combining(c)).casefold()
+    bare = re.sub(r"[,./()\-–'’]", " ", bare)
+    for pattern, short in ABBREVIATIONS:
+        bare = pattern.sub(short, bare)
+    return " ".join(bare.split())
 
 
 def mode_of(route_type: int) -> str | None:
