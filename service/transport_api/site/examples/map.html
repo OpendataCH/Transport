@@ -276,7 +276,8 @@
         var bounds = map.getBounds().pad(0.1);
         var floor = threshold(zoom);
         stations.forEach(function (s) {
-            if (weight(s) < floor || !bounds.contains([s[2], s[3]])) return;
+            var reached = reach && reach.stops[s[0]];
+            if ((!reached && weight(s) < floor) || !bounds.contains([s[2], s[3]])) return;
             var colour = MODE_COLOURS[s[4]] || MODE_COLOURS.bus;
             var fill = zoom < 11 ? 0.85 : 0.2;
             if (reach) {
@@ -480,6 +481,10 @@
                         interactive: false
                     }).addTo(areaLayer);
                 });
+                if (data.stops.length) {
+                    var box = L.latLngBounds(data.stops.map(function (s) { return [s.lat, s.lon]; }));
+                    map.fitBounds(box.extend(origin.getLatLng()), {padding: [20, 20], maxZoom: 13});
+                }
                 drawStations();
                 var counts = data.stops.length;
                 var scale = el('div', {class: 'scale'}, STEPS.map(function (c) { return el('span', {style: 'background:' + c}); }));
