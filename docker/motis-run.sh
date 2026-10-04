@@ -42,6 +42,7 @@ wanted() {
     [ -n "$f" ] || return 0
     o=$(osm)
     if [ -n "$o" ]; then f="$f+osm$(wc -c < "$o" | tr -d ' ')"; fi
+    if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
     echo "$f+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
@@ -59,6 +60,13 @@ build() {
         if [ -n "$street" ]; then
             echo "osm: $street"
             echo "street_routing: true"
+            if [ -n "${MOTIS_TILES:-}" ]; then
+                # The map behind the router's own page (/routing/) and its
+                # place search. Built once per street network.
+                echo "tiles:"
+                echo "  profile: /tiles-profiles/full.lua"
+                echo "geocoding: true"
+            fi
         fi
         echo "timetable:"
         echo "  first_day: $(first_day)"
@@ -110,8 +118,23 @@ until [ -n "$(wanted)" ]; do
     sleep 30
 done
 
-if [ "$(loaded)" != "$(wanted)" ]; then
+# `motis-run.sh build`: only build next/ and stop, in a container of its own
+# beside the one that routes - for a change that takes long to import (the
+# map tiles). The routing container then finds it ready when it restarts.
+if [ "${1:-}" = "build" ]; then
     build || exit 1
+    echo "motis-run: built $(cat "$DATA/next/FEED"); restart the router to use it"
+    exit 0
+fi
+
+prebuilt() { cat "$DATA/next/FEED" 2>/dev/null | tr -d '[:space:]'; }
+
+if [ "$(loaded)" != "$(wanted)" ]; then
+    if [ "$(prebuilt)" = "$(wanted)" ]; then
+        echo "motis-run: using the prebuilt $(prebuilt)"
+    else
+        build || exit 1
+    fi
     swap
 fi
 serve
