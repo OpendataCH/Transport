@@ -36,21 +36,25 @@ ALLOWED_API = (
     "experimental/map/",
 )
 
-# Headers of the router's answer worth passing on.
-# The body arrives decompressed, so its encoding is not among them.
-KEPT_HEADERS = ("content-type", "cache-control", "etag", "last-modified")
+# Headers of the router's answer worth passing on. The body is passed on as
+# it came, compressed or not, so its encoding goes with it: a map tile is a
+# megabyte uncompressed and a tenth of that in gzip.
+KEPT_HEADERS = ("content-type", "cache-control", "etag", "last-modified", "content-encoding")
 
 
 async def _forward(request: Request, path: str) -> Response:
     client: httpx.AsyncClient | None = getattr(request.app.state, "motis", None)
     if client is None or not settings.MOTIS_URL:
         return Response("The router is not configured.", status_code=503)
+    headers = {"accept-encoding": request.headers.get("accept-encoding", "identity")}
     try:
-        answer = await client.get(path, params=request.query_params)
+        query = request.query_params
+        async with client.stream("GET", path, params=query, headers=headers) as answer:
+            body = b"".join([chunk async for chunk in answer.aiter_raw()])
     except httpx.HTTPError:
         return Response("The router is not reachable.", status_code=503)
     kept = {k: v for k, v in answer.headers.items() if k.lower() in KEPT_HEADERS}
-    return Response(answer.content, status_code=answer.status_code, headers=kept)
+    return Response(body, status_code=answer.status_code, headers=kept)
 
 
 @router.get("/routing")

@@ -16,7 +16,10 @@ def api(monkeypatch):
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen.append(request.url.path)
-        return httpx.Response(200, text="ok", headers={"content-type": "text/plain"})
+        # A stream, as a real server sends it, so that it can be passed on raw.
+        return httpx.Response(
+            200, stream=httpx.ByteStream(b"ok"), headers={"content-type": "text/plain"}
+        )
 
     app = FastAPI()
     app.include_router(routing_ui.router)
@@ -49,3 +52,25 @@ def test_only_the_endpoints_the_page_uses_pass(api):
 def test_without_a_router_it_says_so(api, monkeypatch):
     monkeypatch.setattr(settings, "MOTIS_URL", None)
     assert api.get("/routing/").status_code == 503
+
+
+def test_a_compressed_answer_stays_compressed(monkeypatch):
+    import gzip
+
+    monkeypatch.setattr(settings, "MOTIS_URL", "http://motis:8080")
+    packed = gzip.compress(b"tile")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200, stream=httpx.ByteStream(packed), headers={"content-encoding": "gzip"}
+        )
+
+    app = FastAPI()
+    app.include_router(routing_ui.router)
+    app.state.motis = httpx.AsyncClient(
+        base_url="http://motis:8080", transport=httpx.MockTransport(handler)
+    )
+    with TestClient(app) as client:
+        response = client.get("/tiles/1/2/3.mvt", headers={"accept-encoding": "gzip"})
+    assert response.headers["content-encoding"] == "gzip"
+    assert response.content == b"tile"  # the test client unpacks it again
