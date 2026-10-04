@@ -90,6 +90,7 @@ def api():
     errors.install(app)
     app.include_router(tmap.router, prefix="/v2")
     app.dependency_overrides[tmap.get_motis] = lambda: motis
+    app.dependency_overrides[tmap.db.get_pool] = lambda: None
     with TestClient(app) as client:
         client.motis = motis
         yield client

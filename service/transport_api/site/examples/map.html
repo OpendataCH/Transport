@@ -129,7 +129,8 @@
         <label id="minutes-label" hidden>within
             <select class="form-control input-sm" id="minutes">
                 <option>15</option><option selected>30</option><option>60</option><option>90</option>
-            </select> min
+            </select> min, leaving
+            <input class="form-control input-sm" type="datetime-local" id="leaving" step="60" style="display:inline-block;width:auto" aria-label="Leaving at">
         </label>
         <label><input type="checkbox" id="show-vehicles" checked> vehicles</label>
         <label><input type="checkbox" id="colour-map"> colour map</label>
@@ -442,6 +443,9 @@
     // --- Reachability ------------------------------------------------------
 
     var origin = null;
+    var areaLayer = L.layerGroup().addTo(map);
+    // Walking pace for the area around a stop: 4.8 km/h, capped at a kilometre.
+    var WALK_METRES_PER_MINUTE = 80;
     // Sequential, one hue light to dark would hide the near stops; this runs
     // green (near) through yellow to red (far), in steps of a quarter.
     var STEPS = ['#1a9850', '#91cf60', '#fee08b', '#fc8d59', '#d73027'];
@@ -454,11 +458,28 @@
         if (origin) map.removeLayer(origin);
         origin = L.marker(at).addTo(map);
         show([el('h4', {text: 'Reachability'}), el('p', {class: 'muted', text: 'Asking the router…'})]);
-        getJSON('../v2/map/reachable?x=' + at[0].toFixed(4) + '&y=' + at[1].toFixed(4) + '&minutes=' + minutes)
+        var leaving = document.getElementById('leaving').value;
+        var when = leaving ? '&time=' + encodeURIComponent(new Date(leaving).toISOString()) : '';
+        getJSON('../v2/map/reachable?x=' + at[0].toFixed(4) + '&y=' + at[1].toFixed(4) + '&minutes=' + minutes + when)
             .then(function (data) {
                 var byId = {};
                 data.stops.forEach(function (s) { byId[s.id] = s; });
                 reach = {stops: byId, minutes: minutes};
+                if (data.from && data.from.name) {
+                    label = data.from.name;
+                    origin.setLatLng([data.from.lat, data.from.lon]);
+                }
+                // The area: around each stop, what the minutes left reach on
+                // foot. Far stops first, so that the near colours lie on top.
+                areaLayer.clearLayers();
+                data.stops.slice().sort(function (a, b) { return b.minutes - a.minutes; }).forEach(function (s) {
+                    var metres = Math.min(1000, (minutes - s.minutes) * WALK_METRES_PER_MINUTE);
+                    if (metres < 60) return;
+                    L.circle([s.lat, s.lon], {
+                        radius: metres, stroke: false, fillColor: reachColour(s.minutes, minutes), fillOpacity: 0.28,
+                        interactive: false
+                    }).addTo(areaLayer);
+                });
                 drawStations();
                 var counts = data.stops.length;
                 var scale = el('div', {class: 'scale'}, STEPS.map(function (c) { return el('span', {style: 'background:' + c}); }));
@@ -466,7 +487,9 @@
                 var furthest = data.stops.slice().sort(function (a, b) { return b.minutes - a.minutes; }).slice(0, 8);
                 show([
                     el('h4', {text: 'Within ' + minutes + ' minutes'}),
-                    el('p', {class: 'muted', text: 'from ' + (label || at[0].toFixed(4) + ', ' + at[1].toFixed(4)) + ', leaving now: ' + counts + ' stops'}),
+                    el('p', {class: 'muted', text: 'from ' + (label || at[0].toFixed(4) + ', ' + at[1].toFixed(4)) + ', leaving ' +
+                        (leaving ? leaving.replace('T', ' ') : 'now') + ': ' + counts + ' stops'}),
+                    counts ? null : el('p', {class: 'text-warning', text: 'Nothing reachable at this hour. Try a time during the day.'}),
                     scale, labels,
                     el('p', {class: 'muted', style: 'margin-top:10px', text: 'Furthest:'}),
                     el('table', {}, [el('tbody', {}, furthest.map(function (s) {
@@ -494,6 +517,7 @@
         document.getElementById('minutes-label').hidden = next !== 'reach';
         if (next === 'live') {
             reach = null;
+            areaLayer.clearLayers();
             if (origin) { map.removeLayer(origin); origin = null; }
             drawStations();
             loadVehicles();
@@ -507,9 +531,9 @@
     document.querySelectorAll('[data-mode]').forEach(function (b) {
         b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); });
     });
-    document.getElementById('minutes').addEventListener('change', function () {
-        if (origin) startReach([origin.getLatLng().lat, origin.getLatLng().lng]);
-    });
+    function again() { if (origin) startReach([origin.getLatLng().lat, origin.getLatLng().lng]); }
+    document.getElementById('minutes').addEventListener('change', again);
+    document.getElementById('leaving').addEventListener('change', again);
     document.getElementById('show-vehicles').addEventListener('change', loadVehicles);
 
     var moved = null;

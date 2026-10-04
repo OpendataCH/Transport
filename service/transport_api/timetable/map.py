@@ -19,8 +19,18 @@ from fastapi.responses import JSONResponse
 from .. import errors
 from . import db
 from .connections import Motis, get_motis
+from .connections import _place as router_place
 
 router = APIRouter(prefix="/map", tags=["map"])
+
+# The station nearest a point that has departures, for a start the router
+# cannot reach on foot (a router without a street network).
+NEAREST_SERVED = """
+SELECT idx, id, name, lat, lon FROM gtfs.station
+WHERE departures > 0
+ORDER BY pos <-> point($2 * 0.6845, $1)
+LIMIT 1
+"""
 
 STATIONS = """
 SELECT id, name, lat, lon, mode, departures FROM gtfs.station
@@ -164,6 +174,7 @@ async def vehicles(
 @router.get("/reachable", summary="Stops reachable from a point within some minutes")
 async def reachable(
     motis: Annotated[Motis, Depends(get_motis)],
+    pool: Annotated[asyncpg.Pool, Depends(db.get_pool)],
     x: Annotated[float, Query(description="Latitude of the start.")],
     y: Annotated[float, Query(description="Longitude of the start.")],
     minutes: Annotated[int, Query(ge=5, le=180)] = 60,
@@ -179,6 +190,14 @@ async def reachable(
         if time_:
             params["time"] = time_
         answer = await motis.get("/api/v6/one-to-all", params)
+        start = None
+        if not answer.get("all"):
+            # Nothing on foot from the point: start at the nearest station.
+            rows = await db.fetch(pool, NEAREST_SERVED, x, y)
+            if rows:
+                start = rows[0]
+                params["one"] = await router_place(pool, start)
+                answer = await motis.get("/api/v6/one-to-all", params)
         best: dict[str, dict] = {}
         for item in answer.get("all", []):
             place = item.get("place") or {}
@@ -195,7 +214,10 @@ async def reachable(
                     "minutes": duration,
                     "transfers": item.get("k"),
                 }
-        return {"from": {"lat": x, "lon": y}, "minutes": minutes, "stops": list(best.values())}
+        origin = {"lat": x, "lon": y}
+        if start is not None:
+            origin = {key: start[key] for key in ("lat", "lon", "id", "name")}
+        return {"from": origin, "minutes": minutes, "stops": list(best.values())}
 
     key = ("reachable", x, y, minutes, time_ or int(time.time() // REACHABLE_SECONDS))
     return _cacheable(await _cached(key, REACHABLE_SECONDS, produce), REACHABLE_SECONDS)
