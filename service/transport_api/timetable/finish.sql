@@ -8,19 +8,29 @@ CREATE UNIQUE INDEX ON gtfs_next.trips (trip_id);
 CREATE INDEX ON gtfs_next.stops (station);
 
 -- What /v2/locations searches: one row per station. `departures` ranks the
--- busy Bern above a quiet stop of the same name; `mode` is the icon, the most
--- prominent means of transport that calls there.
+-- busy Bern above a quiet stop of the same name: calls per day over the
+-- window, each trip weighted by the days it runs - a trip that runs daily is
+-- one row in stop_times, a bus with many calendar variants many rows, and
+-- counting rows ranked Geneva buses above the Zürich tram. `mode` is the
+-- icon, the most prominent means of transport that calls there.
 CREATE TABLE gtfs_next.station AS
-WITH calls AS (
-    SELECT s.station, t.mode, count(*) AS n
+WITH days AS (
+    SELECT service, count(*) AS n FROM gtfs_next.service_dates GROUP BY service
+),
+window_days AS (
+    SELECT greatest(count(DISTINCT day), 1) AS n FROM gtfs_next.service_dates
+),
+calls AS (
+    SELECT s.station, t.mode, count(*) * max(d.n) AS n
     FROM gtfs_next.stop_times st
     JOIN gtfs_next.stops s ON s.idx = st.stop
     JOIN gtfs_next.trips t ON t.idx = st.trip
-    GROUP BY s.station, t.mode
+    JOIN days d ON d.service = t.service
+    GROUP BY s.station, t.mode, t.service
 ),
 ranked AS (
     SELECT station,
-           sum(n) AS departures,
+           (sum(n) / (SELECT n FROM window_days))::integer AS departures,
            (array_agg(mode ORDER BY CASE mode
                 WHEN 'train' THEN 1 WHEN 'tram' THEN 2 WHEN 'ship' THEN 3
                 WHEN 'cableway' THEN 4 WHEN 'bus' THEN 5 ELSE 6 END))[1] AS mode
