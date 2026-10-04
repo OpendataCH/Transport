@@ -90,7 +90,7 @@ ROUTES = [
     ("Biel/Bienne", "Magglingen/Macolin", {}),
     # In town: tram, metro, bus
     ("Zürich, Bellevue", "Zürich, Paradeplatz", {}),
-    ("Bern, Bahnhof", "Bern, Bärengraben", {}),
+    ("Bern, Bahnhof", "Bern, Bärenpark", {}),
     ("Basel, Barfüsserplatz", "Basel, Messeplatz", {}),
     ("Genève, gare Cornavin", "Genève, Plainpalais", {}),
     ("Lausanne, Flon", "Lausanne, Ouchy-Olympique", {}),
@@ -257,6 +257,11 @@ def verdict(r: dict) -> str:
         return "same best, others differ"
     if r["earliest_arrival"][0] == r["earliest_arrival"][1]:
         return "same earliest arrival"
+    # Times only, so a connection past midnight compares as earlier; the
+    # minutes between the two arrivals decide, within half a day.
+    one, two = (int(t[:2]) * 60 + int(t[3:]) for t in r["earliest_arrival"])
+    if 0 < (one - two) % 1440 < 720:
+        return "different, v2 arrives earlier"
     if r["fastest"][1] <= r["fastest"][0]:
         return "different, v2 as fast or faster"
     return "different, v1 faster"

@@ -173,6 +173,7 @@ async def _station(pool: asyncpg.Pool, wanted: str) -> asyncpg.Record | None:
         f"{pattern}%",
         f"% {pattern}%",
         1,
+        wanted.strip().lower(),
     )
     return rows[0] if rows else None
 

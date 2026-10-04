@@ -31,13 +31,18 @@ first_day() { date -u -d "@$(( $(date +%s) - ${MOTIS_PAST_DAYS:-1} * 86400 ))" +
 
 feed() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
 osm() { if [ -n "${MOTIS_OSM:-}" ] && [ -s "$MOTIS_OSM" ]; then echo "$MOTIS_OSM"; fi; }
-# What the router should be built from: the window, and the street network
-# with its size when there is one.
+# Raise when the configuration written below changes: a running router
+# rebuilds only when what it is built from changes, and this is part of it.
+CONFIG_REVISION=2
+
+# What the router should be built from: the window, the street network with
+# its size when there is one, and the configuration.
 wanted() {
     f=$(feed)
     [ -n "$f" ] || return 0
     o=$(osm)
-    if [ -n "$o" ]; then echo "$f+osm$(wc -c < "$o" | tr -d ' ')"; else echo "$f"; fi
+    if [ -n "$o" ]; then f="$f+osm$(wc -c < "$o" | tr -d ' ')"; fi
+    echo "$f+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
 
@@ -61,6 +66,10 @@ build() {
         echo "  railviz: false"
         echo "  with_shapes: false"
         echo "  update_interval: 60"
+        # Longer than the default 15: MOTIS leaves out a walk of exactly the
+        # limit, and the timetable has 15-minute ones (Trübsee to the chair
+        # lift to the Jochpass).
+        echo "  max_footpath_length: 20"
         if [ -n "$street" ]; then
             # Keep the timetable's own transfers; add street walks where it has none.
             echo "  extend_missing_footpaths: true"

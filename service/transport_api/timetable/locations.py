@@ -22,7 +22,9 @@ router = APIRouter()
 
 LIMIT = 10
 
-# Exact name first. Then every name that contains the query, ranked by how
+# The name exactly as typed first, punctuation included: «Winterthur, Seen»
+# is the bus stop, «Winterthur Seen» the station, and the comma says which.
+# Then the exact name after normalising. Then every name that contains the query, ranked by how
 # busy it is - a match at the start of the name counting four times, one at the
 # start of a later word once, one inside a word a fifth. That keeps Tesserete,
 # Stazione above Lugano, Via Tesserete and Zürich, Bellevue above a quiet
@@ -35,7 +37,8 @@ SELECT id, name, lat, lon, mode
 FROM (SELECT *, departures * CASE mode WHEN 'train' THEN 5 ELSE 1 END AS weight
       FROM gtfs.station) station
 WHERE name_norm LIKE $2 OR name_norm % $1
-ORDER BY name_norm = $1 DESC,
+ORDER BY lower(name) = $6 DESC,
+         name_norm = $1 DESC,
          CASE WHEN name_norm LIKE $3 THEN weight * 4.0
               WHEN name_norm LIKE $4 THEN weight * 1.0
               WHEN name_norm LIKE $2 THEN weight * 0.2
@@ -94,7 +97,14 @@ async def _by_name(pool: asyncpg.Pool, query: str) -> list[dict]:
         return []
     pattern = _like_escape(term)
     rows = await db.fetch(
-        pool, BY_NAME, term, f"%{pattern}%", f"{pattern}%", f"% {pattern}%", LIMIT
+        pool,
+        BY_NAME,
+        term,
+        f"%{pattern}%",
+        f"{pattern}%",
+        f"% {pattern}%",
+        LIMIT,
+        query.strip().lower(),
     )
     return [location(r["id"], r["name"], r["lat"], r["lon"], icon=r["mode"]) for r in rows]
 

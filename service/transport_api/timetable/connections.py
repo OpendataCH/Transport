@@ -18,7 +18,7 @@ import asyncpg
 import httpx
 from fastapi import APIRouter, Depends, Query, Request
 
-from .. import errors
+from .. import errors, settings
 from ..connections import (
     DEFAULT_LIMIT,
     DEFAULT_PAGE,
@@ -169,6 +169,8 @@ async def search_connections(
         # Walking all the way is not a connection /v1 has ever offered.
         "directModes": "",
         "detailedTransfers": "false",
+        "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
+        "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
     }
     if stops_via:
         params["via"] = ",".join([await _place(pool, s) for s in stops_via])

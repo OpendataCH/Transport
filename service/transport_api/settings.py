@@ -83,3 +83,9 @@ MOTIS_URL = os.environ.get("MOTIS_URL") or None
 # it into GTFS_CACHE/osm/ and renews it after OSM_MAX_AGE_DAYS.
 OSM_URL = os.environ.get("OSM_URL") or None
 OSM_MAX_AGE_DAYS = int(os.environ.get("OSM_MAX_AGE_DAYS", "30"))
+
+# How long a connection may walk from where it starts to its first vehicle,
+# and from its last vehicle to where it ends. The router's own default is
+# 15 minutes, which loses connections search.ch finds with a 16-minute walk
+# at either end (Yverdon-les-Bains to Philosophes).
+MOTIS_MAX_WALK_SECONDS = int(os.environ.get("MOTIS_MAX_WALK_SECONDS", "1200"))
