@@ -81,16 +81,19 @@ async def refresh_timetable(connection: asyncpg.Connection, realtime_version: st
 
 async def import_feed(path: Path) -> None:
     """Run the importer as a child process; its log lines go to ours."""
+    # The child also writes the loaded window for the router and points
+    # docker/motis-run.sh at it, so that both answer from the same timetable.
     process = await asyncio.create_subprocess_exec(
-        sys.executable, "-m", "transport_api.timetable.importer", str(path)
+        sys.executable,
+        "-m",
+        "transport_api.timetable.importer",
+        str(path),
+        "--window-feed",
+        settings.GTFS_CACHE,
     )
     code = await process.wait()
     if code != 0:
         raise RuntimeError(f"the import of {path.name} exited with {code}")
-    # The router (docker/motis-run.sh) follows this file, so that it routes
-    # on the same timetable the database holds.
-    marker = Path(settings.GTFS_CACHE) / "CURRENT"
-    marker.write_text(path.name + "\n")
 
 
 async def run() -> None:

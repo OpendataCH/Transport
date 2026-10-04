@@ -159,3 +159,31 @@ def test_modes_translate_the_old_names():
     assert board._modes([]) is None
     assert board._modes(["ice_tgv_rj", "s_sn_r", "tramway"]) == ["train", "tram"]
     assert board._modes(["nonsense"]) is None
+
+
+def test_window_feed_keeps_whole_trips_of_the_window_only(tmp_path):
+    source = write_feed(tmp_path)
+    target = tmp_path / "window.zip"
+    # Monday to Wednesday: no Sunday, and "extra" runs on the Wednesday.
+    counts = importer.write_window_feed(source, target, TODAY, TODAY + timedelta(days=2))
+
+    with zipfile.ZipFile(target) as feed:
+        trips = {r["trip_id"] for r in importer.rows(feed, "trips.txt")}
+        stop_times = list(importer.rows(feed, "stop_times.txt"))
+        stops = list(importer.rows(feed, "stops.txt"))
+
+    assert trips == {"t-morning", "t-night", "t-extra", "t-headway"}
+    # Every stop time of a kept trip is kept; the Sunday trip's are gone.
+    assert sum(r["trip_id"] == "t-morning" for r in stop_times) == 3
+    assert not any(r["trip_id"] == "t-sunday" for r in stop_times)
+    # Stops are not cut, and the frequencies of kept trips stay.
+    assert len(stops) == 6
+    assert counts["frequencies.txt"] == 1
+
+
+def test_publish_window_points_the_router_at_it(tmp_path):
+    source = write_feed(tmp_path)
+    counts = {"version": "20261001", "first": TODAY, "last": TODAY + timedelta(days=14)}
+    target = importer.publish_window(source, tmp_path, counts)
+    assert target.name == "window_20261001_20261005.zip"
+    assert (tmp_path / "CURRENT").read_text().strip() == target.name

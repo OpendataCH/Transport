@@ -237,10 +237,104 @@ def download(url: str, cache: Path) -> Path:
     partial.rename(path)
     # A feed is a few hundred megabytes. The one before the newest stays: it
     # may still be the loaded one, waiting for real time to move on.
-    for old in sorted(cache.glob("*.zip"), key=lambda p: p.stat().st_mtime)[:-2]:
+    feeds = [p for p in cache.glob("*.zip") if not p.name.startswith(WINDOW_PREFIX)]
+    for old in sorted(feeds, key=lambda p: p.stat().st_mtime)[:-2]:
         old.unlink()
     log.info("downloaded %s (%d MB)", name, path.stat().st_size >> 20)
     return path
+
+
+# --------------------------------------------------------------------------
+# The window, for the router
+# --------------------------------------------------------------------------
+
+WINDOW_PREFIX = "window_"
+
+# Files of the feed copied whole; the others are cut to the trips that run.
+WHOLE = ("agency.txt", "routes.txt", "stops.txt", "feed_info.txt")
+
+
+def write_window_feed(source: Path, target: Path, first: date, last: date) -> dict[str, int]:
+    """A GTFS zip with only the trips that run between `first` and `last`.
+
+    For the router: MOTIS reads the whole feed into memory before it looks at
+    any date, and the year's 42 million stop times need more than 3.5 GB to
+    import - more than either server can spare. The window that the database
+    holds is a quarter of that. Written to a temporary name and renamed, so
+    that the router never sees half a file.
+    """
+    low, high = first.strftime("%Y%m%d"), last.strftime("%Y%m%d")
+    with zipfile.ZipFile(source) as feed:
+        services = set(service_days(feed, first, last))
+        trips = {row["trip_id"] for row in rows(feed, "trips.txt") if row["service_id"] in services}
+
+        # Each test gets the row and the column positions: building a dict per
+        # row would cost a minute over 42 million stop times.
+        def trip_ok(row: list, col: dict, *names: str) -> bool:
+            return all(
+                name not in col or row[col[name]] in ("",) or row[col[name]] in trips
+                for name in names
+            )
+
+        keep = {
+            "calendar.txt": lambda r, c: r[c["service_id"]] in services,
+            "calendar_dates.txt": lambda r, c: (
+                r[c["service_id"]] in services and low <= r[c["date"]] <= high
+            ),
+            "trips.txt": lambda r, c: r[c["trip_id"]] in trips,
+            "stop_times.txt": lambda r, c: r[c["trip_id"]] in trips,
+            "frequencies.txt": lambda r, c: r[c["trip_id"]] in trips,
+            "transfers.txt": lambda r, c: trip_ok(r, c, "from_trip_id", "to_trip_id"),
+        }
+        partial = target.with_name(target.name + ".part")
+        counts = {}
+        with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as out:
+            for name in feed.namelist():
+                if name not in WHOLE and name not in keep:
+                    continue
+                counts[name] = _copy_rows(feed, out, name, keep.get(name))
+    partial.rename(target)
+    return counts
+
+
+def _copy_rows(feed: zipfile.ZipFile, out: zipfile.ZipFile, name: str, keep) -> int:
+    kept = 0
+    with feed.open(name) as raw, out.open(name, "w") as sink:
+        reader = csv.reader(io.TextIOWrapper(raw, encoding="utf-8-sig", newline=""))
+        text = io.TextIOWrapper(sink, encoding="utf-8", newline="")
+        writer = csv.writer(text, quoting=csv.QUOTE_ALL)
+        header = next(reader)
+        col = {name: index for index, name in enumerate(header)}
+        writer.writerow(header)
+        for row in reader:
+            if keep is None or keep(row, col):
+                writer.writerow(row)
+                kept += 1
+        text.flush()
+        text.detach()
+    return kept
+
+
+def window_feed_name(version: str | None, first: date) -> str:
+    """Changes with the feed and with the window, so the router follows both."""
+    return f"{WINDOW_PREFIX}{version or 'feed'}_{first:%Y%m%d}.zip"
+
+
+def publish_window(source: Path, directory: Path, counts: dict) -> Path:
+    """Write the window the database now holds, and point the router at it.
+
+    The router (docker/motis-run.sh) follows `CURRENT`; it is written last,
+    after the zip is complete. The window before stays, in case the router is
+    still importing it; older ones go.
+    """
+    target = directory / window_feed_name(counts.get("version"), counts["first"])
+    write_window_feed(source, target, counts["first"], counts["last"])
+    (directory / "CURRENT").write_text(target.name + "\n")
+    windows = sorted(directory.glob(WINDOW_PREFIX + "*.zip"), key=lambda p: p.stat().st_mtime)
+    for old in windows[:-2]:
+        old.unlink()
+    log.info("window for the router: %s", target.name)
+    return target
 
 
 # --------------------------------------------------------------------------
@@ -411,6 +505,9 @@ async def load(connection: asyncpg.Connection, path: Path, today: date, days: in
 
     counts = {
         "feed": path.name,
+        "version": info.get("feed_version"),
+        "first": first,
+        "last": last,
         "window": f"{first}..{last}",
         "trips": len(trips),
         "stop_times": stop_times,
@@ -454,18 +551,25 @@ async def current_feed(connection: asyncpg.Connection) -> asyncpg.Record | None:
     return await connection.fetchrow("SELECT * FROM gtfs.feed_info")
 
 
-async def main(source: str | None) -> None:
+async def main(source: str | None, window_dir: str | None) -> None:
     path = Path(source) if source else download(settings.GTFS_URL, Path(settings.GTFS_CACHE))
     connection = await asyncpg.connect(settings.DATABASE_URL)
     try:
-        await load(connection, path, datetime.now(ZURICH).date(), settings.GTFS_DAYS)
+        counts = await load(connection, path, datetime.now(ZURICH).date(), settings.GTFS_DAYS)
     finally:
         await connection.close()
+    if window_dir:
+        publish_window(path, Path(window_dir), counts)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("feed", nargs="?", help="A GTFS zip; default: download the newest.")
+    parser.add_argument(
+        "--window-feed",
+        metavar="DIR",
+        help="Also write the loaded window as a GTFS zip for the router, and CURRENT.",
+    )
     arguments = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    asyncio.run(main(arguments.feed))
+    asyncio.run(main(arguments.feed, arguments.window_feed))

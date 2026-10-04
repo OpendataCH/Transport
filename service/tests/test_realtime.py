@@ -190,19 +190,21 @@ class FakeProcess:
         return self.code
 
 
-@pytest.mark.parametrize(("code", "marked"), [(0, True), (1, False)])
-def test_the_router_is_told_only_about_a_successful_import(monkeypatch, tmp_path, code, marked):
+@pytest.mark.parametrize("code", [0, 1])
+def test_the_import_runs_as_a_child_that_also_writes_the_window(monkeypatch, tmp_path, code):
+    calls = []
+
     async def spawn(*args):
+        calls.append(args)
         return FakeProcess(code)
 
     monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
     monkeypatch.setattr(ingest.asyncio, "create_subprocess_exec", spawn)
     feed_path = tmp_path / "gtfs_20261002.zip"
 
-    if marked:
+    if code == 0:
         asyncio.run(ingest.import_feed(feed_path))
-        assert (tmp_path / "CURRENT").read_text().strip() == "gtfs_20261002.zip"
     else:
         with pytest.raises(RuntimeError):
             asyncio.run(ingest.import_feed(feed_path))
-        assert not (tmp_path / "CURRENT").exists()
+    assert calls[0][-3:] == (str(feed_path), "--window-feed", str(tmp_path))

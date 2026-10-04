@@ -33,7 +33,7 @@ build() {
         echo "  port: 8080"
         echo "timetable:"
         echo "  first_day: TODAY"
-        echo "  num_days: 365"
+        echo "  num_days: 30"
         echo "  railviz: false"
         echo "  with_shapes: false"
         echo "  update_interval: 60"

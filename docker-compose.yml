@@ -8,6 +8,7 @@
 services:
   service:
     build: ./service
+    mem_limit: 1g
     ports:
       - "8000:8000"
     environment:
@@ -24,6 +25,7 @@ services:
   # every 30 seconds when OTD_API_KEY is set in .env.
   ingest:
     build: ./service
+    mem_limit: 1500m
     command: ["python", "-m", "transport_api.timetable.ingest"]
     # The image's check asks the API on port 8000, which this process is not.
     healthcheck:
@@ -42,6 +44,9 @@ services:
   # docker/motis-run.sh. Its port is published for looking at it directly.
   motis:
     image: ghcr.io/motis-project/motis:2.11.3
+    # The import of the window peaks near 2 GB; a limit keeps a bad feed
+    # from pushing the whole host into the OOM killer, as the full year did.
+    mem_limit: 3g
     entrypoint: ["sh", "/motis-run.sh"]
     environment:
       OTD_API_KEY: ${OTD_API_KEY:-}
@@ -54,6 +59,7 @@ services:
 
   db:
     image: postgres:18-alpine
+    mem_limit: 1500m
     environment:
       POSTGRES_USER: transport
       POSTGRES_PASSWORD: transport
