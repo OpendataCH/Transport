@@ -199,8 +199,8 @@
             <span class="spacer"></span>
             <label class="api">API
                 <select class="form-control" name="api">
-                    <option value="v1">v1 (search.ch)</option>
                     <option value="v2">v2 (opentransportdata.swiss)</option>
+                    <option value="v1">v1 (search.ch)</option>
                 </select>
             </label>
         </div>
@@ -259,20 +259,26 @@
     }
     function clock(value) { var d = parse(value); return d ? hhmm(d) : ''; }
 
-    // "00d01:34:00" -> "1h 34′", "00d00:45:00" -> "45′"
+    // "00d01:34:00" -> "1 h 34 min", "00d00:45:00" -> "45 min"
     function duration(value) {
         var m = /^(\d+)d(\d\d):(\d\d)/.exec(value || '');
         if (!m) return '';
         var hours = parseInt(m[1], 10) * 24 + parseInt(m[2], 10);
-        return hours ? hours + 'h ' + m[3] + '′' : parseInt(m[3], 10) + '′';
+        return hours ? hours + ' h ' + m[3] + ' min' : parseInt(m[3], 10) + ' min';
     }
 
     function minutesBetween(a, b) {
         return Math.round((parse(b) - parse(a)) / 60000);
     }
 
+    // The walk's own duration when the API gives one, else its timetable span.
+    function walkMinutes(section) {
+        if (section.walk && section.walk.duration) return Math.round(section.walk.duration / 60);
+        return minutesBetween(section.departure.departure, section.arrival.arrival);
+    }
+
     function delay(minutes) {
-        return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes + '′'}) : null;
+        return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes}) : null;
     }
 
     function platform(stop) {
@@ -309,7 +315,7 @@
             var dep = section.departure, arr = section.arrival, journey = section.journey;
             var walk = !journey;
             var ride = walk
-                ? 'Walk' + (section.walk && section.walk.duration ? ' · ' + Math.round(section.walk.duration / 60) + '′' : '')
+                ? 'Walk · ' + walkMinutes(section) + ' min'
                 : null;
             var item = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
                 el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
@@ -344,9 +350,9 @@
                     (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
                 );
                 list.appendChild(el('li', {class: 'transfer'}, [
-                    'Change · ' + planned + '′',
+                    'Change · ' + planned + ' min',
                     expected !== planned
-                        ? el('span', {class: 'late', text: ' (' + expected + '′ with delays)'})
+                        ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'})
                         : null
                 ]));
             }
@@ -474,7 +480,7 @@
         var params = new URLSearchParams();
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
-        if (api() === 'v2') params.set('api', 'v2');
+        if (api() === 'v1') params.set('api', 'v1');
         history.replaceState({}, '', '?' + params);
     }
 
@@ -544,7 +550,7 @@
     if (!field('date').value) setNow();
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
-    field('api').value = params.get('api') === 'v2' ? 'v2' : 'v1';
+    field('api').value = params.get('api') === 'v1' ? 'v1' : 'v2';
 
     if (field('from').value && field('to').value) {
         search();
