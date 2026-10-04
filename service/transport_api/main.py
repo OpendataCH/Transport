@@ -4,7 +4,8 @@ It answers **`/v1`**, the contract tens of thousands of unattended clients
 speak, written to be indistinguishable from the PHP application it replaced,
 and **`/v2`**: the same parameters and the same JSON, but locations and station
 boards read from our own copy of the national timetable (`timetable/`)
-instead of search.ch. `/v2/connections` still asks search.ch.
+instead of search.ch, and connections come from our own router (MOTIS) when
+MOTIS_URL is set - otherwise from search.ch.
 
 Stage S6 is what made `/v1` the documented prefix here. Until then this service
 refused the whole `/v1` surface on purpose, so that a routing mistake could not
@@ -21,6 +22,7 @@ from datetime import datetime
 from typing import Literal
 from zoneinfo import ZoneInfo
 
+import httpx
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
@@ -40,6 +42,7 @@ from . import (
     upstream,
 )
 from .models import ApiInfo
+from .timetable import connections as timetable_connections
 from .timetable import db as timetable_db
 from .timetable import locations as timetable_locations
 from .timetable import stationboard as timetable_stationboard
@@ -59,6 +62,11 @@ async def lifespan(app: FastAPI):
     """One connection pool for the life of the process, not one per request."""
     app.state.http = upstream.build_client()
     app.state.timetable = await timetable_db.connect()
+    app.state.motis = (
+        httpx.AsyncClient(base_url=settings.MOTIS_URL, timeout=settings.UPSTREAM_TIMEOUT)
+        if settings.MOTIS_URL
+        else None
+    )
     redis = statistics.connect()
     app.state.statistics = statistics.Statistics(redis) if redis is not None else None
     try:
@@ -67,6 +75,8 @@ async def lifespan(app: FastAPI):
         await app.state.http.aclose()
         if app.state.timetable is not None:
             await app.state.timetable.close()
+        if app.state.motis is not None:
+            await app.state.motis.aclose()
         if redis is not None:
             await redis.aclose()
 
@@ -167,10 +177,14 @@ for prefix, api_version in API_VERSIONS.items():
     if prefix == PREFIX:
         router.include_router(locations.router, tags=["locations"])
         router.include_router(stationboard.router, tags=["stationboard"])
+        router.include_router(connections.router, tags=["connections"])
     else:
         router.include_router(timetable_locations.router, tags=["locations"])
         router.include_router(timetable_stationboard.router, tags=["stationboard"])
-    router.include_router(connections.router, tags=["connections"])
+        router.include_router(
+            timetable_connections.router if settings.MOTIS_URL else connections.router,
+            tags=["connections"],
+        )
     app.include_router(router, include_in_schema=prefix == PREFIX)
 
 

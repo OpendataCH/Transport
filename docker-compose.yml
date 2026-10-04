@@ -14,9 +14,11 @@ services:
       SERVICE_VERSION: dev
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql://transport:transport@db:5432/transport
+      MOTIS_URL: http://motis:8080
     depends_on:
       - redis
       - db
+      - motis
 
   # The timetable loader: the GTFS feed when a new one appears, real time
   # every 30 seconds when OTD_API_KEY is set in .env.
@@ -35,6 +37,20 @@ services:
       - ./var/gtfs:/var/cache/gtfs
     depends_on:
       - db
+
+  # The router behind /v2/connections, on the feed the database holds; see
+  # docker/motis-run.sh. Its port is published for looking at it directly.
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    entrypoint: ["sh", "/motis-run.sh"]
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      - ./docker/motis-run.sh:/motis-run.sh:ro
+      - ./var/gtfs:/gtfs:ro
+      - motisdata:/data
+    ports:
+      - "8081:8080"
 
   db:
     image: postgres:18-alpine
@@ -66,3 +82,4 @@ services:
 
 volumes:
   timetable:
+  motisdata:

@@ -235,10 +235,10 @@ def download(url: str, cache: Path) -> Path:
             for chunk in response.iter_bytes(1 << 20):
                 out.write(chunk)
     partial.rename(path)
-    # One feed is a few hundred megabytes; the previous ones are not needed.
-    for old in cache.glob("*.zip"):
-        if old != path:
-            old.unlink()
+    # A feed is a few hundred megabytes. The one before the newest stays: it
+    # may still be the loaded one, waiting for real time to move on.
+    for old in sorted(cache.glob("*.zip"), key=lambda p: p.stat().st_mtime)[:-2]:
+        old.unlink()
     log.info("downloaded %s (%d MB)", name, path.stat().st_size >> 20)
     return path
 

@@ -67,3 +67,7 @@ GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
 # Without a key the ingest loop loads the timetable and skips real time.
 GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
 OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
+
+# The router behind /v2/connections (MOTIS, on the same feed), e.g.
+# `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
+MOTIS_URL = os.environ.get("MOTIS_URL") or None

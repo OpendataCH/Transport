@@ -87,6 +87,10 @@ async def import_feed(path: Path) -> None:
     code = await process.wait()
     if code != 0:
         raise RuntimeError(f"the import of {path.name} exited with {code}")
+    # The router (docker/motis-run.sh) follows this file, so that it routes
+    # on the same timetable the database holds.
+    marker = Path(settings.GTFS_CACHE) / "CURRENT"
+    marker.write_text(path.name + "\n")
 
 
 async def run() -> None:

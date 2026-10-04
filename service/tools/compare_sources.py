@@ -60,6 +60,20 @@ BOARDS = [
 ]
 
 
+CONNECTIONS = [
+    {"from": "Bern", "to": "Zürich HB"},
+    {"from": "Bern", "to": "Grindelwald"},
+    {"from": "Lausanne", "to": "Zermatt"},
+    {"from": "Basel SBB", "to": "Lugano"},
+    {"from": "Genève", "to": "St. Gallen"},
+    {"from": "Luzern", "to": "Engelberg"},
+    {"from": "Zürich HB", "to": "Chur"},
+    {"from": "Bern", "to": "Zürich HB", "isArrivalTime": "1"},
+    {"from": "Basel SBB", "to": "Lugano", "via[]": "Luzern"},
+    {"from": "Bern, Zytglogge", "to": "Bern, Wankdorf Bahnhof"},
+]
+
+
 def get(base: str, path: str, params: dict) -> dict | None:
     url = f"{base.rstrip('/')}{path}?{urllib.parse.urlencode(params)}"
     request = urllib.request.Request(url, headers={"User-Agent": "transport-compare-sources"})
@@ -191,6 +205,49 @@ def compare_boards(report: Report, v1: str, v2: str, when: str, pause: float) ->
         report.note(f"  of the matched, {name} differs in {count}")
 
 
+def connection_key(connection: dict) -> tuple:
+    return (connection["from"]["departure"], connection["to"]["arrival"])
+
+
+def compare_connections(report: Report, v1: str, v2: str, when: str, pause: float) -> None:
+    print(f"\n## Connections at {when}\n")
+    day, clock = when.split(" ")
+    totals = Counter()
+    mismatched = Counter()
+    for params in CONNECTIONS:
+        query = {"date": day, "time": clock, "limit": "4", **params}
+        one = get(v1, "/v1/connections", query)
+        two = get(v2, "/v2/connections", query)
+        report.compare_shape(one, two)
+        a = {connection_key(c): c for c in (one or {}).get("connections", [])}
+        b = {connection_key(c): c for c in (two or {}).get("connections", [])}
+        both = a.keys() & b.keys()
+        totals["v1"] += len(a)
+        totals["v2"] += len(b)
+        totals["matched"] += len(both)
+        for key in both:
+            for name in ("products", "transfers", "duration"):
+                if a[key][name] != b[key][name]:
+                    mismatched[name] += 1
+                    if mismatched[name] <= 4:
+                        report.note(f"    {name}: v1 {a[key][name]!r} v2 {b[key][name]!r}")
+            if a[key]["from"]["platform"] != b[key]["from"]["platform"]:
+                mismatched["departure platform"] += 1
+        label = ", ".join(f"{k}={v}" for k, v in params.items())
+        report.note(f"{label}: v1 {len(a)}, v2 {len(b)}, same departure+arrival {len(both)}")
+        only_one = sorted(k[0][11:16] + "-" + k[1][11:16] for k in a.keys() - b.keys())
+        only_two = sorted(k[0][11:16] + "-" + k[1][11:16] for k in b.keys() - a.keys())
+        if only_one or only_two:
+            report.note(f"    only v1: {only_one}  only v2: {only_two}")
+        time.sleep(pause)
+    report.note(
+        f"\nConnections: v1 {totals['v1']}, v2 {totals['v2']}, same departure and arrival "
+        f"{totals['matched']}"
+    )
+    for name, count in mismatched.most_common():
+        report.note(f"  of the matched, {name} differs in {count}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--v1", default="https://transport.opendata.ch")
@@ -206,6 +263,7 @@ def main() -> int:
     report = Report()
     compare_locations(report, arguments.v1, arguments.v2, arguments.pause)
     compare_boards(report, arguments.v1, arguments.v2, arguments.when, arguments.pause)
+    compare_connections(report, arguments.v1, arguments.v2, arguments.when, arguments.pause)
 
     print("\n## Shape differences (field, kind, how often)\n")
     if not report.shape:
