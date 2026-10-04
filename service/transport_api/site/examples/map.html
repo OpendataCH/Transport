@@ -239,19 +239,32 @@
     // --- Stations ----------------------------------------------------------
 
     var stations = [];          // [id, name, lat, lon, mode, departures]
+    // Vehicles draw above stations, each on its own canvas.
+    map.createPane('vehicles').style.zIndex = 450;
+    var stationCanvas = L.canvas({padding: 0.2});
+    var vehicleCanvas = L.canvas({pane: 'vehicles', padding: 0.2});
     var stationLayer = L.layerGroup().addTo(map);
 
     // How busy a station must be to be drawn at a zoom: the whole country
     // shows its hubs, a town every stop.
     function threshold(zoom) {
-        if (zoom < 8.5) return 400;
-        if (zoom < 9.5) return 150;
-        if (zoom < 10.5) return 50;
-        if (zoom < 11.5) return 15;
+        if (zoom < 8.5) return 1500;
+        if (zoom < 9.5) return 500;
+        if (zoom < 10.5) return 200;
+        if (zoom < 11.5) return 80;
+        if (zoom < 12.5) return 25;
+        if (zoom < 13.5) return 5;
         return 0;
     }
-    function radius(departures, zoom) {
-        return Math.max(2.5, Math.min(9, Math.log(departures + 1) * (zoom > 11 ? 1.1 : 0.9)));
+    // What decides whether a station is drawn when zoomed out: trains count
+    // five times, as in the name search; lifts that run continuously count
+    // for little, their many runs are one way up a mountain.
+    var WEIGHT = {train: 5, tram: 1, bus: 1, ship: 1, cableway: 0.1};
+    function weight(s) { return s[5] * (WEIGHT[s[4]] || 1); }
+
+    function radius(score, zoom) {
+        var r = Math.log(score + 1) * (zoom < 10 ? 0.75 : 0.55);
+        return Math.max(2.5, Math.min(zoom < 10 ? 8 : 6, r));
     }
 
     var reach = null;           // {stops by id, minutes} while reachability is shown
@@ -262,15 +275,18 @@
         var bounds = map.getBounds().pad(0.1);
         var floor = threshold(zoom);
         stations.forEach(function (s) {
-            if (s[5] < floor || !bounds.contains([s[2], s[3]])) return;
+            if (weight(s) < floor || !bounds.contains([s[2], s[3]])) return;
             var colour = MODE_COLOURS[s[4]] || MODE_COLOURS.bus;
-            var fill = 0.85;
+            var fill = zoom < 11 ? 0.85 : 0.2;
             if (reach) {
                 var hit = reach.stops[s[0]];
                 if (!hit) { colour = '#9aa0a6'; fill = 0.25; } else { colour = reachColour(hit.minutes, reach.minutes); }
             }
+            // Rings when zoomed in, so that the vehicles, which are solid, stand out.
             L.circleMarker([s[2], s[3]], {
-                radius: radius(s[5], zoom), color: '#fff', weight: 1, fillColor: colour, fillOpacity: fill
+                renderer: stationCanvas, radius: radius(weight(s), zoom),
+                color: zoom < 11 || reach ? '#fff' : colour, weight: zoom < 11 || reach ? 1 : 1.5,
+                fillColor: reach ? colour : (zoom < 11 ? colour : '#fff'), fillOpacity: reach ? 0.9 : (zoom < 11 ? fill : 0.9)
             }).bindTooltip(s[1] + (reach && reach.stops[s[0]] ? ' · ' + reach.stops[s[0]].minutes + ' min' : ''))
               .on('click', function () { openStation(s); })
               .addTo(stationLayer);
@@ -377,7 +393,8 @@
             var m = markers[s.trip];
             if (!m) {
                 m = L.circleMarker(at, {
-                    radius: s.kind === 'train' ? 6 : 5, color: '#fff', weight: 1.5,
+                    renderer: vehicleCanvas, pane: 'vehicles',
+                    radius: s.kind === 'train' ? 7 : 5.5, color: '#fff', weight: 2,
                     fillColor: MODE_COLOURS[s.kind], fillOpacity: 1
                 }).addTo(vehicleLayer);
                 m.on('click', function () { openTrip(m.segment); });
