@@ -1,0 +1,162 @@
+"""Timetable rows in the shapes of /v1.
+
+The shapes are /v1's, key for key, so that `tools/comparison.py` can hold the
+two side by side; see models.py. Where /v1 has a habit a client may lean on,
+the habit is kept and named. The values come from a different source and
+differ where the sources do - the operator is the GTFS agency name, not
+search.ch's abbreviation, and there are no addresses.
+"""
+
+from datetime import datetime, timedelta
+from typing import Any
+
+from ..mapping import ZURICH, iso
+
+
+def coordinate(lat: float | None, lon: float | None) -> dict:
+    """`x` is the latitude and `y` the longitude, as /v1 names them."""
+    if lat is None or lon is None:
+        return {"type": "WGS84", "x": None, "y": None}
+    return {"type": "WGS84", "x": round(lat, 6), "y": round(lon, 6)}
+
+
+def location(
+    id_: str | None,
+    name: str | None,
+    lat: float | None,
+    lon: float | None,
+    *,
+    distance: int | None = None,
+    icon: Any = ...,
+) -> dict:
+    """The location shape. `icon` is left out unless given, as /v1 does."""
+    entry: dict[str, Any] = {
+        "id": id_,
+        "name": name,
+        "score": None,
+        "coordinate": coordinate(lat, lon),
+        "distance": distance,
+    }
+    if icon is not ...:
+        entry["icon"] = icon
+    return entry
+
+
+def service_day_start(day) -> datetime:
+    """Where GTFS counts a service day's seconds from: noon minus twelve hours.
+
+    Midnight on most days; on the two days the clocks change it is an hour
+    off midnight, which is exactly what keeps the published times right.
+    """
+    return datetime(day.year, day.month, day.day, 12, tzinfo=ZURICH) - timedelta(hours=12)
+
+
+def moment(day, seconds: int) -> datetime:
+    return (service_day_start(day) + timedelta(seconds=seconds)).astimezone(ZURICH)
+
+
+def prognosis(
+    arrival: datetime | None,
+    departure: datetime | None,
+    arrival_delay: int | None,
+    departure_delay: int | None,
+    now: datetime,
+) -> dict:
+    """The real-time picture, built the way /v1 builds it from search.ch.
+
+    Delays are whole minutes. Only a positive delay moves the time - /v1
+    announces an early train as punctual. A delay for a time the stop does not
+    have is added to *now*: /v1 dates a missing scheduled time to the moment
+    of the request, and the head stop of a station board carries an arrival
+    prognosis because of it.
+    """
+    return {
+        "platform": None,
+        "arrival": _delayed(arrival, arrival_delay, now),
+        "departure": _delayed(departure, departure_delay, now),
+        "capacity1st": None,
+        "capacity2nd": None,
+    }
+
+
+def _delayed(scheduled: datetime | None, minutes: int | None, now: datetime) -> str | None:
+    if minutes is None:
+        return None
+    base = scheduled if scheduled is not None else now
+    return iso(base + timedelta(minutes=minutes) if minutes > 0 else base)
+
+
+def stop(
+    station: dict,
+    arrival: datetime | None,
+    departure: datetime | None,
+    platform: str | None,
+    arrival_delay: int | None,
+    departure_delay: int | None,
+    now: datetime,
+    *,
+    location_: dict | None = None,
+) -> dict:
+    """One checkpoint, with `delay` worked out from the prognosis as /v1 does."""
+    forecast = prognosis(arrival, departure, arrival_delay, departure_delay, now)
+    delay = None
+    if forecast["arrival"] and arrival:
+        delay = _minutes(forecast["arrival"], arrival)
+    if forecast["departure"] and departure:
+        delay = _minutes(forecast["departure"], departure)
+    return {
+        "station": station,
+        "arrival": iso(arrival) if arrival else None,
+        "arrivalTimestamp": int(arrival.timestamp()) if arrival else None,
+        "departure": iso(departure) if departure else None,
+        "departureTimestamp": int(departure.timestamp()) if departure else None,
+        "delay": delay,
+        "platform": platform,
+        "prognosis": forecast,
+        "realtimeAvailability": None,
+        "location": location_ if location_ is not None else dict(station),
+    }
+
+
+def _minutes(forecast: str, scheduled: datetime) -> int | float:
+    seconds = int(datetime.strptime(forecast, "%Y-%m-%dT%H:%M:%S%z").timestamp()) - int(
+        scheduled.timestamp()
+    )
+    return seconds // 60 if seconds % 60 == 0 else seconds / 60
+
+
+def line_number(short_name: str | None, category: str | None) -> str | None:
+    """`S10` with category `S` is line `10`, as search.ch numbers it."""
+    if short_name and category and short_name.startswith(category) and short_name != category:
+        return short_name[len(category) :]
+    return short_name
+
+
+def journey_name(trip_short_name: str | None) -> str | None:
+    """search.ch writes a train number six digits wide: `015145`."""
+    if trip_short_name and trip_short_name.isdigit():
+        return trip_short_name.zfill(6)
+    return trip_short_name
+
+
+def journey(
+    *,
+    trip_short_name: str | None,
+    route_short_name: str | None,
+    category: str | None,
+    operator: str | None,
+    headsign: str | None,
+    pass_list: list[dict],
+) -> dict:
+    return {
+        "name": journey_name(trip_short_name),
+        "category": category,
+        "subcategory": None,
+        "categoryCode": None,
+        "number": line_number(route_short_name, category),
+        "operator": operator,
+        "to": headsign,
+        "passList": pass_list,
+        "capacity1st": None,
+        "capacity2nd": None,
+    }

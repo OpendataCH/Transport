@@ -1,9 +1,10 @@
 """The FastAPI application.
 
 It answers **`/v1`**, the contract tens of thousands of unattended clients
-speak, and **`/v2`** as an alias of the same routes - same parameters, same
-JSON, the one written to be indistinguishable from the PHP application it
-replaces.
+speak, written to be indistinguishable from the PHP application it replaced,
+and **`/v2`**: the same parameters and the same JSON, but locations and station
+boards read from our own copy of the national timetable (`timetable/`)
+instead of search.ch. `/v2/connections` still asks search.ch.
 
 Stage S6 is what made `/v1` the documented prefix here. Until then this service
 refused the whole `/v1` surface on purpose, so that a routing mistake could not
@@ -11,9 +12,8 @@ shadow the old contract with a half-built answer. That guard has done its work
 and is retired; the PHP application now serves only the website around the
 API.
 
-The machine-readable description covers `/v1`. The `/v2` routes are the same
-objects mounted twice and are kept out of the document, because a client
-reading it should see one API, not two names for it.
+The machine-readable description covers `/v1`. `/v2` is an experiment and is
+kept out of the document until it has been compared long enough.
 """
 
 from contextlib import asynccontextmanager
@@ -40,6 +40,9 @@ from . import (
     upstream,
 )
 from .models import ApiInfo
+from .timetable import db as timetable_db
+from .timetable import locations as timetable_locations
+from .timetable import stationboard as timetable_stationboard
 
 # The prefix a client should use, and the one it may. Both answer the same
 # thing; only the first is described.
@@ -55,12 +58,15 @@ API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0"}
 async def lifespan(app: FastAPI):
     """One connection pool for the life of the process, not one per request."""
     app.state.http = upstream.build_client()
+    app.state.timetable = await timetable_db.connect()
     redis = statistics.connect()
     app.state.statistics = statistics.Statistics(redis) if redis is not None else None
     try:
         yield
     finally:
         await app.state.http.aclose()
+        if app.state.timetable is not None:
+            await app.state.timetable.close()
         if redis is not None:
             await redis.aclose()
 
@@ -72,9 +78,7 @@ app = FastAPI(
     description=(
         "Timetable data for Swiss public transport, from "
         "[search.ch](https://timetable.search.ch/). This service translates; "
-        "it stores nothing.\n\n"
-        "The same routes answer under `/v2`, which is an alias and not a "
-        "second version."
+        "it stores nothing."
     ),
     lifespan=lifespan,
     # Under the prefix, so that the nginx location block is the only thing that
@@ -160,8 +164,12 @@ for prefix, api_version in API_VERSIONS.items():
     router = APIRouter(prefix=prefix)
     router.add_api_route("/", info_of(api_version), summary="What this API is")
     router.add_api_route("/health", health, summary="Liveness and identity of the service")
-    router.include_router(locations.router, tags=["locations"])
-    router.include_router(stationboard.router, tags=["stationboard"])
+    if prefix == PREFIX:
+        router.include_router(locations.router, tags=["locations"])
+        router.include_router(stationboard.router, tags=["stationboard"])
+    else:
+        router.include_router(timetable_locations.router, tags=["locations"])
+        router.include_router(timetable_stationboard.router, tags=["stationboard"])
     router.include_router(connections.router, tags=["connections"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
 

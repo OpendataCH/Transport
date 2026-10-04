@@ -108,7 +108,7 @@ async def station_board(
     Without a stop the answer is an empty board rather than an error, as in
     `/v1`.
     """
-    if _over_the_limit(limit):
+    if over_the_limit(limit):
         # Plain text, not the error envelope. /v1 answers this one with a bare
         # string, and a client that has learned to read it would not recognise
         # a JSON document in its place.
@@ -118,7 +118,7 @@ async def station_board(
     if not truthy(stop):
         return PhpJson(content=fields.apply({"station": None, "stationboard": []}))
 
-    when = _when(date or datetime_)
+    when = moment_of(date or datetime_)
 
     payload = await upstream.stationboard(
         stop=stop,
@@ -143,7 +143,7 @@ async def station_board(
     return PhpJson(content=fields.apply({"station": board_station, "stationboard": journeys}))
 
 
-def _over_the_limit(limit: str) -> bool:
+def over_the_limit(limit: str) -> bool:
     """`$limit > 420`, with PHP 8's comparison rules.
 
     A numeric string is compared as a number. A non-numeric one makes PHP cast
@@ -157,7 +157,7 @@ def _over_the_limit(limit: str) -> bool:
         return limit > str(MAX_LIMIT)
 
 
-def _when(given: str | None) -> datetime:
+def moment_of(given: str | None) -> datetime:
     """The moment to ask about: what was given, or now, in Zurich."""
     now = datetime.now(ZURICH)
     if not given:
