@@ -71,17 +71,14 @@
 
         .connection {
             border: 1px solid var(--line);
-            border-radius: 6px;
-            margin-bottom: 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             background: #fff;
         }
         .connection > button {
-            display: grid;
-            grid-template-columns: minmax(11em, max-content) 5.5em 1fr auto;
-            gap: 12px;
-            align-items: center;
+            display: block;
             width: 100%;
-            padding: 12px 14px;
+            padding: 12px 16px 10px;
             background: none;
             border: 0;
             text-align: left;
@@ -89,13 +86,31 @@
         }
         .connection > button:hover { background: var(--surface); }
         .connection.open > button { border-bottom: 1px solid var(--line); }
-        .times { font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-        .duration { font-variant-numeric: tabular-nums; white-space: nowrap; }
-        .duration small { display: block; color: var(--muted); }
-        .products { display: flex; flex-wrap: wrap; gap: 4px; }
-        .chevron { color: var(--muted); transition: transform .15s; }
+        .head { display: flex; align-items: center; gap: 6px; font-size: 16px; margin-bottom: 8px; }
+        .head .line { font-weight: 700; }
+        .head .towards { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .head .changes { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+        .row { display: flex; align-items: center; gap: 10px; }
+        .row .t { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .track { flex: 1; display: flex; align-items: center; min-width: 0; }
+        .seg { display: flex; align-items: center; min-width: 30px; }
+        .seg .bar { flex: 1; height: 2px; background: var(--ink); margin: 0 2px; }
+        .seg.walk .bar { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px); }
+        .ico {
+            flex: 0 0 auto;
+            width: 26px; height: 26px;
+            border: 1.5px solid var(--ink);
+            border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: #fff;
+        }
+        .ico svg { width: 16px; height: 16px; }
+        .ico.walk { border-color: var(--muted); color: var(--muted); }
+        .ico.flat { border: 0; width: 20px; height: 20px; }
+        .chevron { color: var(--muted); transition: transform .15s; margin-left: 4px; }
         .connection.open .chevron { transform: rotate(180deg); }
         @media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
+        .foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 6px; }
 
         .badge-product {
             display: inline-block;
@@ -117,39 +132,40 @@
         .changed { color: var(--late); }
         .muted { color: var(--muted); }
 
-        .legs { list-style: none; margin: 0; padding: 10px 14px 14px; }
-        .leg {
-            display: grid;
-            grid-template-columns: 6em 14px 1fr auto;
-            column-gap: 10px;
+        .legs { list-style: none; margin: 0; padding: 14px 16px 16px; }
+        .legs > li { display: grid; grid-template-columns: 4.2em 22px 1fr auto; column-gap: 10px; }
+        .legs .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; color: var(--muted); padding-top: 1px; }
+        .legs .stop .t { color: var(--ink); }
+        .legs .rail { position: relative; display: flex; justify-content: center; }
+        .legs .rail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 3px; background: var(--regional); }
+        .legs .walk .rail::before { width: 0; border-left: 2px dotted var(--muted); }
+        .legs .stop .rail::after {
+            content: ""; position: relative; z-index: 1; margin-top: 4px;
+            width: 13px; height: 13px; border-radius: 50%; background: #fff; border: 2px solid var(--regional);
         }
-        .leg .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-        .leg .rail { position: relative; }
-        .leg .rail::before {
-            content: "";
-            position: absolute;
-            left: 5px;
-            top: 6px;
-            bottom: -6px;
-            width: 4px;
-            background: var(--regional);
-            border-radius: 2px;
-        }
-        .leg.walk .rail::before { background: repeating-linear-gradient(var(--muted) 0 3px, transparent 3px 7px); width: 2px; left: 6px; }
-        .leg .stop { font-weight: 600; }
-        .leg .ride { padding: 6px 0 10px; color: var(--muted); font-size: 13px; }
-        .leg .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
-        .leg .last .rail::before { display: none; }
-        .transfer { margin: 2px 0 8px 7.6em; font-size: 12px; color: var(--muted); }
+        .legs .stop.first .rail::before { top: 10px; }
+        .legs .stop.last .rail::before { bottom: calc(100% - 10px); }
+        .legs .stop .name { font-weight: 600; }
+        .legs .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
+        .legs .ride { padding: 8px 0 12px; color: var(--muted); font-size: 14px; }
+        .legs .ride .ico { width: 22px; height: 22px; vertical-align: middle; margin-right: 4px; }
+        .legs .ride .ico svg { width: 14px; height: 14px; }
+        .legs .ride strong { color: var(--ink); }
+        .legs .stops-toggle { display: inline-block; margin-top: 6px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: #337ab7; font-size: 13px; }
+        .legs .between { list-style: none; padding: 4px 0 0; margin: 0; font-size: 13px; }
+        .legs .between li { display: flex; gap: 10px; }
+        .legs .between .bt { width: 3em; font-variant-numeric: tabular-nums; }
+        .transfer { margin: 0 0 10px 6.3em; font-size: 12px; color: var(--muted); display: block !important; }
         .transfer .late { font-size: inherit; }
 
         .more { display: flex; justify-content: space-between; margin: 12px 0; }
         .loading { color: var(--muted); padding: 12px 0; }
 
         @media (max-width: 639px) {
-            .connection > button { grid-template-columns: 1fr auto; row-gap: 6px; }
-            .connection > button .products { grid-column: 1 / 2; }
-            .connection > button .chevron { grid-row: 1; grid-column: 2; }
+            .row .t { font-size: 16px; }
+            .ico { width: 22px; height: 22px; }
+            .ico svg { width: 13px; height: 13px; }
+            .seg { min-width: 22px; }
             .when .spacer { display: none; }
         }
     </style>
@@ -322,40 +338,98 @@
         return (stop.station && stop.station.name) || (stop.location && stop.location.name) || '';
     }
 
+    // Small line icons, drawn here so that the page needs nothing else.
+    var ICONS = {
+        walk: 'M13 4a1.6 1.6 0 1 1-3.2 0A1.6 1.6 0 0 1 13 4zM9.5 21l1.6-6 2.2 2v4M11.2 8.5 8 10.5V14M11.2 8.5l1.8 4 3 1.5M11.2 8.5l1.3 6',
+        bus: 'M6 4h12a2 2 0 0 1 2 2v10H4V6a2 2 0 0 1 2-2zM4 11h16M7 19v-3M17 19v-3M8 14h.01M16 14h.01',
+        tram: 'M7 6h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM5 12h14M9 2h6M12 2v4M8 18l-2 3M16 18l2 3',
+        train: 'M8 3h8a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zM5 10h14M9 15h.01M15 15h.01M8 18l-2 3M16 18l2 3',
+        ship: 'M4 15l1.5 4h13L20 15H4zM7 15V9h10v6M12 5v4M3 21c2 0 2-1 4.5-1s2.5 1 4.5 1 2-1 4.5-1 2.5 1 4.5 1',
+        cableway: 'M3 4l18 4M12 6v3M7 9h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1zM6 14h12',
+        bike: 'M6 17.5a3 3 0 1 0 0-.01M18 17.5a3 3 0 1 0 0-.01M6 17.5 9.5 10h6l2.5 7.5M9.5 10 12 17.5l3.5-7.5M8.5 7h3',
+        scooter: 'M6 18a2 2 0 1 0 0-.01M18 18a2 2 0 1 0 0-.01M8 18h8M16 18 13 5h3',
+        car: 'M5 16V12l2-5h10l2 5v4H5zM5 12h14M7.5 16v2M16.5 16v2M8 14h.01M16 14h.01',
+        pin: 'M12 21s-6-5.5-6-10a6 6 0 1 1 12 0c0 4.5-6 10-6 10zM12 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'
+    };
+    var SVG = 'http://www.w3.org/2000/svg';
+    function icon(kind, extra) {
+        var svg = document.createElementNS(SVG, 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '1.8');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        svg.setAttribute('aria-hidden', 'true');
+        var path = document.createElementNS(SVG, 'path');
+        path.setAttribute('d', ICONS[kind] || ICONS.train);
+        svg.appendChild(path);
+        return el('span', {class: 'ico ' + kind + (extra ? ' ' + extra : ''), title: kind}, [svg]);
+    }
+
+    // The kind of vehicle, from the category the timetable gives a line.
+    var BUSES = ['B', 'BUS', 'NFB', 'EXB', 'BP', 'EV', 'KB', 'RUB', 'TX', 'NB'];
+    var TRAMS = ['T', 'NFT', 'TRAM', 'M', 'MET'];
+    var SHIPS = ['BAT', 'FAE', 'SCH', 'KAT', 'BAV'];
+    var LIFTS = ['FUN', 'PB', 'GB', 'LB', 'SL', 'SB', 'CC', 'ASC', 'GLB'];
+    function kindOf(section) {
+        if (section.rental) {
+            var v = section.rental.vehicle || '';
+            return v.indexOf('scooter') === 0 || v === 'moped' ? 'scooter' : v === 'car' ? 'car' : 'bike';
+        }
+        if (!section.journey) return 'walk';
+        var c = (section.journey.category || '').toUpperCase();
+        if (BUSES.indexOf(c) >= 0) return 'bus';
+        if (TRAMS.indexOf(c) >= 0) return 'tram';
+        if (SHIPS.indexOf(c) >= 0) return 'ship';
+        if (LIFTS.indexOf(c) >= 0) return 'cableway';
+        return 'train';
+    }
+
+    function sectionMinutes(section) {
+        if (!section.journey) return walkMinutes(section);
+        return minutesBetween(section.departure.departure, section.arrival.arrival);
+    }
+
     function legs(connection) {
         var list = el('ol', {class: 'legs'});
         var sections = connection.sections || [];
         sections.forEach(function (section, index) {
             var dep = section.departure, arr = section.arrival, journey = section.journey;
+            var kind = kindOf(section);
             var walk = !journey;
-            var ride = walk
-                ? (section.rental ? rentalText(section.rental) : 'Walk') + ' · ' + walkMinutes(section) + ' min'
-                : null;
-            var item = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
+            list.appendChild(el('li', {class: 'stop' + (index === 0 ? ' first' : '') + (walk ? ' walk' : '')}, [
                 el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
                 el('span', {class: 'rail'}),
-                el('span', {class: 'stop', text: stationName(dep)}),
-                el('span', {class: 'pl'}, [platform(dep)]),
-                el('span', {}),
-                el('span', {class: 'rail'}),
-                el('span', {class: 'ride'}, walk ? [ride] : [
-                    badge(vehicle(journey), journey.category), ' → ' + (journey.to || ''),
-                    journey.operator ? el('span', {class: 'muted', text: ' · ' + journey.operator}) : null
-                ]),
-                el('span', {})
-            ]);
-            var end = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
-                el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
-                el('span', {class: 'rail'}),
-                el('span', {class: 'stop', text: stationName(arr)}),
-                el('span', {class: 'pl'}, [platform(arr)])
-            ]);
-            end.querySelectorAll('.rail')[0].style.visibility = 'hidden';
-            list.appendChild(item);
-            list.appendChild(end);
+                el('span', {class: 'name', text: stationName(dep)}),
+                el('span', {class: 'pl'}, [platform(dep)])
+            ]));
+            var ride;
+            if (walk) {
+                ride = [icon(kind), section.rental ? rentalText(section.rental) : 'Walk', ' ca. ' + walkMinutes(section) + ' min'];
+            } else {
+                var between = (journey.passList || []).slice(1, -1).filter(function (s) { return s.departure || s.arrival; });
+                ride = [
+                    icon(kind), el('strong', {text: vehicle(journey)}), ' towards ' + (journey.to || ''),
+                    journey.operator ? el('span', {text: ' · ' + journey.operator}) : null
+                ];
+                if (between.length) {
+                    var listOf = el('ul', {class: 'between', hidden: ''}, between.map(function (s) {
+                        return el('li', {}, [el('span', {class: 'bt', text: clock(s.departure || s.arrival)}), el('span', {text: stationName(s)})]);
+                    }));
+                    var toggle = el('button', {type: 'button', class: 'stops-toggle', 'aria-expanded': 'false'},
+                        [between.length + (between.length === 1 ? ' stop' : ' stops') + ' ›']);
+                    toggle.addEventListener('click', function () {
+                        listOf.hidden = !listOf.hidden;
+                        toggle.setAttribute('aria-expanded', listOf.hidden ? 'false' : 'true');
+                    });
+                    ride.push(el('br'), toggle, listOf);
+                }
+            }
+            list.appendChild(el('li', {class: walk ? 'walk' : ''}, [
+                el('span', {}), el('span', {class: 'rail'}), el('div', {class: 'ride'}, ride), el('span', {})
+            ]));
 
-            // The time between this vehicle and the next one, as planned and,
-            // when real time knows better, as it will be.
             var next = sections[index + 1];
             if (next && journey && next.journey) {
                 var planned = minutesBetween(arr.arrival, next.departure.departure);
@@ -363,11 +437,22 @@
                     (arr.prognosis && arr.prognosis.arrival) || arr.arrival,
                     (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
                 );
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                    el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
+                    el('span', {class: 'rail'}),
+                    el('span', {class: 'name', text: stationName(arr)}),
+                    el('span', {class: 'pl'}, [platform(arr)])
+                ]));
                 list.appendChild(el('li', {class: 'transfer'}, [
                     'Change · ' + planned + ' min',
-                    expected !== planned
-                        ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'})
-                        : null
+                    expected !== planned ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'}) : null
+                ]));
+            } else if (!next) {
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                    el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
+                    el('span', {class: 'rail'}),
+                    el('span', {class: 'name', text: stationName(arr)}),
+                    el('span', {class: 'pl'}, [platform(arr)])
                 ]));
             }
         });
@@ -376,16 +461,35 @@
 
     function card(connection, index) {
         var from = connection.from, to = connection.to;
-        var products = (connection.products || []).map(function (p) { return badge(p); });
+        var sections = connection.sections || [];
+        var firstRide = sections.filter(function (s) { return s.journey; })[0];
+        var head = firstRide
+            ? [icon(kindOf(firstRide), 'flat'), el('span', {class: 'line', text: vehicle(firstRide.journey)}),
+               el('span', {class: 'towards', text: 'towards ' + (firstRide.journey.to || '')})]
+            : [icon('walk', 'flat'), el('span', {class: 'line', text: 'Walk'})];
+        head.push(el('span', {class: 'changes', text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')}));
+
+        var total = sections.reduce(function (sum, s) { return sum + Math.max(1, sectionMinutes(s)); }, 0) || 1;
+        var track = el('span', {class: 'track'}, sections.map(function (s) {
+            var kind = kindOf(s);
+            var seg = el('span', {class: 'seg' + (s.journey ? '' : ' walk')}, [icon(kind), el('span', {class: 'bar'})]);
+            seg.style.flex = String(Math.max(1, sectionMinutes(s)) / total * 100);
+            return seg;
+        }).concat([icon('pin')]));
+
+        var start = sections[0] && !sections[0].journey
+            ? walkMinutes(sections[0]) + "' " + (sections[0].rental ? rentalText(sections[0].rental) : 'walk')
+            : (platform(from) ? 'Platform ' + (from.prognosis && from.prognosis.platform || from.platform) : '');
         var details = el('div', {hidden: ''});
         var button = el('button', {type: 'button', 'aria-expanded': 'false'}, [
-            el('span', {class: 'times'}, [clock(from.departure), delay(from.delay), ' – ', clock(to.arrival), delay(to.delay)]),
-            el('span', {class: 'duration'}, [
-                duration(connection.duration),
-                el('small', {text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')})
+            el('div', {class: 'head'}, head),
+            el('div', {class: 'row'}, [
+                el('span', {class: 't'}, [clock(from.departure), delay(from.delay)]),
+                track,
+                el('span', {class: 't'}, [clock(to.arrival), delay(to.delay)]),
+                el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
             ]),
-            el('span', {class: 'products'}, products.concat([platform(from) ? el('span', {class: 'muted', style: 'font-size:12px;margin-left:6px'}, [platform(from)]) : null])),
-            el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
+            el('div', {class: 'foot'}, [el('span', {text: start}), el('span', {text: duration(connection.duration)})])
         ]);
         var box = el('div', {class: 'connection', 'data-index': index}, [button, details]);
         button.addEventListener('click', function () {
