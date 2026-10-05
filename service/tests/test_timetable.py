@@ -335,3 +335,21 @@ def test_places_are_named_as_search_ch_names_them():
     assert places._name(poi) == "Bundeshaus - Parlamentsgebäude, Bern"
     assert places.house_number("Bubenbergplatz 4c, Bern") == "4c"
     assert places.house_number("Zürich HB") is None
+
+
+def test_places_keep_to_the_town_asked_for():
+    from transport_api.timetable import places
+
+    luzern = places.Place(
+        "Luzern, Bahnhofplatz 5", 47.05, 8.31, "address", "5", ("schweiz", "luzern")
+    )
+    willisau = places.Place(
+        "Willisau, Bahnhofplatz 5", 47.12, 7.99, "address", "5", ("schweiz", "willisau")
+    )
+    museum = places.Place("Museum, Willisau", 47.12, 7.99, "poi", None, ("willisau",))
+    assert places._in_town([willisau, luzern], "Bahnhofplatz 5, Luzern") == [luzern]
+    assert places._in_town([willisau], "Twing 365n, Hasliberg") == []
+    assert places._in_town([museum], "Museum, Luzern") == [museum]
+    assert places._in_town([willisau, luzern], "Bahnhofplatz 5") == [willisau, luzern]
+    assert places._in_town([luzern], "Bahnhofplatz 5, 6003 Luzern") == [luzern]
+    assert places.house_number("Weberstrasse 9.1, Aarburg") == "9.1"

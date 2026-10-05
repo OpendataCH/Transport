@@ -13,12 +13,13 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from .. import errors
+from .names import normalize
 
 if TYPE_CHECKING:
     from .router import Motis
 
 # A house number: digits, perhaps a letter ("4c"). Names of stops have few.
-HOUSE_NUMBER = re.compile(r"\b(\d+[a-zA-Z]?)\b")
+HOUSE_NUMBER = re.compile(r"\b(\d+(?:\.\d+)?[a-zA-Z]?)\b")
 
 # What /v1 calls the kinds, and what the router calls them.
 KINDS = {"address": "ADDRESS", "poi": "PLACE"}
@@ -36,6 +37,7 @@ class Place:
     lon: float
     kind: str
     house_number: str | None = None
+    towns: tuple[str, ...] = ()
 
     @property
     def coordinate(self) -> str:
@@ -73,9 +75,34 @@ async def search(
                 lon=round(match["lon"], 6),
                 kind="address" if match["type"] == "ADDRESS" else "poi",
                 house_number=(match.get("houseNumber") or "").lower() or None,
+                towns=tuple(
+                    normalize(a["name"]) for a in match.get("areas") or [] if a.get("name")
+                ),
             )
         )
-    return places[:limit]
+    return _in_town(places, text)[:limit]
+
+
+def _in_town(places: list[Place], text: str) -> list[Place]:
+    """Only the places in the town a query names after its comma.
+
+    "Bahnhofplatz 5, Luzern" means Luzern, however well a Bahnhofplatz 5
+    elsewhere matches the street. An address in another town is dropped -
+    no answer is better than a wrong one; a point of interest stays, after
+    those in the town, since its name is what was asked for.
+    """
+    if "," not in text:
+        return places
+    town = normalize(re.sub(r"\b\d{4}\b", "", text.rsplit(",", 1)[1]))
+    if not town:
+        return places
+
+    def here(place: Place) -> bool:
+        return any(town == t or town in t.split() or t in town for t in place.towns if t)
+
+    inside = [p for p in places if here(p)]
+    outside = [p for p in places if not here(p) and p.kind == "poi"]
+    return inside + outside
 
 
 async def address(motis: "Motis | None", text: str) -> Place | None:
@@ -83,10 +110,16 @@ async def address(motis: "Motis | None", text: str) -> Place | None:
     number = house_number(text)
     if number is None:
         return None
-    for place in await search(motis, text, ("address",), limit=5):
+    found = await search(motis, text, ("address",), limit=10)
+    for place in found:
         if place.house_number == number:
             return place
-    return None
+    # "Weberstrasse 9.1": a number the map writes otherwise; the street in
+    # the town asked for is closer than any stop of a similar name.
+    for place in found:
+        if place.house_number and place.house_number.split(".")[0] == number.split(".")[0]:
+            return place
+    return found[0] if found else None
 
 
 def _name(match: dict) -> str:
