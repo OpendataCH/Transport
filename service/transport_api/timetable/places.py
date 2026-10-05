@@ -75,8 +75,12 @@ async def search(
                 lon=round(match["lon"], 6),
                 kind="address" if match["type"] == "ADDRESS" else "poi",
                 house_number=(match.get("houseNumber") or "").lower() or None,
+                # The municipality and its parts - not the canton, which
+                # shares its name with a town (Luzern, Bern, Zug …).
                 towns=tuple(
-                    normalize(a["name"]) for a in match.get("areas") or [] if a.get("name")
+                    normalize(a["name"])
+                    for a in match.get("areas") or []
+                    if a.get("name") and (a.get("adminLevel") or 0) >= MUNICIPALITY
                 ),
             )
         )
