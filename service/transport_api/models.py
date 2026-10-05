@@ -132,14 +132,35 @@ class StationBoardResponse(BaseModel):
 class Walk(BaseModel):
     """How long a section is walked for, when it is walked."""
 
-    duration: str | None
+    duration: int | str | None = Field(
+        description="Seconds, as search.ch gives them; null when it does not know."
+    )
+
+
+class Rental(BaseModel):
+    """A shared bike, scooter or car taken for a section (only with `sharing=1`)."""
+
+    provider: str | None = Field(description="Who rents it out, e.g. `PubliBike`.")
+    vehicle: str | None = Field(
+        description="GBFS form factor: `bicycle`, `cargo_bicycle`, `scooter_standing`, `car` …"
+    )
+    propulsion: str | None = Field(description="`human`, `electric_assist`, `electric` …")
+    from_station: str | None = Field(description="Where it is picked up, for a station system.")
+    to_station: str | None = Field(description="Where it is left, for a station system.")
+    url: str | None = Field(description="Where to book it, when the provider gives one.")
 
 
 class Section(BaseModel):
     """One leg of a connection: a vehicle, or a walk."""
 
     journey: Journey | None = Field(description="Null for a walk.")
-    walk: Walk | None = Field(description="Null for anything with a vehicle.")
+    walk: Walk | None = Field(
+        description="Null for anything with a vehicle. A shared vehicle's section is a walk "
+        "with its duration, and says what it is in `rental`."
+    )
+    rental: Rental | None = Field(
+        default=None, description="Only on a section with a shared vehicle (`sharing=1`)."
+    )
     departure: Stop
     arrival: Stop | None = Field(description="Null on a leg the upstream does not end.")
 

@@ -108,6 +108,13 @@ async def search_connections(
         list[str] | None,
         Query(alias="transportations[]", description="Means of transport to allow."),
     ] = None,
+    sharing: Annotated[
+        str | None,
+        Query(
+            description="`1` to allow shared bikes, scooters and cars (GBFS) to and from the "
+            "stops, besides walking. Off by default."
+        ),
+    ] = None,
     fields_: Annotated[
         list[str] | None,
         Query(alias="fields[]", description="Keep only these parts of the answer."),
@@ -147,6 +154,11 @@ async def search_connections(
         "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
     }
+    if truthy(sharing) and sharing.lower() not in ("0", "false"):
+        # A shared vehicle may take the place of the walk to the first stop
+        # and from the last; between stops it is still walking.
+        params["preTransitModes"] = "WALK,RENTAL"
+        params["postTransitModes"] = "WALK,RENTAL"
     if stops_via:
         params["via"] = ",".join([await _place(pool, s) for s in stops_via])
     modes = _modes(as_list(parameter(request, "transportations")))
@@ -312,13 +324,16 @@ def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
     departure = _stop(leg["from"], stations, now, live, departs=True)
     arrival = _stop(leg["to"], stations, now, live, arrives=True)
     if not leg.get("tripId"):
-        return {
+        section = {
             "journey": None,
             # Seconds, as an integer: what /v1 passes on from search.ch.
             "walk": {"duration": int(leg.get("duration") or 0)},
             "departure": departure,
             "arrival": arrival,
         }
+        if leg.get("mode") == "RENTAL":
+            section["rental"] = _rental(leg.get("rental") or {})
+        return section
     trip = trips.get(_trip_id(leg["tripId"])) or _trip_of_leg(leg)
     pass_list = [
         departure,
@@ -340,6 +355,26 @@ def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
         "walk": None,
         "departure": departure,
         "arrival": arrival,
+    }
+
+
+def _rental(rental: dict) -> dict:
+    """What a shared vehicle is, in the words of GBFS, lower case."""
+
+    def lower(value):
+        return value.lower() if isinstance(value, str) else None
+
+    return {
+        # Some aggregated feeds name their system "Lime City partners from …".
+        "provider": (rental.get("systemName") or rental.get("providerGroupId") or "").split(
+            " from "
+        )[0]
+        or None,
+        "vehicle": lower(rental.get("formFactor")),
+        "propulsion": lower(rental.get("propulsionType")),
+        "from_station": rental.get("fromStationName") or rental.get("stationName") or None,
+        "to_station": rental.get("toStationName") or None,
+        "url": rental.get("rentalUriWeb") or rental.get("url") or None,
     }
 
 
