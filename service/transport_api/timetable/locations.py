@@ -116,8 +116,8 @@ async def _by_query(pool: asyncpg.Pool, motis: Motis | None, query: str, kind: s
 
 
 def _place(place: places.Place) -> dict:
-    """An address or point of interest has no id and no icon in /v1."""
-    return location(None, place.name, place.lat, place.lon)
+    """An address or point of interest: no id, and `icon` null, as /v1 gives them."""
+    return location(None, place.name, place.lat, place.lon, icon=None)
 
 
 async def _by_name(pool: asyncpg.Pool, query: str) -> list[dict]:
