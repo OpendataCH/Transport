@@ -925,19 +925,19 @@
 
             <h3 id="source">Source</h3>
 
-            <p>The API keeps its own copy of the Swiss public transport data and answers every request from it. No request is passed on to another timetable service. These are the data it fetches, how the sources publish them, and what becomes of them here:</p>
+            <p>The API keeps its own copy of the Swiss public transport data and answers every request from it.</p>
 
             <h4>Timetable</h4>
             <ul>
-                <li><strong>What we fetch:</strong> the national timetable of all Swiss public transport as GTFS, from <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a>, one file per timetable year (about 300 MB).</li>
+                <li><strong>What we fetch:</strong> the national timetable of all Swiss public transport as GTFS from opentransportdata.swiss, one file per timetable year (about 300 MB): <a href="https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020" rel="external noopener noreferrer">timetable 2026</a>, <a href="https://data.opentransportdata.swiss/dataset/timetable-2027-gtfs2020" rel="external noopener noreferrer">timetable 2027</a>.</li>
                 <li><strong>At the source:</strong> a complete new version about twice a week, usually on Wednesday and Saturday. The next timetable year is published in the autumn, ahead of the change in mid-December.</li>
-                <li><strong>What we do with it:</strong> we check every hour for a new version and load it once the real-time feed has switched to it - the afternoon after publication - so that delays always match the timetable. We keep the days from a week ago to three months ahead in a database; across the December change, both timetable years are merged.</li>
+                <li><strong>What we do with it:</strong> every hour we look whether a new version is out - one small request, nothing is downloaded. A new version is downloaded once, and loaded when the real-time feed has switched to it - the afternoon after publication - so that delays always match the timetable. We keep the days from a week ago to three months ahead in a database; across the December change, both timetable years are merged.</li>
                 <li><strong>In the API:</strong> a new timetable answers <code>/locations</code>, <code>/stationboard</code> and <code>/connections</code> within the hour it is loaded; the days held move on weekly.</li>
             </ul>
 
             <h4>Real time</h4>
             <ul>
-                <li><strong>What we fetch:</strong> delays, cancellations and added trips as GTFS-RT, also from opentransportdata.swiss.</li>
+                <li><strong>What we fetch:</strong> delays, cancellations and added trips as <a href="https://data.opentransportdata.swiss/dataset/gtfsrt" rel="external noopener noreferrer">GTFS-RT</a> from opentransportdata.swiss (an API key is needed).</li>
                 <li><strong>At the source:</strong> renewed every 30 seconds.</li>
                 <li><strong>What we do with it:</strong> station boards read it every 30 seconds, the journey planner every minute.</li>
                 <li><strong>In the API:</strong> <code>delay</code> and <code>prognosis</code> are at most about a minute behind the source.</li>
@@ -951,7 +951,7 @@
 
             <h4>Streets, addresses and places</h4>
             <ul>
-                <li><strong>What we fetch:</strong> the Swiss extract of <a href="https://www.openstreetmap.org/" rel="external noopener noreferrer">OpenStreetMap</a> (about 550 MB).</li>
+                <li><strong>What we fetch:</strong> the <a href="https://download.geofabrik.de/europe/switzerland.html" rel="external noopener noreferrer">Swiss extract</a> of <a href="https://www.openstreetmap.org/" rel="external noopener noreferrer">OpenStreetMap</a> by Geofabrik (about 550 MB).</li>
                 <li><strong>At the source:</strong> edited continuously, the extract published daily.</li>
                 <li><strong>What we do with it:</strong> walks to, from and between stops follow its streets, and its addresses and points of interest are what <code>/locations</code> finds besides stops. Searched on this server; no query leaves it.</li>
                 <li><strong>In the API:</strong> renewed monthly.</li>
@@ -959,13 +959,13 @@
 
             <h4>Shared mobility</h4>
             <ul>
-                <li><strong>What we fetch:</strong> bikes, scooters and cars to rent, as GBFS from <a href="https://sharedmobility.ch/" rel="external noopener noreferrer">sharedmobility.ch</a> of the Swiss Federal Office of Energy.</li>
+                <li><strong>What we fetch:</strong> bikes, scooters and cars to rent, as GBFS from <a href="https://github.com/SFOE/sharedmobility" rel="external noopener noreferrer">sharedmobility.ch</a> of the Swiss Federal Office of Energy.</li>
                 <li><strong>At the source and here:</strong> every minute. The <a href="routing/">journey planner page</a> uses them for the first and last mile; <code>/v1</code> does not.</li>
             </ul>
 
             <h4>Operator names</h4>
             <ul>
-                <li><strong>What we fetch:</strong> the names operators go by in the national timetable's HAFAS data (HRDF), from opentransportdata.swiss.</li>
+                <li><strong>What we fetch:</strong> the names operators go by in the national timetable's HAFAS data (<a href="https://data.opentransportdata.swiss/dataset/timetable-54-2026-hrdf" rel="external noopener noreferrer">HRDF</a>), from opentransportdata.swiss.</li>
                 <li><strong>In the API:</strong> <code>operator</code> reads "BLS-bls" rather than "BLS AG (bls)", as it always has; renewed once a timetable year.</li>
             </ul>
 
