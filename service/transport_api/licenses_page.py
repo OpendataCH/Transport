@@ -40,9 +40,9 @@ DATA = [
     (
         "sharedmobility.ch (Swiss Federal Office of Energy)",
         "Shared bikes, scooters and cars (GBFS)",
-        "Open use, source to be named",
-        "https://sharedmobility.ch/",
-        "https://github.com/SFOE/sharedmobility/blob/main/Access%20the%20data.md",
+        "Open use, must provide the source (BY)",
+        "https://opendata.swiss/en/dataset/standorte-und-verfugbarkeit-von-shared-mobility-angeboten",
+        "https://opendata.swiss/en/terms-of-use#terms_by",
     ),
     (
         "swisstopo national maps",
