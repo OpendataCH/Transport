@@ -367,7 +367,12 @@ def test_shared_vehicles_only_when_asked_for(api, monkeypatch):
     monkeypatch.setattr(api.motis, "plan", rental_plan)
     answer = api.get(
         "/v2/connections",
-        params={"from": "Alpha", "to": "8500003", "datetime": f"{TODAY} 07:55", "sharing": "1"},
+        params={
+            "from": "Alpha",
+            "to": "8500003",
+            "datetime": f"{TODAY} 07:55",
+            "sharedMobility": "1",
+        },
     ).json()
     ConnectionsResponse.model_validate(answer)
     assert api.motis.params["preTransitModes"] == "WALK,RENTAL"

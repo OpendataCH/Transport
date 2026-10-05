@@ -454,7 +454,7 @@
             date: field('date').value,
             time: field('time').value,
             isArrivalTime: arrival ? 1 : 0,
-            sharing: field('sharing').checked ? 1 : '',
+            sharedMobility: field('sharing').checked ? 1 : '',
             limit: 5
         };
         remember();
@@ -500,7 +500,7 @@
         var params = new URLSearchParams();
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
-        if (field('sharing').checked) params.set('sharing', '1');
+        if (field('sharing').checked) params.set('sharedMobility', '1');
         if (api() === 'v1-old') params.set('api', 'v1-old');
         history.replaceState({}, '', '?' + params);
     }
@@ -577,7 +577,7 @@
     if (!field('date').value) setNow();
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
-    field('sharing').checked = params.get('sharing') === '1';
+    field('sharing').checked = params.get('sharedMobility') === '1';
     field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
 
     if (field('from').value && field('to').value) {

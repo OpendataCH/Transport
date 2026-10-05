@@ -108,11 +108,12 @@ async def search_connections(
         list[str] | None,
         Query(alias="transportations[]", description="Means of transport to allow."),
     ] = None,
-    sharing: Annotated[
+    shared_mobility: Annotated[
         str | None,
         Query(
+            alias="sharedMobility",
             description="`1` to allow shared bikes, scooters and cars (GBFS) to and from the "
-            "stops, besides walking. Off by default."
+            "stops, besides walking. Off by default.",
         ),
     ] = None,
     fields_: Annotated[
@@ -154,7 +155,7 @@ async def search_connections(
         "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
     }
-    if truthy(sharing) and sharing.lower() not in ("0", "false"):
+    if truthy(shared_mobility) and shared_mobility.lower() not in ("0", "false"):
         # A shared vehicle may take the place of the walk to the first stop
         # and from the last; between stops it is still walking.
         params["preTransitModes"] = "WALK,RENTAL"

@@ -138,7 +138,7 @@ class Walk(BaseModel):
 
 
 class Rental(BaseModel):
-    """A shared bike, scooter or car taken for a section (only with `sharing=1`)."""
+    """A shared bike, scooter or car taken for a section (only with `sharedMobility=1`)."""
 
     provider: str | None = Field(description="Who rents it out, e.g. `PubliBike`.")
     vehicle: str | None = Field(
@@ -159,7 +159,7 @@ class Section(BaseModel):
         "with its duration, and says what it is in `rental`."
     )
     rental: Rental | None = Field(
-        default=None, description="Only on a section with a shared vehicle (`sharing=1`)."
+        default=None, description="Only on a section with a shared vehicle (`sharedMobility=1`)."
     )
     departure: Stop
     arrival: Stop | None = Field(description="Null on a leg the upstream does not end.")
