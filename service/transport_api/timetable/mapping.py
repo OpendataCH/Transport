@@ -26,7 +26,7 @@ def location(
     lat: float | None,
     lon: float | None,
     *,
-    distance: int | None = None,
+    distance: float | None = None,
     icon: Any = ...,
 ) -> dict:
     """The location shape. `icon` is left out unless given, as /v1 does."""

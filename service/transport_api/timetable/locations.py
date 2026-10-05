@@ -91,7 +91,7 @@ async def search_locations(
     elif truthy(x) and truthy(y):
         point = _point(x, y)
         if point is not None:
-            stations = await _nearest(pool, *point)
+            stations = await _near(pool, motis, *point)
 
     return PhpJson(content=fields.apply({"stations": stations}))
 
@@ -138,6 +138,23 @@ async def _by_name(pool: asyncpg.Pool, query: str) -> list[dict]:
     return [location(r["id"], r["name"], r["lat"], r["lon"], icon=r["mode"]) for r in rows]
 
 
+async def _near(pool: asyncpg.Pool, motis: Motis | None, lat: float, lon: float) -> list[dict]:
+    """The nearest address first, then the nearest stops - as /v1 has answered.
+
+    The address's distance has decimals and the stops' have none: that is
+    how search.ch gives them.
+    """
+    stations = await _nearest(pool, lat, lon)
+    address = await places.nearest_address(motis, lat, lon)
+    if address is None:
+        return stations
+    metres = _exact_metres(lat, lon, address.lat, address.lon)
+    if metres > places.NEAREST_ADDRESS_METRES:
+        return stations
+    first = location(None, address.name, address.lat, address.lon, distance=metres, icon=None)
+    return [first, *stations[: LIMIT - 1]]
+
+
 async def _nearest(pool: asyncpg.Pool, lat: float, lon: float) -> list[dict]:
     rows = await db.fetch(pool, NEAREST, lat, lon, LIMIT)
     return [
@@ -161,6 +178,14 @@ def _point(x: str, y: str) -> tuple[float, float] | None:
     if not (math.isfinite(lat) and math.isfinite(lon)):
         return None
     return lat, lon
+
+
+def _exact_metres(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance in metres, with its decimals."""
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi, dlambda = phi2 - phi1, math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+    return 6371000 * 2 * math.asin(math.sqrt(a))
 
 
 def _metres(lat1: float, lon1: float, lat2: float | None, lon2: float | None) -> int | None:

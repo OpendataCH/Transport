@@ -214,3 +214,36 @@ def test_a_delay_holds_until_the_next_report(api):
     assert beta["prognosis"]["arrival"] == "2026-10-05T08:14:00+0200"
     assert beta["prognosis"]["departure"] == "2026-10-05T08:16:00+0200"
     assert gamma["delay"] == 4
+
+
+class _ReverseGeocoder:
+    async def get(self, path, params):
+        assert path == "/api/v1/reverse-geocode"
+        return [
+            {
+                "type": "ADDRESS",
+                "street": "Seftigenstrasse",
+                "houseNumber": "4",
+                "zip": "3007",
+                "lat": 47.0001,
+                "lon": 7.5001,
+                "areas": [{"name": "Bern", "adminLevel": 8.0}],
+            }
+        ]
+
+
+def test_locations_by_coordinate_name_the_nearest_address_first(api):
+    from transport_api.timetable.router import motis_or_none
+
+    app.dependency_overrides[motis_or_none] = lambda: _ReverseGeocoder()
+    try:
+        answer = api.get("/v2/locations", params={"x": "47.0", "y": "7.5"}).json()
+    finally:
+        app.dependency_overrides.pop(motis_or_none)
+    LocationsResponse.model_validate(answer)
+    first = answer["stations"][0]
+    assert first["id"] is None
+    assert first["name"] == "Seftigenstrasse 4, 3007 Bern"
+    assert first["icon"] is None
+    assert 10 < first["distance"] < 15 and not float(first["distance"]).is_integer()
+    assert answer["stations"][1]["name"] == "Beta"

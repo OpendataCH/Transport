@@ -107,3 +107,38 @@ def _town(areas: list[dict]) -> str | None:
         return by_level[MUNICIPALITY]
     default = next((a.get("name") for a in areas if a.get("default")), None)
     return default
+
+
+# How far the nearest address may be to be named for a coordinate.
+NEAREST_ADDRESS_METRES = 250
+
+
+async def nearest_address(motis: "Motis | None", lat: float, lon: float) -> Place | None:
+    """The address nearest a coordinate, named as search.ch names it there.
+
+    `Bubenbergplatz 4c, 3011 Bern`: street first and the postcode with the
+    town - not the town first, as for a searched address. None without a
+    router that has reverse geocoding, or without an address nearby.
+    """
+    if motis is None:
+        return None
+    try:
+        matches = await motis.get(
+            "/api/v1/reverse-geocode",
+            {"place": f"{lat},{lon}", "type": "ADDRESS", "numResults": "1"},
+        )
+    except errors.ApiError:
+        return None
+    for match in matches if isinstance(matches, list) else []:
+        if match.get("type") != "ADDRESS" or match.get("lat") is None:
+            continue
+        street = " ".join(p for p in (match.get("street"), match.get("houseNumber")) if p)
+        town = " ".join(p for p in (match.get("zip"), _town(match.get("areas") or [])) if p)
+        return Place(
+            name=", ".join(p for p in (street or match.get("name"), town) if p),
+            lat=round(match["lat"], 6),
+            lon=round(match["lon"], 6),
+            kind="address",
+            house_number=(match.get("houseNumber") or "").lower() or None,
+        )
+    return None
