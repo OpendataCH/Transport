@@ -121,7 +121,7 @@ def compare_locations(report: Report, v1: str, v2: str, pause: float) -> None:
     same_first = 0
     for name in STATIONS:
         one = get(v1, "/v1/locations", {"query": name})
-        two = get(v2, "/v2/locations", {"query": name})
+        two = get(v2, f"{PREFIX}/locations", {"query": name})
         report.compare_shape(one, two)
         a = [(s["id"], s["name"]) for s in (one or {}).get("stations", [])]
         b = [(s["id"], s["name"]) for s in (two or {}).get("stations", [])]
@@ -142,7 +142,7 @@ def compare_locations(report: Report, v1: str, v2: str, pause: float) -> None:
     print("\n## Locations by coordinate\n")
     for lat, lon in COORDINATES:
         one = get(v1, "/v1/locations", {"x": lat, "y": lon})
-        two = get(v2, "/v2/locations", {"x": lat, "y": lon})
+        two = get(v2, f"{PREFIX}/locations", {"x": lat, "y": lon})
         report.compare_shape(one, two)
         a = [(s["name"], s["distance"]) for s in (one or {}).get("stations", [])]
         b = [(s["name"], s["distance"]) for s in (two or {}).get("stations", [])]
@@ -161,7 +161,7 @@ def compare_boards(report: Report, v1: str, v2: str, when: str, pause: float) ->
     for params in BOARDS:
         query = {"limit": "15", "datetime": when, **params}
         one = get(v1, "/v1/stationboard", query)
-        two = get(v2, "/v2/stationboard", query)
+        two = get(v2, f"{PREFIX}/stationboard", query)
         report.compare_shape(one, two)
         a = {journey_key(j): j for j in (one or {}).get("stationboard", [])}
         b = {journey_key(j): j for j in (two or {}).get("stationboard", [])}
@@ -217,7 +217,7 @@ def compare_connections(report: Report, v1: str, v2: str, when: str, pause: floa
     for params in CONNECTIONS:
         query = {"date": day, "time": clock, "limit": "4", **params}
         one = get(v1, "/v1/connections", query)
-        two = get(v2, "/v2/connections", query)
+        two = get(v2, f"{PREFIX}/connections", query)
         report.compare_shape(one, two)
         a = {connection_key(c): c for c in (one or {}).get("connections", [])}
         b = {connection_key(c): c for c in (two or {}).get("connections", [])}
@@ -248,17 +248,28 @@ def compare_connections(report: Report, v1: str, v2: str, when: str, pause: floa
         report.note(f"  of the matched, {name} differs in {count}")
 
 
+# The second host's path prefix, set from the command line.
+PREFIX = "/v2"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--v1", default="https://transport.opendata.ch")
     parser.add_argument("--v2", default="http://localhost:8000")
     parser.add_argument("--pause", type=float, default=1.5, help="seconds between /v1 calls")
     parser.add_argument(
+        "--v2-prefix",
+        default="/v2",
+        help="path prefix on the second host (/v1 once it answers from the timetable)",
+    )
+    parser.add_argument(
         "--when",
         default=(datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d 09:00"),
         help="board time; two days out by default, so that real time does not enter",
     )
     arguments = parser.parse_args()
+    global PREFIX
+    PREFIX = arguments.v2_prefix
 
     report = Report()
     compare_locations(report, arguments.v1, arguments.v2, arguments.pause)

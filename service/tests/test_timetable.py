@@ -191,10 +191,78 @@ def test_window_feed_keeps_whole_trips_of_the_window_only(tmp_path):
 
 def test_publish_window_points_the_router_at_it(tmp_path):
     source = write_feed(tmp_path)
-    counts = {"version": "20261001", "first": TODAY, "last": TODAY + timedelta(days=14)}
-    target = importer.publish_window(source, tmp_path, counts)
-    assert target.name == "window_20261001_20261005_walks.zip"
-    assert (tmp_path / "CURRENT").read_text().strip() == target.name
+    window = importer.build_window([source], tmp_path, TODAY, TODAY + timedelta(days=14))
+    importer.publish_window(window)
+    assert window.name == "window_20261001_20261005_walks.zip"
+    assert (tmp_path / "CURRENT").read_text().strip() == window.name
+
+
+def _year_feeds(tmp_path):
+    """This year's test feed ending on 12 December, and next year's from the 13th.
+
+    Next year's reuses the calendar ids and a route id, renames a stop, and
+    carries its own trip ids, as the Swiss feeds do.
+    """
+    import gtfs_feed
+
+    this = dict(gtfs_feed.FILES)
+    this["feed_info.txt"] = this["feed_info.txt"].replace("20261231", "20261212")
+    nxt = {
+        name: text.replace('"t-', '"n-')
+        .replace("20260101", "20261213")
+        .replace("20261231", "20271211")
+        for name, text in gtfs_feed.FILES.items()
+    }
+    nxt["stops.txt"] = nxt["stops.txt"].replace('"Beta"', '"Beta Neu"')
+    nxt["feed_info.txt"] = nxt["feed_info.txt"].replace('"20261001"', '"20261101"')
+    paths = []
+    for name, files in (("gtfs_fp2026.zip", this), ("gtfs_fp2027.zip", nxt)):
+        path = tmp_path / name
+        with zipfile.ZipFile(path, "w") as archive:
+            for filename, text in files.items():
+                archive.writestr(filename, "\ufeff" + text)
+        paths.append(path)
+    return paths
+
+
+def test_a_window_across_the_change_reads_both_years(tmp_path):
+    paths = _year_feeds(tmp_path)
+    target = tmp_path / "window.zip"
+    counts = importer.write_window_feed(
+        list(reversed(paths)), target, date(2026, 12, 10), date(2026, 12, 16)
+    )
+    assert counts["first"] == date(2026, 12, 10)
+    assert counts["last"] == date(2026, 12, 16)
+    assert counts["version"] == "20261001+20261101"
+    with zipfile.ZipFile(target) as feed:
+        trips = {r["trip_id"]: r for r in importer.rows(feed, "trips.txt")}
+        services = importer.service_days(feed, date(2026, 12, 10), date(2026, 12, 16))
+        stops = {r["stop_id"]: r["stop_name"] for r in importer.rows(feed, "stops.txt")}
+        routes = [r["route_id"] for r in importer.rows(feed, "routes.txt")]
+        info = next(importer.rows(feed, "feed_info.txt"))
+    # Both years' trips, under their own ids; the calendars kept apart.
+    assert "t-morning" in trips and "n-morning" in trips
+    assert trips["n-morning"]["service_id"] == "20261101:daily"
+    assert max(services["daily"]) == date(2026, 12, 12)
+    assert min(services["20261101:daily"]) == date(2026, 12, 13)
+    # A shared route id is made unique; a shared stop is one row, the newer name.
+    assert "r-s1" in routes and "20261101:r-s1" in routes
+    assert trips["n-morning"]["route_id"] == "20261101:r-s1"
+    assert stops["ch:1:sloid:2"] == "Beta Neu"
+    assert (info["feed_start_date"], info["feed_end_date"]) == ("20261210", "20261216")
+
+
+def test_a_window_inside_one_year_reads_only_that_feed(tmp_path):
+    paths = _year_feeds(tmp_path)
+    counts = importer.write_window_feed(paths, tmp_path / "w.zip", TODAY, TODAY + timedelta(days=3))
+    assert counts["version"] == "20261001"
+
+
+def test_the_feeds_of_a_window_are_found_by_year():
+    url = "https://x/timetable-{year}-gtfs2020/permalink"
+    urls = importer.feed_urls(url, date(2026, 9, 28), date(2027, 2, 2))
+    assert urls == [url.format(year=y) for y in (2026, 2027, 2028)]
+    assert importer.feed_urls("https://x/fixed.zip", TODAY, None) == ["https://x/fixed.zip"]
 
 
 TRANSFER_HEADER = "from_stop_id,to_stop_id,from_trip_id,to_trip_id,transfer_type,min_transfer_time"

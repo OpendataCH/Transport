@@ -44,41 +44,56 @@ def version_of(feed_file: str) -> str | None:
 
 
 async def refresh_timetable(connection: asyncpg.Connection, realtime_version: str | None) -> None:
-    """Import the feed real time is on, and re-import it daily to move the window."""
+    """Import the feeds real time is on, and re-import them to move the window.
+
+    The window may need two timetable years; what is loaded is recorded as
+    their file names joined by `+`, and a new file for either is a new import.
+    """
     today = datetime.now(importer.ZURICH).date()
     cache = Path(settings.GTFS_CACHE)
     loaded = await importer.current_feed(connection)
-    newest = await asyncio.to_thread(importer.feed_name, settings.GTFS_URL)
+    first, last = importer.window_of(today, settings.GTFS_DAYS, settings.GTFS_PAST_DAYS)
+    sources = await asyncio.to_thread(importer.feed_sources, settings.GTFS_URL, first, last)
+    if not sources:
+        log.warning("no timetable feed found for %s..%s", first, last)
+        return
+    newest = "+".join(name for _, name in sources)
 
     target = newest
     if loaded is not None and newest != loaded["feed_file"]:
-        newest_version = version_of(newest)
+        newest_version = max(filter(None, (version_of(n) for _, n in sources)), default=None)
         if realtime_version and newest_version and newest_version > realtime_version:
             log.info("%s waits for real time to leave version %s", newest, realtime_version)
             target = loaded["feed_file"]
 
-    # A window that ends a fixed number of days ahead moves on daily; one that
-    # runs to the end of the feed only changes with the feed.
+    # A window that ends a fixed number of days ahead moves on, in steps of
+    # GTFS_WINDOW_STEP_DAYS; one that runs to the end of the feed only changes
+    # with the feed.
     stale = (
         loaded is not None
         and settings.GTFS_DAYS > 0
-        and loaded["window_from"] < today - timedelta(days=settings.GTFS_PAST_DAYS)
+        and loaded["window_from"]
+        < today - timedelta(days=settings.GTFS_PAST_DAYS + settings.GTFS_WINDOW_STEP_DAYS - 1)
     )
     if loaded is not None and target == loaded["feed_file"] and not stale:
         return
 
     if target == newest:
-        path = await asyncio.to_thread(importer.download, settings.GTFS_URL, cache)
-        if path.name != target:
-            log.info("the permalink moved on to %s; deciding again next round", path.name)
-            return
+        paths = []
+        for url, name in sources:
+            path = await asyncio.to_thread(importer.download, url, cache)
+            if path.name != name:
+                log.info("the permalink moved on to %s; deciding again next round", path.name)
+                return
+            paths.append(path)
     else:
-        path = cache / target
-        if not path.exists():
-            log.warning("%s is no longer in the cache; the window stays where it is", target)
+        paths = [cache / name for name in target.split("+")]
+        missing = [p.name for p in paths if not p.exists()]
+        if missing:
+            log.warning("%s no longer in the cache; the window stays where it is", missing)
             return
 
-    await import_feed(path)
+    await import_feed(paths)
 
 
 OSM_FILE = "osm/switzerland.osm.pbf"
@@ -108,7 +123,7 @@ def refresh_osm(now: float | None = None) -> Path | None:
     return target
 
 
-async def import_feed(path: Path) -> None:
+async def import_feed(paths: list[Path]) -> None:
     """Run the importer as a child process; its log lines go to ours."""
     # The child also writes the loaded window for the router and points
     # docker/motis-run.sh at it, so that both answer from the same timetable.
@@ -116,13 +131,13 @@ async def import_feed(path: Path) -> None:
         sys.executable,
         "-m",
         "transport_api.timetable.importer",
-        str(path),
+        *(str(path) for path in paths),
         "--window-feed",
         settings.GTFS_CACHE,
     )
     code = await process.wait()
     if code != 0:
-        raise RuntimeError(f"the import of {path.name} exited with {code}")
+        raise RuntimeError(f"the import of {'+'.join(p.name for p in paths)} exited with {code}")
 
 
 async def run() -> None:

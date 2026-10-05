@@ -49,15 +49,24 @@ DATABASE_URL = os.environ.get("DATABASE_URL") or None
 
 # The national GTFS feed. The permalink redirects to the newest file and needs
 # no key; the CKAN API next to it does.
+#
+# One feed per timetable year, which changes in mid-December; `{year}` stands
+# for it, so that next year's feed is found once it is published and a window
+# across the change reads both.
 GTFS_URL = os.environ.get(
     "GTFS_URL",
-    "https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020/permalink",
+    "https://data.opentransportdata.swiss/dataset/timetable-{year}-gtfs2020/permalink",
 )
 
 # Days of service loaded ahead of today. The full feed is a year of 42 million
 # stop times; a window keeps the database at a fraction of that, and the feed
 # is re-read twice a week anyway. Zero loads everything.
 GTFS_DAYS = int(os.environ.get("GTFS_DAYS", "14"))
+
+# How far the window falls behind before it is moved on. One re-imports
+# daily; more saves imports (and the router's rebuild) at the price of up to
+# that many more days back.
+GTFS_WINDOW_STEP_DAYS = max(int(os.environ.get("GTFS_WINDOW_STEP_DAYS", "1")), 1)
 
 # Days of service loaded before today. One keeps the trips of yesterday's
 # service day that run past midnight; more answers questions about the recent

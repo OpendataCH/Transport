@@ -2,7 +2,7 @@
 
 import asyncio
 import os
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import asyncpg
@@ -100,8 +100,8 @@ def decide(monkeypatch, tmp_path):
         async def current_feed(_):
             return loaded
 
-        async def import_feed(path):
-            loads.append(path.name)
+        async def import_feed(paths):
+            loads.append("+".join(path.name for path in paths))
 
         monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
         monkeypatch.setattr(ingest.importer, "current_feed", current_feed)
@@ -203,10 +203,10 @@ def test_the_import_runs_as_a_child_that_also_writes_the_window(monkeypatch, tmp
     feed_path = tmp_path / "gtfs_20261002.zip"
 
     if code == 0:
-        asyncio.run(ingest.import_feed(feed_path))
+        asyncio.run(ingest.import_feed([feed_path]))
     else:
         with pytest.raises(RuntimeError):
-            asyncio.run(ingest.import_feed(feed_path))
+            asyncio.run(ingest.import_feed([feed_path]))
     assert calls[0][-3:] == (str(feed_path), "--window-feed", str(tmp_path))
 
 
@@ -257,3 +257,35 @@ def test_the_street_network_is_fetched_when_missing_and_renewed_when_old(monkeyp
 def test_without_an_osm_url_nothing_is_fetched(monkeypatch):
     monkeypatch.setattr(ingest.settings, "OSM_URL", None)
     assert ingest.refresh_osm() is None
+
+
+def test_two_timetable_years_are_imported_together(monkeypatch, tmp_path):
+    # Next year's feed is out: the window reads both, as one import.
+    names = {"2026": "gtfs_fp2026_20260930.zip", "2027": "gtfs_fp2027_20260930.zip"}
+    loads = []
+
+    async def current_feed(_):
+        return None
+
+    async def import_feed(paths):
+        loads.append([p.name for p in paths])
+
+    def feed_name(url):
+        return next((n for year, n in names.items() if year in url), None)
+
+    monkeypatch.setattr(ingest.settings, "GTFS_CACHE", str(tmp_path))
+    monkeypatch.setattr(
+        ingest.settings, "GTFS_URL", "https://x/timetable-{year}-gtfs2020/permalink"
+    )
+    monkeypatch.setattr(ingest.settings, "GTFS_DAYS", 120)
+    monkeypatch.setattr(ingest.importer, "current_feed", current_feed)
+    monkeypatch.setattr(ingest.importer, "feed_name", feed_name)
+    monkeypatch.setattr(
+        ingest.importer, "download", lambda url, cache: Path(cache) / feed_name(url)
+    )
+    monkeypatch.setattr(ingest, "import_feed", import_feed)
+    monkeypatch.setattr(
+        ingest, "datetime", type("D", (), {"now": staticmethod(lambda tz: datetime(2026, 11, 1))})
+    )
+    asyncio.run(ingest.refresh_timetable(FakeConnection(), None))
+    assert loads == [[names["2026"], names["2027"]]]

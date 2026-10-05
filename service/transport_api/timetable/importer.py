@@ -11,6 +11,12 @@ Only the days in the window are loaded (`GTFS_PAST_DAYS` back, `GTFS_DAYS`
 ahead, or to the end of the feed when that is 0): a trip that runs on none of
 them is skipped, along with its stop times. At least yesterday is in, because
 a trip of yesterday's service day can still be running after midnight.
+
+The national timetable is published per timetable year, which changes in
+mid-December, and the next year's feed appears in the autumn. A window that
+reaches across the change is read from both feeds, merged into one
+(`write_window_feed`); that merged window is what both the database and the
+router load.
 """
 
 import argparse
@@ -211,12 +217,47 @@ def _expand_frequencies(state: Feed) -> Iterator[tuple]:
 # --------------------------------------------------------------------------
 
 
-def feed_name(url: str) -> str:
-    """The file name the permalink currently points at, without downloading."""
+def feed_name(url: str) -> str | None:
+    """The file name the permalink currently points at, without downloading.
+
+    None when there is no such feed (yet): the permalink of a timetable year
+    that has not been published answers 404.
+    """
     with httpx.Client(follow_redirects=False, timeout=30) as client:
         response = client.get(url)
+        if response.status_code == 404:
+            return None
         target = response.headers.get("location") if response.is_redirect else url
     return Path(urlparse(target).path).name
+
+
+def window_of(today: date, days: int, past: int) -> tuple[date, date | None]:
+    """The first day and the last one (None: to the end of the feeds)."""
+    return today - timedelta(days=past), (today + timedelta(days=days) if days > 0 else None)
+
+
+def feed_urls(url: str, first: date, last: date | None) -> list[str]:
+    """The permalinks of the timetable years a window may touch.
+
+    `url` names one feed, or every year's with `{year}` in it. A timetable
+    year ends in mid-December, so a day in December can belong to the next
+    one; the candidates run from the first day's year to the year after the
+    last day's. Those not published come back empty from feed_name.
+    """
+    if "{year}" not in url:
+        return [url]
+    end = last or first + timedelta(days=366)
+    return [url.format(year=year) for year in range(first.year, end.year + 2)]
+
+
+def feed_sources(url: str, first: date, last: date | None) -> list[tuple[str, str]]:
+    """(permalink, file name) of the feeds that exist for the window, oldest first."""
+    found: dict[str, str] = {}
+    for candidate in feed_urls(url, first, last):
+        name = feed_name(candidate)
+        if name and name not in found.values():
+            found[candidate] = name
+    return list(found.items())
 
 
 def download(url: str, cache: Path) -> Path:
@@ -235,10 +276,11 @@ def download(url: str, cache: Path) -> Path:
             for chunk in response.iter_bytes(1 << 20):
                 out.write(chunk)
     partial.rename(path)
-    # A feed is a few hundred megabytes. The one before the newest stays: it
-    # may still be the loaded one, waiting for real time to move on.
+    # A feed is a few hundred megabytes. Two timetable years with the one
+    # before the newest of each stay: those may still be the loaded ones,
+    # waiting for real time to move on.
     feeds = [p for p in cache.glob("*.zip") if not p.name.startswith(WINDOW_PREFIX)]
-    for old in sorted(feeds, key=lambda p: p.stat().st_mtime)[:-2]:
+    for old in sorted(feeds, key=lambda p: p.stat().st_mtime)[:-KEPT_FEEDS]:
         old.unlink()
     log.info("downloaded %s (%d MB)", name, path.stat().st_size >> 20)
     return path
@@ -250,73 +292,260 @@ def download(url: str, cache: Path) -> Path:
 
 WINDOW_PREFIX = "window_"
 
+# Feed files kept in the cache: two timetable years, two versions each.
+KEPT_FEEDS = 4
+
 # Files of the feed copied whole; the others are cut to the trips that run.
 WHOLE = ("agency.txt", "routes.txt", "stops.txt", "feed_info.txt")
 
 
 def write_window_feed(
-    source: Path, target: Path, first: date, last: date, walk_sets_transfer: bool = False
-) -> dict[str, int]:
-    """A GTFS zip with only the trips that run between `first` and `last`.
+    sources: Path | list[Path],
+    target: Path,
+    first: date,
+    last: date | None,
+    walk_sets_transfer: bool = False,
+) -> dict:
+    """One GTFS zip with only the trips that run between `first` and `last`.
 
-    For the router: MOTIS reads the whole feed into memory before it looks at
-    any date, and the year's 42 million stop times need more than 3.5 GB to
-    import - more than either server can spare. The window that the database
-    holds is a quarter of that. Written to a temporary name and renamed, so
-    that the router never sees half a file. `walk_sets_transfer`: see
-    walks_set_transfer_times.
+    For the router and the database alike: MOTIS reads the whole feed into
+    memory before it looks at any date, and the year's 42 million stop times
+    need more than 3.5 GB to import - more than either server can spare.
+
+    `sources` may be two timetable years. Each then gives the days it is valid
+    for (the newer one where they overlap), and they are written as one feed:
+    stops are shared (the newer name wins), the ids of calendars are made
+    unique by the feed's version, and route or trip ids only when the two
+    feeds share one - trip ids are what real time is matched by, and the
+    Swiss ones carry their year already. `last` None runs to the end of the
+    feeds. Written to a temporary name and renamed, so that the router never
+    sees half a file. `walk_sets_transfer`: see walks_set_transfer_times.
+
+    Returns the rows written per file, and `first`, `last` and `version` of
+    the window.
     """
-    low, high = first.strftime("%Y%m%d"), last.strftime("%Y%m%d")
-    with zipfile.ZipFile(source) as feed:
-        services = set(service_days(feed, first, last))
-        trips = {row["trip_id"] for row in rows(feed, "trips.txt") if row["service_id"] in services}
+    paths = [sources] if isinstance(sources, (str, Path)) else list(sources)
+    feeds = [zipfile.ZipFile(path) for path in paths]
+    try:
+        return _write_window(feeds, target, first, last, walk_sets_transfer)
+    finally:
+        for feed in feeds:
+            feed.close()
 
-        # Each test gets the row and the column positions: building a dict per
-        # row would cost a minute over 42 million stop times.
-        def trip_ok(row: list, col: dict, *names: str) -> bool:
+
+@dataclass
+class _Part:
+    """One source feed's share of a window."""
+
+    feed: zipfile.ZipFile
+    version: str
+    start: date
+    end: date
+    first: date = date.min
+    last: date = date.min
+    services: set = field(default_factory=set)
+    trips: set = field(default_factory=set)
+    rename: dict = field(default_factory=dict)  # column -> (prefix, ids to prefix or None = all)
+
+
+def _feed_dates(feed: zipfile.ZipFile) -> tuple[str, date, date]:
+    info = next(rows(feed, "feed_info.txt"), {}) if "feed_info.txt" in feed.namelist() else {}
+    start = datetime.strptime(info.get("feed_start_date") or "19700101", "%Y%m%d").date()
+    end = datetime.strptime(info.get("feed_end_date") or "99991231", "%Y%m%d").date()
+    return info.get("feed_version") or "", start, end
+
+
+def _write_window(feeds, target: Path, first: date, last: date | None, walks: bool) -> dict:
+    parts = sorted((_Part(feed, *_feed_dates(feed)) for feed in feeds), key=lambda part: part.start)
+    for i, part in enumerate(parts):
+        part.first = max(first, part.start)
+        part.last = part.end if last is None else min(last, part.end)
+        if i + 1 < len(parts):
+            part.last = min(part.last, parts[i + 1].start - timedelta(days=1))
+    parts = [part for part in parts if part.first <= part.last]
+    if not parts:
+        raise ValueError(f"no feed covers {first}..{last}")
+
+    for part in parts:
+        part.services = set(service_days(part.feed, part.first, part.last))
+        part.trips = {
+            row["trip_id"]
+            for row in rows(part.feed, "trips.txt")
+            if row["service_id"] in part.services
+        }
+
+    # Ids the later feeds must change so as not to meet the earlier ones'.
+    seen_routes: set = set()
+    seen_trips: set = set()
+    for i, part in enumerate(parts):
+        routes = {row["route_id"] for row in rows(part.feed, "routes.txt")}
+        if i:
+            prefix = f"{part.version or i}:"
+            part.rename["service_id"] = (prefix, None)
+            if routes & seen_routes:
+                part.rename["route_id"] = (prefix, routes & seen_routes)
+            if part.trips & seen_trips:
+                log.warning("%d trip ids repeat across feeds", len(part.trips & seen_trips))
+                part.rename["trip_id"] = (prefix, part.trips & seen_trips)
+        seen_routes |= routes
+        seen_trips |= part.trips
+
+    def trip_ok(part):
+        def check(row, col, *names):
             return all(
-                name not in col or row[col[name]] in ("",) or row[col[name]] in trips
+                name not in col or row[col[name]] == "" or row[col[name]] in part.trips
                 for name in names
             )
 
-        keep = {
-            "calendar.txt": lambda r, c: r[c["service_id"]] in services,
+        return check
+
+    def keep_for(part, name):
+        low, high = part.first.strftime("%Y%m%d"), part.last.strftime("%Y%m%d")
+        services, trips, ok = part.services, part.trips, trip_ok(part)
+
+        def calendar(r, c):
+            # Kept rows are cut to this feed's share of the window, so that a
+            # calendar running on past the timetable change does not reach
+            # into the next year's days.
+            if r[c["service_id"]] not in services:
+                return False
+            r[c["start_date"]] = max(r[c["start_date"]], low)
+            r[c["end_date"]] = min(r[c["end_date"]], high)
+            return True
+
+        return {
+            "calendar.txt": calendar,
             "calendar_dates.txt": lambda r, c: (
                 r[c["service_id"]] in services and low <= r[c["date"]] <= high
             ),
             "trips.txt": lambda r, c: r[c["trip_id"]] in trips,
             "stop_times.txt": lambda r, c: r[c["trip_id"]] in trips,
             "frequencies.txt": lambda r, c: r[c["trip_id"]] in trips,
-            "transfers.txt": lambda r, c: trip_ok(r, c, "from_trip_id", "to_trip_id"),
-        }
-        rewrite = {"transfers.txt": walks_set_transfer_times} if walk_sets_transfer else {}
-        partial = target.with_name(target.name + ".part")
-        counts = {}
-        with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as out:
-            for name in feed.namelist():
-                if name not in WHOLE and name not in keep:
-                    continue
-                counts[name] = _copy_rows(feed, out, name, keep.get(name), rewrite.get(name))
+            "transfers.txt": lambda r, c: ok(r, c, "from_trip_id", "to_trip_id"),
+        }.get(name)
+
+    names = []
+    for part in parts:
+        names += [n for n in part.feed.namelist() if n not in names]
+    # The newest first for the files whose rows are merged by key, so that its
+    # version of a stop or an operator is the one kept.
+    by_key = {"stops.txt": ("stop_id",), "agency.txt": ("agency_id",)}
+
+    counts: dict = {}
+    partial = target.with_name(target.name + ".part")
+    with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as out:
+        for name in names:
+            if name == "feed_info.txt":
+                continue
+            if name not in WHOLE and keep_for(parts[0], name) is None:
+                continue
+            ordered = list(reversed(parts)) if name in by_key else parts
+            sources = [
+                (part, keep_for(part, name)) for part in ordered if name in part.feed.namelist()
+            ]
+            rewrite = walks_set_transfer_times if walks and name == "transfers.txt" else None
+            counts[name] = _merge_rows(out, name, sources, by_key.get(name), rewrite)
+        out.writestr("feed_info.txt", _feed_info(parts))
+
     partial.rename(target)
+    counts.update(
+        first=parts[0].first,
+        last=parts[-1].last,
+        version="+".join(part.version for part in parts if part.version) or None,
+    )
     return counts
 
 
-def _copy_rows(feed: zipfile.ZipFile, out: zipfile.ZipFile, name: str, keep, rewrite=None) -> int:
-    """Copy the rows that `keep` accepts; `rewrite` gets all of them at once."""
-    kept = 0
-    with feed.open(name) as raw, out.open(name, "w") as sink:
+def _feed_info(parts: list[_Part]) -> str:
+    text = io.StringIO()
+    writer = csv.writer(text, quoting=csv.QUOTE_ALL)
+    writer.writerow(
+        [
+            "feed_publisher_name",
+            "feed_publisher_url",
+            "feed_lang",
+            "feed_start_date",
+            "feed_end_date",
+            "feed_version",
+        ]
+    )
+    info = next(rows(parts[-1].feed, "feed_info.txt"), {})
+    writer.writerow(
+        [
+            info.get("feed_publisher_name", ""),
+            info.get("feed_publisher_url", ""),
+            info.get("feed_lang", ""),
+            parts[0].first.strftime("%Y%m%d"),
+            parts[-1].last.strftime("%Y%m%d"),
+            "+".join(part.version for part in parts if part.version),
+        ]
+    )
+    return text.getvalue()
+
+
+def _merge_rows(out: zipfile.ZipFile, name: str, sources, key, rewrite) -> int:
+    """The kept rows of one file from every source, under one header.
+
+    Columns are matched by name; a column only one feed has stays empty in
+    the other's rows. With `key`, a row whose key an earlier source already
+    gave is left out. `rewrite` gets all rows at once (the transfers).
+    """
+    readers = []
+    header: list[str] = []
+    for part, keep in sources:
+        raw = part.feed.open(name)
         reader = csv.reader(io.TextIOWrapper(raw, encoding="utf-8-sig", newline=""))
+        columns = next(reader, [])
+        header += [c for c in columns if c not in header]
+        readers.append((part, keep, raw, reader, {c: i for i, c in enumerate(columns)}))
+
+    def renamed(part, col):
+        """(output index, prefix, only these ids) per renamed column of this file."""
+        found = []
+        for column, (prefix, only) in part.rename.items():
+            for out_name in (column, f"from_{column}", f"to_{column}"):
+                if out_name in col:
+                    found.append((header.index(out_name), prefix, only))
+        return found
+
+    seen: set = set()
+    kept = 0
+    collected = [] if rewrite is not None else None
+    # Zip64 from the start: two years' stop times are over 4 GB uncompressed
+    # before they are cut, and the size is not known when writing begins.
+    with out.open(name, "w", force_zip64=True) as sink:
         text = io.TextIOWrapper(sink, encoding="utf-8", newline="")
         writer = csv.writer(text, quoting=csv.QUOTE_ALL)
-        header = next(reader)
-        col = {name: index for index, name in enumerate(header)}
         writer.writerow(header)
-        selected = (row for row in reader if keep is None or keep(row, col))
-        if rewrite is not None:
-            selected = iter(rewrite(list(selected), col))
-        for row in selected:
-            writer.writerow(row)
-            kept += 1
+        for part, keep, raw, reader, col in readers:
+            same = list(col) == header[: len(col)]
+            positions = [col.get(c) for c in header]
+            changes = renamed(part, col)
+            key_at = [header.index(k) for k in key] if key else None
+            for row in reader:
+                if keep is not None and not keep(row, col):
+                    continue
+                if not same or len(row) != len(header):
+                    row = [row[i] if i is not None and i < len(row) else "" for i in positions]
+                for at, prefix, only in changes:
+                    value = row[at]
+                    if value and (only is None or value in only):
+                        row[at] = prefix + value
+                if key_at is not None:
+                    k = tuple(row[i] for i in key_at)
+                    if k in seen:
+                        continue
+                    seen.add(k)
+                if collected is not None:
+                    collected.append(row)
+                else:
+                    writer.writerow(row)
+                    kept += 1
+            raw.close()
+        if collected is not None:
+            for row in rewrite(collected, {c: i for i, c in enumerate(header)}):
+                writer.writerow(row)
+                kept += 1
         text.flush()
         text.detach()
     return kept
@@ -396,22 +625,38 @@ def window_feed_name(version: str | None, first: date, walk_sets_transfer: bool 
     return f"{WINDOW_PREFIX}{version or 'feed'}_{first:%Y%m%d}{walks}.zip"
 
 
-def publish_window(source: Path, directory: Path, counts: dict) -> Path:
-    """Write the window the database now holds, and point the router at it.
-
-    The router (docker/motis-run.sh) follows `CURRENT`; it is written last,
-    after the zip is complete. The window before stays, in case the router is
-    still importing it; older ones go.
-    """
+def build_window(sources: list[Path], directory: Path, first: date, last: date | None) -> Path:
+    """The merged window of `sources`, written into `directory` under its name."""
+    directory.mkdir(parents=True, exist_ok=True)
     walks = settings.GTFS_WALK_SETS_TRANSFER
-    target = directory / window_feed_name(counts.get("version"), counts["first"], walks)
-    write_window_feed(source, target, counts["first"], counts["last"], walks)
-    (directory / "CURRENT").write_text(target.name + "\n")
+    building = directory / f"{WINDOW_PREFIX}building.zip"
+    counts = write_window_feed(sources, building, first, last, walks)
+    target = directory / window_feed_name(counts["version"], counts["first"], walks)
+    building.rename(target)
+    log.info(
+        "window %s..%s from %s: %s",
+        counts["first"],
+        counts["last"],
+        ", ".join(p.name for p in sources),
+        target.name,
+    )
+    return target
+
+
+def publish_window(window: Path) -> None:
+    """Point the router at a window.
+
+    The router (docker/motis-run.sh) follows `CURRENT`, written once the zip
+    is complete. The window before stays, in case the router is still
+    importing it; older ones go.
+    """
+    directory = window.parent
+    (directory / "CURRENT").write_text(window.name + "\n")
     windows = sorted(directory.glob(WINDOW_PREFIX + "*.zip"), key=lambda p: p.stat().st_mtime)
     for old in windows[:-2]:
-        old.unlink()
-    log.info("window for the router: %s", target.name)
-    return target
+        if old != window:
+            old.unlink()
+    log.info("window for the router: %s", window.name)
 
 
 # --------------------------------------------------------------------------
@@ -420,9 +665,18 @@ def publish_window(source: Path, directory: Path, counts: dict) -> Path:
 
 
 async def load(
-    connection: asyncpg.Connection, path: Path, today: date, days: int, past: int = 1
+    connection: asyncpg.Connection,
+    path: Path,
+    today: date,
+    days: int,
+    past: int = 1,
+    feed_file: str | None = None,
 ) -> dict:
-    """Read the feed at `path` into `gtfs_next` and swap it in. Returns counts."""
+    """Read the feed at `path` into `gtfs_next` and swap it in. Returns counts.
+
+    `feed_file` is what is recorded as loaded, when `path` is a window merged
+    from other files: their names, joined by `+`.
+    """
     started = time.monotonic()
     first = today - timedelta(days=past)
 
@@ -572,7 +826,7 @@ async def load(
         await connection.execute(
             "INSERT INTO gtfs_next.feed_info (feed_file, version, window_from, window_to)"
             " VALUES ($1, $2, $3, $4)",
-            path.name,
+            feed_file or path.name,
             info.get("feed_version"),
             first,
             last,
@@ -583,7 +837,7 @@ async def load(
     await swap(connection)
 
     counts = {
-        "feed": path.name,
+        "feed": feed_file or path.name,
         "version": info.get("feed_version"),
         "first": first,
         "last": last,
@@ -630,44 +884,57 @@ async def current_feed(connection: asyncpg.Connection) -> asyncpg.Record | None:
     return await connection.fetchrow("SELECT * FROM gtfs.feed_info")
 
 
-async def main(source: str | None, window_dir: str | None, window_only: bool = False) -> None:
+async def main(sources: list[str], window_dir: str | None, window_only: bool = False) -> None:
+    """Import the window: from the files given, or the feeds the window needs.
+
+    The window is merged into one file first (`build_window`), the database is
+    loaded from it, and with `window_dir` the router is pointed at it. With
+    `window_only` nothing is imported: the window the database holds is
+    written again from its feeds in the cache.
+    """
+    cache = Path(settings.GTFS_CACHE)
+    today = datetime.now(ZURICH).date()
+    first, last = window_of(today, settings.GTFS_DAYS, settings.GTFS_PAST_DAYS)
     connection = await asyncpg.connect(settings.DATABASE_URL)
-    if window_only:
-        # The window the database holds, written again from its cached feed:
-        # for a change to the router's feed that should not wait for the next
-        # timetable.
-        try:
-            loaded = await current_feed(connection)
-        finally:
-            await connection.close()
-        if loaded is None:
-            raise SystemExit("no timetable loaded")
-        counts = {
-            "version": loaded["version"],
-            "first": loaded["window_from"],
-            "last": loaded["window_to"],
-        }
-        path = Path(source) if source else Path(settings.GTFS_CACHE) / loaded["feed_file"]
-        publish_window(path, Path(window_dir or settings.GTFS_CACHE), counts)
-        return
-    path = Path(source) if source else download(settings.GTFS_URL, Path(settings.GTFS_CACHE))
     try:
-        counts = await load(
+        if window_only:
+            loaded = await current_feed(connection)
+            if loaded is None:
+                raise SystemExit("no timetable loaded")
+            paths = [Path(s) for s in sources] or [
+                cache / name for name in loaded["feed_file"].split("+")
+            ]
+            window = build_window(
+                paths, Path(window_dir or cache), loaded["window_from"], loaded["window_to"]
+            )
+            publish_window(window)
+            return
+        if sources:
+            paths = [Path(s) for s in sources]
+        else:
+            paths = [
+                download(url, cache) for url, _ in feed_sources(settings.GTFS_URL, first, last)
+            ]
+        window = build_window(paths, Path(window_dir or cache), first, last)
+        await load(
             connection,
-            path,
-            datetime.now(ZURICH).date(),
+            window,
+            today,
             settings.GTFS_DAYS,
             settings.GTFS_PAST_DAYS,
+            feed_file="+".join(p.name for p in paths),
         )
     finally:
         await connection.close()
     if window_dir:
-        publish_window(path, Path(window_dir), counts)
+        publish_window(window)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("feed", nargs="?", help="A GTFS zip; default: download the newest.")
+    parser.add_argument(
+        "feeds", nargs="*", help="GTFS zips (one per timetable year); default: download them."
+    )
     parser.add_argument(
         "--window-feed",
         metavar="DIR",
@@ -681,4 +948,4 @@ if __name__ == "__main__":
     )
     arguments = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    asyncio.run(main(arguments.feed, arguments.window_feed, arguments.window_only))
+    asyncio.run(main(arguments.feeds, arguments.window_feed, arguments.window_only))

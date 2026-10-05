@@ -267,11 +267,20 @@ def verdict(r: dict) -> str:
     return "different, v1 faster"
 
 
+# The second host's path prefix, set from the command line.
+PREFIX = "/v2"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--v1", default="https://transport.opendata.ch")
     parser.add_argument("--v2", default="https://transport-new.opendata.ch")
     parser.add_argument("--pause", type=float, default=1.5)
+    parser.add_argument(
+        "--v2-prefix",
+        default="/v2",
+        help="path prefix on the second host (/v1 once it answers from the timetable)",
+    )
     parser.add_argument("--json", help="write every case and its measures here")
     parser.add_argument(
         "--random",
@@ -282,6 +291,8 @@ def main() -> int:
     )
     parser.add_argument("--seed", type=int, default=20261004, help="for the random hours")
     arguments = parser.parse_args()
+    global PREFIX
+    PREFIX = arguments.v2_prefix
 
     day = datetime.now() + timedelta(days=2)
     saturday = day + timedelta(days=(5 - day.weekday()) % 7 or 7)
@@ -341,7 +352,7 @@ def main() -> int:
     tally = Counter()
     for params, label in cases:
         s1, one = get(arguments.v1, "/v1/connections", params)
-        s2, two = get(arguments.v2, "/v2/connections", params)
+        s2, two = get(arguments.v2, f"{PREFIX}/connections", params)
         r = {"case": label, "status": [s1, s2]}
         if s1 == 200 and s2 == 200:
             r.update(compare_connections(one, two))
@@ -364,7 +375,7 @@ def main() -> int:
     for station in BOARDS:
         params = {"station": station, "limit": "15", "datetime": day.strftime("%Y-%m-%d 09:00")}
         s1, one = get(arguments.v1, "/v1/stationboard", params)
-        s2, two = get(arguments.v2, "/v2/stationboard", params)
+        s2, two = get(arguments.v2, f"{PREFIX}/stationboard", params)
         r = {"case": station, "status": [s1, s2]}
         if s1 == 200 and s2 == 200:
             key = lambda j: (j["stop"]["departure"], j["category"], j["number"])  # noqa: E731
