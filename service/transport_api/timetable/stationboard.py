@@ -28,8 +28,11 @@ from .names import normalize
 router = APIRouter()
 
 # How far ahead a board looks. A quiet stop may have its next departure in
-# the morning; nothing in the timetable is further away than a day.
-HORIZON = 24 * 3600
+# the morning; nothing in the timetable is further away than a day. A busy
+# one fills its board within the first of these, which reads a fraction of
+# the rows: the longer one is only asked when the shorter falls short.
+HORIZONS = (2 * 3600, 24 * 3600)
+HORIZON = HORIZONS[-1]
 
 # Rows fetched beyond `limit`, for the departures that share its last minute.
 TIES = 50
@@ -191,6 +194,22 @@ async def _calls_at(
         r["idx"]
         for r in await db.fetch(pool, "SELECT idx FROM gtfs.stops WHERE station = $1", station_idx)
     ]
+    for horizon in HORIZONS:
+        rows = await _calls_within(pool, platforms, when, arrivals, modes, count, horizon)
+        if len(rows) > count or horizon == HORIZONS[-1]:
+            return _cut(rows, count)
+    return []
+
+
+async def _calls_within(
+    pool: asyncpg.Pool,
+    platforms: list[int],
+    when: datetime,
+    arrivals: bool,
+    modes: list[str] | None,
+    count: int,
+    horizon: int,
+) -> list[asyncpg.Record]:
     instant = int(when.timestamp())
     args: list[Any] = [platforms, modes]
     halves = []
@@ -200,7 +219,7 @@ async def _calls_at(
         day = when.date() + timedelta(days=offset)
         base = int(service_day_start(day).timestamp())
         start = len(args) + 1
-        args += [day, base, instant - base, instant - base + HORIZON]
+        args += [day, base, instant - base, instant - base + horizon]
         halves.append(
             HALF.format(
                 p=start,
@@ -214,8 +233,7 @@ async def _calls_at(
         )
     args.append(count + TIES)
     query = " UNION ALL ".join(f"({h})" for h in halves) + f" ORDER BY at LIMIT ${len(args)}"
-    rows = await db.fetch(pool, query, *args)
-    return _cut(rows, count)
+    return await db.fetch(pool, query, *args)
 
 
 def _cut(rows: list[asyncpg.Record], count: int) -> list[asyncpg.Record]:
