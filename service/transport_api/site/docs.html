@@ -49,13 +49,19 @@
                     <a href="#limit-response">Limit response</a>
                 </li>
                 <li>
+                    <a href="#source">Source</a>
+                </li>
+                <li>
+                    <a href="#history">History</a>
+                </li>
+                <li>
                     <a href="privacy.html">Privacy</a>
                 </li>
             </ul>
 
             <h3 id="rate-limiting">Rate Limit</h3>
 
-            <p>The number of HTTP requests you can send is constraint by the <a href="https://timetable.search.ch/api/help">rate limit of timetable.search.ch</a>.</p>
+            <p>There is no fixed limit per client. The service is shared by thousands of applications, so please cache what you can: the timetable changes twice a week, real-time data every 30 seconds. An application that asks the same question every few seconds will be throttled.</p>
 
             <h3 id="api-resources">API Resources</h3>
 
@@ -110,15 +116,10 @@
                         <td>optional</td>
                         <td>
                             Only with <code>query</code> parameter.
-                            Specifies the location type, possible types are:
-                            <ul>
-                                <li>all (default): Looks up for all types of locations</li>
-                                <li>station: Looks up for stations (train station, bus station)</li>
-                                <li>poi: Looks up for points of interest (Clock tower, China garden)</li>
-                                <li>address: Looks up for an address (Zurich Bahnhofstrasse 33)</li>
-                            </ul>
+                            Accepted for compatibility: <code>all</code> (default), <code>station</code>, <code>poi</code>, <code>address</code>.
+                            The answer always lists stations and stops - the timetable has no addresses or points of interest.
                         </td>
-                        <td>address</td>
+                        <td>station</td>
                     </tr>
                 </tbody>
             </table>
@@ -150,8 +151,8 @@
 {
     "stations": [
         {
-            "id": "000000022",
-            "name": "Basel",
+            "id": "8500010",
+            "name": "Basel SBB",
             "score": null,
             "coordinate": {
                 "type": "WGS84",
@@ -237,7 +238,7 @@
                     <tr>
                         <td><code>page</code></td>
                         <td>optional</td>
-                        <td>0 - 3. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
+                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
                         <td>3</td>
                     </tr>
                 </tbody>
@@ -264,7 +265,7 @@
 
             <pre>GET http://transport.opendata.ch/v1/connections?from=Lausanne&amp;to=Genève</pre>
             <p>which is the same as</p>
-            <pre>GET http://transport.opendata.ch/v1/connections?from=008501120&amp;to=008501008</pre>
+            <pre>GET http://transport.opendata.ch/v1/connections?from=8501120&amp;to=8501008</pre>
 
             <h4>Example response</h4>
 
@@ -288,10 +289,10 @@
                 "station" : {
                     "coordinate" : {
                         "type" : "WGS84",
-                        "x" : "6629086",
-                        "y" : "46516785"
+                        "x" : 46.516785,
+                        "y" : 6.629086
                     },
-                    "id" : "008501120",
+                    "id" : "8501120",
                     "name" : "Lausanne",
                     "score" : null
                 }
@@ -312,10 +313,10 @@
                 "station" : {
                     "coordinate" : {
                         "type" : "WGS84",
-                        "x" : "6142437",
-                        "y" : "46210217"
+                        "x" : 46.210217,
+                        "y" : 6.142437
                     },
-                    "id" : "008501008",
+                    "id" : "8501008",
                     "name" : "Genève",
                     "score" : null
                 }
@@ -437,8 +438,8 @@
                 "coordinate":
                 {
                     "type" : "WGS84",
-                    "x": "8050864",
-                    "y": "47392020"
+                    "x": 47.39202,
+                    "y": 8.050864
                 }
             },
             "arrival": null,
@@ -471,8 +472,8 @@
                 "coordinate":
                 {
                     "type": "WGS84",
-                    "x": "8050864",
-                    "y": "47392020"
+                    "x": 47.39202,
+                    "y": 8.050864
                 }
             },
             "arrival": null,
@@ -874,13 +875,13 @@
         {
             "from":{
                 "station":{
-                    "id":"008501120",
+                    "id":"8501120",
                     "name":"Lausanne",
                     "score":null,
                     "coordinate":{
                         "type":"WGS84",
-                        "x":6.629086,
-                        "y":46.516785
+                        "x":46.516785,
+                        "y":6.629086
                     }
                 },
                 "arrival":null,
@@ -898,13 +899,13 @@
             },
             "to":{
                 "station":{
-                    "id":"008501008",
+                    "id":"8501008",
                     "name":"Gen\u00e8ve",
                     "score":null,
                     "coordinate":{
                         "type":"WGS84",
-                        "x":6.142437,
-                        "y":46.210217
+                        "x":46.210217,
+                        "y":6.142437
                     }
                 }
             }
@@ -913,6 +914,29 @@
     // ...
 }
             </pre>
+
+            <hr/>
+
+            <h3 id="source">Source</h3>
+
+            <p>The API answers from its own copy of the national timetable. It asks no other timetable service while answering a request.</p>
+
+            <ul>
+                <li><strong>Timetable:</strong> the Swiss national timetable in GTFS, from <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a>, the open data platform for Swiss public transport. A new version appears twice a week and is loaded the same day. Around the timetable change in December the current and the next timetable year are read together.</li>
+                <li><strong>Real time:</strong> delays, cancellations and added trips from the GTFS-RT feed of opentransportdata.swiss, refreshed every 30 seconds.</li>
+                <li><strong>Connections:</strong> computed by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner, on the same timetable and real-time data. Walks to, from and between stops follow the streets of <a href="https://www.openstreetmap.org/" rel="external noopener noreferrer">OpenStreetMap</a>.</li>
+                <li><strong>Operator names:</strong> as the national timetable's HAFAS data (HRDF) gives them, also from opentransportdata.swiss.</li>
+            </ul>
+
+            <p>The source code is on <a href="https://gitlab.com/opendata.ch/Transport">GitLab</a>. If you show the data, please name its source: <em>Timetable data: opentransportdata.swiss</em>.</p>
+
+            <h3 id="history">History</h3>
+
+            <ul>
+                <li><strong>2012:</strong> Opendata.ch starts the Transport API, written by Fabian Vogler and the community, on top of the SBB's timetable interface.</li>
+                <li><strong>2017:</strong> the SBB systems behind it are to be switched off. search.ch steps in with its own web service, and from <a href="https://opendata.ch/2017/06/search-ch-rettet-transport-opendata-ch/" rel="external noopener noreferrer">31 July 2017</a> the API translates its answers.</li>
+                <li><strong>2026:</strong> the national timetable and its real-time data are open data, so the API answers from them directly: its own copy of the timetable and its own journey planner. The parameters and the answers of <code>/v1</code> stay as they were.</li>
+            </ul>
 
         </article>
 
