@@ -340,33 +340,41 @@
         return (stop.station && stop.station.name) || (stop.location && stop.location.name) || '';
     }
 
-    // Small line icons, drawn here so that the page needs nothing else.
+    // Icons from Tabler Icons (https://tabler.io/icons, MIT License,
+    // Copyright (c) 2020-2025 Pawel Kuna) and, for the tram, Lucide
+    // (https://lucide.dev, ISC License, Copyright (c) Lucide Contributors,
+    // portions Copyright (c) 2013-2023 Cole Bemis as part of Feather, MIT).
+    // Both licences allow use and change with this notice kept. The e-bike
+    // is Tabler's bike with Tabler's bolt.
     var ICONS = {
-        walk: 'M13 4a1.6 1.6 0 1 1-3.2 0A1.6 1.6 0 0 1 13 4zM9.5 21l1.6-6 2.2 2v4M11.2 8.5 8 10.5V14M11.2 8.5l1.8 4 3 1.5M11.2 8.5l1.3 6',
-        bus: 'M6 4h12a2 2 0 0 1 2 2v10H4V6a2 2 0 0 1 2-2zM4 11h16M7 19v-3M17 19v-3M8 14h.01M16 14h.01',
-        tram: 'M7 6h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM5 12h14M9 2h6M12 2v4M8 18l-2 3M16 18l2 3',
-        train: 'M6 15V8a6 5 0 0 1 12 0v7a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3zM6 11h12M10 5h4M9 14.5h.01M15 14.5h.01M9 18l-2 3M15 18l2 3',
-        ship: 'M4 15l1.5 4h13L20 15H4zM7 15V9h10v6M12 5v4M3 21c2 0 2-1 4.5-1s2.5 1 4.5 1 2-1 4.5-1 2.5 1 4.5 1',
-        cableway: 'M3 4l18 4M12 6v3M7 9h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1zM6 14h12',
-        bike: 'M6 17.5a3 3 0 1 0 0-.01M18 17.5a3 3 0 1 0 0-.01M6 17.5 9.5 10h6l2.5 7.5M9.5 10 12 17.5l3.5-7.5M8.5 7h3',
-        scooter: 'M6 18a2 2 0 1 0 0-.01M18 18a2 2 0 1 0 0-.01M8 18h8M16 18 13 5h3',
-        car: 'M5 16V12l2-5h10l2 5v4H5zM5 12h14M7.5 16v2M16.5 16v2M8 14h.01M16 14h.01',
-        pin: 'M12 21s-6-5.5-6-10a6 6 0 1 1 12 0c0 4.5-6 10-6 10zM12 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'
+        "walk": "<path d=\"M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" /> <path d=\"M7 21l3 -4\" /> <path d=\"M16 21l-2 -4l-3 -3l1 -6\" /> <path d=\"M6 12l2 -3l4 -1l3 3l3 1\" />",
+        "bus": "<path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8\" /> <path d=\"M16 5l1.5 7l4.5 0\" /> <path d=\"M2 10l15 0\" /> <path d=\"M7 5l0 5\" /> <path d=\"M12 5l0 5\" />",
+        "train": "<path d=\"M21 13c0 -3.87 -3.37 -7 -10 -7h-8\" /> <path d=\"M3 15h16a2 2 0 0 0 2 -2\" /> <path d=\"M3 6v5h17.5\" /> <path d=\"M3 11v4\" /> <path d=\"M8 11v-5\" /> <path d=\"M13 11v-4.5\" /> <path d=\"M3 19h18\" />",
+        "tram": "<rect width=\"16\" height=\"16\" x=\"4\" y=\"3\" rx=\"2\" /> <path d=\"M4 11h16\" /> <path d=\"M12 3v8\" /> <path d=\"m8 19-2 3\" /> <path d=\"m18 22-2-3\" /> <path d=\"M8 15h.01\" /> <path d=\"M16 15h.01\" />",
+        "ship": "<path d=\"M2 20a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1\" /> <path d=\"M4 18l-1 -5h18l-2 4\" /> <path d=\"M5 13v-6h8l4 6\" /> <path d=\"M7 7v-4h-1\" />",
+        "cableway": "<path d=\"M4 5l16 -2m-8 1v10m-5.106 -6h10.306c2.45 3 2.45 9 -.2 12h-10.106c-2.544 -3 -2.544 -9 0 -12zm-1.894 6h14\" />",
+        "bike": "<path d=\"M5 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M19 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M12 19l0 -4l-3 -3l5 -4l2 3l3 0\" /> <path d=\"M17 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" />",
+        "scooter": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\" />",
+        "escooter": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\" /> <path d=\"M10 4l-2 4h3l-2 4\" />",
+        "moped": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M5 16v1a2 2 0 0 0 4 0v-5h-3a3 3 0 0 0 -3 3v1h10a6 6 0 0 1 5 -4v-5a2 2 0 0 0 -2 -2h-1\" /> <path d=\"M6 9l3 0\" />",
+        "car": "<path d=\"M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\" />",
+        "pin": "<path d=\"M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0\" /> <path d=\"M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z\" />",
+        "ebike": "<path d=\"M5 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M19 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M12 19l0 -4l-3 -3l5 -4l2 3l3 0\" /> <path d=\"M17 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" /><g transform=\"translate(13 0) scale(.45)\"><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></g>"
     };
+
+    var ICON_TITLES = {walk: 'walk', cableway: 'cable car', ebike: 'e-bike', escooter: 'e-scooter', pin: 'destination'};
     var SVG = 'http://www.w3.org/2000/svg';
     function icon(kind, extra) {
         var svg = document.createElementNS(SVG, 'svg');
         svg.setAttribute('viewBox', '0 0 24 24');
         svg.setAttribute('fill', 'none');
         svg.setAttribute('stroke', 'currentColor');
-        svg.setAttribute('stroke-width', '1.8');
+        svg.setAttribute('stroke-width', '2');
         svg.setAttribute('stroke-linecap', 'round');
         svg.setAttribute('stroke-linejoin', 'round');
         svg.setAttribute('aria-hidden', 'true');
-        var path = document.createElementNS(SVG, 'path');
-        path.setAttribute('d', ICONS[kind] || ICONS.train);
-        svg.appendChild(path);
-        return el('span', {class: 'ico ' + kind + (extra ? ' ' + extra : ''), title: kind}, [svg]);
+        svg.innerHTML = ICONS[kind] || ICONS.train;
+        return el('span', {class: 'ico ' + kind + (extra ? ' ' + extra : ''), title: ICON_TITLES[kind] || kind}, [svg]);
     }
 
     // The kind of vehicle, from the category the timetable gives a line.
@@ -377,7 +385,11 @@
     function kindOf(section) {
         if (section.rental) {
             var v = section.rental.vehicle || '';
-            return v.indexOf('scooter') === 0 || v === 'moped' ? 'scooter' : v === 'car' ? 'car' : 'bike';
+            var electric = (section.rental.propulsion || '').indexOf('electric') === 0;
+            if (v === 'car') return 'car';
+            if (v === 'moped' || v === 'scooter_seated') return 'moped';
+            if (v.indexOf('scooter') === 0) return electric ? 'escooter' : 'scooter';
+            return electric ? 'ebike' : 'bike';
         }
         if (!section.journey) return 'walk';
         var c = (section.journey.category || '').toUpperCase();
