@@ -1,0 +1,139 @@
+# transport.opendata.ch, containerised: one service answers the API under /v1
+# and the website around it, Redis keeps the counters behind /stats.php.
+# /v2/locations and /v2/stationboard read the timetable from Postgres (db),
+# which `ingest` loads from opentransportdata.swiss and keeps current;
+# /v2/connections asks `motis`, the router, which runs on the same feed.
+#
+# The image is built by the CI of gitlab.com/opendata.ch/Transport and pulled
+# from its registry; nothing is built here. The registry is public, so no
+# credentials are needed. To move to another build, change SERVICE_IMAGE_TAG
+# in .env and run `docker compose up -d` - and to roll back, put the old tag
+# back. That is the whole deployment procedure.
+#
+# .env also holds DB_PASSWORD (the timetable database, internal only) and
+# OTD_API_KEY (GTFS-RT, Bitwarden "opentransportdata.swiss - API-Manager").
+name: transport
+
+services:
+  service:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 1g
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      WEB_CONCURRENCY: "2"
+      # The Redis stats.php reads and the service counts into.
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      MOTIS_URL: http://motis:8080
+      # /v1 answers from the timetable; search.ch stays at /v1-old.
+      V1_FROM_TIMETABLE: "1"
+    depends_on:
+      redis: {condition: service_healthy}
+      # Started, not healthy: /v1 must not wait for the timetable database
+      # or the router.
+      db: {condition: service_started}
+      motis: {condition: service_started}
+    # Reached by name over oa-network, where the reverse proxy lives.
+    networks: [transport, oa-network]
+
+  # The timetable loader: the GTFS feed hourly checked and imported when real
+  # time has moved to it, real time every 30 seconds. One process, so that the
+  # API workers do not each poll against a limit of five requests a minute.
+  ingest:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 1500m
+    pull_policy: always
+    restart: unless-stopped
+    command: ["python", "-m", "transport_api.timetable.ingest"]
+    # The image's check asks the API on port 8000, which this process is not.
+    healthcheck:
+      disable: true
+    environment:
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      GTFS_DAYS: "14"
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      - gtfscache:/var/cache/gtfs
+    depends_on:
+      db: {condition: service_healthy}
+    networks: [transport]
+
+  # The router behind /v2/connections. motis-run.sh (from the repository's
+  # docker/ folder, copied next to this file) imports the feed named in
+  # /gtfs/CURRENT - written by ingest after each import - and follows it.
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    # The import of the window peaks near 2 GB; a limit keeps a bad feed
+    # from pushing the whole host into the OOM killer, as the full year did.
+    mem_limit: 3g
+    restart: unless-stopped
+    entrypoint: ["sh", "/motis-run.sh"]
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      - ./motis-run.sh:/motis-run.sh:ro
+      - gtfscache:/gtfs:ro
+      - motisdata:/data
+    # Internal only, like the database.
+    networks: [transport]
+
+  db:
+    image: postgres:18-alpine
+    mem_limit: 1500m
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: transport
+    # Everything in here is reloaded from the feed, so a lost commit costs
+    # nothing; sized for a host that runs a good deal besides.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - work_mem=32MB
+      - -c
+      - synchronous_commit=off
+      - -c
+      - max_wal_size=2GB
+    shm_size: 512m
+    volumes:
+      - timetable:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "transport"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Internal only: no published port. This host has no firewall.
+    networks: [transport]
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    # The counters behind /stats.php are the only state; an RDB snapshot every
+    # few minutes is enough, and losing a few is not worth an AOF write per
+    # request.
+    command: ["redis-server", "--save", "300", "10", "--appendonly", "no"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [transport]
+
+volumes:
+  redisdata:
+  timetable:
+  gtfscache:
+  motisdata:
+
+networks:
+  transport:
+  oa-network:
+    external: true
