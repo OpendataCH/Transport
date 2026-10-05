@@ -111,3 +111,10 @@ def test_every_page_links_the_privacy_policy_in_its_footer(client, path):
 def test_the_privacy_policy_is_its_own_page_not_a_docs_section(client):
     assert 'id="privacy"' in client.get("/privacy.html").text
     assert 'id="privacy"' not in client.get("/docs.html").text
+
+
+def test_the_licenses_list_the_installed_packages(client):
+    page = client.get("/licenses.html").text
+    assert "MIT License" in page and "fastapi" in page.lower()
+    assert "ODbL" in page
+    assert client.get("/licenses", follow_redirects=False).headers["location"] == "/licenses.html"

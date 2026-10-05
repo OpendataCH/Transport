@@ -37,6 +37,7 @@ from . import (
     compat,
     connections,
     errors,
+    licenses_page,
     locations,
     settings,
     stationboard,
@@ -212,6 +213,7 @@ app.include_router(routing_ui.router)
 app.include_router(board_page.router)
 
 app.include_router(stats_page.router)
+app.include_router(licenses_page.router)
 
 
 # The alias gets the same three documents, at its own addresses, so that a
