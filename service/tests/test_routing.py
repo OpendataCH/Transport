@@ -98,3 +98,28 @@ def test_a_slash_in_a_value_is_escaped_too(client, search_ch):
     raw = client.get("/v1/stationboard", params={"station": "x"}).content
 
     assert b'"43\\/44"' in raw
+
+
+def test_plans_beyond_the_router_capacity_are_refused(monkeypatch):
+    import asyncio
+
+    from transport_api import errors, settings
+    from transport_api.timetable import router
+
+    monkeypatch.setattr(settings, "MOTIS_CONCURRENCY", 1)
+    monkeypatch.setattr(settings, "MOTIS_QUEUE_SECONDS", 0.05)
+    monkeypatch.setattr(router, "_plans", None)
+
+    class Slow(router.Motis):
+        async def get(self, path, params):
+            await asyncio.sleep(0.2)
+            return {"itineraries": []}
+
+    async def two():
+        motis = Slow(None)
+        return await asyncio.gather(motis.plan({}), motis.plan({}), return_exceptions=True)
+
+    first, second = asyncio.run(two())
+    assert first == {"itineraries": []}
+    assert isinstance(second, errors.ApiError) and second.status_code == 429
+    monkeypatch.setattr(router, "_plans", None)

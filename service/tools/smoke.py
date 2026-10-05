@@ -1,6 +1,6 @@
 """Smoke test of a running transport.opendata.ch: is it up, and is it the right one.
 
-    python tools/smoke.py https://transport-new.opendata.ch
+    python tools/smoke.py https://transport.opendata.ch
     python tools/smoke.py http://transport:8000 --version 2cb5db51 --no-redis
 
 Checks what breaks silently rather than what the unit tests already cover: the
@@ -157,7 +157,7 @@ def checks(base: str, version: str | None, redis: bool):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("base", help="e.g. https://transport-new.opendata.ch")
+    parser.add_argument("base", help="e.g. https://transport.opendata.ch")
     parser.add_argument("--version", help="the build /v1/health must report")
     parser.add_argument("--no-redis", action="store_true", help="the host runs without statistics")
     parser.add_argument("--wait", type=int, default=60, help="seconds to wait for health")

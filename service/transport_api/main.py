@@ -39,6 +39,7 @@ from . import (
     errors,
     licenses_page,
     locations,
+    response_cache,
     settings,
     stationboard,
     statistics,
@@ -111,6 +112,13 @@ app = FastAPI(
     openapi_url=f"{PREFIX}/openapi.json",
     docs_url=f"{PREFIX}/docs",
     redoc_url=f"{PREFIX}/documentation",
+)
+
+# The 30-second memory of repeated answers, innermost: what it answers is
+# still counted by the statistics around it.
+app.add_middleware(
+    response_cache.ResponseCacheMiddleware,
+    redis_of=lambda: getattr(getattr(app.state, "statistics", None), "redis", None),
 )
 
 # Counting for /stats.php. Added before the proxy-headers middleware so that it
