@@ -70,7 +70,13 @@ async def station_board_page(request: Request) -> Response:
         f'id="station" name="station" value="{html.escape(found["name"])}"',
     )
     if arrivals:
-        page = page.replace('<option value="arrival">', '<option value="arrival" selected>')
+        page = page.replace(
+            'class="btn btn-default active" data-type="departure" aria-pressed="true"',
+            'class="btn btn-default" data-type="departure" aria-pressed="false"',
+        ).replace(
+            'class="btn btn-default" data-type="arrival" aria-pressed="false"',
+            'class="btn btn-default active" data-type="arrival" aria-pressed="true"',
+        )
     response = Response(page, media_type="text/html")
     response.headers["Cache-Control"] = "public, max-age=30"
     return _uncounted(request, response)

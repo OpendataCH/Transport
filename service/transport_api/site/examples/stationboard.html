@@ -26,7 +26,11 @@
 
         .board-form { display: flex; gap: 8px; margin-bottom: 16px; }
         .board-form .form-control { flex: 1; min-width: 0; }
-        .board-form select { flex: 0 0 auto; width: auto; }
+        .switch { margin-bottom: 4px; }
+        .switch .btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+        .api { margin-top: 20px; font-size: 13px; }
+        .api summary { cursor: pointer; color: var(--muted); }
+        .api code { word-break: break-all; }
 
         #board-title { margin-top: 24px; }
         #board-title small { display: block; margin-top: 4px; }
@@ -90,19 +94,25 @@
             </a>
         </p>
         <h3>Station Board Example</h3>
-        <p class="text-muted">The next departures from a stop, live: <code>/v1/locations</code> for the suggestions, <code>/v1/stationboard</code> for the board. Link to a board with <code>?station=Bern</code>.</p>
+        <p class="text-muted">The next departures and arrivals at any Swiss stop, live.</p>
 
         <form class="board-form" id="board-form" autocomplete="off">
             <input class="form-control" id="station" name="station" list="station-list" placeholder="Stop or station" aria-label="Stop or station" required />
             <datalist id="station-list"></datalist>
-            <select class="form-control" id="type" aria-label="Departures or arrivals">
-                <option value="departure">Departures</option>
-                <option value="arrival">Arrivals</option>
-            </select>
             <button type="submit" class="btn btn-primary">Show</button>
         </form>
+        <div class="btn-group switch" role="group" aria-label="Departures or arrivals">
+            <button type="button" class="btn btn-default active" data-type="departure" aria-pressed="true">Departures</button>
+            <button type="button" class="btn btn-default" data-type="arrival" aria-pressed="false">Arrivals</button>
+        </div>
 
         <section id="board" aria-live="polite"><!--board--></section>
+
+        <details id="api" class="api" hidden>
+            <summary>API request behind this board</summary>
+            <p><a id="api-link" href="#" rel="noopener"><code id="api-url"></code></a></p>
+            <p class="text-muted">The suggestions come from <code>/v1/locations?type=station&amp;query=…</code>. Link to this board: <a id="page-link" href="#"><code id="page-url"></code></a></p>
+        </details>
     </article>
 
     <footer class="footer">
@@ -122,7 +132,7 @@
     var REGIONAL = ['S', 'SN', 'R', 'RE', 'RB', 'TER'];
 
     var input = document.getElementById('station');
-    var type = document.getElementById('type');
+    var type = {value: 'departure'};
     var timer = null;
 
     function el(tag, attributes, children) {
@@ -180,7 +190,7 @@
         }
         section.appendChild(el('table', {class: 'board'}, [
             el('thead', {}, [el('tr', {}, [
-                el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {text: type.value === 'arrival' ? 'From' : 'To'}),
+                el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {text: 'To'}),
                 el('th', {class: 'pl', text: 'Platform'})
             ])]),
             el('tbody', {}, rows)
@@ -201,9 +211,30 @@
             var address = new URLSearchParams({station: input.value});
             if (type.value === 'arrival') address.set('type', 'arrival');
             history[push ? 'pushState' : 'replaceState']({}, '', '?' + address);
+            showApi(params, address);
         }).catch(function () {});
         clearTimeout(timer);
         timer = setTimeout(function () { load(false); }, 30000);
+    }
+
+    // The request this board is built from, for whoever wants to build their own.
+    function showApi(params, address) {
+        var api = location.origin + '/v1/stationboard?' + params;
+        var page = location.origin + location.pathname + '?' + address;
+        document.getElementById('api-url').textContent = api;
+        document.getElementById('api-link').href = api;
+        document.getElementById('page-url').textContent = page;
+        document.getElementById('page-link').href = page;
+        document.getElementById('api').hidden = false;
+    }
+
+    function setType(value) {
+        type.value = value;
+        document.querySelectorAll('[data-type]').forEach(function (b) {
+            var on = b.getAttribute('data-type') === value;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
     }
 
     // Suggestions as one types: stops only, a board needs one.
@@ -229,14 +260,23 @@
         e.preventDefault();
         load(true);
     });
-    type.addEventListener('change', function () { load(true); });
+    document.querySelectorAll('[data-type]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            setType(b.getAttribute('data-type'));
+            load(true);
+        });
+    });
 
     var params = new URLSearchParams(location.search);
     input.value = params.get('station') || params.get('id') || input.getAttribute('data-default') || 'Bern';
-    if (params.get('type') === 'arrival') type.value = 'arrival';
+    setType(params.get('type') === 'arrival' ? 'arrival' : 'departure');
     // The server has already drawn the board for a linked station; refresh it
     // in a while, or draw it now when it has not.
     if (document.querySelector('#board table')) {
+        var initial = new URLSearchParams({station: input.value, limit: 20});
+        var here = new URLSearchParams({station: input.value});
+        if (type.value === 'arrival') { initial.set('type', 'arrival'); here.set('type', 'arrival'); }
+        showApi(initial, here);
         timer = setTimeout(function () { load(false); }, 30000);
     } else {
         load(false);
