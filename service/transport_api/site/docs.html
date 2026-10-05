@@ -247,6 +247,12 @@
                         <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
                         <td>3</td>
                     </tr>
+                    <tr>
+                        <td><code>sharing</code></td>
+                        <td>optional</td>
+                        <td>defaults to <code>0</code>; with <code>1</code>, shared bikes, scooters and cars (from <a href="https://github.com/SFOE/sharedmobility" rel="external noopener noreferrer">sharedmobility.ch</a>) may take the place of the walk to the first stop and from the last. Such a section has a <a href="#section"><code>rental</code></a>.</td>
+                        <td>1</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -765,8 +771,13 @@
                     </tr>
                     <tr>
                         <td><code>walk</code></td>
-                        <td>Information about walking distance, if available</td>
-                        <td>null</td>
+                        <td>Information about walking distance, if available: <code>duration</code> in seconds</td>
+                        <td>{"duration": 240}</td>
+                    </tr>
+                    <tr>
+                        <td><code>rental</code></td>
+                        <td>Only with <code>sharing=1</code>, on a section taken with a shared vehicle (its <code>walk</code> gives the duration): <code>provider</code>, <code>vehicle</code> (<code>bicycle</code>, <code>scooter_standing</code>, <code>car</code> and others), <code>propulsion</code>, <code>from_station</code>, <code>to_station</code>, <code>url</code></td>
+                        <td>{"provider": "PubliBike", "vehicle": "bicycle"}</td>
                     </tr>
                     <tr>
                         <td><code>departure</code></td>
@@ -961,7 +972,7 @@
             <h4>Shared mobility</h4>
             <ul>
                 <li><strong>What we fetch:</strong> bikes, scooters and cars to rent, as GBFS from <a href="https://github.com/SFOE/sharedmobility" rel="external noopener noreferrer">sharedmobility.ch</a> of the Swiss Federal Office of Energy.</li>
-                <li><strong>At the source and here:</strong> every minute. The <a href="routing/">journey planner page</a> offers them for the first and last mile; <code>/connections</code> reaches and leaves the stops on foot, as it always has.</li>
+                <li><strong>At the source and here:</strong> every minute. <code>/connections</code> with <code>sharing=1</code> and the <a href="routing/">journey planner page</a> use them for the way to the first stop and from the last; without the parameter, <code>/connections</code> walks, as it always has.</li>
             </ul>
 
             <h4>Operator names</h4>

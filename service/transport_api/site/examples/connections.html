@@ -55,6 +55,7 @@
         .when .api { color: var(--muted); font-size: 12px; }
         .when .api select { display: inline-block; width: auto; height: 28px; padding: 2px 6px; font-size: 12px; }
         .link-button { background: none; border: 0; padding: 0; color: #337ab7; }
+        .sharing { font-weight: normal; margin: 0; }
 
         #summary { color: var(--muted); margin-bottom: 12px; }
         #summary strong { color: var(--ink); font-weight: 600; }
@@ -199,6 +200,7 @@
                 <button type="button" class="btn btn-default active" data-arrival="0">Departure</button>
                 <button type="button" class="btn btn-default" data-arrival="1">Arrival</button>
             </div>
+            <label class="sharing" title="Shared bikes, scooters and cars to and from the stops (sharedmobility.ch)"><input type="checkbox" name="sharing"> bikes &amp; scooters</label>
             <button type="submit" class="btn btn-primary">Search</button>
             <span class="spacer"></span>
             <!-- The source switch stays for testing (?api=v1-old); it is not shown. -->
@@ -281,6 +283,14 @@
         return minutesBetween(section.departure.departure, section.arrival.arrival);
     }
 
+    // "Lime e-scooter", "PubliBike bike": a shared vehicle in plain words.
+    var VEHICLES = {bicycle: 'bike', cargo_bicycle: 'cargo bike', scooter_standing: 'scooter', scooter_seated: 'moped', car: 'car', moped: 'moped'};
+    function rentalText(rental) {
+        var kind = VEHICLES[rental.vehicle] || 'vehicle';
+        var electric = rental.propulsion && rental.propulsion.indexOf('electric') === 0 && kind !== 'car';
+        return (rental.provider ? rental.provider + ' ' : '') + (electric ? 'e-' : '') + kind;
+    }
+
     function delay(minutes) {
         return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes}) : null;
     }
@@ -319,7 +329,7 @@
             var dep = section.departure, arr = section.arrival, journey = section.journey;
             var walk = !journey;
             var ride = walk
-                ? 'Walk · ' + walkMinutes(section) + ' min'
+                ? (section.rental ? rentalText(section.rental) : 'Walk') + ' · ' + walkMinutes(section) + ' min'
                 : null;
             var item = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
                 el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
@@ -444,6 +454,7 @@
             date: field('date').value,
             time: field('time').value,
             isArrivalTime: arrival ? 1 : 0,
+            sharing: field('sharing').checked ? 1 : '',
             limit: 5
         };
         remember();
@@ -489,6 +500,7 @@
         var params = new URLSearchParams();
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
+        if (field('sharing').checked) params.set('sharing', '1');
         if (api() === 'v1-old') params.set('api', 'v1-old');
         history.replaceState({}, '', '?' + params);
     }
@@ -565,6 +577,7 @@
     if (!field('date').value) setNow();
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
+    field('sharing').checked = params.get('sharing') === '1';
     field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
 
     if (field('from').value && field('to').value) {
