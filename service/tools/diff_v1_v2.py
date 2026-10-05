@@ -6,8 +6,8 @@ sent to both implementations of the same host and the two JSON answers are
 compared structurally - order-aware for lists, order-insensitive for object
 keys, and `null` kept strictly apart from a missing key.
 
-    python tools/diff_v1_v2.py https://test-transport-new.opendata.ch
-    python tools/diff_v1_v2.py https://transport-new.opendata.ch --quiet
+    python tools/diff_v1_v2.py https://test-transport.opendata.ch
+    python tools/diff_v1_v2.py https://transport.opendata.ch --quiet
 
 It is not a load test: the queries below are a handful, and both sides call
 search.ch once each. Anything that needs volume belongs against a stub.
@@ -102,7 +102,7 @@ def _body(raw: bytes, headers) -> object:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("host", help="e.g. https://test-transport-new.opendata.ch")
+    parser.add_argument("host", help="e.g. https://test-transport.opendata.ch")
     parser.add_argument("--quiet", action="store_true", help="only the tally")
     parser.add_argument(
         "--v1-prefix",

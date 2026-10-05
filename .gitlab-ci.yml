@@ -117,10 +117,10 @@ smoke:image:
 smoke:staging:
   extends: .smoke:host
   variables:
-    HOST: https://test-transport-new.opendata.ch
+    HOST: https://test-transport.opendata.ch
 
 smoke:production:
   extends: .smoke:host
   variables:
-    HOST: https://transport-new.opendata.ch
+    HOST: https://transport.opendata.ch
 
