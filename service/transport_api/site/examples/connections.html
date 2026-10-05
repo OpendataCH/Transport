@@ -252,6 +252,8 @@
     var arrival = false;
     // What is on screen: the connections, and the question that found them.
     var shown = [];
+    // Read before the address is rewritten by the first search.
+    var openOnLoad = parseInt(new URLSearchParams(location.search).get('open'), 10) || 0;
     var asked = null;
 
     // Categories that run between cities, drawn red as on the station
@@ -579,8 +581,8 @@
             if (!shown.length) summary.append(' – no connections found.');
             draw();
             // ?open=2 opens the second connection, for a link to one of them.
-            var wanted = parseInt(new URLSearchParams(location.search).get('open'), 10);
-            var target = wanted && results.querySelectorAll('.connection > button')[wanted - 1];
+            var target = openOnLoad && results.querySelectorAll('.connection > button')[openOnLoad - 1];
+            openOnLoad = 0;
             if (target) target.click();
         }).catch(fail).then(function () { busy(false); });
     }
