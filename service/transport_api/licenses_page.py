@@ -8,6 +8,7 @@ changes rarely and is listed here by hand.
 """
 
 import html
+import re
 from datetime import datetime
 from functools import cache
 from importlib import metadata
@@ -20,30 +21,34 @@ from .website import _uncounted
 
 router = APIRouter(include_in_schema=False)
 
-# name, what it is, licence, link
+# name, what it is, licence, project link, licence link
 DATA = [
     (
         "Swiss national timetable (GTFS, GTFS-RT, HRDF)",
         "Timetable, real time, operator names",
-        "opentransportdata.swiss terms of use (free use, source to be named)",
+        "opentransportdata.swiss terms of use",
+        "https://opentransportdata.swiss/",
         "https://opentransportdata.swiss/en/terms-of-use/",
     ),
     (
         "OpenStreetMap, Swiss extract by Geofabrik",
         "Streets for walks, addresses and places",
-        "ODbL 1.0 - © OpenStreetMap contributors",
+        "ODbL 1.0, © OpenStreetMap contributors",
+        "https://download.geofabrik.de/europe/switzerland.html",
         "https://www.openstreetmap.org/copyright",
     ),
     (
         "sharedmobility.ch (Swiss Federal Office of Energy)",
         "Shared bikes, scooters and cars (GBFS)",
         "Open use, source to be named",
-        "https://github.com/SFOE/sharedmobility",
+        "https://sharedmobility.ch/",
+        "https://github.com/SFOE/sharedmobility/blob/main/Access%20the%20data.md",
     ),
     (
         "swisstopo national maps",
         "Background of the map example",
-        "Free geodata of the Swiss Confederation (OGD), source to be named",
+        "Free geodata of the Swiss Confederation (OGD)",
+        "https://www.swisstopo.admin.ch/",
         "https://www.swisstopo.admin.ch/en/terms-of-use-free-geodata-and-geoservices",
     ),
 ]
@@ -54,17 +59,20 @@ SERVICES = [
         "Journey planner behind /connections, map tiles and place search",
         "MIT",
         "https://github.com/motis-project/motis",
+        "https://github.com/motis-project/motis/blob/master/LICENSE",
     ),
     (
         "PostgreSQL",
         "Timetable database",
         "PostgreSQL License",
+        "https://www.postgresql.org/",
         "https://www.postgresql.org/about/licence/",
     ),
     (
         "Redis",
         "Counters of the statistics page",
         "RSALv2 / SSPLv1 / AGPLv3",
+        "https://redis.io/",
         "https://redis.io/legal/licenses/",
     ),
 ]
@@ -74,33 +82,56 @@ BROWSER = [
         "Bootstrap 3.3.6",
         "Layout of the pages",
         "MIT",
+        "https://getbootstrap.com/docs/3.3/",
         "https://github.com/twbs/bootstrap/blob/v3.3.6/LICENSE",
     ),
     (
         "Leaflet 1.9.4",
         "Map example",
         "BSD-2-Clause",
+        "https://leafletjs.com/",
         "https://github.com/Leaflet/Leaflet/blob/main/LICENSE",
     ),
     (
         "Tabler Icons",
         "Icons of the connection search",
         "MIT",
+        "https://tabler.io/icons",
         "https://github.com/tabler/tabler-icons/blob/main/LICENSE",
     ),
     (
         "Lucide",
         "Tram icon of the connection search",
         "ISC",
+        "https://lucide.dev/",
         "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
     ),
     (
         "jQuery 1.7.1, jQuery UI 1.8.16",
         "The autocomplete example",
         "MIT",
+        "https://jquery.com/",
         "https://jquery.org/license/",
     ),
 ]
+
+# Licence names in package metadata, as SPDX identifiers.
+SPDX = {
+    "MIT License": "MIT",
+    "Apache Software License": "Apache-2.0",
+    "Python Software Foundation License": "PSF-2.0",
+    "ISC License (ISCL)": "ISC",
+    "Mozilla Public License 2.0 (MPL 2.0)": "MPL-2.0",
+}
+SPDX_ID = re.compile(r"^[A-Za-z0-9.\-+]+$")
+
+
+def licence_link(licence: str, package: str) -> str:
+    """The licence's text at spdx.org when it is one SPDX identifier, else the package on PyPI."""
+    single = SPDX.get(licence, licence)
+    if SPDX_ID.match(single) and not single.lower().startswith("see"):
+        return f"https://spdx.org/licenses/{single}.html"
+    return f"https://pypi.org/project/{package}/"
 
 
 @cache
@@ -136,20 +167,30 @@ def python_packages() -> list[tuple[str, str, str, str]]:
                 ):
                     home = link.strip()
                     break
-        found[name.lower()] = (name, dist.version, licence, home)
+        found[name.lower()] = (
+            name,
+            dist.version,
+            licence,
+            home or f"https://pypi.org/project/{name}/",
+            licence_link(licence, name),
+        )
     return sorted(found.values(), key=lambda row: row[0].lower())
 
 
-def _rows(rows, columns: int) -> str:
-    out = []
-    for row in rows:
-        *cells, link = row
-        first = html.escape(cells[0])
-        if link:
-            first = f'<a href="{html.escape(link)}" rel="external noopener noreferrer">{first}</a>'
-        rest = "".join(f"<td>{html.escape(c)}</td>" for c in cells[1:columns])
-        out.append(f"<tr><td>{first}</td>{rest}</tr>")
-    return "".join(out)
+def _link(text: str, href: str) -> str:
+    text = html.escape(text)
+    if not href:
+        return text
+    return f'<a href="{html.escape(href)}" rel="external noopener noreferrer">{text}</a>'
+
+
+def _rows(rows) -> str:
+    """name (to its project), what it is or its version, licence (to its text)."""
+    return "".join(
+        f"<tr><td>{_link(name, project)}</td><td>{html.escape(middle)}</td>"
+        f"<td>{_link(licence, licence_href)}</td></tr>"
+        for name, middle, licence, project, licence_href in rows
+    )
 
 
 @router.get("/licenses")
@@ -184,25 +225,24 @@ def licenses(request: Request) -> HTMLResponse:
         <article>
         <h2>Licenses</h2>
         <p>The Transport API is free software under the MIT License, © 2012–{datetime.now(ZONE).year} Opendata.ch:
-            <a href="https://gitlab.com/opendata.ch/Transport">gitlab.com/opendata.ch/Transport</a>.
-            What it answers from and what it is built from, with their licences:</p>
+            <a href="https://gitlab.com/opendata.ch/Transport">gitlab.com/opendata.ch/Transport</a>.</p>
 
         <h3>Data</h3>
         <table class="table table-condensed lic"><thead><tr><th>Source</th><th>Used for</th><th>Terms</th></tr></thead>
-        <tbody>{_rows(DATA, 3)}</tbody></table>
+        <tbody>{_rows(DATA)}</tbody></table>
 
         <h3>Services beside the API</h3>
         <table class="table table-condensed lic"><thead><tr><th>Software</th><th>Used for</th><th>License</th></tr></thead>
-        <tbody>{_rows(SERVICES, 3)}</tbody></table>
+        <tbody>{_rows(SERVICES)}</tbody></table>
 
         <h3>In the browser</h3>
         <table class="table table-condensed lic"><thead><tr><th>Library</th><th>Used for</th><th>License</th></tr></thead>
-        <tbody>{_rows(BROWSER, 3)}</tbody></table>
+        <tbody>{_rows(BROWSER)}</tbody></table>
 
         <h3>Python packages <small>{len(packages)}, as installed in the running service</small></h3>
         <input class="form-control input-sm" id="filter" placeholder="Filter packages" aria-label="Filter packages">
         <table class="table table-condensed lic" id="packages"><thead><tr><th>Package</th><th>Version</th><th>License</th></tr></thead>
-        <tbody>{_rows([(n, v, lic, home) for n, v, lic, home in packages], 3)}</tbody></table>
+        <tbody>{_rows(packages)}</tbody></table>
         </article>
         <footer class="footer">
             <hr>

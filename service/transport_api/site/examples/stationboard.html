@@ -75,6 +75,8 @@
         @media (max-width: 639px) {
             .board .op { display: none; }
         }
+            .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
+        .api-panel code { word-break: break-all; }
     </style>
 </head>
 
@@ -90,16 +92,20 @@
 
     <article>
         <p class="pull-right">
-            <a class="btn btn-link" id="api-link" href="#" rel="noopener" target="_blank" hidden>
+            <button type="button" class="btn btn-link" id="api-link" aria-expanded="false" aria-controls="api-panel" hidden>
                 <span class="glyphicon glyphicon-link"></span>
                 API request
-            </a>
+            </button>
             <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/stationboard.html" target="_blank" rel="noopener">
                 <span class="glyphicon glyphicon-new-window"></span>
                 Source Code
             </a>
         </p>
         <h3>Station Board Example</h3>
+        <div class="api-panel" id="api-panel" hidden>
+            <p>Everything on this page runs in the browser against the public API: <code>/locations</code> for the suggestions, <code>/stationboard</code> for the board.</p>
+            <p><a id="api-url" href="#" rel="noopener" target="_blank"><code id="api-code"></code></a></p>
+        </div>
 
         <form class="board-form" id="board-form" autocomplete="off">
             <input class="form-control" id="station" name="station" list="station-list" placeholder="Stop or station" aria-label="Stop or station" required />
@@ -224,13 +230,22 @@
         timer = setTimeout(function () { load(false); }, 30000);
     }
 
+
+    // "API request" opens the panel with the request behind what is shown.
+    document.getElementById('api-link').addEventListener('click', function () {
+        var panel = document.getElementById('api-panel');
+        panel.hidden = !panel.hidden;
+        this.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+    });
+    function setApi(url) {
+        document.getElementById('api-url').href = url;
+        document.getElementById('api-code').textContent = url;
+        document.getElementById('api-link').hidden = false;
+    }
+
     // The request this board is built from, for whoever wants to build their own.
     function showApi(params, address) {
-        var api = location.origin + '/v1/stationboard?' + params;
-        var link = document.getElementById('api-link');
-        link.href = api;
-        link.title = api;
-        link.hidden = false;
+        setApi(location.origin + '/v1/stationboard?' + params);
     }
 
     function setType(value) {

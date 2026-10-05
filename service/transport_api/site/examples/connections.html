@@ -168,6 +168,8 @@
             .seg { min-width: 22px; }
             .when .spacer { display: none; }
         }
+            .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
+        .api-panel code { word-break: break-all; }
     </style>
 </head>
 
@@ -180,18 +182,20 @@
     </header>
 
     <p class="pull-right">
-        <a class="btn btn-link" id="api-link" href="#" rel="noopener" target="_blank" hidden>
+        <button type="button" class="btn btn-link" id="api-link" aria-expanded="false" aria-controls="api-panel" hidden>
             <span class="glyphicon glyphicon-link"></span>
             API request
-        </a>
+        </button>
         <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank" rel="noopener">
             <span class="glyphicon glyphicon-new-window"></span>
             Source Code
         </a>
     </p>
     <h3>Connection Search Example</h3>
-    <p class="muted">Everything on this page runs in the browser against the public API:
-        <code>/locations</code> for the suggestions, <code>/connections</code> for the results.</p>
+        <div class="api-panel" id="api-panel" hidden>
+            <p>Everything on this page runs in the browser against the public API: <code>/locations</code> for the suggestions, <code>/connections</code> for the results.</p>
+            <p><a id="api-url" href="#" rel="noopener" target="_blank"><code id="api-code"></code></a></p>
+        </div>
     <br>
 
     <form id="search" autocomplete="off">
@@ -537,16 +541,25 @@
         document.getElementById('later-row').hidden = !any;
     }
 
+    // "API request" opens the panel with the request behind what is shown.
+    document.getElementById('api-link').addEventListener('click', function () {
+        var panel = document.getElementById('api-panel');
+        panel.hidden = !panel.hidden;
+        this.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+    });
+    function setApi(url) {
+        document.getElementById('api-url').href = url;
+        document.getElementById('api-code').textContent = url;
+        document.getElementById('api-link').hidden = false;
+    }
+
     function api() { return field('api').value === 'v1-old' ? 'v1-old' : 'v1'; }
 
     function ask(query) {
         var params = new URLSearchParams();
         Object.keys(query).forEach(function (k) { if (query[k] !== '' && query[k] != null) params.set(k, query[k]); });
         // The request behind what is shown, linked next to the source code.
-        var link = document.getElementById('api-link');
-        link.href = location.origin + '/' + api() + '/connections?' + params;
-        link.title = link.href;
-        link.hidden = false;
+        setApi(location.origin + '/' + api() + '/connections?' + params);
         return fetch('../' + api() + '/connections?' + params).then(function (response) {
             if (!response.ok) throw new Error('Error from API: ' + response.status + ' ' + response.statusText);
             return response.json();
