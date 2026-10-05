@@ -109,6 +109,8 @@ services:
       # address is how the feed asks callers to identify themselves.
       MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
       MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
+      # The address nearest a coordinate, first in /locations?x&y.
+      MOTIS_REVERSE_GEOCODING: "1"
     volumes:
       - ./motis-run.sh:/motis-run.sh:ro
       - gtfscache:/gtfs:ro
@@ -117,8 +119,16 @@ services:
 
   db:
     image: postgres:18-alpine
-    mem_limit: 1500m
-    <<: *gentle-io
+    # Enough for the hot part of the timetable to stay in memory (shared
+    # buffers and the file cache both count here): a station board read from
+    # disk is a hundred times slower than one read from memory.
+    mem_limit: 2560m
+    # Writes are capped like the other bulk writers; reads are not - a cold
+    # read under a cap is what made station boards take seconds.
+    blkio_config:
+      device_write_iops:
+        - path: /dev/sda
+          rate: 300
     restart: unless-stopped
     environment:
       POSTGRES_USER: transport
@@ -129,7 +139,9 @@ services:
     command:
       - postgres
       - -c
-      - shared_buffers=256MB
+      - shared_buffers=768MB
+      - -c
+      - effective_cache_size=1792MB
       - -c
       - maintenance_work_mem=512MB
       - -c
