@@ -8,7 +8,8 @@ seconds is given again, from Redis, to every worker alike.
 Connections asked "from now" are kept longer (CONNECTIONS_NOW_CACHE_SECONDS):
 Home Assistant, nearly all of their traffic, asks the same connection every
 90 seconds, which a 30-second memory never meets. Kept a little longer, every
-second poll is answered here, at the price of delays up to that old.
+second poll is answered here, at the price of delays up to that old. A date
+and time within two minutes of the present count as "from now" too.
 
 Only what the service computes itself is kept: station boards and
 connections under /v1 and /v2 when they answer from the timetable, and only
@@ -20,15 +21,20 @@ here is still counted.
 """
 
 import logging
+from datetime import date as date_type
+from datetime import datetime, timedelta
 from urllib.parse import parse_qsl, urlencode
 
 from . import settings
+from .mapping import ZURICH
 
 log = logging.getLogger("transport_api.response_cache")
 
 SECONDS = 30
 CACHED_ENDPOINTS = ("/stationboard", "/connections")
 PREFIX = "answer:"
+# A date and time this close to the present count as "from now".
+NOW_TOLERANCE = 120
 
 
 def cached_path(path: str) -> bool:
@@ -44,16 +50,45 @@ def _pairs(query: bytes) -> list[tuple[str, str]]:
     return sorted(parse_qsl(query.decode("latin-1"), keep_blank_values=True))
 
 
-def cache_key(path: str, query: bytes) -> str:
-    return PREFIX + path + "?" + urlencode(_pairs(query))
+def _is_now(date: str, time: str, now: datetime) -> bool:
+    """Whether a date and time name the present, give or take NOW_TOLERANCE.
+
+    Some Home Assistant versions send the moment of the poll, to the
+    microsecond (`time=14:13:36.806931`); every such request would be a key
+    of its own. Read as "from now", they meet the poll before.
+    """
+    try:
+        day = date_type.fromisoformat(date) if date else now.date()
+        hour, minute, *rest = (time or "").split(":")
+        second = float(rest[0]) if rest else 0.0
+        asked = datetime(day.year, day.month, day.day, int(hour), int(minute), tzinfo=ZURICH)
+    except ValueError:
+        return False
+    return abs((asked + timedelta(seconds=second) - now).total_seconds()) <= NOW_TOLERANCE
 
 
-def seconds_kept(path: str, query: bytes) -> int:
+def _from_now(path: str, pairs: list[tuple[str, str]], now: datetime | None = None) -> bool:
+    if not path.endswith("/connections"):
+        return False
+    asked = {name: value for name, value in pairs if value}
+    if not asked.keys() & {"date", "time"}:
+        return True
+    if "time" not in asked:
+        return False
+    return _is_now(asked.get("date", ""), asked["time"], now or datetime.now(ZURICH))
+
+
+def cache_key(path: str, query: bytes, now: datetime | None = None) -> str:
+    pairs = _pairs(query)
+    if _from_now(path, pairs, now):
+        pairs = [(name, value) for name, value in pairs if name not in ("date", "time")]
+    return PREFIX + path + "?" + urlencode(pairs)
+
+
+def seconds_kept(path: str, query: bytes, now: datetime | None = None) -> int:
     """How long the answer is kept: longer for a connection from now."""
-    if path.endswith("/connections"):
-        asked = {name for name, value in _pairs(query) if value}
-        if not asked & {"date", "time"}:
-            return settings.CONNECTIONS_NOW_CACHE_SECONDS
+    if _from_now(path, _pairs(query), now):
+        return settings.CONNECTIONS_NOW_CACHE_SECONDS
     return SECONDS
 
 
@@ -68,7 +103,9 @@ class ResponseCacheMiddleware:
             await self.app(scope, receive, send)
             return
 
-        key = cache_key(scope["path"], scope.get("query_string", b""))
+        query = scope.get("query_string", b"")
+        key = cache_key(scope["path"], query)
+        kept = seconds_kept(scope["path"], query)
         try:
             hit = await redis.hgetall(key)
         except Exception as exc:  # noqa: BLE001 - without the cache, answer as always
@@ -105,7 +142,7 @@ class ResponseCacheMiddleware:
         try:
             async with redis.pipeline(transaction=False) as pipe:
                 pipe.hset(key, mapping={"type": content_type, "body": bytes(body)})
-                pipe.expire(key, seconds_kept(scope["path"], scope.get("query_string", b"")))
+                pipe.expire(key, kept)
                 await pipe.execute()
         except Exception as exc:  # noqa: BLE001
             log.warning("answer cache unwritable: %r", exc)
