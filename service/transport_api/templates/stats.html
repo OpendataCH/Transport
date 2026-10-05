@@ -256,6 +256,59 @@
                 </div>
             </div>
 
+            {% if sources %}
+            <h2 id="sources">Data sources</h2>
+            <p class="text-muted"><small>What the API answers from, and when it was fetched. Each timetable file is a complete version, not a change to the one before; real time is a complete snapshot every 30 seconds. See <a href="docs.html#source">Source</a>.</small></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Loaded now</h3>
+                    <table class="table table-condensed stats-table">
+                        <tbody>
+                            <tr><td>Timetable files</td><td>{{ sources.loaded.feeds }}</td></tr>
+                            <tr><td>Days held</td><td>{{ sources.loaded.window }}</td></tr>
+                            <tr><td>Imported</td><td>{{ sources.loaded.imported }}</td></tr>
+                            {% if sources.osm %}<tr><td>Street network (OpenStreetMap)</td><td>{{ sources.osm.size }}, {{ sources.osm.at }}</td></tr>{% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Real time, last 24 hours</h3>
+                    <table class="table table-condensed stats-table">
+                        <tbody>
+                            <tr><td>Snapshots fetched</td><td class="text-right">{{ sources.realtime.fetches }}</td></tr>
+                            <tr><td>Size of a snapshot</td><td class="text-right">{{ sources.realtime.size }}</td></tr>
+                            <tr><td>Trips with real time per snapshot</td><td class="text-right">{{ sources.realtime.trips }}</td></tr>
+                            <tr><td>Fetched in total</td><td class="text-right">{{ sources.realtime.volume }}</td></tr>
+                            <tr><td>Time to fetch (seconds)</td><td class="text-right">{{ sources.realtime.seconds }}</td></tr>
+                            <tr><td>Last snapshot</td><td class="text-right">{{ sources.realtime.last }}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Timetable files downloaded</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>When</th><th>File</th><th class="text-right">Size</th></tr></thead>
+                        <tbody>
+                        {% for d in sources.downloads %}<tr><td>{{ d.at }}</td><td>{{ d.name }}</td><td class="text-right">{{ d.size }}</td></tr>
+                        {% else %}<tr><td colspan="3" class="text-muted">Recorded from 5. October 2026 on.</td></tr>{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Imports</h3>
+                    <table class="table table-condensed stats-table">
+                        <thead><tr><th>When</th><th>Days</th><th class="text-right">Stop times</th><th class="text-right">Minutes</th></tr></thead>
+                        <tbody>
+                        {% for i in sources.imports %}<tr title="{{ i.name }}, window file {{ i.size }}"><td>{{ i.at }}</td><td>{{ i.window }}</td><td class="text-right">{{ i.stop_times }}</td><td class="text-right">{{ i.minutes }}</td></tr>
+                        {% else %}<tr><td colspan="4" class="text-muted">Recorded from 5. October 2026 on.</td></tr>{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
             <h2 id="history">Stations 2012–2017</h2>
             <p class="text-muted"><small>The most asked-for stations from 10. August 2012 until 8. June 2017, when the API moved to timetable.search.ch and this count stopped.</small></p>
             <div class="row">

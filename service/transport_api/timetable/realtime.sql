@@ -24,3 +24,17 @@ CREATE TABLE IF NOT EXISTS rt.feed (
     trips          integer NOT NULL,
     delays         integer NOT NULL
 );
+
+-- What was fetched from the sources, when, and how large it was: for the
+-- statistics page. Written by the ingest loop and the importer; real time
+-- adds a row every 30 seconds, so rows older than 30 days are dropped.
+CREATE TABLE IF NOT EXISTS rt.fetch_log (
+    at      timestamptz NOT NULL DEFAULT now(),
+    source  text        NOT NULL,
+    name    text,
+    bytes   bigint,
+    items   bigint,
+    seconds real,
+    detail  jsonb
+);
+CREATE INDEX IF NOT EXISTS fetch_log_source_at ON rt.fetch_log (source, at);
