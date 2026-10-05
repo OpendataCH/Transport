@@ -343,7 +343,7 @@
         walk: 'M13 4a1.6 1.6 0 1 1-3.2 0A1.6 1.6 0 0 1 13 4zM9.5 21l1.6-6 2.2 2v4M11.2 8.5 8 10.5V14M11.2 8.5l1.8 4 3 1.5M11.2 8.5l1.3 6',
         bus: 'M6 4h12a2 2 0 0 1 2 2v10H4V6a2 2 0 0 1 2-2zM4 11h16M7 19v-3M17 19v-3M8 14h.01M16 14h.01',
         tram: 'M7 6h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM5 12h14M9 2h6M12 2v4M8 18l-2 3M16 18l2 3',
-        train: 'M8 3h8a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zM5 10h14M9 15h.01M15 15h.01M8 18l-2 3M16 18l2 3',
+        train: 'M6 15V8a6 5 0 0 1 12 0v7a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3zM6 11h12M10 5h4M9 14.5h.01M15 14.5h.01M9 18l-2 3M15 18l2 3',
         ship: 'M4 15l1.5 4h13L20 15H4zM7 15V9h10v6M12 5v4M3 21c2 0 2-1 4.5-1s2.5 1 4.5 1 2-1 4.5-1 2.5 1 4.5 1',
         cableway: 'M3 4l18 4M12 6v3M7 9h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1zM6 14h12',
         bike: 'M6 17.5a3 3 0 1 0 0-.01M18 17.5a3 3 0 1 0 0-.01M6 17.5 9.5 10h6l2.5 7.5M9.5 10 12 17.5l3.5-7.5M8.5 7h3',
@@ -578,6 +578,10 @@
             summary.hidden = false;
             if (!shown.length) summary.append(' – no connections found.');
             draw();
+            // ?open=2 opens the second connection, for a link to one of them.
+            var wanted = parseInt(new URLSearchParams(location.search).get('open'), 10);
+            var target = wanted && results.querySelectorAll('.connection > button')[wanted - 1];
+            if (target) target.click();
         }).catch(fail).then(function () { busy(false); });
     }
 
