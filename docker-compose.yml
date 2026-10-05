@@ -2,17 +2,90 @@
 # from the registry; this one builds from the working copy.
 #
 # One service answers everything - the API under /v1 and the website around
-# it - and Redis holds the counters behind /stats.php.
+# it - and Redis holds the counters behind /stats.php. /v2/locations and
+# /v2/stationboard read the timetable from Postgres, which `ingest` keeps
+# loaded from opentransportdata.swiss.
 services:
   service:
     build: ./service
+    mem_limit: 1g
     ports:
       - "8000:8000"
     environment:
       SERVICE_VERSION: dev
       REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://transport:transport@db:5432/transport
+      MOTIS_URL: http://motis:8080
     depends_on:
       - redis
+      - db
+      - motis
+
+  # The timetable loader: the GTFS feed when a new one appears, real time
+  # every 30 seconds when OTD_API_KEY is set in .env.
+  ingest:
+    build: ./service
+    mem_limit: 1500m
+    command: ["python", "-m", "transport_api.timetable.ingest"]
+    # The image's check asks the API on port 8000, which this process is not.
+    healthcheck:
+      disable: true
+    environment:
+      DATABASE_URL: postgresql://transport:transport@db:5432/transport
+      GTFS_DAYS: ${GTFS_DAYS:-14}
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      # The downloaded feed survives a rebuild, so it is fetched once.
+      - ./var/gtfs:/var/cache/gtfs
+    depends_on:
+      - db
+
+  # The router behind /v2/connections, on the feed the database holds; see
+  # docker/motis-run.sh. Its port is published for looking at it directly.
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    # The import of the window peaks near 2 GB; a limit keeps a bad feed
+    # from pushing the whole host into the OOM killer, as the full year did.
+    mem_limit: 3g
+    entrypoint: ["sh", "/motis-run.sh"]
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+    volumes:
+      - ./docker/motis-run.sh:/motis-run.sh:ro
+      - ./var/gtfs:/gtfs:ro
+      - motisdata:/data
+    ports:
+      - "8081:8080"
+
+  db:
+    image: postgres:18-alpine
+    mem_limit: 1500m
+    environment:
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: transport
+      POSTGRES_DB: transport
+    # Tuned for the bulk load; a lost transaction here is reloaded anyway.
+    command:
+      - postgres
+      - -c
+      - maintenance_work_mem=1GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - synchronous_commit=off
+      - -c
+      - max_wal_size=4GB
+    shm_size: 1g
+    ports:
+      - "5434:5432"
+    volumes:
+      - timetable:/var/lib/postgresql
 
   redis:
     image: redis:8-alpine
+
+volumes:
+  timetable:
+  motisdata:

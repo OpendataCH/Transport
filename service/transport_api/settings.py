@@ -41,3 +41,73 @@ REDIS_URL = os.environ.get("REDIS_URL") or None
 # Seconds a statistics write may take before it is given up. Counting is never
 # worth holding an answer for.
 REDIS_TIMEOUT = float(os.environ.get("REDIS_TIMEOUT", "0.25"))
+
+# The timetable database behind /v2/locations and /v2/stationboard, e.g.
+# `postgresql://transport:transport@db:5432/transport`. Unset, those two routes
+# answer 503 and everything else works as before.
+DATABASE_URL = os.environ.get("DATABASE_URL") or None
+
+# The national GTFS feed. The permalink redirects to the newest file and needs
+# no key; the CKAN API next to it does.
+#
+# One feed per timetable year, which changes in mid-December; `{year}` stands
+# for it, so that next year's feed is found once it is published and a window
+# across the change reads both.
+GTFS_URL = os.environ.get(
+    "GTFS_URL",
+    "https://data.opentransportdata.swiss/dataset/timetable-{year}-gtfs2020/permalink",
+)
+
+# Days of service loaded ahead of today. The full feed is a year of 42 million
+# stop times; a window keeps the database at a fraction of that, and the feed
+# is re-read twice a week anyway. Zero loads everything.
+GTFS_DAYS = int(os.environ.get("GTFS_DAYS", "14"))
+
+# How far the window falls behind before it is moved on. One re-imports
+# daily; more saves imports (and the router's rebuild) at the price of up to
+# that many more days back.
+GTFS_WINDOW_STEP_DAYS = max(int(os.environ.get("GTFS_WINDOW_STEP_DAYS", "1")), 1)
+
+# Days of service loaded before today. One keeps the trips of yesterday's
+# service day that run past midnight; more answers questions about the recent
+# past, at the cost of a few more trips per day kept.
+GTFS_PAST_DAYS = max(int(os.environ.get("GTFS_PAST_DAYS", "1")), 1)
+
+# Where a downloaded feed is kept between runs, so that an unchanged file is
+# not fetched again.
+GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
+
+# The real-time feed and its key from api-manager.opentransportdata.swiss.
+# Without a key the ingest loop loads the timetable and skips real time.
+GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
+OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
+
+# The router behind /v2/connections (MOTIS, on the same feed), e.g.
+# `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
+MOTIS_URL = os.environ.get("MOTIS_URL") or None
+
+# Which source answers /v1. On, /v1 (and its alias /v2) answer from our own
+# timetable and router, and the search.ch translation moves to /v1-old. Off,
+# /v1 asks search.ch as it always has, and /v2 is the timetable experiment.
+V1_FROM_TIMETABLE = os.environ.get("V1_FROM_TIMETABLE", "0") not in ("0", "false", "")
+
+# The Swiss OpenStreetMap extract, for the router's walks between stops - a
+# bus stop and a station are rarely linked in the timetable itself. Unset, the
+# router walks only where the timetable says it may. The ingest loop fetches
+# it into GTFS_CACHE/osm/ and renews it after OSM_MAX_AGE_DAYS.
+OSM_URL = os.environ.get("OSM_URL") or None
+OSM_MAX_AGE_DAYS = int(os.environ.get("OSM_MAX_AGE_DAYS", "30"))
+
+# The router (MOTIS) times a walk between two stops as the longest of the
+# walk and the transfer times of both stops; HAFAS, which the Swiss data is
+# written for, lets the walk replace them. On, the router's window lowers a
+# stop's transfer time to its shortest walk, so that the walk counts as given
+# (Grindelwald: 5 minutes to the bus, not the station's 10). Off, the feed's
+# transfers go to the router unchanged.
+GTFS_WALK_SETS_TRANSFER = os.environ.get("GTFS_WALK_SETS_TRANSFER", "1") not in ("0", "false", "")
+
+# How long a connection may walk from where it starts to its first vehicle,
+# and from its last vehicle to where it ends. The router's own default is
+# 15 minutes, which loses connections search.ch finds with a 16-minute walk
+# at either end (Yverdon-les-Bains to Philosophes).
+MOTIS_MAX_WALK_SECONDS = int(os.environ.get("MOTIS_MAX_WALK_SECONDS", "1200"))

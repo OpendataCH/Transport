@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
 
@@ -10,186 +10,148 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script>
-        // The whole example runs in the browser against the public API: read the
-        // form from the query string, ask /v1/connections, draw the table.
-        $(function () {
+    <style>
+        :root {
+            --ink: #383a3d;
+            --muted: #767a80;
+            --line: #e2e4e7;
+            --surface: #f6f7f8;
+            --red: #a20d0d;
+            --long-distance: #c60018;
+            --regional: #2d327d;
+            --local: #5a5f66;
+            --late: #c60018;
+        }
 
-            var params = new URLSearchParams(window.location.search);
-            var from = params.get('from') || '';
-            var to = params.get('to') || '';
-            var via = params.get('via') || '';
-            var datetime = params.get('datetime') || '';
-            var page = params.has('page') ? (parseInt(params.get('page'), 10) || 0) - 1 : 0;
-            var c = params.has('c') ? parseInt(params.get('c'), 10) : 0;
+        /* Bootstrap's .form-control sets display, which beats the attribute. */
+        [hidden] { display: none !important; }
 
-            $('input[name=from]').val(from);
-            $('input[name=to]').val(to);
-            $('input[name=datetime]').val(datetime);
+        .search {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .search .swap {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .search .via-row { grid-column: 1 / -1; }
+        .when {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .when input[type=date] { width: 11em; }
+        .when input[type=time] { width: 7.5em; }
+        .when .btn-group .btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+        .when .spacer { flex: 1; }
+        .when .api { color: var(--muted); font-size: 12px; }
+        .when .api select { display: inline-block; width: auto; height: 28px; padding: 2px 6px; font-size: 12px; }
+        .link-button { background: none; border: 0; padding: 0; color: #337ab7; }
 
-            function escape(value) {
-                return $('<div>').text(value === null || value === undefined ? '' : value).html();
-            }
+        #summary { color: var(--muted); margin-bottom: 12px; }
+        #summary strong { color: var(--ink); font-weight: 600; }
 
-            function time(value) {
-                return value ? moment(value).format('HH:mm') : '';
-            }
+        .day {
+            margin: 18px 0 6px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
 
-            function delay(value) {
-                return value ? ' <span style="color: #a20d0d;">+' + escape(value) + '</span>' : '';
-            }
+        .connection {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: #fff;
+        }
+        .connection > button {
+            display: grid;
+            grid-template-columns: minmax(11em, max-content) 5.5em 1fr auto;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            padding: 12px 14px;
+            background: none;
+            border: 0;
+            text-align: left;
+            color: var(--ink);
+        }
+        .connection > button:hover { background: var(--surface); }
+        .connection.open > button { border-bottom: 1px solid var(--line); }
+        .times { font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .duration { font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .duration small { display: block; color: var(--muted); }
+        .products { display: flex; flex-wrap: wrap; gap: 4px; }
+        .chevron { color: var(--muted); transition: transform .15s; }
+        .connection.open .chevron { transform: rotate(180deg); }
+        @media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
 
-            function platform(stop) {
-                if (stop.prognosis && stop.prognosis.platform) {
-                    return '<span style="color: #a20d0d;">' + escape(stop.prognosis.platform) + '</span>';
-                }
-                return escape(stop.platform);
-            }
+        .badge-product {
+            display: inline-block;
+            min-width: 2.4em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.4;
+            text-align: center;
+            color: #fff;
+            background: var(--local);
+            white-space: nowrap;
+        }
+        .badge-product.long-distance { background: var(--long-distance); }
+        .badge-product.regional { background: var(--regional); }
 
-            function capacity(value) {
-                if (!(value > 0)) {
-                    return '';
-                }
-                var icons = '';
-                for (var i = 0; i < 3; i++) {
-                    icons += '<span class="glyphicon glyphicon-user ' + (i < value ? 'text-muted' : 'text-disabled') + '"></span>';
-                }
-                return '<small title="Expected occupancy 2nd class">' + icons + '</small>';
-            }
+        .late { color: var(--late); font-weight: 600; font-size: .85em; }
+        .changed { color: var(--late); }
+        .muted { color: var(--muted); }
 
-            // "00d01:05:00" -> "1:05′", "01d02:00:00" -> "1d 2:00′"
-            function duration(value) {
-                var days = parseInt(value.substr(0, 2), 10);
-                var hours = parseInt(value.substr(3, 2), 10);
-                return (days > 0 ? days + 'd ' : '') + hours + value.substr(5, 3) + '′';
-            }
+        .legs { list-style: none; margin: 0; padding: 10px 14px 14px; }
+        .leg {
+            display: grid;
+            grid-template-columns: 6em 14px 1fr auto;
+            column-gap: 10px;
+        }
+        .leg .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+        .leg .rail { position: relative; }
+        .leg .rail::before {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 6px;
+            bottom: -6px;
+            width: 4px;
+            background: var(--regional);
+            border-radius: 2px;
+        }
+        .leg.walk .rail::before { background: repeating-linear-gradient(var(--muted) 0 3px, transparent 3px 7px); width: 2px; left: 6px; }
+        .leg .stop { font-weight: 600; }
+        .leg .ride { padding: 6px 0 10px; color: var(--muted); font-size: 13px; }
+        .leg .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
+        .leg .last .rail::before { display: none; }
+        .transfer { margin: 2px 0 8px 7.6em; font-size: 12px; color: var(--muted); }
+        .transfer .late { font-size: inherit; }
 
-            function link(query) {
-                return 'connections.html?' + $.param(query);
-            }
+        .more { display: flex; justify-content: space-between; margin: 12px 0; }
+        .loading { color: var(--muted); padding: 12px 0; }
 
-            function render(response) {
-                if (response.from) {
-                    from = response.from.name;
-                    $('input[name=from]').val(from);
-                }
-                if (response.to) {
-                    to = response.to.name;
-                    $('input[name=to]').val(to);
-                }
-                document.title = from + ' – ' + to;
-
-                var connections = response.connections || [];
-                if (!connections.length) {
-                    return;
-                }
-
-                var body = '';
-                $.each(connections, function (index, connection) {
-                    var j = index + 1;
-                    var hidden = ' style="display: none;"';
-                    body += '<tbody>' +
-                        '<tr class="connection"' + (j === c ? hidden : '') + ' data-c="' + j + '">' +
-                        '<td>' + time(connection.from.departure) + delay(connection.from.delay) + '<br/>' +
-                        time(connection.to.arrival) + delay(connection.to.delay) + '</td>' +
-                        '<td>' + escape(duration(connection.duration)) + '<br/>' +
-                        '<span class="muted">' + escape((connection.products || []).join(', ')) + '</span></td>' +
-                        '<td>' + platform(connection.from) + '<br/>' + capacity(connection.capacity2nd) + '</td>' +
-                        '</tr>';
-
-                    $.each(connection.sections || [], function (_, section) {
-                        var shown = j === c ? '' : hidden;
-                        var journey = section.journey;
-                        body += '<tr class="section"' + shown + '>' +
-                            '<td rowspan="2">' + time(section.departure.departure) + delay(section.departure.delay) + '</td>' +
-                            '<td>' + escape(section.departure.station.name) + '</td>' +
-                            '<td>' + platform(section.departure) + '</td>' +
-                            '</tr>' +
-                            '<tr class="section"' + shown + '>' +
-                            '<td style="border-top: 0; padding: 4px 8px;"><span class="muted">' + (journey ? escape(journey.name) : 'Walk') + '</span></td>' +
-                            '<td style="border-top: 0; padding: 4px 8px;">' + (journey ? capacity(journey.capacity2nd) : '') + '</td>' +
-                            '</tr>' +
-                            '<tr class="section"' + shown + '>' +
-                            '<td style="border-top: 0;">' + time(section.arrival.arrival) + delay(section.arrival.delay) + '</td>' +
-                            '<td style="border-top: 0;">' + escape(section.arrival.station.name) + '</td>' +
-                            '<td style="border-top: 0;">' + platform(section.arrival) + '</td>' +
-                            '</tr>';
-                    });
-                    body += '</tbody>';
-                });
-
-                $('table.connections').append(body).show();
-
-                var when = datetime || moment().format('YYYY-MM-DDTHH:mm');
-                $('#earlier').attr('href', link({from: from, to: to, datetime: when, page: page}));
-                $('#later').attr('href', link({from: from, to: to, datetime: when, page: page + 2}));
-                $('.pager-links').show();
-
-                $('table.connections tr.connection').on('click', function () {
-                    $('table.connections tr.connection').show();
-                    $('table.connections tr.section').hide();
-                    var $this = $(this);
-                    $this.hide();
-                    $this.nextAll('tr.section').show();
-                    if ('replaceState' in window.history) {
-                        history.replaceState({}, '', link({from: from, to: to, datetime: when, page: page + 1, c: $this.data('c')}));
-                    }
-                });
-            }
-
-            if (from && to) {
-                var query = {from: from, to: to, page: page, limit: 6};
-                if (datetime) {
-                    var moment_ = moment(datetime);
-                    query.date = moment_.format('YYYY-MM-DD');
-                    query.time = moment_.format('HH:mm');
-                }
-                if (via) {
-                    query.via = via;
-                }
-                $.getJSON('../v1/connections', query, render).fail(function (xhr) {
-                    $('#error').text('Error from API: ' + xhr.status + ' ' + xhr.statusText).show();
-                });
-            } else if (navigator.geolocation) {
-                // no search yet: fill "From" with the nearest station
-                var input = $('input[name=from]');
-                var i = 0;
-                var interval = setInterval(function () {
-                    i = (i + 1) % 4;
-                    input.attr('placeholder', 'Locating' + '...'.substr(0, i));
-                }, 400);
-
-                var watch = navigator.geolocation.watchPosition(function (position) {
-                    if (position.coords.accuracy < 100) {
-                        navigator.geolocation.clearWatch(watch);
-                        $.get('../v1/locations', {x: position.coords.latitude, y: position.coords.longitude}, function (data) {
-                            clearInterval(interval);
-                            input.attr('placeholder', 'From');
-                            if (!input.val() && data.stations && data.stations.length) {
-                                input.val(data.stations[0].name);
-                            }
-                        });
-                    }
-                }, function () {
-                    clearInterval(interval);
-                    input.attr('placeholder', 'From');
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 10000,
-                    timeout: 30000
-                });
-            }
-
-            $('.station input').on('focus', function () {
-                var that = this;
-                setTimeout(function () {
-                    that.setSelectionRange(0, 9999);
-                }, 10);
-            });
-        });
-    </script>
+        @media (max-width: 639px) {
+            .connection > button { grid-template-columns: 1fr auto; row-gap: 6px; }
+            .connection > button .products { grid-column: 1 / 2; }
+            .connection > button .chevron { grid-row: 1; grid-column: 2; }
+            .when .spacer { display: none; }
+        }
+    </style>
 </head>
 
 <body>
@@ -201,89 +163,413 @@
     </header>
 
     <p class="pull-right">
-        <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank">
+        <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank" rel="noopener">
             <span class="glyphicon glyphicon-new-window"></span>
             Source Code
         </a>
     </p>
     <h3>Connection Search Example</h3>
+    <p class="muted">Everything on this page runs in the browser against the public API:
+        <code>/locations</code> for the suggestions, <code>/connections</code> for the results.</p>
     <br>
 
-    <div class="row">
-        <div class="col-sm-5">
-
-            <form method="get" action="">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group station">
-                            <input type="text" class="form-control" name="from" placeholder="From" autocapitalize="on" />
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group station">
-                            <input type="text" name="to" class="form-control" placeholder="To" autocapitalize="on" autofocus />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <input type="datetime-local" class="form-control" name="datetime" placeholder="Date and time (optional)" step="300" />
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="Search" />
-                            <a class="btn btn-link" href="connections.html">Clear</a>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-        <div class="col-sm-7">
-
-            <p id="error" class="text-danger" style="display: none;"></p>
-
-            <table class="table connections" style="display: none;">
-                <colgroup>
-                    <col width="20%">
-                    <col width="57%">
-                    <col width="23%">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Journey</th>
-                        <th>
-                            <span class="visible-xs-inline">Pl.</span>
-                            <span class="hidden-xs">Platform</span>
-                        </th>
-                    </tr>
-                </thead>
-            </table>
-
-            <div class="row pager-links" style="display: none;">
-                <div class="col-xs-6">
-                    <a id="earlier" href="#">Earlier connections</a>
-                </div>
-                <div class="col-xs-6 text-right">
-                    <a id="later" href="#">Later connections</a>
-                </div>
+    <form id="search" autocomplete="off">
+        <div class="search">
+            <input class="form-control" name="from" list="from-list" placeholder="From" aria-label="From" required />
+            <button type="button" class="btn btn-default swap" title="Swap" aria-label="Swap from and to">⇄</button>
+            <input class="form-control" name="to" list="to-list" placeholder="To" aria-label="To" required />
+            <div class="via-row">
+                <button type="button" class="link-button" id="add-via">+ Via</button>
+                <input class="form-control" name="via" list="via-list" placeholder="Via (optional)" aria-label="Via" hidden />
             </div>
         </div>
+        <datalist id="from-list"></datalist>
+        <datalist id="to-list"></datalist>
+        <datalist id="via-list"></datalist>
 
-    </div>
+        <div class="when">
+            <input class="form-control" type="date" name="date" aria-label="Date" />
+            <input class="form-control" type="time" name="time" aria-label="Time" />
+            <button type="button" class="btn btn-default" id="now">Now</button>
+            <div class="btn-group" role="group" aria-label="Departure or arrival">
+                <button type="button" class="btn btn-default active" data-arrival="0">Departure</button>
+                <button type="button" class="btn btn-default" data-arrival="1">Arrival</button>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <span class="spacer"></span>
+            <!-- The source switch stays for testing (?api=v1-old); it is not shown. -->
+            <label class="api" hidden>API
+                <select class="form-control" name="api">
+                    <option value="v1">v1 (opentransportdata.swiss)</option>
+                    <option value="v1-old">v1-old (search.ch)</option>
+                </select>
+            </label>
+        </div>
+    </form>
+
+    <p id="error" class="text-danger" hidden></p>
+    <div id="summary" hidden></div>
+    <div class="more" id="earlier-row" hidden><button type="button" class="link-button" id="earlier">↑ Earlier connections</button></div>
+    <div id="results"></div>
+    <div class="more" id="later-row" hidden><span></span><button type="button" class="link-button" id="later">Later connections ↓</button></div>
+    <div class="loading" id="loading" hidden>Searching…</div>
 
     <footer class="footer">
         <hr>
-        <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+        <p>Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
         <p><a href="/privacy.html">Privacy policy</a></p>
     </footer>
-
 </div>
 
-<p>&nbsp;</p>
+<script>
+(function () {
+    'use strict';
+
+    var form = document.getElementById('search');
+    var results = document.getElementById('results');
+    var field = function (name) { return form.elements[name]; };
+    var arrival = false;
+    // What is on screen: the connections, and the question that found them.
+    var shown = [];
+    var asked = null;
+
+    // Categories that run between cities, drawn red as on the station
+    // displays; S-Bahn and regional trains blue; everything else grey.
+    var LONG_DISTANCE = ['IC', 'ICE', 'ICN', 'IR', 'IRE', 'EC', 'EN', 'TGV', 'RJ', 'RJX', 'NJ', 'PE', 'GEX', 'BEX', 'VAE', 'EXT', 'CNL'];
+    var REGIONAL = ['S', 'SN', 'R', 'RE', 'RB', 'TER', 'PE'];
+
+    function el(tag, attributes, children) {
+        var node = document.createElement(tag);
+        Object.keys(attributes || {}).forEach(function (key) {
+            if (key === 'text') node.textContent = attributes[key];
+            else node.setAttribute(key, attributes[key]);
+        });
+        (children || []).forEach(function (child) {
+            if (child) node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
+        });
+        return node;
+    }
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function isoDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+    function hhmm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+    // The API writes "2026-10-04T21:39:00+0200"; Safari wants "+02:00".
+    function parse(value) {
+        return value ? new Date(value.replace(/([+-]\d\d)(\d\d)$/, '$1:$2')) : null;
+    }
+    function clock(value) { var d = parse(value); return d ? hhmm(d) : ''; }
+
+    // "00d01:34:00" -> "1 h 34 min", "00d00:45:00" -> "45 min"
+    function duration(value) {
+        var m = /^(\d+)d(\d\d):(\d\d)/.exec(value || '');
+        if (!m) return '';
+        var hours = parseInt(m[1], 10) * 24 + parseInt(m[2], 10);
+        return hours ? hours + ' h ' + m[3] + ' min' : parseInt(m[3], 10) + ' min';
+    }
+
+    function minutesBetween(a, b) {
+        return Math.round((parse(b) - parse(a)) / 60000);
+    }
+
+    // The walk's own duration when the API gives one, else its timetable span.
+    function walkMinutes(section) {
+        if (section.walk && section.walk.duration) return Math.round(section.walk.duration / 60);
+        return minutesBetween(section.departure.departure, section.arrival.arrival);
+    }
+
+    function delay(minutes) {
+        return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes}) : null;
+    }
+
+    function platform(stop) {
+        var changed = stop.prognosis && stop.prognosis.platform;
+        var value = changed || stop.platform;
+        if (!value) return null;
+        return el('span', {class: changed ? 'changed' : '', title: changed ? 'Platform changed' : ''}, ['Pl. ' + value]);
+    }
+
+    function badge(text, category) {
+        var head = (category || String(text).split(/[\s\d]/)[0]).toUpperCase();
+        var kind = LONG_DISTANCE.indexOf(head) >= 0 ? ' long-distance' : REGIONAL.indexOf(head) >= 0 ? ' regional' : '';
+        return el('span', {class: 'badge-product' + kind, text: text});
+    }
+
+    // A section's vehicle as people say it: "IC 5", "S11", "Bus 10".
+    function vehicle(journey) {
+        var category = journey.category || '';
+        var number = journey.number || '';
+        if (/^0*\d{4,}$/.test(number)) return category;    // a train number, not a line
+        if (category === 'B' || category === 'BUS') return 'Bus ' + number;
+        if (category === 'T') return 'Tram ' + number;
+        return LONG_DISTANCE.indexOf(category) >= 0 && number ? category + ' ' + number : category + number;
+    }
+
+    function stationName(stop) {
+        return (stop.station && stop.station.name) || (stop.location && stop.location.name) || '';
+    }
+
+    function legs(connection) {
+        var list = el('ol', {class: 'legs'});
+        var sections = connection.sections || [];
+        sections.forEach(function (section, index) {
+            var dep = section.departure, arr = section.arrival, journey = section.journey;
+            var walk = !journey;
+            var ride = walk
+                ? 'Walk · ' + walkMinutes(section) + ' min'
+                : null;
+            var item = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
+                el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
+                el('span', {class: 'rail'}),
+                el('span', {class: 'stop', text: stationName(dep)}),
+                el('span', {class: 'pl'}, [platform(dep)]),
+                el('span', {}),
+                el('span', {class: 'rail'}),
+                el('span', {class: 'ride'}, walk ? [ride] : [
+                    badge(vehicle(journey), journey.category), ' → ' + (journey.to || ''),
+                    journey.operator ? el('span', {class: 'muted', text: ' · ' + journey.operator}) : null
+                ]),
+                el('span', {})
+            ]);
+            var end = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
+                el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
+                el('span', {class: 'rail'}),
+                el('span', {class: 'stop', text: stationName(arr)}),
+                el('span', {class: 'pl'}, [platform(arr)])
+            ]);
+            end.querySelectorAll('.rail')[0].style.visibility = 'hidden';
+            list.appendChild(item);
+            list.appendChild(end);
+
+            // The time between this vehicle and the next one, as planned and,
+            // when real time knows better, as it will be.
+            var next = sections[index + 1];
+            if (next && journey && next.journey) {
+                var planned = minutesBetween(arr.arrival, next.departure.departure);
+                var expected = minutesBetween(
+                    (arr.prognosis && arr.prognosis.arrival) || arr.arrival,
+                    (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
+                );
+                list.appendChild(el('li', {class: 'transfer'}, [
+                    'Change · ' + planned + ' min',
+                    expected !== planned
+                        ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'})
+                        : null
+                ]));
+            }
+        });
+        return list;
+    }
+
+    function card(connection, index) {
+        var from = connection.from, to = connection.to;
+        var products = (connection.products || []).map(function (p) { return badge(p); });
+        var details = el('div', {hidden: ''});
+        var button = el('button', {type: 'button', 'aria-expanded': 'false'}, [
+            el('span', {class: 'times'}, [clock(from.departure), delay(from.delay), ' – ', clock(to.arrival), delay(to.delay)]),
+            el('span', {class: 'duration'}, [
+                duration(connection.duration),
+                el('small', {text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')})
+            ]),
+            el('span', {class: 'products'}, products.concat([platform(from) ? el('span', {class: 'muted', style: 'font-size:12px;margin-left:6px'}, [platform(from)]) : null])),
+            el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
+        ]);
+        var box = el('div', {class: 'connection', 'data-index': index}, [button, details]);
+        button.addEventListener('click', function () {
+            var open = box.classList.toggle('open');
+            button.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open && !details.firstChild) details.appendChild(legs(connection));
+            details.hidden = !open;
+        });
+        return box;
+    }
+
+    function key(connection) {
+        return connection.from.departure + '|' + connection.to.arrival + '|' + (connection.products || []).join(',');
+    }
+
+    function draw() {
+        results.textContent = '';
+        var day = null;
+        shown.forEach(function (connection, index) {
+            var d = parse(connection.from.departure);
+            var label = d.toLocaleDateString('en-GB', {weekday: 'long', day: 'numeric', month: 'long'});
+            if (label !== day) {
+                results.appendChild(el('div', {class: 'day', text: label}));
+                day = label;
+            }
+            results.appendChild(card(connection, index));
+        });
+        var any = shown.length > 0;
+        document.getElementById('earlier-row').hidden = !any;
+        document.getElementById('later-row').hidden = !any;
+    }
+
+    function api() { return field('api').value === 'v1-old' ? 'v1-old' : 'v1'; }
+
+    function ask(query) {
+        var params = new URLSearchParams();
+        Object.keys(query).forEach(function (k) { if (query[k] !== '' && query[k] != null) params.set(k, query[k]); });
+        return fetch('../' + api() + '/connections?' + params).then(function (response) {
+            if (!response.ok) throw new Error('Error from API: ' + response.status + ' ' + response.statusText);
+            return response.json();
+        });
+    }
+
+    function busy(on) {
+        document.getElementById('loading').hidden = !on;
+        form.querySelector('[type=submit]').disabled = on;
+    }
+
+    function fail(error) {
+        var box = document.getElementById('error');
+        box.textContent = error.message;
+        box.hidden = false;
+    }
+
+    function search() {
+        document.getElementById('error').hidden = true;
+        asked = {
+            from: field('from').value.trim(),
+            to: field('to').value.trim(),
+            via: field('via').value.trim(),
+            date: field('date').value,
+            time: field('time').value,
+            isArrivalTime: arrival ? 1 : 0,
+            limit: 5
+        };
+        remember();
+        shown = [];
+        draw();
+        busy(true);
+        ask(asked).then(function (response) {
+            if (response.from) field('from').value = response.from.name;
+            if (response.to) field('to').value = response.to.name;
+            document.title = field('from').value + ' – ' + field('to').value;
+            shown = response.connections || [];
+            var summary = document.getElementById('summary');
+            summary.textContent = '';
+            if (response.from && response.to) {
+                summary.append('From ', el('strong', {text: response.from.name}), ' to ', el('strong', {text: response.to.name}));
+            }
+            summary.hidden = false;
+            if (!shown.length) summary.append(' – no connections found.');
+            draw();
+        }).catch(fail).then(function () { busy(false); });
+    }
+
+    // Earlier: the ones arriving before the first shown; later: the ones
+    // leaving after the last. That works the same on v1 and v2, whose page
+    // numbers do not.
+    function more(earlier) {
+        if (!shown.length) return;
+        var edge = earlier ? parse(shown[0].to.arrival) : parse(shown[shown.length - 1].from.departure);
+        edge = new Date(edge.getTime() + (earlier ? -60000 : 60000));
+        busy(true);
+        ask(Object.assign({}, asked, {date: isoDate(edge), time: hhmm(edge), isArrivalTime: earlier ? 1 : 0}))
+            .then(function (response) {
+                var seen = {};
+                shown.forEach(function (c) { seen[key(c)] = true; });
+                var fresh = (response.connections || []).filter(function (c) { return !seen[key(c)]; });
+                shown = earlier ? fresh.concat(shown) : shown.concat(fresh);
+                draw();
+            }).catch(fail).then(function () { busy(false); });
+    }
+
+    // The question lives in the address, so a search can be bookmarked or sent.
+    function remember() {
+        var params = new URLSearchParams();
+        ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
+        if (arrival) params.set('arrival', '1');
+        if (api() === 'v1-old') params.set('api', 'v1-old');
+        history.replaceState({}, '', '?' + params);
+    }
+
+    // Suggestions as one types, from /locations.
+    var timers = {};
+    function suggest(input) {
+        clearTimeout(timers[input.name]);
+        var term = input.value.trim();
+        if (term.length < 2) return;
+        timers[input.name] = setTimeout(function () {
+            fetch('../' + api() + '/locations?type=station&query=' + encodeURIComponent(term))
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var list = document.getElementById(input.name + '-list');
+                    list.textContent = '';
+                    (data.stations || []).forEach(function (station) {
+                        if (station.name) list.appendChild(el('option', {value: station.name}));
+                    });
+                }).catch(function () {});
+        }, 200);
+    }
+
+    function setArrival(value) {
+        arrival = value;
+        form.querySelectorAll('[data-arrival]').forEach(function (b) {
+            b.classList.toggle('active', (b.getAttribute('data-arrival') === '1') === value);
+        });
+    }
+
+    function setNow() {
+        var now = new Date();
+        field('date').value = isoDate(now);
+        field('time').value = hhmm(now);
+    }
+
+    ['from', 'to', 'via'].forEach(function (name) {
+        field(name).addEventListener('input', function () { suggest(field(name)); });
+        field(name).addEventListener('focus', function () { this.select(); });
+    });
+    form.querySelector('.swap').addEventListener('click', function () {
+        var from = field('from').value;
+        field('from').value = field('to').value;
+        field('to').value = from;
+    });
+    document.getElementById('add-via').addEventListener('click', function () {
+        this.hidden = true;
+        field('via').hidden = false;
+        field('via').focus();
+    });
+    document.getElementById('now').addEventListener('click', setNow);
+    form.querySelectorAll('[data-arrival]').forEach(function (b) {
+        b.addEventListener('click', function () { setArrival(b.getAttribute('data-arrival') === '1'); });
+    });
+    document.getElementById('earlier').addEventListener('click', function () { more(true); });
+    document.getElementById('later').addEventListener('click', function () { more(false); });
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        search();
+    });
+
+    // Start from the address: a shared link searches at once.
+    var params = new URLSearchParams(location.search);
+    ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (params.get(k)) field(k).value = params.get(k); });
+    // The old form sent one "datetime" field.
+    var old = /^(\d{4}-\d\d-\d\d)[T ](\d\d:\d\d)/.exec(params.get('datetime') || '');
+    if (old) { field('date').value = old[1]; field('time').value = old[2]; }
+    if (!field('date').value) setNow();
+    if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
+    setArrival(params.get('arrival') === '1');
+    field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
+
+    if (field('from').value && field('to').value) {
+        search();
+    } else if (navigator.geolocation) {
+        // No search yet: offer the nearest station as "From".
+        navigator.geolocation.getCurrentPosition(function (position) {
+            fetch('../' + api() + '/locations?x=' + position.coords.latitude + '&y=' + position.coords.longitude)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!field('from').value && data.stations && data.stations.length) {
+                        field('from').value = data.stations[0].name;
+                    }
+                }).catch(function () {});
+        }, function () {}, {enableHighAccuracy: true, maximumAge: 60000, timeout: 15000});
+        field('to').focus();
+    }
+})();
+</script>
 
 </body>
 </html>

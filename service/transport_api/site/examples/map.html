@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Map - Transport</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link rel="stylesheet" href="../media/css/layout.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <style>
+        :root {
+            --ink: #383a3d;
+            --muted: #767a80;
+            --line: #e2e4e7;
+            --train: #c60018;
+            --tram: #2d327d;
+            --bus: #5a5f66;
+            --ship: #0079c7;
+            --cableway: #8a5a00;
+        }
+        [hidden] { display: none !important; }
+
+        header h1 { font-size: 4em; margin-top: 24px; }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .toolbar .search { flex: 1; min-width: 12rem; max-width: 22rem; }
+        .toolbar label { font-weight: normal; margin: 0; }
+        .toolbar select { display: inline-block; width: auto; }
+        .mode-switch .btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+        .stage {
+            display: grid;
+            grid-template-columns: 1fr 22rem;
+            gap: 12px;
+        }
+        #map {
+            height: 72vh;
+            min-height: 420px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+        }
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 12px 14px;
+            height: 72vh;
+            min-height: 420px;
+            overflow-y: auto;
+            min-width: 0;
+        }
+        .panel h4 { margin-top: 0; }
+        .panel .muted, .muted { color: var(--muted); }
+        .panel table { width: 100%; font-size: 13px; }
+        .panel td { padding: 3px 4px; vertical-align: top; }
+        .panel td.t { white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .late { color: #c60018; font-weight: 600; }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+        .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+        .scale { display: flex; height: 10px; border-radius: 3px; overflow: hidden; margin: 6px 0 2px; }
+        .scale span { flex: 1; }
+        .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+
+        .badge-product {
+            display: inline-block;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: var(--bus);
+            white-space: nowrap;
+        }
+        .vehicle-label {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 0 3px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 767px) {
+            header h1 { font-size: 3em; }
+            .stage { grid-template-columns: 1fr; }
+            #map { height: 60vh; }
+            .panel { height: auto; min-height: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <header>
+        <h1><a href="../">Transport</a></h1>
+        <p>Swiss public transport API</p>
+    </header>
+
+    <p class="pull-right">
+        <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/map.html" target="_blank" rel="noopener">
+            <span class="glyphicon glyphicon-new-window"></span>
+            Source Code
+        </a>
+    </p>
+    <h3>Map Example</h3>
+    <p class="muted">Every station of the national timetable on the swisstopo map, the vehicles under way with their delays,
+        and how far you get from any point. Click a station for its departures, a vehicle for its run.</p>
+
+    <div class="toolbar">
+        <input class="form-control search" id="search" list="search-list" placeholder="Go to station…" aria-label="Go to station" />
+        <datalist id="search-list"></datalist>
+        <div class="btn-group mode-switch" role="group" aria-label="What the map shows">
+            <button type="button" class="btn btn-default active" data-mode="live">Live</button>
+            <button type="button" class="btn btn-default" data-mode="reach">Reachability</button>
+        </div>
+        <label id="minutes-label" hidden>within
+            <select class="form-control input-sm" id="minutes">
+                <option>15</option><option selected>30</option><option>60</option><option>90</option>
+            </select> min, leaving
+            <input class="form-control input-sm" type="datetime-local" id="leaving" step="60" style="display:inline-block;width:auto" aria-label="Leaving at">
+        </label>
+        <label><input type="checkbox" id="show-vehicles" checked> vehicles</label>
+        <label><input type="checkbox" id="colour-map"> colour map</label>
+    </div>
+
+    <div class="stage">
+        <div id="map" role="application" aria-label="Map"></div>
+        <aside class="panel" id="panel" aria-live="polite">
+            <h4>Live</h4>
+            <p class="muted">Zoom in to see vehicles moving. Their position is placed from the timetable and the real-time feed,
+                between the last stop and the next.</p>
+            <div class="legend">
+                <span><i style="background:var(--train)"></i>train</span>
+                <span><i style="background:var(--tram)"></i>tram</span>
+                <span><i style="background:var(--bus)"></i>bus</span>
+                <span><i style="background:var(--ship)"></i>ship</span>
+                <span><i style="background:var(--cableway)"></i>cableway</span>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="footer">
+        <hr>
+        <p>Map © <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a> ·
+            Timetable <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> ·
+            Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
+        <p><a href="/privacy.html">Privacy policy</a></p>
+    </footer>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    var MODE_COLOURS = {train: '#c60018', tram: '#2d327d', bus: '#5a5f66', ship: '#0079c7', cableway: '#8a5a00'};
+    // What the router calls a mode, in the five names of /v1.
+    var ROUTER_MODES = {
+        RAIL: 'train', HIGHSPEED_RAIL: 'train', LONG_DISTANCE: 'train', NIGHT_RAIL: 'train',
+        REGIONAL_FAST_RAIL: 'train', REGIONAL_RAIL: 'train', SUBURBAN: 'train', METRO: 'tram', SUBWAY: 'tram',
+        TRAM: 'tram', BUS: 'bus', COACH: 'bus', FERRY: 'ship', AERIAL_LIFT: 'cableway', FUNICULAR: 'cableway',
+        CABLE_CAR: 'cableway', GONDOLA: 'cableway'
+    };
+
+    var panel = document.getElementById('panel');
+    var mode = 'live';
+
+    // --- The map ---------------------------------------------------------
+
+    var map = L.map('map', {preferCanvas: true, minZoom: 7, maxZoom: 18, zoomSnap: 0.5})
+        .setView([46.85, 8.25], 8);
+    map.setMaxBounds([[45.4, 5.3], [48.3, 11.2]]);
+
+    function swisstopo(layer, format) {
+        return L.tileLayer('https://wmts.geo.admin.ch/1.0.0/' + layer + '/default/current/3857/{z}/{x}/{y}.' + format, {
+            maxZoom: 18,
+            attribution: '© <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a>'
+        });
+    }
+    var grey = swisstopo('ch.swisstopo.pixelkarte-grau', 'jpeg').addTo(map);
+    var colour = swisstopo('ch.swisstopo.pixelkarte-farbe', 'jpeg');
+    document.getElementById('colour-map').addEventListener('change', function () {
+        if (this.checked) { map.removeLayer(grey); colour.addTo(map); } else { map.removeLayer(colour); grey.addTo(map); }
+    });
+
+    function el(tag, attributes, children) {
+        var node = document.createElement(tag);
+        Object.keys(attributes || {}).forEach(function (k) {
+            if (k === 'text') node.textContent = attributes[k]; else node.setAttribute(k, attributes[k]);
+        });
+        (children || []).forEach(function (c) {
+            if (c !== null && c !== undefined) node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+        });
+        return node;
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function clock(value) {
+        if (!value) return '';
+        var d = new Date(value.replace(/([+-]\d\d)(\d\d)$/, '$1:$2'));
+        return pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    function getJSON(url) {
+        return fetch(url).then(function (r) {
+            if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
+            return r.json();
+        });
+    }
+    function show(nodes) {
+        panel.textContent = '';
+        nodes.forEach(function (n) { if (n) panel.appendChild(n); });
+    }
+
+    // Google's encoded polyline, as the router writes it.
+    function decode(text, precision) {
+        var points = [], lat = 0, lon = 0, i = 0, factor = Math.pow(10, precision || 5);
+        while (text && i < text.length) {
+            var shift = 0, result = 0, b;
+            do { b = text.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+            lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+            shift = 0; result = 0;
+            do { b = text.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+            lon += (result & 1) ? ~(result >> 1) : (result >> 1);
+            points.push([lat / factor, lon / factor]);
+        }
+        return points;
+    }
+
+    // --- Stations ----------------------------------------------------------
+
+    var stations = [];          // [id, name, lat, lon, mode, departures]
+    // Vehicles draw above stations, each on its own canvas.
+    map.createPane('vehicles').style.zIndex = 450;
+    var stationCanvas = L.canvas({padding: 0.2});
+    var vehicleCanvas = L.canvas({pane: 'vehicles', padding: 0.2});
+    var stationLayer = L.layerGroup().addTo(map);
+
+    // How busy a station must be to be drawn at a zoom: the whole country
+    // shows its hubs, a town every stop.
+    function threshold(zoom) {
+        if (zoom < 8.5) return 1500;
+        if (zoom < 9.5) return 500;
+        if (zoom < 10.5) return 200;
+        if (zoom < 11.5) return 80;
+        if (zoom < 12.5) return 25;
+        if (zoom < 13.5) return 5;
+        return 0;
+    }
+    // What decides whether a station is drawn when zoomed out: trains count
+    // five times, as in the name search; lifts that run continuously count
+    // for little, their many runs are one way up a mountain.
+    var WEIGHT = {train: 5, tram: 1, bus: 1, ship: 1, cableway: 0.1};
+    function weight(s) { return s[5] * (WEIGHT[s[4]] || 1); }
+
+    function radius(score, zoom) {
+        var r = Math.log(score + 1) * (zoom < 10 ? 0.75 : 0.55);
+        return Math.max(2.5, Math.min(zoom < 10 ? 8 : 6, r));
+    }
+
+    var reach = null;           // {stops by id, minutes} while reachability is shown
+
+    function drawStations() {
+        stationLayer.clearLayers();
+        var zoom = map.getZoom();
+        var bounds = map.getBounds().pad(0.1);
+        var floor = threshold(zoom);
+        stations.forEach(function (s) {
+            var reached = reach && reach.stops[s[0]];
+            if ((!reached && weight(s) < floor) || !bounds.contains([s[2], s[3]])) return;
+            var colour = MODE_COLOURS[s[4]] || MODE_COLOURS.bus;
+            var fill = zoom < 11 ? 0.85 : 0.2;
+            if (reach) {
+                var hit = reach.stops[s[0]];
+                if (!hit) { colour = '#9aa0a6'; fill = 0.25; } else { colour = reachColour(hit.minutes, reach.minutes); }
+            }
+            // Rings when zoomed in, so that the vehicles, which are solid, stand out.
+            L.circleMarker([s[2], s[3]], {
+                renderer: stationCanvas, radius: radius(weight(s), zoom),
+                color: zoom < 11 || reach ? '#fff' : colour, weight: zoom < 11 || reach ? 1 : 1.5,
+                fillColor: reach ? colour : (zoom < 11 ? colour : '#fff'), fillOpacity: reach ? 0.9 : (zoom < 11 ? fill : 0.9)
+            }).bindTooltip(s[1] + (reach && reach.stops[s[0]] ? ' · ' + reach.stops[s[0]].minutes + ' min' : ''))
+              .on('click', function (e) { L.DomEvent.stopPropagation(e); openStation(s); })
+              .addTo(stationLayer);
+        });
+    }
+
+    getJSON('../v2/map/stations').then(function (data) {
+        stations = data.stations;
+        drawStations();
+    }).catch(function (e) {
+        show([el('h4', {text: 'Map'}), el('p', {class: 'text-danger', text: 'Stations could not be loaded: ' + e.message})]);
+    });
+
+    function openStation(s) {
+        if (mode === 'reach') { startReach([s[2], s[3]], s[1]); return; }
+        show([el('h4', {text: s[1]}), el('p', {class: 'muted', text: 'Loading departures…'})]);
+        getJSON('../v1/stationboard?limit=12&id=' + encodeURIComponent(s[0])).then(function (data) {
+            var rows = (data.stationboard || []).map(function (j) {
+                var name = j.category + (j.number && !/^0*\d{4,}$/.test(j.number) ? ' ' + j.number : '');
+                return el('tr', {}, [
+                    el('td', {class: 't'}, [clock(j.stop.departure), j.stop.delay ? el('span', {class: 'late', text: ' +' + j.stop.delay}) : null]),
+                    el('td', {}, [el('span', {class: 'badge-product', style: 'background:' + (MODE_COLOURS[s[4]] || MODE_COLOURS.bus), text: name})]),
+                    el('td', {text: j.to}),
+                    el('td', {class: 'muted', text: j.stop.platform || ''})
+                ]);
+            });
+            show([
+                el('h4', {text: s[1]}),
+                el('p', {class: 'muted', text: s[5] + ' departures a day'}),
+                rows.length ? el('table', {}, [el('tbody', {}, rows)]) : el('p', {class: 'muted', text: 'No departures soon.'}),
+                el('p', {}, [
+                    el('a', {href: 'connections.html?from=' + encodeURIComponent(s[1])}, ['Connections from here']), ' · ',
+                    el('a', {href: '#', id: 'reach-here'}, ['How far from here?'])
+                ])
+            ]);
+            document.getElementById('reach-here').addEventListener('click', function (e) {
+                e.preventDefault();
+                setMode('reach');
+                startReach([s[2], s[3]], s[1]);
+            });
+        }).catch(function (e) {
+            show([el('h4', {text: s[1]}), el('p', {class: 'text-danger', text: e.message})]);
+        });
+    }
+
+    // --- Live vehicles -----------------------------------------------------
+
+    var vehicleLayer = L.layerGroup().addTo(map);
+    var segments = [];
+    var markers = {};
+    var tripLine = null;
+
+    function vehiclesWanted() {
+        return mode === 'live' && document.getElementById('show-vehicles').checked && map.getZoom() >= 11;
+    }
+
+    function loadVehicles() {
+        if (!vehiclesWanted()) { segments = []; vehicleLayer.clearLayers(); markers = {}; return; }
+        var b = map.getBounds();
+        var q = 'min=' + b.getSouth().toFixed(3) + ',' + b.getWest().toFixed(3) +
+            '&max=' + b.getNorth().toFixed(3) + ',' + b.getEast().toFixed(3) + '&zoom=' + Math.round(map.getZoom());
+        getJSON('../v2/map/vehicles?' + q).then(function (data) {
+            segments = (data.segments || []).map(function (s) {
+                s.points = decode(s.polyline, 5);
+                if (s.points.length < 2) s.points = [[s.from.lat, s.from.lon], [s.to.lat, s.to.lon]];
+                s.start = Date.parse(s.departure);
+                s.end = Date.parse(s.arrival);
+                s.kind = ROUTER_MODES[s.mode] || 'bus';
+                return s;
+            });
+            moveVehicles();
+        }).catch(function () {});
+    }
+
+    // Where on its segment a vehicle is now: along the line, in proportion
+    // to the time between its departure and its arrival.
+    function position(s, now) {
+        var f = Math.min(1, Math.max(0, (now - s.start) / Math.max(1, s.end - s.start)));
+        var pts = s.points, total = 0, lengths = [];
+        for (var i = 1; i < pts.length; i++) {
+            var d = Math.hypot(pts[i][0] - pts[i - 1][0], (pts[i][1] - pts[i - 1][1]) * 0.68);
+            lengths.push(d); total += d;
+        }
+        var goal = f * total;
+        for (var j = 0; j < lengths.length; j++) {
+            if (goal <= lengths[j] || j === lengths.length - 1) {
+                var g = lengths[j] ? Math.min(1, goal / lengths[j]) : 0;
+                return [pts[j][0] + (pts[j + 1][0] - pts[j][0]) * g, pts[j][1] + (pts[j + 1][1] - pts[j][1]) * g];
+            }
+            goal -= lengths[j];
+        }
+        return pts[0];
+    }
+
+    function moveVehicles() {
+        if (!vehiclesWanted()) return;
+        var now = Date.now();
+        var seen = {};
+        segments.forEach(function (s) {
+            if (now < s.start || now > s.end) return;
+            if (seen[s.trip]) return;
+            seen[s.trip] = true;
+            var at = position(s, now);
+            var m = markers[s.trip];
+            if (!m) {
+                m = L.circleMarker(at, {
+                    renderer: vehicleCanvas, pane: 'vehicles',
+                    radius: s.kind === 'train' ? 7 : 5.5, color: '#fff', weight: 2,
+                    fillColor: MODE_COLOURS[s.kind], fillOpacity: 1
+                }).addTo(vehicleLayer);
+                m.on('click', function (e) { L.DomEvent.stopPropagation(e); openTrip(m.segment); });
+                markers[s.trip] = m;
+            }
+            m.segment = s;
+            m.setLatLng(at);
+            var late = s.delay > 0 ? ' +' + s.delay : '';
+            m.bindTooltip((s.name || '') + late + ' → ' + (s.to.name || ''));
+        });
+        Object.keys(markers).forEach(function (trip) {
+            if (!seen[trip]) { vehicleLayer.removeLayer(markers[trip]); delete markers[trip]; }
+        });
+    }
+
+    function openTrip(s) {
+        show([el('h4', {text: s.name || 'Trip'}), el('p', {class: 'muted', text: 'Loading its run…'})]);
+        getJSON('../v2/map/trip?id=' + encodeURIComponent(s.trip)).then(function (t) {
+            if (tripLine) map.removeLayer(tripLine);
+            var line = decode(t.polyline, 5);
+            if (line.length < 2) line = t.stops.map(function (x) { return [x.lat, x.lon]; });
+            tripLine = L.polyline(line, {color: MODE_COLOURS[ROUTER_MODES[t.mode] || 'bus'], weight: 4, opacity: 0.7}).addTo(map);
+            var now = Date.now();
+            var rows = t.stops.map(function (x) {
+                var planned = x.scheduledDeparture || x.scheduledArrival;
+                var expected = x.departure || x.arrival;
+                var late = planned && expected ? Math.floor((Date.parse(expected) - Date.parse(planned)) / 60000) : 0;
+                var past = expected && Date.parse(expected) < now;
+                return el('tr', {style: past ? 'opacity:.55' : ''}, [
+                    el('td', {class: 't'}, [clock(planned), late > 0 ? el('span', {class: 'late', text: ' +' + late}) : null]),
+                    el('td', {text: x.name + (x.cancelled ? ' (cancelled)' : '')}),
+                    el('td', {class: 'muted', text: x.track || ''})
+                ]);
+            });
+            show([
+                el('h4', {}, [el('span', {class: 'badge-product', style: 'background:' + MODE_COLOURS[ROUTER_MODES[t.mode] || 'bus'], text: t.name || ''}), ' → ' + (t.headsign || '')]),
+                el('p', {class: 'muted', text: (t.operator || '') + (t.realTime ? ' · real time' : ' · timetable')}),
+                el('table', {}, [el('tbody', {}, rows)])
+            ]);
+        }).catch(function (e) {
+            show([el('h4', {text: s.name || 'Trip'}), el('p', {class: 'text-danger', text: e.message})]);
+        });
+    }
+
+    // --- Reachability ------------------------------------------------------
+
+    var origin = null;
+    var areaLayer = L.layerGroup().addTo(map);
+    // Walking pace for the area around a stop: 4.8 km/h, capped at a kilometre.
+    var WALK_METRES_PER_MINUTE = 80;
+    // Sequential, one hue light to dark would hide the near stops; this runs
+    // green (near) through yellow to red (far), in steps of a quarter.
+    var STEPS = ['#1a9850', '#91cf60', '#fee08b', '#fc8d59', '#d73027'];
+    function reachColour(minutes, max) {
+        return STEPS[Math.min(STEPS.length - 1, Math.floor(minutes / max * STEPS.length))];
+    }
+
+    function startReach(at, label) {
+        var minutes = parseInt(document.getElementById('minutes').value, 10);
+        if (origin) map.removeLayer(origin);
+        origin = L.marker(at).addTo(map);
+        show([el('h4', {text: 'Reachability'}), el('p', {class: 'muted', text: 'Asking the router…'})]);
+        var leaving = document.getElementById('leaving').value;
+        var when = leaving ? '&time=' + encodeURIComponent(new Date(leaving).toISOString()) : '';
+        getJSON('../v2/map/reachable?x=' + at[0].toFixed(4) + '&y=' + at[1].toFixed(4) + '&minutes=' + minutes + when)
+            .then(function (data) {
+                var byId = {};
+                data.stops.forEach(function (s) { byId[s.id] = s; });
+                reach = {stops: byId, minutes: minutes};
+                if (data.from && data.from.name) {
+                    label = data.from.name;
+                    origin.setLatLng([data.from.lat, data.from.lon]);
+                }
+                // The area: around each stop, what the minutes left reach on
+                // foot. Far stops first, so that the near colours lie on top.
+                areaLayer.clearLayers();
+                data.stops.slice().sort(function (a, b) { return b.minutes - a.minutes; }).forEach(function (s) {
+                    var metres = Math.min(1000, (minutes - s.minutes) * WALK_METRES_PER_MINUTE);
+                    if (metres < 60) return;
+                    L.circle([s.lat, s.lon], {
+                        radius: metres, stroke: false, fillColor: reachColour(s.minutes, minutes), fillOpacity: 0.28,
+                        interactive: false
+                    }).addTo(areaLayer);
+                });
+                if (data.stops.length) {
+                    var box = L.latLngBounds(data.stops.map(function (s) { return [s.lat, s.lon]; }));
+                    map.fitBounds(box.extend(origin.getLatLng()), {padding: [20, 20], maxZoom: 13});
+                }
+                drawStations();
+                var counts = data.stops.length;
+                var scale = el('div', {class: 'scale'}, STEPS.map(function (c) { return el('span', {style: 'background:' + c}); }));
+                var labels = el('div', {class: 'scale-labels'}, [el('span', {text: '0'}), el('span', {text: Math.round(minutes / 2) + ' min'}), el('span', {text: minutes + ' min'})]);
+                var furthest = data.stops.slice().sort(function (a, b) { return b.minutes - a.minutes; }).slice(0, 8);
+                show([
+                    el('h4', {text: 'Within ' + minutes + ' minutes'}),
+                    el('p', {class: 'muted', text: 'from ' + (label || at[0].toFixed(4) + ', ' + at[1].toFixed(4)) + ', leaving ' +
+                        (leaving ? leaving.replace('T', ' ') : 'now') + ': ' + counts + ' stops'}),
+                    counts ? null : el('p', {class: 'text-warning', text: 'Nothing reachable at this hour. Try a time during the day.'}),
+                    scale, labels,
+                    el('p', {class: 'muted', style: 'margin-top:10px', text: 'Furthest:'}),
+                    el('table', {}, [el('tbody', {}, furthest.map(function (s) {
+                        return el('tr', {}, [el('td', {class: 't', text: s.minutes + ' min'}), el('td', {text: s.name}),
+                            el('td', {class: 'muted', text: s.transfers ? s.transfers + '×' : 'direct'})]);
+                    }))]),
+                    el('p', {class: 'muted', style: 'margin-top:10px', text: 'Click anywhere on the map to start from there.'})
+                ]);
+            }).catch(function (e) {
+                show([el('h4', {text: 'Reachability'}), el('p', {class: 'text-danger', text: e.message})]);
+            });
+    }
+
+    map.on('click', function (e) {
+        if (mode === 'reach') startReach([e.latlng.lat, e.latlng.lng]);
+    });
+
+    // --- Modes and controls ------------------------------------------------
+
+    function setMode(next) {
+        mode = next;
+        document.querySelectorAll('[data-mode]').forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-mode') === next);
+        });
+        document.getElementById('minutes-label').hidden = next !== 'reach';
+        if (next === 'live') {
+            reach = null;
+            areaLayer.clearLayers();
+            if (origin) { map.removeLayer(origin); origin = null; }
+            drawStations();
+            loadVehicles();
+        } else {
+            vehicleLayer.clearLayers(); markers = {};
+            if (tripLine) { map.removeLayer(tripLine); tripLine = null; }
+            show([el('h4', {text: 'Reachability'}),
+                el('p', {class: 'muted', text: 'Click a station or anywhere on the map: the stations reachable from there by public transport, leaving now, are coloured by travel time.'})]);
+        }
+    }
+    document.querySelectorAll('[data-mode]').forEach(function (b) {
+        b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); });
+    });
+    function again() { if (origin) startReach([origin.getLatLng().lat, origin.getLatLng().lng]); }
+    document.getElementById('minutes').addEventListener('change', again);
+    document.getElementById('leaving').addEventListener('change', again);
+    document.getElementById('show-vehicles').addEventListener('change', loadVehicles);
+
+    var moved = null;
+    map.on('moveend', function () {
+        drawStations();
+        clearTimeout(moved);
+        moved = setTimeout(loadVehicles, 300);
+    });
+    setInterval(loadVehicles, 15000);
+    setInterval(moveVehicles, 1000);
+
+    // Jump to a station by name.
+    var search = document.getElementById('search');
+    var timer = null;
+    search.addEventListener('input', function () {
+        clearTimeout(timer);
+        var term = search.value.trim().toLowerCase();
+        var list = document.getElementById('search-list');
+        if (term.length < 2) return;
+        timer = setTimeout(function () {
+            list.textContent = '';
+            stations.filter(function (s) { return s[1].toLowerCase().indexOf(term) >= 0; })
+                .slice(0, 12)
+                .forEach(function (s) { list.appendChild(el('option', {value: s[1]})); });
+        }, 150);
+    });
+    search.addEventListener('change', function () {
+        var hit = stations.find(function (s) { return s[1] === search.value; });
+        if (hit) { map.setView([hit[2], hit[3]], 14); openStation(hit); }
+    });
+})();
+</script>
+
+</body>
+</html>

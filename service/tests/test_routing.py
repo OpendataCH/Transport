@@ -3,7 +3,8 @@
 Until stage S6 the rule here was the opposite one: the service refused the
 whole `/v1` surface, so that a location block written too broadly could not
 shadow the old contract with a half-built answer. S6 is the deliberate end of
-that guard - `/v1` is now this service's own prefix and `/v2` an alias of it.
+that guard - `/v1` is now this service's own prefix. `/v2` was an alias of it
+until locations and station boards moved to our own timetable (timetable/).
 The website around the API is served here too; see test_website.py.
 """
 
@@ -17,14 +18,20 @@ def test_both_prefixes_answer(client, prefix):
     assert client.get(f"{prefix}/health").json()["status"] == "ok"
 
 
-def test_the_two_prefixes_are_the_same_routes(client, search_ch):
-    """An alias, not a second version."""
+def test_v2_reads_the_timetable_and_not_search_ch(client, search_ch):
+    """Without a database, /v2 says so - it does not fall back to search.ch."""
     search_ch.returns([{"label": "Bern", "id": "8507000", "iconclass": "sl-icon-type-train"}])
 
-    assert (
-        client.get("/v1/locations", params={"query": "Bern"}).json()
-        == client.get("/v2/locations", params={"query": "Bern"}).json()
-    )
+    assert client.get("/v1/locations", params={"query": "Bern"}).json()["stations"]
+    answer = client.get("/v2/locations", params={"query": "Bern"})
+    assert answer.status_code == 503
+    assert len(search_ch.requests) == 1
+
+
+def test_v2_connections_still_ask_search_ch(client, search_ch):
+    search_ch.returns({"connections": [], "points": []})
+    client.get("/v2/connections", params={"from": "Bern", "to": "Basel"})
+    assert search_ch.last.url.path.endswith("route.json")
 
 
 def test_the_api_version_is_the_one_the_prefix_promises(client):

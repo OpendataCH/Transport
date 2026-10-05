@@ -17,6 +17,16 @@ stages:
 test:service:
   stage: test
   image: python:3.13-slim
+  # The /v2 timetable tests need a real Postgres; without one they skip, and
+  # the coverage below would fall short for the wrong reason.
+  services:
+    - name: postgres:18-alpine
+      alias: db
+  variables:
+    POSTGRES_USER: transport
+    POSTGRES_PASSWORD: transport
+    POSTGRES_DB: transport_test
+    TEST_DATABASE_URL: postgresql://transport:transport@db:5432/transport_test
   before_script:
     - pip install --disable-pip-version-check --no-cache-dir -e './service[dev]'
   script:
@@ -51,9 +61,10 @@ test:service:
     - |
       echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf '%s:%s' "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
   rules:
-    # Only the default branch moves `latest`. A branch build would otherwise
-    # hand a server something nobody reviewed.
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Every branch gets an image under its commit SHA, so that a branch can be
+    # tried on staging. Only the default branch moves `latest` (see the
+    # script): that tag must never point at something nobody reviewed.
+    - if: $CI_COMMIT_BRANCH
 
 # The one image: the API and the website around it.
 build:image:service:
@@ -61,13 +72,17 @@ build:image:service:
   script:
     # SERVICE_VERSION is baked in so that /v2/health names the build that is
     # answering, without anyone having to read the compose file on the host.
-    - >-
-      /kaniko/executor
-      --context "${CI_PROJECT_DIR}/service"
-      --dockerfile "${CI_PROJECT_DIR}/service/Dockerfile"
-      --build-arg "SERVICE_VERSION=${CI_COMMIT_SHORT_SHA}"
-      --destination "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
-      --destination "${CI_REGISTRY_IMAGE}/service:latest"
+    - |
+      LATEST=""
+      if [ "${CI_COMMIT_BRANCH}" = "${CI_DEFAULT_BRANCH}" ]; then
+        LATEST="--destination ${CI_REGISTRY_IMAGE}/service:latest"
+      fi
+      /kaniko/executor \
+        --context "${CI_PROJECT_DIR}/service" \
+        --dockerfile "${CI_PROJECT_DIR}/service/Dockerfile" \
+        --build-arg "SERVICE_VERSION=${CI_COMMIT_SHORT_SHA}" \
+        --destination "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}" \
+        ${LATEST}
 
 # The image just built, started as a container and asked what matters: that it
 # comes up, reports this build and Europe/Zurich, serves the website and the
@@ -80,7 +95,7 @@ smoke:image:
   stage: verify
   image: python:3.13-slim
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH
   services:
     - name: "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
       alias: transport

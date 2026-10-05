@@ -1,0 +1,197 @@
+# transport.opendata.ch, containerised: one service answers the API under /v1
+# and the website around it, Redis keeps the counters behind /stats.php, and
+# access-log keeps the vhost's access log.
+#
+# /v2 answers from our own copy of the national timetable: `db` holds it,
+# `ingest` loads it from opentransportdata.swiss (feed and real time), and
+# `motis` routes /v2/connections on the same feed. /v1 still asks search.ch.
+#
+# The image is built by the CI of gitlab.com/opendata.ch/Transport and pulled
+# from its registry; nothing is built here. The registry is public, so no
+# credentials are needed. To move to another build, change SERVICE_IMAGE_TAG
+# in .env and run `docker compose up -d` - and to roll back, put the old tag
+# back. That is the whole deployment procedure.
+#
+# .env also holds DB_PASSWORD (internal only) and OTD_API_KEY (GTFS-RT,
+# Bitwarden "opentransportdata.swiss - API-Manager"; one key per environment,
+# five requests a minute: ingest takes two, motis one).
+#
+# This host freezes under many small disk accesses (see the portal's notes on
+# OPEN-PRD), and the timetable containers are the ones that write in bulk. They
+# are capped in operations per second on sda, which holds /mnt/data/docker, and
+# in memory, so that an import can slow itself down but never the portal.
+name: transport
+
+x-gentle-io: &gentle-io
+  blkio_config:
+    device_read_iops:
+      - path: /dev/sda
+        rate: 300
+    device_write_iops:
+      - path: /dev/sda
+        rate: 300
+
+services:
+  service:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 1g
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      WEB_CONCURRENCY: "3"
+      # The Redis stats.php reads: /v1 is answered here, so this service keeps
+      # the counters the PHP one used to write. Unset, nothing is counted.
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      MOTIS_URL: http://motis:8080
+      # /v1 answers from the timetable; search.ch stays at /v1-old.
+      V1_FROM_TIMETABLE: "1"
+    depends_on:
+      redis: {condition: service_healthy}
+      # Started, not healthy: /v1 must not wait for the timetable or router.
+      db: {condition: service_started}
+      motis: {condition: service_started}
+    # Published on the opendata-net gateway: the reverse proxy is the only
+    # thing that may reach it.
+    ports: ["172.18.0.1:8086:8000"]
+    networks: [transport]
+
+  # The timetable loader: the feed when a new one appears (to its end, seven
+  # days back), real time every 30 seconds. One process, so that the API
+  # workers do not each poll against the key's limit.
+  ingest:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 1500m
+    <<: *gentle-io
+    pull_policy: always
+    restart: unless-stopped
+    command: ["python", "-m", "transport_api.timetable.ingest"]
+    # The image's check asks the API on port 8000, which this process is not.
+    healthcheck:
+      disable: true
+    environment:
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      # 90 days ahead: across the timetable change the window reads two
+      # years, and to the end of the next one would not fit the router.
+      GTFS_DAYS: "90"
+      # Moved on weekly: each move rebuilds the router, map tiles included.
+      GTFS_WINDOW_STEP_DAYS: "7"
+      GTFS_PAST_DAYS: "7"
+      OTD_API_KEY: ${OTD_API_KEY:-}
+      # The Swiss OpenStreetMap extract for the router, renewed monthly.
+      OSM_URL: https://download.geofabrik.de/europe/switzerland-latest.osm.pbf
+    volumes:
+      - gtfscache:/var/cache/gtfs
+    depends_on:
+      db: {condition: service_healthy}
+    networks: [transport]
+
+  # The router behind /v2/connections. motis-run.sh (from the repository's
+  # docker/ folder, copied next to this file) imports the window named in
+  # /gtfs/CURRENT - written by the importer - and follows it.
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    # The import of the window to the end of the feed peaks near 2.5 GB, with
+    # the street network near 3.7 GB.
+    mem_limit: 6g
+    <<: *gentle-io
+    restart: unless-stopped
+    entrypoint: ["sh", "/motis-run.sh"]
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+      MOTIS_PAST_DAYS: "7"
+      MOTIS_DAYS: "150"
+      # Fetched by ingest; walks between stops along streets once it is there.
+      MOTIS_OSM: /gtfs/osm/switzerland.osm.pbf
+      # Map tiles and place search for the router page at /routing/.
+      MOTIS_TILES: "1"
+      # Bikes, scooters and cars to rent (sharedmobility.ch, BFE): the
+      # address is how the feed asks callers to identify themselves.
+      MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
+      MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
+    volumes:
+      - ./motis-run.sh:/motis-run.sh:ro
+      - gtfscache:/gtfs:ro
+      - motisdata:/data
+    networks: [transport]
+
+  db:
+    image: postgres:18-alpine
+    mem_limit: 1500m
+    <<: *gentle-io
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: transport
+    # Everything in here is reloaded from the feed, so a lost commit costs
+    # nothing; sized for a host that runs a good deal besides.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - work_mem=32MB
+      - -c
+      - synchronous_commit=off
+      - -c
+      - max_wal_size=2GB
+    shm_size: 512m
+    volumes:
+      - timetable:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "transport"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Internal only: no published port.
+    networks: [transport]
+
+  # The access log of the transport vhost: nginx sends it over syslog, this
+  # keeps it as daily files for 30 days (access_log_receiver.py, from docker/
+  # in the repository). It runs in the image of the Python service because
+  # that has Python and the Zurich zone already. Root inside, only to write
+  # to a fresh named volume; it listens on the gateway alone, like the others.
+  access-log:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    restart: unless-stopped
+    user: root
+    command: ["python", "/ops/access_log_receiver.py"]
+    environment:
+      LOG_DIR: /logs
+      LOG_KEEP_DAYS: "30"
+    volumes:
+      - ./access_log_receiver.py:/ops/access_log_receiver.py:ro
+      - accesslogs:/logs
+    # The image's own check asks the API, which does not run here.
+    healthcheck:
+      disable: true
+    ports: ["172.18.0.1:5514:5514/udp"]
+    networks: [transport]
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    # The counters behind /stats are the only state; an RDB snapshot every few
+    # minutes is enough, and losing a few is not worth an AOF write per request.
+    command: ["redis-server", "--save", "300", "10", "--appendonly", "no"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [transport]
+
+volumes:
+  redisdata:
+  accesslogs:
+  timetable:
+  gtfscache:
+  motisdata:
+
+networks:
+  transport:

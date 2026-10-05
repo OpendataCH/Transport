@@ -84,7 +84,7 @@ CLIENT_KINDS = [
 ]
 
 # Paths that are the service watching itself, not a client asking.
-UNCOUNTED = ("/v1/health", "/v2/health")
+UNCOUNTED = ("/v1/health", "/v2/health", "/v1-old/health")
 
 
 def connect():

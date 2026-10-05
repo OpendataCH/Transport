@@ -57,11 +57,11 @@ def test_connections_read_the_time_as_strtotime_does(combined, date, time, expec
     ],
 )
 def test_the_board_reads_the_time_as_datetime_does(given, expected):
-    assert fmt(stationboard._when(given)) == expected
+    assert fmt(stationboard.moment_of(given)) == expected
 
 
 def test_a_bare_time_with_a_fraction_is_today():
-    moment = stationboard._when("13:15:00.25")
+    moment = stationboard.moment_of("13:15:00.25")
     today = datetime.now(ZURICH)
 
     assert (moment.date(), moment.hour, moment.minute) == (today.date(), 13, 15)
