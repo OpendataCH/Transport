@@ -8,12 +8,14 @@ changes rarely and is listed here by hand.
 """
 
 import html
+from datetime import datetime
 from functools import cache
 from importlib import metadata
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
+from .statistics import ZONE
 from .website import _uncounted
 
 router = APIRouter(include_in_schema=False)
@@ -181,7 +183,7 @@ def licenses(request: Request) -> HTMLResponse:
         </header>
         <article>
         <h2>Licenses</h2>
-        <p>The Transport API is free software under the MIT License, © 2012 Opendata.ch:
+        <p>The Transport API is free software under the MIT License, © 2012–{datetime.now(ZONE).year} Opendata.ch:
             <a href="https://gitlab.com/opendata.ch/Transport">gitlab.com/opendata.ch/Transport</a>.
             What it answers from and what it is built from, with their licences:</p>
 
