@@ -184,6 +184,19 @@ PLAN = {
 }
 
 
+GEOCODE = [
+    {
+        "type": "ADDRESS",
+        "name": "Neufeldstrasse 101",
+        "street": "Neufeldstrasse",
+        "houseNumber": "101",
+        "lat": 46.957123,
+        "lon": 7.434012,
+        "areas": [{"name": "Schweiz", "adminLevel": 2}, {"name": "Bern", "adminLevel": 8.0}],
+    }
+]
+
+
 class FakeMotis:
     def __init__(self) -> None:
         self.params: dict | None = None
@@ -191,6 +204,10 @@ class FakeMotis:
     async def plan(self, params):
         self.params = params
         return PLAN
+
+    async def get(self, path, params):
+        assert path == "/api/v1/geocode"
+        return GEOCODE if "Neufeld" in params["text"] else []
 
 
 @pytest.fixture(scope="module")
@@ -307,3 +324,15 @@ def test_a_walk_between_stations_is_its_seconds():
     }
     section = v2._section(leg, {}, {}, None)
     assert section["walk"] == {"duration": 180}
+
+
+@needs_database
+def test_a_connection_from_an_address_starts_at_its_coordinate(api):
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "Neufeldstrasse 101, Bern", "to": "8500003", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    assert api.motis.params["fromPlace"] == "46.957123,7.434012"
+    assert answer["from"]["id"] is None
+    assert answer["from"]["name"] == "Bern, Neufeldstrasse 101"
+    assert answer["from"]["coordinate"]["x"] == 46.957123

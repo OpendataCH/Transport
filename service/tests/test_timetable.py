@@ -323,3 +323,15 @@ def test_operators_are_named_as_search_ch_names_them():
     # By full name when the id is unknown (a trip only real time knows).
     assert operator_name(None, "BLS AG (bls)") == "BLS-bls"
     assert operator_name("999999", "Unbekannte Bahn") == "Unbekannte Bahn"
+
+
+def test_places_are_named_as_search_ch_names_them():
+    from transport_api.timetable import places
+
+    bern = [{"name": "Bern", "adminLevel": 4.0}, {"name": "Bern", "adminLevel": 8.0}]
+    address = {"type": "ADDRESS", "street": "Neufeldstrasse", "houseNumber": "101", "areas": bern}
+    poi = {"type": "PLACE", "name": "Bundeshaus - Parlamentsgebäude", "areas": bern}
+    assert places._name(address) == "Bern, Neufeldstrasse 101"
+    assert places._name(poi) == "Bundeshaus - Parlamentsgebäude, Bern"
+    assert places.house_number("Bubenbergplatz 4c, Bern") == "4c"
+    assert places.house_number("Zürich HB") is None

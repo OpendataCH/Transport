@@ -14,13 +14,16 @@ from ..encoding import PhpJson
 from ..fields import Fields
 from ..models import Errors, LocationsResponse
 from ..query import truthy
-from . import db
+from . import db, places
 from .mapping import location
 from .names import normalize
+from .router import Motis, motis_or_none
 
 router = APIRouter()
 
 LIMIT = 10
+# Lines of an `all` answer kept for addresses and points of interest.
+PLACES_AT_LEAST = 3
 
 # The name exactly as typed first, punctuation included: «Winterthur, Seen»
 # is the bus stop, «Winterthur Seen» the station, and the comma says which.
@@ -66,12 +69,14 @@ LIMIT $3
 )
 async def search_locations(
     pool: Annotated[asyncpg.Pool, Depends(db.get_pool)],
+    motis: Annotated[Motis | None, Depends(motis_or_none)],
     fields: Annotated[Fields, Depends(Fields.of)],
     query: Annotated[str | None, Query(description="Station name to search for.")] = None,
     x: Annotated[str | None, Query(description="Latitude to search around.")] = None,
     y: Annotated[str | None, Query(description="Longitude to search around.")] = None,
     type: Annotated[  # noqa: A002 - the name is part of the /v1 contract
-        str | None, Query(description="Accepted and ignored, as in /v1.")
+        str | None,
+        Query(description="`all` (default), `station`, `poi` or `address`; with `query` only."),
     ] = None,
     fields_: Annotated[
         list[str] | None,
@@ -82,13 +87,37 @@ async def search_locations(
     stations: list[dict] = []
 
     if truthy(query):
-        stations = await _by_name(pool, query)
+        stations = await _by_query(pool, motis, query, (type or "all").lower())
     elif truthy(x) and truthy(y):
         point = _point(x, y)
         if point is not None:
             stations = await _nearest(pool, *point)
 
     return PhpJson(content=fields.apply({"stations": stations}))
+
+
+async def _by_query(pool: asyncpg.Pool, motis: Motis | None, query: str, kind: str) -> list[dict]:
+    """Stops, addresses or points of interest, as `type` asks.
+
+    `all` gives stops first - they are what the API is for - followed by
+    addresses and points of interest to fill the list. Those have no id,
+    which is how a client tells them apart.
+    """
+    if kind in places.KINDS:
+        return [_place(p) for p in await places.search(motis, query, (kind,), LIMIT)]
+    stations = await _by_name(pool, query)
+    if kind == "station":
+        return stations
+    # Places get the room the stops leave, and at least a few lines, so that
+    # an address is found even when its street shares its name with stops.
+    room = max(PLACES_AT_LEAST, LIMIT - len(stations))
+    more = [_place(p) for p in await places.search(motis, query, ("address", "poi"), room)]
+    return stations[: LIMIT - len(more)] + more
+
+
+def _place(place: places.Place) -> dict:
+    """An address or point of interest has no id and no icon in /v1."""
+    return location(None, place.name, place.lat, place.lon)
 
 
 async def _by_name(pool: asyncpg.Pool, query: str) -> list[dict]:

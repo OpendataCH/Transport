@@ -15,10 +15,9 @@ from datetime import datetime
 from typing import Annotated, Any
 
 import asyncpg
-import httpx
 from fastapi import APIRouter, Depends, Query, Request
 
-from .. import errors, settings
+from .. import settings
 from ..connections import (
     DEFAULT_LIMIT,
     DEFAULT_PAGE,
@@ -33,9 +32,10 @@ from ..fields import Fields
 from ..mapping import DEPRECATED_TYPES, ZURICH, duration_of
 from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
-from . import db
+from . import db, places
 from .mapping import journey, line_number, location, stop
-from .names import operator_name
+from .names import normalize, operator_name
+from .router import Motis, get_motis, motis_or_none  # noqa: F401 - re-exported
 from .stationboard import TRANSPORTATIONS, _station
 
 router = APIRouter()
@@ -71,36 +71,6 @@ WHERE t.trip_id = ANY($1::text[])
 """
 
 PARENT = "SELECT stop_id FROM gtfs.stops WHERE idx = $1"
-
-
-class Motis:
-    """The router, behind one HTTP client for the life of the process."""
-
-    def __init__(self, client: httpx.AsyncClient) -> None:
-        self._client = client
-
-    async def plan(self, params: dict[str, str]) -> dict:
-        return await self.get("/api/v6/plan", params)
-
-    async def get(self, path: str, params: dict[str, str]) -> dict | list:
-        """One call to the router's API; its failures in the /v1 envelope."""
-        try:
-            response = await self._client.get(path, params=params)
-        except httpx.HTTPError as exc:
-            raise errors.ApiError(503, f"The router is not reachable: {exc}") from exc
-        if response.status_code >= 400:
-            raise errors.ApiError(
-                503 if response.status_code >= 500 else 400,
-                f"The router answered {response.status_code}: {response.text[:200]}",
-            )
-        return response.json()
-
-
-def get_motis(request: Request) -> Motis:
-    client = getattr(request.app.state, "motis", None)
-    if client is None:
-        raise errors.ApiError(503, "The router is not configured.")
-    return Motis(client)
 
 
 @router.get(
@@ -157,8 +127,8 @@ async def search_connections(
     if problems:
         return PhpErrorJson(status_code=400, content={"errors": problems})
 
-    origin = await _station(pool, from_)
-    destination = await _station(pool, to)
+    origin = await _endpoint(pool, motis, from_)
+    destination = await _endpoint(pool, motis, to)
     stops_via = [await _station(pool, place) for place in places]
     if origin is None or destination is None or None in stops_via:
         return PhpJson(content=fields.apply(empty))
@@ -166,8 +136,8 @@ async def search_connections(
     arrival = _is_arrival_time(isArrivalTime)
     when = _when(datetime_, date, time)
     params = {
-        "fromPlace": await _place(pool, origin),
-        "toPlace": await _place(pool, destination),
+        "fromPlace": await _router_place(pool, origin),
+        "toPlace": await _router_place(pool, destination),
         "time": when.astimezone(ZURICH).isoformat(),
         "arriveBy": "true" if arrival else "false",
         "numItineraries": str(limit_value if arrival else (page_value + 1) * limit_value),
@@ -189,13 +159,14 @@ async def search_connections(
         plan = await motis.plan(params)
         itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
         itineraries = _page(itineraries, limit_value, page_value)
+    _name_the_ends(itineraries, origin, destination)
     page_of = await _connections(pool, itineraries)
 
-    origin_location = location(origin["id"], origin["name"], origin["lat"], origin["lon"])
+    origin_location = _endpoint_location(origin)
     # /v1 names the second of search.ch's points as `to`, and with a via stop
     # that is the first via, not the destination. Reproduced.
     second = stops_via[0] if stops_via else destination
-    destination_location = location(second["id"], second["name"], second["lat"], second["lon"])
+    destination_location = _endpoint_location(second)
     return PhpJson(
         content=fields.apply(
             {
@@ -234,6 +205,52 @@ async def _arrival_page(motis: "Motis", params: dict, limit: int, page: int) -> 
                 later.append(itinerary)
         cursor = more.get("nextPageCursor")
     return sorted(later[(page - 1) * limit : page * limit], key=lambda i: i["startTime"])
+
+
+async def _endpoint(
+    pool: asyncpg.Pool, motis: Motis, text: str
+) -> "asyncpg.Record | places.Place | None":
+    """Where a connection starts or ends: a stop, an address or a point of interest.
+
+    A text with a house number is tried as an address first - a stop of that
+    name would be a coincidence, a street with that name a near certainty.
+    Otherwise a stop, and an address or a point of interest when no stop
+    matches.
+    """
+    station = await _station(pool, text)
+    if text.isdigit() or (station is not None and normalize(station["name"]) == normalize(text)):
+        return station
+    found = await places.address(motis, text)
+    if found is not None:
+        return found
+    if station is not None:
+        return station
+    matches = await places.search(motis, text, ("address", "poi"), limit=1)
+    return matches[0] if matches else None
+
+
+async def _router_place(pool: asyncpg.Pool, end) -> str:
+    if isinstance(end, places.Place):
+        return end.coordinate
+    return await _place(pool, end)
+
+
+def _endpoint_location(end) -> dict:
+    if isinstance(end, places.Place):
+        return location(None, end.name, end.lat, end.lon)
+    return location(end["id"], end["name"], end["lat"], end["lon"])
+
+
+def _name_the_ends(itineraries: list[dict], origin, destination) -> None:
+    """The router calls a start or end that is no stop START or END; /v1 names it."""
+    for itinerary in itineraries:
+        legs = itinerary.get("legs") or []
+        if not legs:
+            continue
+        if isinstance(origin, places.Place):
+            legs[0]["from"]["name"] = origin.name
+        if isinstance(destination, places.Place):
+            legs[-1]["to"]["name"] = destination.name
 
 
 async def _place(pool: asyncpg.Pool, station: asyncpg.Record) -> str:

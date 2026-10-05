@@ -175,9 +175,9 @@
 
     <form id="search" autocomplete="off">
         <div class="search">
-            <input class="form-control" name="from" list="from-list" placeholder="From" aria-label="From" required />
+            <input class="form-control" name="from" list="from-list" placeholder="From: stop or address" aria-label="From" required />
             <button type="button" class="btn btn-default swap" title="Swap" aria-label="Swap from and to">⇄</button>
-            <input class="form-control" name="to" list="to-list" placeholder="To" aria-label="To" required />
+            <input class="form-control" name="to" list="to-list" placeholder="To: stop or address" aria-label="To" required />
             <div class="via-row">
                 <button type="button" class="link-button" id="add-via">+ Via</button>
                 <input class="form-control" name="via" list="via-list" placeholder="Via (optional)" aria-label="Via" hidden />
@@ -492,13 +492,19 @@
         var term = input.value.trim();
         if (term.length < 2) return;
         timers[input.name] = setTimeout(function () {
-            fetch('../' + api() + '/locations?type=station&query=' + encodeURIComponent(term))
+            // Stops come first; addresses and places (no id) follow, marked
+            // as such - a journey can start or end at either.
+            var via = input.name === 'via';
+            fetch('../' + api() + '/locations?' + (via ? 'type=station&' : '') + 'query=' + encodeURIComponent(term))
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     var list = document.getElementById(input.name + '-list');
                     list.textContent = '';
                     (data.stations || []).forEach(function (station) {
-                        if (station.name) list.appendChild(el('option', {value: station.name}));
+                        if (!station.name) return;
+                        list.appendChild(el('option', station.id
+                            ? {value: station.name}
+                            : {value: station.name, label: 'Address / place'}));
                     });
                 }).catch(function () {});
         }, 200);

@@ -116,10 +116,16 @@
                         <td>optional</td>
                         <td>
                             Only with <code>query</code> parameter.
-                            Accepted for compatibility: <code>all</code> (default), <code>station</code>, <code>poi</code>, <code>address</code>.
-                            The answer always lists stations and stops - the timetable has no addresses or points of interest.
+                            Specifies the location type, possible types are:
+                            <ul>
+                                <li>all (default): stations and stops first, then addresses and points of interest</li>
+                                <li>station: Looks up for stations (train station, bus station)</li>
+                                <li>poi: Looks up for points of interest (Clock tower, China garden)</li>
+                                <li>address: Looks up for an address (Zurich Bahnhofstrasse 33)</li>
+                            </ul>
+                            Addresses and points of interest have no <code>id</code>; they can be given as <code>from</code> or <code>to</code> of a connection.
                         </td>
-                        <td>station</td>
+                        <td>address</td>
                     </tr>
                 </tbody>
             </table>
@@ -925,6 +931,7 @@
                 <li><strong>Timetable:</strong> the Swiss national timetable in GTFS, from <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a>, the open data platform for Swiss public transport. A new version appears twice a week and is loaded the same day. Around the timetable change in December the current and the next timetable year are read together.</li>
                 <li><strong>Real time:</strong> delays, cancellations and added trips from the GTFS-RT feed of opentransportdata.swiss, refreshed every 30 seconds.</li>
                 <li><strong>Connections:</strong> computed by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner, on the same timetable and real-time data. Walks to, from and between stops follow the streets of <a href="https://www.openstreetmap.org/" rel="external noopener noreferrer">OpenStreetMap</a>.</li>
+                <li><strong>Addresses and points of interest:</strong> from <a href="https://www.openstreetmap.org/" rel="external noopener noreferrer">OpenStreetMap</a>, searched on this server by the journey planner's own place search.</li>
                 <li><strong>Operator names:</strong> as the national timetable's HAFAS data (HRDF) gives them, also from opentransportdata.swiss.</li>
             </ul>
 
