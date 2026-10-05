@@ -12,6 +12,7 @@ points to it - except on the test host, which asks not to be indexed.
 
 import html
 import json
+import re
 from datetime import datetime
 from urllib.parse import urlencode
 
@@ -122,6 +123,11 @@ def _with_head(page: str, request: Request, station, arrivals: bool) -> str:
     return page.replace("<!--head-->", "\n    ".join(extra))
 
 
+def _operator(name: str | None) -> str:
+    """`BLS-bls` -> `BLS`: the part of the long name people know the operator by."""
+    return re.split(r"[-/]", name or "")[0].strip()
+
+
 def _line(journey: dict) -> str:
     category = journey.get("category") or ""
     number = journey.get("number") or ""
@@ -139,7 +145,9 @@ def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
     out = [f'<h2 id="board-title" class="h3">{html.escape(what)} {html.escape(name)}</h2>']
     if not journeys:
         return out[0] + '<p class="text-muted">No departures found.</p>'
-    out.append('<table class="board"><thead><tr><th>Time</th><th>Line</th>')
+    out.append(
+        '<table class="board"><thead><tr><th>Time</th><th>Line</th><th class="op">Operator</th>'
+    )
     # The line's destination either way: /v1 gives it for arrivals too.
     out.append('<th>To</th><th class="pl">Platform</th></tr></thead><tbody>')
     for journey in journeys:
@@ -161,9 +169,8 @@ def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
             "<tr>"
             f'<td class="t">{html.escape(at[11:16])}{late}</td>'
             f'<td><span class="badge-product{kind}">{html.escape(_line(journey))}</span></td>'
-            f"<td>{html.escape(journey.get('to') or '')}"
-            + (f'<span class="text-muted op"> · {html.escape(operator)}</span>' if operator else "")
-            + "</td>"
+            f'<td class="op">{html.escape(_operator(operator))}</td>'
+            f"<td>{html.escape(journey.get('to') or '')}</td>"
             f'<td class="pl{" changed" if changed else ""}">'
             f"{html.escape(changed or stop.get('platform') or '')}</td>"
             "</tr>"

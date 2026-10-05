@@ -48,6 +48,7 @@
         }
         .board td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
         .board .t { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 16px; }
+        .board .op { color: var(--muted); white-space: nowrap; }
         .board .pl { text-align: right; white-space: nowrap; color: var(--muted); }
         .board .pl.changed { color: var(--late); font-weight: 600; }
         .late { color: var(--late); font-weight: 600; font-size: .85em; }
@@ -160,6 +161,13 @@
         if (category === 'T') return 'Tram ' + number;
         return LONG_DISTANCE.indexOf(category) >= 0 ? category + ' ' + number : category + number;
     }
+    // "BLS-bls", "SOB-sob", "AVA/rbz": the API gives the long name of the
+    // national timetable, as it always has; people know the operator by
+    // the part in front.
+    function operator(name) {
+        return (name || '').split(/[-/]/)[0].trim();
+    }
+
     function badge(journey) {
         var category = (journey.category || '').toUpperCase();
         var kind = LONG_DISTANCE.indexOf(category) >= 0 ? ' long-distance' : REGIONAL.indexOf(category) >= 0 ? ' regional' : '';
@@ -175,7 +183,8 @@
             return el('tr', {}, [
                 el('td', {class: 't'}, [clock(at), stop.delay > 0 ? el('span', {class: 'late', text: ' +' + stop.delay}) : null]),
                 el('td', {}, [badge(journey)]),
-                el('td', {}, [journey.to || '', journey.operator ? el('span', {class: 'text-muted op', text: ' · ' + journey.operator}) : null]),
+                el('td', {class: 'op', text: operator(journey.operator)}),
+                el('td', {text: journey.to || ''}),
                 el('td', {class: 'pl' + (changed ? ' changed' : ''), text: changed || stop.platform || ''})
             ]);
         });
@@ -190,7 +199,7 @@
         }
         section.appendChild(el('table', {class: 'board'}, [
             el('thead', {}, [el('tr', {}, [
-                el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {text: 'To'}),
+                el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {class: 'op', text: 'Operator'}), el('th', {text: 'To'}),
                 el('th', {class: 'pl', text: 'Platform'})
             ])]),
             el('tbody', {}, rows)
@@ -256,6 +265,13 @@
         }, 200);
     });
     input.addEventListener('focus', function () { this.select(); });
+    // Picking a suggestion shows its board at once.
+    input.addEventListener('change', function () {
+        var options = document.getElementById('station-list').options;
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].value === input.value) { load(true); return; }
+        }
+    });
     document.getElementById('board-form').addEventListener('submit', function (e) {
         e.preventDefault();
         load(true);
