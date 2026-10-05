@@ -55,6 +55,7 @@
         .when .api { color: var(--muted); font-size: 12px; }
         .when .api select { display: inline-block; width: auto; height: 28px; padding: 2px 6px; font-size: 12px; }
         .link-button { background: none; border: 0; padding: 0; color: #337ab7; }
+        .sharing { font-weight: normal; margin: 0; }
 
         #summary { color: var(--muted); margin-bottom: 12px; }
         #summary strong { color: var(--ink); font-weight: 600; }
@@ -70,17 +71,14 @@
 
         .connection {
             border: 1px solid var(--line);
-            border-radius: 6px;
-            margin-bottom: 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             background: #fff;
         }
         .connection > button {
-            display: grid;
-            grid-template-columns: minmax(11em, max-content) 5.5em 1fr auto;
-            gap: 12px;
-            align-items: center;
+            display: block;
             width: 100%;
-            padding: 12px 14px;
+            padding: 12px 16px 10px;
             background: none;
             border: 0;
             text-align: left;
@@ -88,13 +86,31 @@
         }
         .connection > button:hover { background: var(--surface); }
         .connection.open > button { border-bottom: 1px solid var(--line); }
-        .times { font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-        .duration { font-variant-numeric: tabular-nums; white-space: nowrap; }
-        .duration small { display: block; color: var(--muted); }
-        .products { display: flex; flex-wrap: wrap; gap: 4px; }
-        .chevron { color: var(--muted); transition: transform .15s; }
+        .head { display: flex; align-items: center; gap: 6px; font-size: 16px; margin-bottom: 8px; }
+        .head .line { font-weight: 700; }
+        .head .towards { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .head .changes { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+        .row { display: flex; align-items: center; gap: 10px; }
+        .row .t { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .track { flex: 1; display: flex; align-items: center; min-width: 0; }
+        .seg { display: flex; align-items: center; min-width: 30px; }
+        .seg .bar { flex: 1; height: 2px; background: var(--ink); margin: 0 2px; }
+        .seg.walk .bar { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px); }
+        .ico {
+            flex: 0 0 auto;
+            width: 26px; height: 26px;
+            border: 1.5px solid var(--ink);
+            border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: #fff;
+        }
+        .ico svg { width: 16px; height: 16px; }
+        .ico.walk { border-color: var(--muted); color: var(--muted); }
+        .ico.flat { border: 0; width: 20px; height: 20px; }
+        .chevron { color: var(--muted); transition: transform .15s; margin-left: 4px; }
         .connection.open .chevron { transform: rotate(180deg); }
         @media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
+        .foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 6px; }
 
         .badge-product {
             display: inline-block;
@@ -116,41 +132,44 @@
         .changed { color: var(--late); }
         .muted { color: var(--muted); }
 
-        .legs { list-style: none; margin: 0; padding: 10px 14px 14px; }
-        .leg {
-            display: grid;
-            grid-template-columns: 6em 14px 1fr auto;
-            column-gap: 10px;
+        .legs { list-style: none; margin: 0; padding: 14px 16px 16px; }
+        .legs > li { display: grid; grid-template-columns: 4.2em 22px 1fr auto; column-gap: 10px; }
+        .legs .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; color: var(--muted); padding-top: 1px; }
+        .legs .stop .t { color: var(--ink); }
+        .legs .rail { position: relative; display: flex; justify-content: center; }
+        .legs .rail::before { content: ""; position: absolute; top: 0; bottom: 0; width: 3px; background: var(--regional); }
+        .legs .walk .rail::before { width: 0; border-left: 2px dotted var(--muted); }
+        .legs .stop .rail::after {
+            content: ""; position: relative; z-index: 1; margin-top: 4px;
+            width: 13px; height: 13px; border-radius: 50%; background: #fff; border: 2px solid var(--regional);
         }
-        .leg .t { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-        .leg .rail { position: relative; }
-        .leg .rail::before {
-            content: "";
-            position: absolute;
-            left: 5px;
-            top: 6px;
-            bottom: -6px;
-            width: 4px;
-            background: var(--regional);
-            border-radius: 2px;
-        }
-        .leg.walk .rail::before { background: repeating-linear-gradient(var(--muted) 0 3px, transparent 3px 7px); width: 2px; left: 6px; }
-        .leg .stop { font-weight: 600; }
-        .leg .ride { padding: 6px 0 10px; color: var(--muted); font-size: 13px; }
-        .leg .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
-        .leg .last .rail::before { display: none; }
-        .transfer { margin: 2px 0 8px 7.6em; font-size: 12px; color: var(--muted); }
+        .legs .stop.first .rail::before { top: 10px; }
+        .legs .stop.last .rail::before { bottom: calc(100% - 10px); }
+        .legs .stop .name { font-weight: 600; }
+        .legs .pl { color: var(--muted); font-size: 13px; text-align: right; white-space: nowrap; }
+        .legs .ride { padding: 8px 0 12px; color: var(--muted); font-size: 14px; }
+        .legs .ride .ico { width: 22px; height: 22px; vertical-align: middle; margin-right: 4px; }
+        .legs .ride .ico svg { width: 14px; height: 14px; }
+        .legs .ride strong { color: var(--ink); }
+        .legs .stops-toggle { display: inline-block; margin-top: 6px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: #337ab7; font-size: 13px; }
+        .legs .between { list-style: none; padding: 4px 0 0; margin: 0; font-size: 13px; }
+        .legs .between li { display: flex; gap: 10px; }
+        .legs .between .bt { width: 3em; font-variant-numeric: tabular-nums; }
+        .transfer { margin: 0 0 10px 6.3em; font-size: 12px; color: var(--muted); display: block !important; }
         .transfer .late { font-size: inherit; }
 
         .more { display: flex; justify-content: space-between; margin: 12px 0; }
         .loading { color: var(--muted); padding: 12px 0; }
 
         @media (max-width: 639px) {
-            .connection > button { grid-template-columns: 1fr auto; row-gap: 6px; }
-            .connection > button .products { grid-column: 1 / 2; }
-            .connection > button .chevron { grid-row: 1; grid-column: 2; }
+            .row .t { font-size: 16px; }
+            .ico { width: 22px; height: 22px; }
+            .ico svg { width: 13px; height: 13px; }
+            .seg { min-width: 22px; }
             .when .spacer { display: none; }
         }
+            .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
+        .api-panel code { word-break: break-all; }
     </style>
 </head>
 
@@ -163,21 +182,27 @@
     </header>
 
     <p class="pull-right">
+        <button type="button" class="btn btn-link" id="api-link" aria-expanded="false" aria-controls="api-panel" hidden>
+            <span class="glyphicon glyphicon-link"></span>
+            API request
+        </button>
         <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank" rel="noopener">
             <span class="glyphicon glyphicon-new-window"></span>
             Source Code
         </a>
     </p>
     <h3>Connection Search Example</h3>
-    <p class="muted">Everything on this page runs in the browser against the public API:
-        <code>/locations</code> for the suggestions, <code>/connections</code> for the results.</p>
+        <div class="api-panel" id="api-panel" hidden>
+            <p>Everything on this page runs in the browser against the public API: <code>/locations</code> for the suggestions, <code>/connections</code> for the results.</p>
+            <p><a id="api-url" href="#" rel="noopener" target="_blank"><code id="api-code"></code></a></p>
+        </div>
     <br>
 
     <form id="search" autocomplete="off">
         <div class="search">
-            <input class="form-control" name="from" list="from-list" placeholder="From" aria-label="From" required />
+            <input class="form-control" name="from" list="from-list" placeholder="From: stop or address" aria-label="From" required />
             <button type="button" class="btn btn-default swap" title="Swap" aria-label="Swap from and to">⇄</button>
-            <input class="form-control" name="to" list="to-list" placeholder="To" aria-label="To" required />
+            <input class="form-control" name="to" list="to-list" placeholder="To: stop or address" aria-label="To" required />
             <div class="via-row">
                 <button type="button" class="link-button" id="add-via">+ Via</button>
                 <input class="form-control" name="via" list="via-list" placeholder="Via (optional)" aria-label="Via" hidden />
@@ -195,6 +220,7 @@
                 <button type="button" class="btn btn-default active" data-arrival="0">Departure</button>
                 <button type="button" class="btn btn-default" data-arrival="1">Arrival</button>
             </div>
+            <label class="sharing" title="Shared bikes, scooters and cars to and from the stops (sharedmobility.ch)"><input type="checkbox" name="sharing"> bikes &amp; scooters</label>
             <button type="submit" class="btn btn-primary">Search</button>
             <span class="spacer"></span>
             <!-- The source switch stays for testing (?api=v1-old); it is not shown. -->
@@ -216,8 +242,7 @@
 
     <footer class="footer">
         <hr>
-        <p>Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
-        <p><a href="/privacy.html">Privacy policy</a></p>
+        <p>Powered by <a href="https://opendata.ch/">Opendata.ch</a> · <a href="/privacy.html">Privacy policy</a> · <a href="/licenses.html">Licenses</a></p>
     </footer>
 </div>
 
@@ -231,6 +256,8 @@
     var arrival = false;
     // What is on screen: the connections, and the question that found them.
     var shown = [];
+    // Read before the address is rewritten by the first search.
+    var openOnLoad = parseInt(new URLSearchParams(location.search).get('open'), 10) || 0;
     var asked = null;
 
     // Categories that run between cities, drawn red as on the station
@@ -278,6 +305,14 @@
         return minutesBetween(section.departure.departure, section.arrival.arrival);
     }
 
+    // "Lime e-scooter", "PubliBike bike": a shared vehicle in plain words.
+    var VEHICLES = {bicycle: 'bike', cargo_bicycle: 'cargo bike', scooter_standing: 'scooter', scooter_seated: 'moped', car: 'car', moped: 'moped'};
+    function rentalText(rental) {
+        var kind = VEHICLES[rental.vehicle] || 'vehicle';
+        var electric = rental.propulsion && rental.propulsion.indexOf('electric') === 0 && kind !== 'car';
+        return (rental.provider ? rental.provider + ' ' : '') + (electric ? 'e-' : '') + kind;
+    }
+
     function delay(minutes) {
         return minutes > 0 ? el('span', {class: 'late', text: ' +' + minutes}) : null;
     }
@@ -306,7 +341,73 @@
     }
 
     function stationName(stop) {
-        return (stop.station && stop.station.name) || (stop.location && stop.location.name) || '';
+        // A shared vehicle is picked up or left where it stands, which has no name.
+        return (stop.station && stop.station.name) || (stop.location && stop.location.name) || 'On the street';
+    }
+
+    // Icons from Tabler Icons (https://tabler.io/icons, MIT License,
+    // Copyright (c) 2020-2025 Pawel Kuna) and, for the tram, Lucide
+    // (https://lucide.dev, ISC License, Copyright (c) Lucide Contributors,
+    // portions Copyright (c) 2013-2023 Cole Bemis as part of Feather, MIT).
+    // Both licences allow use and change with this notice kept. The e-bike
+    // is Tabler's bike with Tabler's bolt.
+    var ICONS = {
+        "walk": "<path d=\"M13 4m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" /> <path d=\"M7 21l3 -4\" /> <path d=\"M16 21l-2 -4l-3 -3l1 -6\" /> <path d=\"M6 12l2 -3l4 -1l3 3l3 1\" />",
+        "bus": "<path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8\" /> <path d=\"M16 5l1.5 7l4.5 0\" /> <path d=\"M2 10l15 0\" /> <path d=\"M7 5l0 5\" /> <path d=\"M12 5l0 5\" />",
+        "train": "<path d=\"M21 13c0 -3.87 -3.37 -7 -10 -7h-8\" /> <path d=\"M3 15h16a2 2 0 0 0 2 -2\" /> <path d=\"M3 6v5h17.5\" /> <path d=\"M3 11v4\" /> <path d=\"M8 11v-5\" /> <path d=\"M13 11v-4.5\" /> <path d=\"M3 19h18\" />",
+        "tram": "<rect width=\"16\" height=\"16\" x=\"4\" y=\"3\" rx=\"2\" /> <path d=\"M4 11h16\" /> <path d=\"M12 3v8\" /> <path d=\"m8 19-2 3\" /> <path d=\"m18 22-2-3\" /> <path d=\"M8 15h.01\" /> <path d=\"M16 15h.01\" />",
+        "ship": "<path d=\"M2 20a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1\" /> <path d=\"M4 18l-1 -5h18l-2 4\" /> <path d=\"M5 13v-6h8l4 6\" /> <path d=\"M7 7v-4h-1\" />",
+        "cableway": "<path d=\"M4 5l16 -2m-8 1v10m-5.106 -6h10.306c2.45 3 2.45 9 -.2 12h-10.106c-2.544 -3 -2.544 -9 0 -12zm-1.894 6h14\" />",
+        "bike": "<path d=\"M5 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M19 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M12 19l0 -4l-3 -3l5 -4l2 3l3 0\" /> <path d=\"M17 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" />",
+        "scooter": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\" />",
+        "escooter": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\" /> <path d=\"M10 4l-2 4h3l-2 4\" />",
+        "moped": "<path d=\"M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M5 16v1a2 2 0 0 0 4 0v-5h-3a3 3 0 0 0 -3 3v1h10a6 6 0 0 1 5 -4v-5a2 2 0 0 0 -2 -2h-1\" /> <path d=\"M6 9l3 0\" />",
+        "car": "<path d=\"M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\" /> <path d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\" />",
+        "pin": "<path d=\"M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0\" /> <path d=\"M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z\" />",
+        "ebike": "<path d=\"M5 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M19 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\" /> <path d=\"M12 19l0 -4l-3 -3l5 -4l2 3l3 0\" /> <path d=\"M17 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0\" /><g transform=\"translate(13 0) scale(.45)\"><path d=\"M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11\" /></g>"
+    };
+
+    var ICON_TITLES = {walk: 'walk', cableway: 'cable car', ebike: 'e-bike', escooter: 'e-scooter', pin: 'destination'};
+    var SVG = 'http://www.w3.org/2000/svg';
+    function icon(kind, extra) {
+        var svg = document.createElementNS(SVG, 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '2');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.innerHTML = ICONS[kind] || ICONS.train;
+        return el('span', {class: 'ico ' + kind + (extra ? ' ' + extra : ''), title: ICON_TITLES[kind] || kind}, [svg]);
+    }
+
+    // The kind of vehicle, from the category the timetable gives a line.
+    var BUSES = ['B', 'BUS', 'NFB', 'EXB', 'BP', 'EV', 'KB', 'RUB', 'TX', 'NB'];
+    var TRAMS = ['T', 'NFT', 'TRAM', 'M', 'MET'];
+    var SHIPS = ['BAT', 'FAE', 'SCH', 'KAT', 'BAV'];
+    var LIFTS = ['FUN', 'PB', 'GB', 'LB', 'SL', 'SB', 'CC', 'ASC', 'GLB'];
+    function kindOf(section) {
+        if (section.rental) {
+            var v = section.rental.vehicle || '';
+            var electric = (section.rental.propulsion || '').indexOf('electric') === 0;
+            if (v === 'car') return 'car';
+            if (v === 'moped' || v === 'scooter_seated') return 'moped';
+            if (v.indexOf('scooter') === 0) return electric ? 'escooter' : 'scooter';
+            return electric ? 'ebike' : 'bike';
+        }
+        if (!section.journey) return 'walk';
+        var c = (section.journey.category || '').toUpperCase();
+        if (BUSES.indexOf(c) >= 0) return 'bus';
+        if (TRAMS.indexOf(c) >= 0) return 'tram';
+        if (SHIPS.indexOf(c) >= 0) return 'ship';
+        if (LIFTS.indexOf(c) >= 0) return 'cableway';
+        return 'train';
+    }
+
+    function sectionMinutes(section) {
+        if (!section.journey) return walkMinutes(section);
+        return minutesBetween(section.departure.departure, section.arrival.arrival);
     }
 
     function legs(connection) {
@@ -314,35 +415,40 @@
         var sections = connection.sections || [];
         sections.forEach(function (section, index) {
             var dep = section.departure, arr = section.arrival, journey = section.journey;
+            var kind = kindOf(section);
             var walk = !journey;
-            var ride = walk
-                ? 'Walk · ' + walkMinutes(section) + ' min'
-                : null;
-            var item = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
+            list.appendChild(el('li', {class: 'stop' + (index === 0 ? ' first' : '') + (walk ? ' walk' : '')}, [
                 el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
                 el('span', {class: 'rail'}),
-                el('span', {class: 'stop', text: stationName(dep)}),
-                el('span', {class: 'pl'}, [platform(dep)]),
-                el('span', {}),
-                el('span', {class: 'rail'}),
-                el('span', {class: 'ride'}, walk ? [ride] : [
-                    badge(vehicle(journey), journey.category), ' → ' + (journey.to || ''),
-                    journey.operator ? el('span', {class: 'muted', text: ' · ' + journey.operator}) : null
-                ]),
-                el('span', {})
-            ]);
-            var end = el('li', {class: 'leg' + (walk ? ' walk' : '')}, [
-                el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
-                el('span', {class: 'rail'}),
-                el('span', {class: 'stop', text: stationName(arr)}),
-                el('span', {class: 'pl'}, [platform(arr)])
-            ]);
-            end.querySelectorAll('.rail')[0].style.visibility = 'hidden';
-            list.appendChild(item);
-            list.appendChild(end);
+                el('span', {class: 'name', text: stationName(dep)}),
+                el('span', {class: 'pl'}, [platform(dep)])
+            ]));
+            var ride;
+            if (walk) {
+                ride = [icon(kind), section.rental ? rentalText(section.rental) : 'Walk', ' ca. ' + walkMinutes(section) + ' min'];
+            } else {
+                var between = (journey.passList || []).slice(1, -1).filter(function (s) { return s.departure || s.arrival; });
+                ride = [
+                    icon(kind), el('strong', {text: vehicle(journey)}), ' towards ' + (journey.to || ''),
+                    journey.operator ? el('span', {text: ' · ' + journey.operator}) : null
+                ];
+                if (between.length) {
+                    var listOf = el('ul', {class: 'between', hidden: ''}, between.map(function (s) {
+                        return el('li', {}, [el('span', {class: 'bt', text: clock(s.departure || s.arrival)}), el('span', {text: stationName(s)})]);
+                    }));
+                    var toggle = el('button', {type: 'button', class: 'stops-toggle', 'aria-expanded': 'false'},
+                        [between.length + (between.length === 1 ? ' stop' : ' stops') + ' ›']);
+                    toggle.addEventListener('click', function () {
+                        listOf.hidden = !listOf.hidden;
+                        toggle.setAttribute('aria-expanded', listOf.hidden ? 'false' : 'true');
+                    });
+                    ride.push(el('br'), toggle, listOf);
+                }
+            }
+            list.appendChild(el('li', {class: walk ? 'walk' : ''}, [
+                el('span', {}), el('span', {class: 'rail'}), el('div', {class: 'ride'}, ride), el('span', {})
+            ]));
 
-            // The time between this vehicle and the next one, as planned and,
-            // when real time knows better, as it will be.
             var next = sections[index + 1];
             if (next && journey && next.journey) {
                 var planned = minutesBetween(arr.arrival, next.departure.departure);
@@ -350,11 +456,22 @@
                     (arr.prognosis && arr.prognosis.arrival) || arr.arrival,
                     (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
                 );
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                    el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
+                    el('span', {class: 'rail'}),
+                    el('span', {class: 'name', text: stationName(arr)}),
+                    el('span', {class: 'pl'}, [platform(arr)])
+                ]));
                 list.appendChild(el('li', {class: 'transfer'}, [
                     'Change · ' + planned + ' min',
-                    expected !== planned
-                        ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'})
-                        : null
+                    expected !== planned ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'}) : null
+                ]));
+            } else if (!next) {
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                    el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
+                    el('span', {class: 'rail'}),
+                    el('span', {class: 'name', text: stationName(arr)}),
+                    el('span', {class: 'pl'}, [platform(arr)])
                 ]));
             }
         });
@@ -363,16 +480,35 @@
 
     function card(connection, index) {
         var from = connection.from, to = connection.to;
-        var products = (connection.products || []).map(function (p) { return badge(p); });
+        var sections = connection.sections || [];
+        var firstRide = sections.filter(function (s) { return s.journey; })[0];
+        var head = firstRide
+            ? [icon(kindOf(firstRide), 'flat'), el('span', {class: 'line', text: vehicle(firstRide.journey)}),
+               el('span', {class: 'towards', text: 'towards ' + (firstRide.journey.to || '')})]
+            : [icon('walk', 'flat'), el('span', {class: 'line', text: 'Walk'})];
+        head.push(el('span', {class: 'changes', text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')}));
+
+        var total = sections.reduce(function (sum, s) { return sum + Math.max(1, sectionMinutes(s)); }, 0) || 1;
+        var track = el('span', {class: 'track'}, sections.map(function (s) {
+            var kind = kindOf(s);
+            var seg = el('span', {class: 'seg' + (s.journey ? '' : ' walk')}, [icon(kind), el('span', {class: 'bar'})]);
+            seg.style.flex = String(Math.max(1, sectionMinutes(s)) / total * 100);
+            return seg;
+        }).concat([icon('pin')]));
+
+        var start = sections[0] && !sections[0].journey
+            ? walkMinutes(sections[0]) + "' " + (sections[0].rental ? rentalText(sections[0].rental) : 'walk')
+            : (platform(from) ? 'Platform ' + (from.prognosis && from.prognosis.platform || from.platform) : '');
         var details = el('div', {hidden: ''});
         var button = el('button', {type: 'button', 'aria-expanded': 'false'}, [
-            el('span', {class: 'times'}, [clock(from.departure), delay(from.delay), ' – ', clock(to.arrival), delay(to.delay)]),
-            el('span', {class: 'duration'}, [
-                duration(connection.duration),
-                el('small', {text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')})
+            el('div', {class: 'head'}, head),
+            el('div', {class: 'row'}, [
+                el('span', {class: 't'}, [clock(from.departure), delay(from.delay)]),
+                track,
+                el('span', {class: 't'}, [clock(to.arrival), delay(to.delay)]),
+                el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
             ]),
-            el('span', {class: 'products'}, products.concat([platform(from) ? el('span', {class: 'muted', style: 'font-size:12px;margin-left:6px'}, [platform(from)]) : null])),
-            el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
+            el('div', {class: 'foot'}, [el('span', {text: start}), el('span', {text: duration(connection.duration)})])
         ]);
         var box = el('div', {class: 'connection', 'data-index': index}, [button, details]);
         button.addEventListener('click', function () {
@@ -405,11 +541,25 @@
         document.getElementById('later-row').hidden = !any;
     }
 
+    // "API request" opens the panel with the request behind what is shown.
+    document.getElementById('api-link').addEventListener('click', function () {
+        var panel = document.getElementById('api-panel');
+        panel.hidden = !panel.hidden;
+        this.setAttribute('aria-expanded', panel.hidden ? 'false' : 'true');
+    });
+    function setApi(url) {
+        document.getElementById('api-url').href = url;
+        document.getElementById('api-code').textContent = url;
+        document.getElementById('api-link').hidden = false;
+    }
+
     function api() { return field('api').value === 'v1-old' ? 'v1-old' : 'v1'; }
 
     function ask(query) {
         var params = new URLSearchParams();
         Object.keys(query).forEach(function (k) { if (query[k] !== '' && query[k] != null) params.set(k, query[k]); });
+        // The request behind what is shown, linked next to the source code.
+        setApi(location.origin + '/' + api() + '/connections?' + params);
         return fetch('../' + api() + '/connections?' + params).then(function (response) {
             if (!response.ok) throw new Error('Error from API: ' + response.status + ' ' + response.statusText);
             return response.json();
@@ -436,6 +586,7 @@
             date: field('date').value,
             time: field('time').value,
             isArrivalTime: arrival ? 1 : 0,
+            sharedMobility: field('sharing').checked ? 1 : '',
             limit: 5
         };
         remember();
@@ -455,6 +606,10 @@
             summary.hidden = false;
             if (!shown.length) summary.append(' – no connections found.');
             draw();
+            // ?open=2 opens the second connection, for a link to one of them.
+            var target = openOnLoad && results.querySelectorAll('.connection > button')[openOnLoad - 1];
+            openOnLoad = 0;
+            if (target) target.click();
         }).catch(fail).then(function () { busy(false); });
     }
 
@@ -481,6 +636,7 @@
         var params = new URLSearchParams();
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
+        if (field('sharing').checked) params.set('sharedMobility', '1');
         if (api() === 'v1-old') params.set('api', 'v1-old');
         history.replaceState({}, '', '?' + params);
     }
@@ -492,13 +648,19 @@
         var term = input.value.trim();
         if (term.length < 2) return;
         timers[input.name] = setTimeout(function () {
-            fetch('../' + api() + '/locations?type=station&query=' + encodeURIComponent(term))
+            // Stops come first; addresses and places (no id) follow, marked
+            // as such - a journey can start or end at either.
+            var via = input.name === 'via';
+            fetch('../' + api() + '/locations?' + (via ? 'type=station&' : '') + 'query=' + encodeURIComponent(term))
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
                     var list = document.getElementById(input.name + '-list');
                     list.textContent = '';
                     (data.stations || []).forEach(function (station) {
-                        if (station.name) list.appendChild(el('option', {value: station.name}));
+                        if (!station.name) return;
+                        list.appendChild(el('option', station.id
+                            ? {value: station.name}
+                            : {value: station.name, label: 'Address / place'}));
                     });
                 }).catch(function () {});
         }, 200);
@@ -551,6 +713,7 @@
     if (!field('date').value) setNow();
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
+    field('sharing').checked = params.get('sharedMobility') === '1';
     field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
 
     if (field('from').value && field('to').value) {

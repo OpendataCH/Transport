@@ -184,6 +184,19 @@ PLAN = {
 }
 
 
+GEOCODE = [
+    {
+        "type": "ADDRESS",
+        "name": "Neufeldstrasse 101",
+        "street": "Neufeldstrasse",
+        "houseNumber": "101",
+        "lat": 46.957123,
+        "lon": 7.434012,
+        "areas": [{"name": "Schweiz", "adminLevel": 2}, {"name": "Bern", "adminLevel": 8.0}],
+    }
+]
+
+
 class FakeMotis:
     def __init__(self) -> None:
         self.params: dict | None = None
@@ -191,6 +204,10 @@ class FakeMotis:
     async def plan(self, params):
         self.params = params
         return PLAN
+
+    async def get(self, path, params):
+        assert path == "/api/v1/geocode"
+        return GEOCODE if "Neufeld" in params["text"] else []
 
 
 @pytest.fixture(scope="module")
@@ -307,3 +324,65 @@ def test_a_walk_between_stations_is_its_seconds():
     }
     section = v2._section(leg, {}, {}, None)
     assert section["walk"] == {"duration": 180}
+
+
+@needs_database
+def test_a_connection_from_an_address_starts_at_its_coordinate(api):
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "Neufeldstrasse 101, Bern", "to": "8500003", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    assert api.motis.params["fromPlace"] == "46.957123,7.434012"
+    assert answer["from"]["id"] is None
+    assert answer["from"]["name"] == "Bern, Neufeldstrasse 101"
+    assert answer["from"]["coordinate"]["x"] == 46.957123
+
+
+@needs_database
+def test_shared_vehicles_only_when_asked_for(api, monkeypatch):
+    import copy
+
+    plain = api.get(
+        "/v2/connections", params={"from": "Alpha", "to": "8500003", "datetime": f"{TODAY} 07:55"}
+    ).json()
+    assert "preTransitModes" not in api.motis.params
+    assert all("rental" not in s for c in plain["connections"] for s in c["sections"])
+
+    plan = copy.deepcopy(PLAN)
+    walk = plan["itineraries"][0]["legs"][1]
+    walk["mode"] = "RENTAL"
+    walk["rental"] = {
+        "systemName": "Lime City partners from Partners::RegionFeedMediator",
+        "formFactor": "SCOOTER_STANDING",
+        "propulsionType": "ELECTRIC",
+        "rentalUriWeb": "https://example.org/lime",
+    }
+    walk["from"] = place("ch_ch:1:sloid:2:0:1", "ch_ch:1:sloid:2", "Beta", "2026-10-05T06:10:00Z")
+    walk["to"] = place("ch_8500003", None, "Gamma, Dorf", "2026-10-05T06:14:00Z", kind="arrival")
+
+    async def rental_plan(params):
+        api.motis.params = params
+        return plan
+
+    monkeypatch.setattr(api.motis, "plan", rental_plan)
+    answer = api.get(
+        "/v2/connections",
+        params={
+            "from": "Alpha",
+            "to": "8500003",
+            "datetime": f"{TODAY} 07:55",
+            "sharedMobility": "1",
+        },
+    ).json()
+    ConnectionsResponse.model_validate(answer)
+    assert api.motis.params["preTransitModes"] == "WALK,RENTAL"
+    rental = next(s for s in answer["connections"][0]["sections"] if "rental" in s)
+    assert rental["walk"]["duration"] == 240 and rental["journey"] is None
+    assert rental["rental"] == {
+        "provider": "Lime City partners",
+        "vehicle": "scooter_standing",
+        "propulsion": "electric",
+        "from_station": None,
+        "to_station": None,
+        "url": "https://example.org/lime",
+    }

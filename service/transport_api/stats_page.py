@@ -139,6 +139,7 @@ async def stats_page(request: Request) -> Response:
     total = sum(values)
     page = TEMPLATES.get_template("stats.html")
     initial = await window(reader, "all")
+    sources = await data_sources(getattr(request.app.state, "timetable", None))
     return HTMLResponse(
         page.render(
             total=total,
@@ -157,8 +158,83 @@ async def stats_page(request: Request) -> Response:
             windows_json=twig_json(list(WINDOWS)),
             window=initial,
             window_json=twig_json(initial),
+            sources=sources,
         )
     )
+
+
+async def data_sources(pool) -> dict | None:
+    """What the timetable database says about its sources: what is loaded,
+    when each was fetched, and how large it was (rt.fetch_log)."""
+    if pool is None:
+        return None
+    try:
+        loaded = await pool.fetchrow("SELECT * FROM gtfs.feed_info")
+        downloads = await pool.fetch(
+            "SELECT at, name, bytes, seconds FROM rt.fetch_log WHERE source = 'gtfs'"
+            " ORDER BY at DESC LIMIT 8"
+        )
+        imports = await pool.fetch(
+            "SELECT at, name, bytes, items, seconds, detail FROM rt.fetch_log"
+            " WHERE source = 'import' ORDER BY at DESC LIMIT 6"
+        )
+        realtime = await pool.fetchrow(
+            "SELECT count(*) AS fetches, avg(bytes) AS size, sum(bytes) AS volume,"
+            " avg(items) AS trips, avg(seconds) AS seconds, max(at) AS last"
+            " FROM rt.fetch_log WHERE source = 'gtfs-rt' AND at > now() - interval '24 hours'"
+        )
+        osm = await pool.fetchrow(
+            "SELECT at, bytes FROM rt.fetch_log WHERE source = 'osm' ORDER BY at DESC LIMIT 1"
+        )
+    except Exception:  # noqa: BLE001 - the rest of the page does not depend on it
+        return None
+
+    def when(value) -> str:
+        return value.astimezone(ZONE).strftime("%d.%m.%Y %H:%M") if value else "–"
+
+    def megabytes(value) -> str:
+        return f"{value / 1_000_000:,.1f} MB".replace(",", "'") if value else "–"
+
+    return {
+        "loaded": {
+            "feeds": (loaded["feed_file"] or "").replace("+", ", ") if loaded else "–",
+            "window": f"{loaded['window_from']:%d.%m.%Y} – {loaded['window_to']:%d.%m.%Y}"
+            if loaded
+            else "–",
+            "imported": when(loaded["imported_at"]) if loaded else "–",
+        },
+        "downloads": [
+            {
+                "at": when(r["at"]),
+                "name": r["name"],
+                "size": megabytes(r["bytes"]),
+                "seconds": round(r["seconds"] or 0),
+            }
+            for r in downloads
+        ],
+        "imports": [
+            {
+                "at": when(r["at"]),
+                "name": (r["name"] or "").replace("+", ", "),
+                "window": json.loads(r["detail"] or "{}").get("window", ""),
+                "stop_times": number(r["items"] or 0),
+                "size": megabytes(r["bytes"]),
+                "minutes": round((r["seconds"] or 0) / 60, 1),
+            }
+            for r in imports
+        ],
+        "realtime": {
+            "last": when(realtime["last"]) if realtime else "–",
+            "fetches": number(realtime["fetches"] or 0) if realtime else "0",
+            "size": f"{(realtime['size'] or 0) / 1000:,.0f} kB".replace(",", "'")
+            if realtime
+            else "–",
+            "volume": megabytes(realtime["volume"]) if realtime else "–",
+            "trips": number(round(realtime["trips"] or 0)) if realtime else "0",
+            "seconds": f"{realtime['seconds'] or 0:.1f}" if realtime else "–",
+        },
+        "osm": {"at": when(osm["at"]), "size": megabytes(osm["bytes"])} if osm else None,
+    }
 
 
 # How far back the station box on the page looks.

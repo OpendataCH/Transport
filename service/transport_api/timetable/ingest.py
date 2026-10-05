@@ -28,7 +28,7 @@ import asyncpg
 import httpx
 
 from .. import settings
-from . import importer, realtime
+from . import fetch_log, importer, realtime
 
 log = logging.getLogger("transport_api.timetable.ingest")
 
@@ -81,10 +81,21 @@ async def refresh_timetable(connection: asyncpg.Connection, realtime_version: st
     if target == newest:
         paths = []
         for url, name in sources:
+            fresh = not (cache / name).exists()
+            started = time.monotonic()
             path = await asyncio.to_thread(importer.download, url, cache)
             if path.name != name:
                 log.info("the permalink moved on to %s; deciding again next round", path.name)
                 return
+            if fresh and path.exists():
+                await fetch_log.record(
+                    connection,
+                    "gtfs",
+                    name=path.name,
+                    bytes_=path.stat().st_size,
+                    seconds=round(time.monotonic() - started, 1),
+                    detail={"version": version_of(path.name)},
+                )
             paths.append(path)
     else:
         paths = [cache / name for name in target.split("+")]
@@ -161,9 +172,20 @@ async def _realtime(state: dict[str, str | None]) -> None:
             started = time.monotonic()
             wait = REALTIME_EVERY
             try:
-                snapshot = realtime.parse(await realtime.fetch(client))
+                payload = await realtime.fetch(client)
+                fetched = time.monotonic() - started
+                snapshot = realtime.parse(payload)
                 state["version"] = snapshot.version or state["version"]
                 await realtime.store(connection, snapshot)
+                await fetch_log.record(
+                    connection,
+                    "gtfs-rt",
+                    name=snapshot.version,
+                    bytes_=len(payload),
+                    items=snapshot.trips,
+                    seconds=round(fetched, 2),
+                    detail={"delays": len(snapshot.delays), "cancelled": len(snapshot.cancelled)},
+                )
             except realtime.RateLimited as exc:
                 log.warning("real time rate limited (%s); waiting", exc)
                 wait = BACKOFF
@@ -186,7 +208,19 @@ async def _timetable(state: dict[str, str | None]) -> None:
         wait = TIMETABLE_EVERY
         try:
             await refresh_timetable(connection, state["version"])
+            osm = Path(settings.GTFS_CACHE) / OSM_FILE
+            before = osm.stat().st_mtime if osm.exists() else None
+            started = time.monotonic()
             await asyncio.to_thread(refresh_osm)
+            if settings.OSM_URL and osm.exists() and osm.stat().st_mtime != before:
+                await fetch_log.record(
+                    connection,
+                    "osm",
+                    name=osm.name,
+                    bytes_=osm.stat().st_size,
+                    seconds=round(time.monotonic() - started, 1),
+                )
+            await fetch_log.prune(connection)
         except (httpx.HTTPError, asyncpg.PostgresError, OSError, RuntimeError) as exc:
             log.error("timetable refresh failed: %r", exc)
             wait = 600

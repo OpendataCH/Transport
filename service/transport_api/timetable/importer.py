@@ -38,6 +38,7 @@ import asyncpg
 import httpx
 
 from .. import settings
+from . import fetch_log
 from .names import mode_of, normalize, operator_name
 
 log = logging.getLogger("transport_api.timetable.importer")
@@ -916,13 +917,22 @@ async def main(sources: list[str], window_dir: str | None, window_only: bool = F
                 download(url, cache) for url, _ in feed_sources(settings.GTFS_URL, first, last)
             ]
         window = build_window(paths, Path(window_dir or cache), first, last)
-        await load(
+        counts = await load(
             connection,
             window,
             today,
             settings.GTFS_DAYS,
             settings.GTFS_PAST_DAYS,
             feed_file="+".join(p.name for p in paths),
+        )
+        await fetch_log.record(
+            connection,
+            "import",
+            name=counts["feed"],
+            bytes_=window.stat().st_size,
+            items=counts["stop_times"],
+            seconds=counts["seconds"],
+            detail={"window": counts["window"], "trips": counts["trips"], "stops": counts["stops"]},
         )
     finally:
         await connection.close()

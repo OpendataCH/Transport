@@ -37,6 +37,7 @@ from . import (
     compat,
     connections,
     errors,
+    licenses_page,
     locations,
     settings,
     stationboard,
@@ -45,11 +46,11 @@ from . import (
     upstream,
 )
 from .models import ApiInfo
+from .timetable import board_page, routing_ui
 from .timetable import connections as timetable_connections
 from .timetable import db as timetable_db
 from .timetable import locations as timetable_locations
 from .timetable import map as timetable_map
-from .timetable import routing_ui
 from .timetable import stationboard as timetable_stationboard
 
 # The prefix a client should use, and the one it may. Both answer the same
@@ -208,8 +209,11 @@ for prefix, api_version in API_VERSIONS.items():
 app.include_router(timetable_map.router, prefix=ALIAS, include_in_schema=False)
 # The router's own web interface, at /routing/.
 app.include_router(routing_ui.router)
+# The station board example drawn on the server, the sitemap and robots.txt.
+app.include_router(board_page.router)
 
 app.include_router(stats_page.router)
+app.include_router(licenses_page.router)
 
 
 # The alias gets the same three documents, at its own addresses, so that a

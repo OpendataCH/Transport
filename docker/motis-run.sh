@@ -44,6 +44,7 @@ wanted() {
     if [ -n "$o" ]; then f="$f+osm$(wc -c < "$o" | tr -d ' ')"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_GBFS_URL:-}" ]; then f="$f+gbfs"; fi
+    if [ -n "$o" ] && [ -n "${MOTIS_REVERSE_GEOCODING:-}" ]; then f="$f+rgeo"; fi
     echo "$f+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
@@ -67,6 +68,10 @@ build() {
                 echo "tiles:"
                 echo "  profile: /tiles-profiles/full.lua"
                 echo "geocoding: true"
+            fi
+            if [ -n "${MOTIS_REVERSE_GEOCODING:-}" ]; then
+                # The address nearest a coordinate, first in /locations?x&y.
+                echo "reverse_geocoding: true"
             fi
             if [ -n "${MOTIS_GBFS_URL:-}" ]; then
                 # Bikes, scooters and cars to rent, for the first and last mile
