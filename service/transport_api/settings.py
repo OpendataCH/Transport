@@ -86,6 +86,11 @@ OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 # `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
 
+# Journey plans one worker asks the router at once, and how long a plan may
+# wait for its turn before it is refused with 429 (see timetable/router.py).
+MOTIS_CONCURRENCY = int(os.environ.get("MOTIS_CONCURRENCY", "4"))
+MOTIS_QUEUE_SECONDS = float(os.environ.get("MOTIS_QUEUE_SECONDS", "3"))
+
 # Which source answers /v1. On, /v1 (and its alias /v2) answer from our own
 # timetable and router, and the search.ch translation moves to /v1-old. Off,
 # /v1 asks search.ch as it always has, and /v2 is the timetable experiment.

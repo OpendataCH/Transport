@@ -1,9 +1,25 @@
 """The client of the router (MOTIS), shared by the routes that ask it."""
 
+import asyncio
+
 import httpx
 from fastapi import Request
 
-from .. import errors
+from .. import errors, settings
+
+# Journey plans each worker sends the router at once. The router is the one
+# part of the service bound by the processor; a queue in front of it would
+# only make every answer late. A plan that cannot start within
+# MOTIS_QUEUE_SECONDS is refused with 429, as the API has always done when
+# it had more to do than it could.
+_plans: asyncio.Semaphore | None = None
+
+
+def _plan_slots() -> asyncio.Semaphore:
+    global _plans
+    if _plans is None:
+        _plans = asyncio.Semaphore(settings.MOTIS_CONCURRENCY)
+    return _plans
 
 
 class Motis:
@@ -13,7 +29,17 @@ class Motis:
         self._client = client
 
     async def plan(self, params: dict[str, str]) -> dict:
-        return await self.get("/api/v6/plan", params)
+        slots = _plan_slots()
+        try:
+            await asyncio.wait_for(slots.acquire(), timeout=settings.MOTIS_QUEUE_SECONDS)
+        except TimeoutError:
+            raise errors.ApiError(
+                429, "Rate limit error: too many requests at the moment, please try again."
+            ) from None
+        try:
+            return await self.get("/api/v6/plan", params)
+        finally:
+            slots.release()
 
     async def get(self, path: str, params: dict[str, str]) -> dict | list:
         """One call to the router's API; its failures in the /v1 envelope."""
