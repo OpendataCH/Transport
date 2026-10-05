@@ -313,3 +313,13 @@ def test_the_window_rewrites_transfers_only_when_asked(tmp_path, monkeypatch):
         importer.write_window_feed(source, target, TODAY, TODAY + timedelta(days=2), walks)
         with zipfile.ZipFile(target) as feed:
             assert len(list(importer.rows(feed, "transfers.txt"))) == expected
+
+
+def test_operators_are_named_as_search_ch_names_them():
+    from transport_api.timetable.names import operator_name
+
+    assert operator_name("33", "BLS AG (bls)") == "BLS-bls"
+    assert operator_name("11", "Schweizerische Bundesbahnen SBB") == "SBB"
+    # By full name when the id is unknown (a trip only real time knows).
+    assert operator_name(None, "BLS AG (bls)") == "BLS-bls"
+    assert operator_name("999999", "Unbekannte Bahn") == "Unbekannte Bahn"

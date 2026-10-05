@@ -38,7 +38,7 @@ import asyncpg
 import httpx
 
 from .. import settings
-from .names import mode_of, normalize
+from .names import mode_of, normalize, operator_name
 
 log = logging.getLogger("transport_api.timetable.importer")
 
@@ -703,7 +703,7 @@ async def load(
         agency_rows = []
         for index, row in enumerate(rows(feed, "agency.txt")):
             state.agencies[row["agency_id"]] = index
-            agency_rows.append((index, row["agency_name"]))
+            agency_rows.append((index, operator_name(row["agency_id"], row["agency_name"])))
         await _copy(connection, "agency", ("idx", "name"), agency_rows)
 
         route_rows = []

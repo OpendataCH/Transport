@@ -1,0 +1,610 @@
+agency_id,name,full_name
+11,SBB,Schweizerische Bundesbahnen SBB
+22,AB-ab,Appenzeller Bahnen (ab)
+23,TPC,Transports Publics du Chablais
+24,TPC-aomc,Transports Publics du Chablais (aomc)
+27,TPC-asd,Transports Publics du Chablais (asd)
+29,MBC,Transports de la région Morges-Bière-Cossonay
+31,AVA-bd,Aargau Verkehr AG
+32,BLM,Lauterbrunnen-Mürren
+33,BLS-bls,BLS AG (bls)
+34,BLS-bn,BLS AG (bn)
+35,BOB,Berner Oberland-Bahnen
+36,SOB-bt,Schweizerische Südostbahn (bt)
+37,BLT,Baselland Transport
+38,ASM-bti,Aare Seeland mobil (bti)
+39,TPC-bvb,Transports Publics du Chablais (bvb)
+41,AVA-ltb,Aargau Verkehr AG
+42,MVR-cev,Montreux-Vevey-Riviera (cev)
+43,CJ,Chemins de fer du Jura
+44,TRN-cmn,Transports Publics Neuchâtelois SA (cmn)
+45,BLS-ebt,BLS AG (ebt)
+46,FB,Forchbahn
+47,FLP,Lugano-Ponte Tresa
+48,MGB-fo,Matterhorn Gotthard Bahn (fo)
+49,FART,Ferrovie Autolinee Regionali Ticinesi
+51,AB-fw,Appenzeller Bahnen (fw)
+52,BLS-gbs,BLS AG (gbs)
+53,TPF,Transports publics fribourgeois
+55,LEB,Lausanne-Echallens-Bercher
+56,ASM-rvo,Aare Seeland mobil (rvo)
+61,TMR-mc,Transports de Martigny et Régions (mc)
+63,TMR-mo,Transports de Martigny et Régions (mo)
+64,MOB,Montreux-Oberland Bernois
+65,THURBO,THURBO
+66,NStCM,Compagnie du chemin de fer Nyon - St-Cergue - Morez
+67,TRAVYS-o,Transports Vallée de Joux-Yverdon-Ste-Croix (oc)
+68,OeBB,Oensingen-Balsthal-Bahn
+69,TRAVYS-p,Transports Vallée de Joux-Yverdon-Ste-Croix (pbr)
+71,AB-rhb,Appenzeller Bahnen (rhb)
+72,RhB,Rhätische Bahn
+73,TRN-rvt,Transports Publics Neuchâtelois SA (rvt)
+74,RA,Regionalps
+76,BLS-sez,BLS AG (sez)
+78,SZU,Sihltal-Zürich-Uetliberg-Bahn
+79,BLS-smb,BLS AG (smb)
+81,ASM-snb,Aare Seeland mobil (snb)
+82,SOB-sob,Schweizerische Südostbahn (sob)
+83,VALP,VerticAlp SA
+84,ST,Sursee-Triengen-Bahn
+85,STB,Sensetalbahn
+86,ZB,Zentralbahn
+88,RBS,Regionalverkehr Bern-Solothurn
+89,AB-tb,Appenzeller Bahnen (tb)
+92,BLS-vhb,BLS AG (vhb)
+93,MGB-bvz,Matterhorn Gotthard Bahn (bvz)
+94,BLT-wb,Waldenburgerbahn
+96,AVA-wsb,Aargau Verkehr AG
+97,TRAVYS,Transports Vallée de Joux-Yverdon-Ste-Croix
+101,VB-be,Verkehrsbetriebe Biel
+103,VB-bm,Verkehrsbetriebe Biel
+104,BRB,Brienz Rothorn Bahn AG
+105,BRSB,Braunwald-Standseilbahn
+106,SVB,Städtische Verkehrsbetriebe Bern
+107,BB,Bürgenstock Bahn AG
+109,DKB-dpb,Davos Klosters Bergbahnen (dpb)
+111,SDS,Sportbahnen Davos
+112,StSS,Standseilbahn Schwyz-Stoos AG
+113,TBBU,Toggenburg Bergbahnen Unterwasser
+114,BET,Engelberg-Trübsee-Titlis
+115,PAC,Parc d'Attractions du Châtelard
+116,FMB,Società Funicolare Cassarate-Monte Brè
+117,FPR,Funicolare Ritom SA
+118,AMP,Aufzug Matte-Plattform (Bern)
+119,DMB,Drahtseilbahn Marzili-Stadt Bern AG
+120,GbB,Parkhotel Giessbach AG
+121,GGB,Gornergratbahn
+122,GB,Gurtenbahn
+123,HB,Harderbahn
+124,JB,Jungfraubahn
+125,MVR-las,Montreux-Vevey-Riviera (las)
+127,TL-lo,Transports Publics de la Région Lausannoise sa
+128,ASM-ltb,Aare Seeland mobil (ltb)
+129,MG,Ferrovia Monte Generoso
+131,MVR-mtgn,Montreux-Vevey-Riviera (mtgn)
+132,ZB-mib,Meiringen-Innertkirchen-Bahn
+133,ESMM-mmb,Celeriner Bergbahnen - Punt Muragl-Muottas Muragl
+134,MS,Lugano-Monte San Salvatore
+135,NB,Niesenbahn
+136,PB,Pilatusbahnen
+137,RB,Rigi Bahnen AG
+138,BOS,Bus Ostschweiz
+139,AB-rhw,Appenzeller Bahnen (rhw)
+140,BOB-spb,Berner Oberland-Bahnen
+141,LSMS-sbm,Schilthornbahn (sbm)
+142,SMC,Sierre-Montana-Crans
+143,SMtS,Funiculaire Saint-Imier-Mont-Soleil SA
+145,SthB,Stanserhornbahn
+146,STI,STI Bus AG
+147,ESMM-smb,Bergbahnen Engadin St. Moritz AG
+149,NHB-bbb,Niederhornbahn AG
+150,WAB/LW,Wengernalpbahn Lauterbrunnen-Wengen
+151,TL,Transports Publics de la Région Lausannoise sa
+153,TRN-tn,Transports Publics Neuchâtelois SA (tn)
+154,TSB,Treib-Seelisberg-Bahn
+155,MVR-vcp,Montreux-Vevey-Riviera (vcp)
+156,TRN/Auto,Service d'automobiles TRN (vr)
+157,WAB,Wengernalpbahn
+158,ZBB,Zugerbergbahn
+159,DIH,Interlaken-Heimwehfluh
+160,DFB,Dampfbahn Furka-Bergstrecke
+163,FLMS,Società della Funicolare Locarno-Madonna del Sasso SA
+164,DBZ,Dolderbahn Betriebs AG
+165,PBZ,Poly-Bahn Zürich
+166,FUN,Funiculaire Neuchâtel-Université - Neuchâtel-Gare
+167,ALVS,Alplift AG
+179,AeS,Ägerisee Schifffahrt AG
+180,SGG,Schifffahrts-Genossenschaft Greifensee
+181,SGH,Hallwilersee
+182,BSG,Bielersee-Schifffahrts-Gesellschaft AG
+183,BLS-brs,BLS Schifffahrt AG (brs)
+184,CGN,CGN SA
+185,SGV,Vierwaldstättersee
+186,SGZ,Schifffahrtsgesellschaft für den Zugersee AG
+187,NLM,Lago Maggiore
+188,SNL,Lago di Lugano
+189,LNM,Lacs de Neuchâtel et Morat
+190,SNL-magg,Società Navigazione del Lago di Lugano SA
+191,BPG,Basler Personenschifffahrt AG
+192,BLS-ths,BLS Schifffahrt AG (ths)
+193,URh,Schweiz. Schifffahrtsgesellschaft Untersee und Rhein AG
+194,ZSG,Zürichsee-Schifffahrtsgesellschaft AG (ZSG)
+195,SBS,Schweizerische Bodensee-Schifffahrt AG
+196,FHM,Zürichsee-Fähre Horgen-Meilen AG
+197,SW,Schiffsbetrieb Walensee
+198,NLB,Navigation Lac des Brenets
+199,MGsa,Mouettes genevoises SA
+200,WAB-sbge,Wengernalpbahn Grindelwald Grund - Eigergletscher
+201,BGF,Grindelwald-First
+202,SWAG,Seilbahn Weissenstein AG
+203,EB,Brunni-Bahnen Engelberg AG
+204,SZU-laf,Adliswil-Felsenegg
+205,BBE,Bergbahnen Beckenried-Emmetten
+207,DKB-bbbj,Davos Klosters Bergbahnen (bbbj)
+208,DKB-lkp,Davos Klosters Bergbahnen (lkp)
+209,ARBAG,Aletsch Riederalp Bahnen AG
+210,FML,Funivia Monte Lema SA
+211,LRU,Raron-Unterbäch
+212,CBV,Chalais-Briey-Vercorin
+213,LSS,Schwägalp-Säntis
+214,LUFAG,Luftseilbahn Unterterzen-Flumserberg AG
+215,LWE,Wasserauen-Ebenalp
+216,LWM,Wengen-Männlichen
+217,TCP,Portes du Soleil Suisse SA
+218,DIALA-lb,"Bergbahnen Engadin St. Moritz, Bernina-Diavolezza (lbd)"
+219,ABB,Arosa Bergbahnen
+220,TUG,Touristische Unternehmung Grächen AG
+222,SMF-lsm,Sportbahnen Melchsee-Frutt (lsm)
+223,PSSA,Pendicularas Scuol SA
+224,SBP,Sportbahnen Pischa
+225,BDGAG,Bergbahnen Destination Gstaad AG
+226,LORB,Luftseilbahn Obergschwend-Rigi-Burggeist AG
+227,TRI,Téléphérique Riddes-Isérables
+228,LKS,Luftseilbahn Kandersteg-Sunnbüel (Gemmi) AG
+229,LLG,Leukerbad-Gemmipass
+230,SB,Savognin-Bergbahnen AG
+231,TCLB,Château-d'Oex-La Braye
+232,LRF,Rhäzüns-Feldis/Veulden
+233,TLML,Télé-Leysin-Col des Mosses - La Lécherette SA
+234,STBAG,Saastal Bergbahnen AG
+235,RMAG,Rotenfluebahn Mythenregion AG
+236,BCD,Chur-Dreibündenstein
+237,LRW,Reigoldswil-Wasserfallen
+238,ESMM,Engadin St. Moritz Mountains AG
+239,NHB-nhb,Niederhornbahn AG
+240,SHAG,Sattel-Hochstuckli AG
+244,LGJ,Gampel-Jeizinen
+245,CMA,Remontées Mécaniques Crans-Montana-Aminona
+247,DIALA-lc,Curtinatsch-Piz Lagalb
+249,LSC,Surlej-Silvaplana-Corvatsch
+250,LDN,Dallenwil-Niederrickenbach
+251,ASS,Andermatt-Sedrun Sport AG
+252,LHB,Lenzerheide Bergbahnen
+253,HKDS,Hoher Kasten Drehrestaurant und Seilbahn AG
+254,LDW,Dallenwil-Wirzweli
+255,LJK,Jakobsbad-Kronberg
+256,LSMS-lsm,Stechelberg-Mürren-Schilthorn (lsms)
+257,BBWAG,Bergbahnen Wildhaus AG
+258,FLC,Funiculaire St-Luc-Chandolin
+261,G3AG,Gstaad 3000 AG
+262,ABAG,Aletsch Bahnen AG
+263,LFüB,Fürgangen-Bellwald
+264,SHB,Stockhornbahn AG
+265,BBF-mbf,Bergbahnen Flumserberg AG
+266,ABAG/FE,Aletsch Bahnen AG
+267,SPL,Pontresina-Alp Languard
+268,LSMS/MS,Luftseilbahn Mürren-Schilthorn
+269,FE,Fiesch-Eggishorn
+270,LSH,Luftseilbahn Schattdorf-Haldi
+272,LGP,Grindelwald-Pfingstegg
+273,LMM,Marbach-Marbachegg
+274,LBB,Blatten-Belalp
+275,BFL,Weisse Arena Bergbahnen AG
+276,LRR,Rosswald Bahnen AG
+277,TDCA,Téléphérique Dorénaz-Champex d'Alesse/Commune de Dorénaz
+278,Cent-kli,Intragna-Pila Costa
+279,Cent-klv,Verdasio-Rasa
+280,LSG,Stalden-Gspon
+281,LKüS,Küssnacht am Rigi-Seebodenalp
+282,BEAG,Bergbahnen Engstligenalp AG
+283,BSAG,Bergbahnen Sörenberg AG
+285,LB-blb,Genossenschaft Lenk Bergbahnen
+286,CIT,Cardada Impianti Turistici
+287,PIZAG,Pizolbahnen AG
+288,BBF-pbf,Bergbahnen Flumserberg AG
+289,GSJ,Genossenschaft Seilbahn Jungen
+290,LTUO,Turtmann-Unterems-Oberems
+291,LSG/LSG,Staldenried-Gspon
+293,BGR,Glaris-Rinerhorn
+294,RMA,Remontées Méc. du Wildhorn Anzère
+296,FBS,Brusino-Arsizio-Serpiano
+297,LLAT,Torrent-Bahnen Leukerbad-Albinen AG
+298,LB,Lenk Bergbahnen
+299,ZBAG,Zermatt Bergbahnen AG
+301,SSA,Schutt Atzmännig
+303,BHY-lws,Bergbahnen Hoch-Ybrig AG
+305,TMSA,TéléMarécottes
+306,LABB,Lauchernalp Bergbahnen AG
+307,BMH,Bergbahnen Meiringen-Hasliberg
+309,KMB-bkm,Klosters-Madrisa Bergbahn
+310,LKE,Luftseilbahn Kalpetran-Embd
+311,TV,Téléverbier
+312,GGM,Gondelbahn Grindelwald-Männlichen AG
+313,LKRS,Luftseilbahn Kräbel-Rigi Scheidegg AG
+314,TVCM,Télécabine Vercorin-Crêt-du-Midi
+315,BHAG,Bergbahnen Hohsaas AG
+316,VBSA,Valbianca SA Airolo
+319,StoB-lms,Stoosbahnen AG
+323,GKO,Gondelbahn Kandersteg-Oeschinensee
+324,SMF-ssmb,Sportbahnen Melchsee-Frutt (ssmb)
+329,BBD,Bergbahnen Disentis
+332,LRE,Raron-Eischoll
+334,BHY-sost,Bergbahnen Hoch-Ybrig AG
+336,SBAD,Bergün Filisur Tourismus AG
+337,RMGZ,Remontées Mécaniques Grimentz-Zinal SA
+342,PAGT,Pradaschier AG Top
+344,MBC-cg,Transports de la Région Morges-Bière-Cossonay
+345,GOBA-Poo,Gotthard Oberalp Arena
+346,LSKA,Luftseilbahn Kandersteg-Allmenalp
+347,SRI,Seilbahn Ried Illgau
+348,ITRT,Impianti turistici Rivera-Monte Tamaro
+349,LTBAG,LTB Lungern-Turren-Bahn AG
+351,SBB GmbH,SBB GmbH (Grenzverkehr)
+353,DB/SH,Deutsche Bahnhöfe im Kt. Schaffhausen
+354,SBG,Südbadenbus GmbH
+360,BSB,Bodensee-Schiffsbetriebe GmbH
+369,SBT,Stadtbus Tuttlingen Klink GmbH
+371,BC-cmBC,Société coopérative du Chemin de fer - Musée Blonay-Chamby
+420,TILO,Treni Regionali Ticino Lombardia
+422,FS Domo,Iselle transito-Domodossola
+424,SSIF,Società Subalpina di Imprese Ferroviare (Centovalli)
+478,VVV,Verkehrsverbund Vorarlberg GmbH
+518,BDWM,Limmatbus AG Dietikon
+525,SRT,Swiss Rail Traffic AG Glattbrugg
+528,ETB,Emmentalbahn GmbH
+602,BA Auto,Bergbahnen Adelboden AG
+603,BA Auto-,Bergbahnen Adelboden AG
+605,STI Berg,STI Bus AG
+606,DistriBu,DistriBus Saint-Louis Agglo
+609,BPB,Comune di Personico
+610,TDEV74,"Transdev Haute Savoie, SARL"
+611,AFO,Alpbus Fournier
+613,TBA,Tschentenbahnen AG
+614,LEE,"Elsigenalpbahnen AG Frutigen, Luftseilbahn und Skilifte"
+617,ALTRA,Alpintrans GmbH
+619,LMR,Luftseilbahn Meiringen-Reuti AG
+624,FINIAG,Finanz Infra AG
+654,GAA,Gander Autocar Sàrl
+682,WASJ,Gemeinde Wildhaus-Alt St. Johann
+697,BBB,Bus Buchserberg
+700,ABG,Alsa Bustours Gex S.A.S
+702,SBB Bus,Automobildienst SBB
+704,STA Auto,Südtiroler Transportstrukturen AG
+707,TUB,Transports Urbains Bruntrutains
+708,EBZ,Elektrobus Zermatt
+709,MSG,Mühleggbahn AG
+710,WETA,Bürgerbus Walperswil-Epsach-Täuffelen-Aarberg
+711,BüBu,Bürgerbus Hellsau-Höchstetten-Willadingen-Koppigen
+712,ASL,Autoservizi Silvestri Livigno
+713,BUM,Bus urbain de Martigny
+714,BS,Bus Sierrois
+716,OBSM,Ortsbus St. Moritz
+718,OKS,Ortsbus Klosters-Serneus
+719,SAPJV,Société des Auto-transports du Pied du Jura Vaudois
+721,SVB/kmb,Städt. Verkehrsbetriebe Bern Konolfingen-Münsingen-Belp
+722,TPC/Auto,Service d'automobiles TPC (Aigle-Villeneuve)
+723,AVA/rbz,Aargau Verkehr AG
+725,TUD,Transports Urbains Delémontains
+727,VSK-bkk,Verkehrsbetriebe Kreuzlingen
+731,AVJ,Autotransports de la Vallée de Joux
+736,AMSA,Autolinea Mendrisiense SA
+737,SNL Auto,Servizio d'automobili
+738,TPN,Transports Publics de la Région Nyonnaise
+740,VBD,Verkehrsbetrieb der Landschaft Davos
+741,BNP,Bus Nyon-Prangins
+742,MGB/asng,Automobildienst Matterhorn Gotthard Bahn (asng)
+744,AB Auto,Automobildienst Appenzeller Bahnen
+748,VVTIROL,Verkehrsverbund Tirol GesmbH
+755,ABF,Autobusbetrieb Freienbach
+764,MBC Auto,Automobiles MBC
+765,PAG/BCS,PostAuto AG (Bus Commune Sion)
+766,BuS/cb,Bus und Service AG (Chur)
+767,ESE,Eurobus swiss-express AG
+772,BRER,Busbetrieb Rapperswil-Eschenbach-Rüti ZH
+773,VBG,Verkehrsbetriebe Glattal
+777,Bamert,Bamert Bus
+787,PAG/RA,Autobus Monthey-Collombey-Vouvry
+791,TPF/tf,Service d'automobiles TPF (tf)
+792,TRN/tc,Transports Publics Neuchâtelois SA (tc)
+793,BOGG,Busbetrieb Olten-Gösgen-Gäu
+796,TRN/Autr,Service d'automobiles TRN (rvt Auto)
+797,SBF,Stadtbus Frauenfeld
+799,VBH,Verkehrsbetriebe Herisau
+800,BAL AG,Bergbahnen Adelboden-Lenk AG
+801,PAG,PostAuto AG
+803,VerAlp,VerticAlp Vallée du Trient SA
+804,JAC,Jacquet Autocars
+805,VLM,Verkehrsbetrieb LIECHTENSTEINmobil
+807,SZU Auto,Automobildienst SZU
+810,BLWE,Busbetrieb Lichtensteig-Wattwil-Ebnat-Kappel
+811,AAGL,Autobus AG Liestal
+812,AAGR,Auto AG Rothenburg
+813,AFA,AFA Bus AG
+814,RA/bus,RegionAlps Bus
+815,BuS/eb,Bus und Service AG (Engadin)
+816,AAGU,Auto AG Uri
+817,FART Aut,Autolinee FART
+818,TPC Auto,Transports Publics du Chablais (Bus)
+819,ARAG,Automobil Rottal AG
+820,VBL,Verkehrsbetriebe Luzern AG
+822,BOB Auto,Busbetrieb BOB
+823,BVB,Basler Verkehrsbetriebe
+827,SVB Auto,Städtische Verkehrsbetriebe Bern
+828,TPF TUB,Service d'automobiles TPF (Mobul)
+832,AWA,Autobetrieb Weesen-Amden
+833,CJ Auto,Automobiles CJ
+834,TPF Auto,Service d'automobiles TPF
+835,TMR Auto,Service d'automobiles TMR
+836,VBSH,Verkehrsbetriebe Schaffhausen
+838,VZO,Verkehrsbetriebe Zürichsee und Oberland
+839,ZVB,Zugerland Verkehrsbetriebe
+840,BBA,Busbetrieb Aarau
+841,AAGS,Auto AG Schwyz
+846,VBSH-rv,Verkehrsbetriebe Schaffhausen
+849,VBZ,Verkehrsbetriebe Zürich
+850,RBS Auto,Autobusbetrieb RBS
+851,MGB/Auto,Automobildienst Matterhorn Gotthard Bahn (fo auto)
+852,TPC/Autb,Service d'automobiles TPC (bvb auto)
+853,TSD-asdt,Theytaz Excursions Sion
+855,LLB,Auto Leuk-Leukerbad
+856,AS,Autobetrieb Sernftal
+858,ARL,Autolinee Regionali Luganesi
+859,STI-gwb,STI Bus AG
+862,ABl,Autolinee Bleniesi
+865,RhB Auto,Autoverkehr RhB
+868,TRAVYS/a,Transports Vallée de Joux-Yverdon-Ste-Croix (auto ystec)
+870,ASM Auto,Automobildienste Aare Seeland mobil
+871,BLAG,Busland AG
+872,BLAG Ber,Busland AG Berg
+873,RBL,Regionalbus Lenzburg
+876,VMCV,Transports publics Vevey-Montreux-Chillon-Villeneuve
+879,BLT Auto,Auto BLT
+881,TPG,Transports Publics Genevois
+882,SBW,Stadtbus Winterthur
+883,BSU,Busbetrieb Solothurn und Umgebung
+885,VBSG,Verkehrsbetriebe der Stadt St.Gallen
+886,RVBW,Regionale Verkehrsbetriebe Baden-Wettingen
+888,ASGS,Autotransports Sion-Grône-Sierre
+889,VB,Verkehrsbetriebe Biel
+894,BGU,Busbetrieb Grenchen und Umgebung
+895,TRAVYSAu,Transports Vallée de Joux-Yverdon-Ste-Croix
+896,REGO,Regiobus Gossau SG
+899,AVA/Autw,Aargau Verkehr AG
+908,DVZO,Dampfbahn-Verein Zürcher Oberland
+955,TPL,Trasporti Pubblici Luganesi SA
+959,HAG,Heuberge AG
+967,BBBWA,Bergbahnen Brigels Waltensburg Andiast AG
+1011,ANV,Ausländische Nahverkehrsbetriebe
+1043,GYSEV,Raab-Ödenburg-Ebenfurter Eisenbahn
+1064,FNM,Eisenbahnen der Region Nord Milano
+3000,KUBUS,Publikation nur Kursbuch/Plakat
+3002,ALEX,Aletsch-Express Riederalp-Bettmeralp
+3003,TBR,Télésiège Buttes-La Robella
+3004,TPF-nstp,Transports publics fribourgeois
+3005,KBS,Kaisereggbahnen Schwarzsee AG
+3007,cmBC,Blonay-Chamby
+3009,TTM,Centre Touristique Moléson
+3012,LGGI,Luftseilbahngenossenschaft Gitschenen
+3013,TVGD,Télé-Villars-Gryon
+3020,TTG,Télé-Torgon SA
+3024,TLFC,TéléLaFouly-ChampexLac SA
+3026,LHB-ssps,Val Sporz-Piz Scalottas
+3028,NVRM,Remontées mécaniques SA
+3031,TTY-tce,Télé-Thyon SA
+3032,TSD-tcld,Theytaz Excursions Sion
+3033,TLLM,Télésiège Lana-La Meina
+3036,LBER,Luftseilbahngenossenschaft Brügg-Eierschwand-Ruogig
+3040,TOJ,Téléovronnaz SA
+3042,SFT,Sesselbahn Fatschel - Triemel
+3044,BWA,Bergbahnen Brigels Waltensburg Andiast
+3046,SRN,Sesselbahn Riedli - Nüegg (Wiriehorn)
+3050,SBU,Sportbahnen Unterbäch AG
+3051,ESMM-sms,Sesselbahn St. Moritz Suvretta-Randolins
+3052,SVG,Sesselbahn Visperterminen-Giw
+3054,SGES,Seilbahngenossenschaft Embd-Schalb
+3063,SBR,Bellwald Sportbahnen AG
+3070,SKRa,Sesselbahn Kiental-Ramslauenen
+3072,LEE fpl,Luftseilbahn Elsigbach-Elsigenalp
+3073,BA-SB,Bergbahnen Adelboden AG
+3075,GFR,Giovanni Frapolli Bellinzona
+3083,AH,Aufzug Hammetschwand
+3084,BBF-fpl,Bergbahnen Flumserberg AG
+3085,GLIS,Genossenschaft Luftseilbahn Sulwald
+3087,RFB,Reichenbachfall-Bahn
+3090,KSB,Kriens-Sonnenberg-Bahn
+3091,SMF-ldb,Sportbahnen Melchsee-Frutt (ldb)
+3092,LEF,Luftseilbahn Engelberg-Fürenalp
+3093,LFCh,Luftseilbahn Fell-Chrüzhütte
+3094,LFB,Luftseilbahn Fellboden-Bannalpsee
+3099,LNE,Luftseilbahn Niederbauen
+3101,GTBE,Genossenschaft Tschinglenbahn Elm
+3102,StoB-sb,Stoosbahnen AG
+3105,HLAG,Holzegg Liegenschaften AG
+3106,BHY-ssks,Bergbahnen Hoch-Ybrig AG
+3107,BHY-sssp,Bergbahnen Hoch-Ybrig AG
+3108,LABAG,Luftseilbahn Attinghausen-Brüsti AG
+3109,LFE,Luftseilbahn Flüelen-Eggbergen
+3110,BKAG,Biel-Kinzig AG
+3112,SBGG,Seilbahngenossenschaft Golzern
+3115,LGIA,Luftseilbahngenossenschaft Arnisee
+3119,GR-fab,Cantone di Grigioni
+3120,GR-fsl,Funivia Selma-Landarenca
+3121,KWS,Kraftwerk Sanetsch AG
+3123,FSCR,Funiva San Carlo-Robiei
+3128,SKR,Sesselbahn Krümmenschwil-Rietbach
+3129,SWG,Sesselbahn Wildhaus-Gamplüt
+3130,SBA,Sportbahnen Amden
+3131,BGST,Berggasthaus Staubern AG
+3132,LHA,Luftseilbahn Oberschan-Hotel Alvier
+3133,BBMAG,Bergbahnen Malbun AG
+3135,SK,Sportbahnen Kerenzerberg GmbH
+3136,GLNM,Genossenschaft Luftseilbahn Morgenholz
+3137,LKM,Luftseilbahn Kies-Mettmen
+3138,LMW,Luftseilbahn Matt-Weissenberg
+3139,SBE,Sportbahnen Elm
+3140,AMG,Aelplibahn Malans Genossenschaft
+3142,SFE,Gemeinde Grüsch
+3146,BO,Bergbahnen Obersaxen AG
+3148,BPM-svcs,Bergbahnen Piz Mundaun AG
+3151,SVGa,Sesselbahn Vals-Gadenstatt
+3152,BPM-svh,Bergbahnen Piz Mundaun AG
+3158,SFM,Sesselbahn Feldis-Mutta
+3160,EWZ-pa,EWZ Bergeller Kraftwerke
+3161,LS,Bergbahnen Samnaun AG
+3162,EBS,ebs Energie AG
+3165,LIV,Luftseilbahn Illgau - Vorder Oberberg
+3167,SBB Ausl,SBB AG Auslandsverbindungen (KUBUS)
+3168,SPBR,Sportbahnen Braunwald AG
+3181,NLJ,Navigation Lac de Joux
+3182,STGR,Solarfährbetrieb Thomas Geiger Reichenau
+3183,SS,Schiffahrtsunternehmung Silsersee
+3185,EMAG,Ernst Mändli AG Nohl
+3186,SZR-ET,Schiff Eglisau-Tössegg
+3188,LAA,Luftseilbahn Amsteg-Arni
+3190,FBG,Fähre Beckenried-Gersau
+3191,WG-wg,Wasserngrat 2000 AG
+3194,FWS,Franz Weiss Sarnen (Sarnersee)
+3195,GSB,Politische Gemeinde Steckborn
+3199,MSSG,MS Seestern + Gastro AG
+3200,STP,Stiftung Paradies
+3201,CAS,Cassons AG
+3205,VBA,Verein Bus alpin
+3222,SMF-lsmF,Sportbahnen Melchsee-Frutt (lsm)
+3257,LPF,La Punt Ferien
+3258,TCSA,TéléCharmey SA
+3271,ANAT,Association neuchâteloise des Amis du Tramway ANAT
+3849,VBZ    F,Verkehrsbetriebe Zürich INFO+
+3862,KWO-sb,KWO Seilbahnen
+3955,TPL    F,Trasporti Pubblici Luganesi SA
+7000,Extrabus,Interimsfahrplan / Horaire interimaire / Orario ad interim
+7001,Extrabus,Events / Manifestations / Eventi
+7004,CdA,Commune d'Anniviers Vissoie
+7005,RiT,Riffelalp Resort AG Zermatt
+7008,RRB,Ruftaxi Rorschacherberg
+7011,ASTB,Anrufsammeltaxi Bischofszell
+7012,ASTA,Anrufsammeltaxi Amriswil
+7017,BBO,Gemeinde St. Gallenkappel
+7023,SWEG,SWEG Bus GmbH
+7025,BKG,Busbetrieb Kandersteg - Gasterntal
+7027,WSU,Walker's Söhne Urnerboden
+7029,AFN,"Armin Fischli GmbH, 8752 Näfels"
+7030,SSM,Skilift Schilt AG 8753 Mollis
+7031,AVB,Aroser Verkehrsbetriebe
+7037,Bahnersa,Bahnersatz Jahresfahrplan
+7038,LEE Bus ,Autobusbetrieb LEE
+7040,MOB-EV,Montreux-Oberland Bernois Ersatzverkehr
+7042,BLS BusF,BLS Bus Fahrplanbedürfnisse
+7045,GHU,Bürgerbus Gondiswil-Huttwil-Ufhusen
+7046,OUW,Bürgerbus Kleindietwil-Oeschenbach-Walterswil
+7047,SUTU,Vischnaunca Sumvitg
+7048,SOB BusF,SOB Bus Fahrplanbedürfnisse
+7049,FRG,Förderverein Region Gantrisch
+7050,ZB Bus F,ZB Bus Fahrplanbedürfnisse
+7052,GSUR,Gemeinde Surses - Cumegn Surses
+7055,FCA,Funicar AG
+7058,EAB,Engelberger Auto-Betriebe
+7061,OSF,Ortsbus Saas-Fee
+7062,OTL,Office du tourisme de Leysin
+7063,WTZ,Walter Tschannen Zofingen
+7065,BCR,Bus de la commune de Riddes
+7067,BOG,Busbetrieb Oberems-Gruben
+7070,TWS,"Taxi, Bau- und Traxarbeiten Willi Schaad"
+7076,MGB/Autb,Automobildienst Matterhorn Gotthard Bahn
+7077,MTB,Mountain Tour Bergün GmbH
+7078,BGB,Busbetrieb Gemeinde Bergün
+7079,PRH,PRO REGIO HUTTWIL Verkehrsverein
+7080,BALA,Bus alpin Lombachalp
+7081,VNB,Verein Naturpark Beverin
+7082,JVTT,José Vogel Transport Taxi
+7085,OGS,Ortsbus der Gemeinde Silvaplana / Gemeinde Silvaplana
+7087,RSZ,Bürgerbus Rüderswil
+7088,THP,Trägerverein Historische Postautolinie
+7089,MNL,Moonliner
+7090,ACO,Autoservizi Comazzi S.R.L.
+7092,APRO,Prontobus
+7093,SAFSRL,S.A.F. Societa' Autoservizi Fontaneto SRL
+7094,GDLZ,Gemeinde Luzein
+7095,OBA,Ortsbus Andermatt
+7096,GB-EV,Gurtenbahn Ersatzverkehr
+7136,ASM-EV,Aare Seeland mobil Ersatzverkehr
+7200,SBB-EFZ,fiktive Fahrten für EFZ
+7223,TPF-EV,Transports publics fribourgeois Ersatzverkehr
+7225,BB-EV,Bürgenstock Bahn Ersatzverkehr
+7230,BLS-EV,BLS Netz AG Ersatzverkehr
+7231,SBB-EV,SBB Infrastruktur AG Bahnersatz
+7232,SOB-EV,Schweizerische Südostbahn AG Ersatzverkehr
+7233,THB-EV,Thurbo AG Ersatzverkehr
+7234,ZB-EV,Zentralbahn AG Ersatzverkehr
+7240,FART-EV,Ferrovie Autolinee Regionali Ticinesi Ersatzverkehr
+7244,AVA-EV,Aargau Verkehr AG Ersatzverkehr
+7245,BOB-EV,Berner Oberland-Bahnen Ersatzverkehr
+7246,RBS-EV,Regionalverkehr Bern-Solothurn Ersatzverkehr
+7247,RA-EV,Regionalps Ersatzverkehr
+7248,FB-EV,Forchbahn Ersatzverkehr
+7249,MGB-EV,Matterhorn Gotthard Bahn Ersatzverkehr
+7250,RhB-EV,Rhätische Bahn Ersatzverkehr
+7251,SZU-EV,Sihltal-Zürich-Uetliberg-Bahn Ersatzverkehr
+7252,AB-EV,Appenzeller Bahnen Ersatzverkehr
+7253,TPC-EV,Transports Publics du Chablais Ersatzverkehr
+7254,TRAVYS-E,Transports Vallée de Joux-Yverdon-Ste-Croix Ersatzverkehr
+7255,TRN-EV,Transport Publics Neuchâtelois SA Ersatzverkehr
+7256,MBC-EV,Transports de la région Morges-Bière-Cossonay Ersatzverkehr
+7257,TMR-EV,Transports de Martigny et Régions Ersatzverkehr
+7258,NStCM-EV,Chemin de fer Nyon - St-Cergue - Morez Ersatzverkehr
+7259,CJ-EV,Chemins de fer du Jura Ersatzverkehr
+7260,MVR-EV,Montreux-Vevey-Riviera Ersatzverkehr
+7261,ALVS-EV,Alplift AG Ersatzverkehr
+7263,LEB-EV,Lausanne-Echallens-Bercher Ersatzverkehr
+7274,FLP-EV,Lugano-Ponte Tresa Ersatzverkehr
+7280,LSG-EV,Stalden-Gspon Ersatzverkehr
+9014,VDBB,Verein Dampfbahn Bern
+9020,TRAVYS/o,Transports Vallée de Joux-Yverdon-Ste-Croix (oc/bus)
+9028,GCS,Gemeinde Celerina/Schlarigna
+9045,INTT,Intertours ME Sàrl
+9988,INFOPLUS,Fiktive GO für Infoplus
+9999,DIVINFO,Diverse INFO
+13600,PB Fpl,Kriens-Fräkmüntegg
+13700,RB Fpl,Weggis-Rigi Kaltbad
+15300,TRN-tn F,Transports Publics Neuchâtelois SA
+15301,TRN-tn f,Transport Publics Neuchâtelois SA
+6____,DB Regio,DB Regio AG
+85000,NA_85000,NA_85000
+120001,VVT,Verkehrsverbund Tirol
+327000,TN,TreNord
+800631,DB Regio,DB Regio AG Baden-Württemberg
+800693,DB Regio,DB Regio AG Baden-Württemberg
+8006C4,DB Regio,DB Regio AG Baden-Württemberg
+8006C5,DB Regio,DB Regio AG Baden-Württemberg
+807000,NeTS-DB,NeTS Planung DB
+80_BOD,BOD,FPLAN BOD RAB OMP
+80_RVL,RVL,FPLAN RBG SWG
+80_VHB,VHB,FPLAN VHB SBP
+817000,NeTS-ÖBB,NeTS Planung ÖBB
+81_VVV,VVV,Verkehrsverbund Vorarlberg
+81____,ÖBB,Österreichische Bundesbahnen
+87_BUT,But,Réseau de transports de l'Agglomération de Thonon
+87_CAR,Car,Cars Rhône-Alpes
+87_DIB,DIB,DistriBus
+87_EVA,Evian,Evian
+87_LEX,SNCF,Société Nationale des Chemins de fer Français
+87_LSA,Rse,Réseau Lihsa
+87_PRO,Pro,Proxim iTi
+87_RDT,RDT,RDTAin
+87_SIB,SIB,SIBRA
+87_TAC,TAC,Transports Publics de l'agglomération d'Annemasse
+L7____,SBB,SBB GmbH
+sbg034,SBG,Südbadenbus
+swg001,SWEG,SWEG Südwestdeutsche Landesverkehrs-GmbH
+swg003,SWEG,SWEG Südwestdeutsche Landesverkehrs-GmbH
+swg004,SWEG,SWEG Südwestdeutsche Landesverkehrs-GmbH
+vhb004,VHB,Verkehrsverbund Hegau-Bodensee

@@ -1,7 +1,10 @@
 """Text and modes, shared by the importer and the routes that query its tables."""
 
+import csv
 import re
 import unicodedata
+from functools import cache
+from importlib import resources
 
 # Swiss stop names abbreviate where people do not: Ste-Croix, St-Cergue.
 ABBREVIATIONS = [(re.compile(r"\bsainte\b"), "ste"), (re.compile(r"\b(saint|sankt)\b"), "st")]
@@ -42,3 +45,24 @@ def mode_of(route_type: int) -> str | None:
     if 1300 <= route_type < 1500 or route_type in (5, 6, 7):
         return "cableway"
     return None
+
+
+@cache
+def operators() -> tuple[dict[str, str], dict[str, str]]:
+    """The names /v1 gives operators, by GTFS agency_id and by full name.
+
+    GTFS has "BLS AG (bls)", search.ch "BLS-bls": the long name of HAFAS.
+    operators.csv is written from HRDF by tools/operator_names.py.
+    """
+    by_id, by_full_name = {}, {}
+    text = resources.files(__package__).joinpath("operators.csv").read_text(encoding="utf-8")
+    for row in csv.DictReader(text.splitlines()):
+        by_id[row["agency_id"]] = row["name"]
+        by_full_name.setdefault(row["full_name"], row["name"])
+    return by_id, by_full_name
+
+
+def operator_name(agency_id: str | None, full_name: str | None) -> str | None:
+    """The operator as /v1 names it; the GTFS name when HRDF does not know it."""
+    by_id, by_full_name = operators()
+    return by_id.get(agency_id or "") or by_full_name.get(full_name or "") or full_name

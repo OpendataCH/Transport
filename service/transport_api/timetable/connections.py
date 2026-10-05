@@ -35,6 +35,7 @@ from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
 from . import db
 from .mapping import journey, line_number, location, stop
+from .names import operator_name
 from .stationboard import TRANSPORTATIONS, _station
 
 router = APIRouter()
@@ -338,7 +339,9 @@ def _trip_of_leg(leg: dict) -> dict:
         "short_name": leg.get("tripShortName"),
         "route_short_name": route,
         "category": match.group(0) if match else None,
-        "operator": leg.get("agencyName"),
+        "operator": operator_name(
+            (leg.get("agencyId") or "").removeprefix(DATASET), leg.get("agencyName")
+        ),
         "headsign": leg.get("headsign"),
     }
 

@@ -20,11 +20,11 @@ CLOCKS_BACK = date(2026, 10, 25)
 
 FILES = {
     "agency.txt": """agency_id,agency_name,agency_url,agency_timezone
-"11","Test Bahn","https://example.org","Europe/Zurich"
+"test","Test Bahn","https://example.org","Europe/Zurich"
 """,
     "routes.txt": """route_id,agency_id,route_short_name,route_long_name,route_desc,route_type
-"r-s1","11","S1","","S","109"
-"r-b10","11","10","","B","700"
+"r-s1","test","S1","","S","109"
+"r-b10","test","10","","B","700"
 """,
     "stops.txt": """stop_id,stop_name,stop_lat,stop_lon,location_type,parent_station,platform_code,didok
 "ch:1:sloid:1","Alpha","46.9","7.4","1","","","8500001"
