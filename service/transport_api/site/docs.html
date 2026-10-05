@@ -931,7 +931,7 @@
             <ul>
                 <li><strong>What we fetch:</strong> the national timetable of all Swiss public transport as GTFS from opentransportdata.swiss, one file per timetable year (about 300 MB): <a href="https://data.opentransportdata.swiss/dataset/timetable-2026-gtfs2020" rel="external noopener noreferrer">timetable 2026</a>, <a href="https://data.opentransportdata.swiss/dataset/timetable-2027-gtfs2020" rel="external noopener noreferrer">timetable 2027</a>.</li>
                 <li><strong>At the source:</strong> a complete new version about twice a week, usually on Wednesday and Saturday. The next timetable year is published in the autumn, ahead of the change in mid-December.</li>
-                <li><strong>What we do with it:</strong> every hour we look whether a new version is out - one small request, nothing is downloaded. A new version is downloaded once, and loaded when the real-time feed has switched to it - the afternoon after publication - so that delays always match the timetable. We keep the days from a week ago to three months ahead in a database; across the December change, both timetable years are merged.</li>
+                <li><strong>What we do with it:</strong> every hour we look whether a new version is out. A new version is downloaded once, and loaded when the real-time feed has switched to it - the afternoon after publication - so that delays always match the timetable. We keep the days from a week ago to three months ahead in a database; across the December change, both timetable years are merged.</li>
                 <li><strong>In the API:</strong> a new timetable answers <code>/locations</code>, <code>/stationboard</code> and <code>/connections</code> within the hour it is loaded; the days held move on weekly.</li>
             </ul>
 
@@ -945,8 +945,9 @@
 
             <h4>Connections</h4>
             <ul>
-                <li><strong>How:</strong> computed here by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner, on the same timetable and real-time data. Transfer times are those of the national timetable.</li>
-                <li><strong>In the API:</strong> the planner is rebuilt with each new timetable, while the old one keeps answering; it switches over in seconds.</li>
+                <li><strong>How:</strong> computed here by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner (MIT licence), on the very file of timetable days the database holds and on the same real-time feed, read every minute. For a journey it finds the connections that are best in arrival time and in the number of changes, and <code>/connections</code> writes them in the form <code>/v1</code> has always used: sections, products, platforms, delays.</li>
+                <li><strong>Changes and walks:</strong> transfer times are those of the national timetable, per station; where the timetable gives a walk to a neighbouring stop that is shorter than the station's transfer time, the walk counts, as in the official journey planners. Walks between stops the timetable does not link, and the way from an address to the first stop and from the last stop to the destination, follow the streets of OpenStreetMap - up to 20 minutes on foot.</li>
+                <li><strong>In the API:</strong> each new timetable and each weekly move of the days held rebuilds the planner, which takes 10 to 20 minutes. It is built beside the running one, which keeps answering until the new one takes over within seconds.</li>
             </ul>
 
             <h4>Streets, addresses and places</h4>
