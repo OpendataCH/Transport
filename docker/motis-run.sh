@@ -43,6 +43,7 @@ wanted() {
     o=$(osm)
     if [ -n "$o" ]; then f="$f+osm$(wc -c < "$o" | tr -d ' ')"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
+    if [ -n "$o" ] && [ -n "${MOTIS_GBFS_URL:-}" ]; then f="$f+gbfs"; fi
     echo "$f+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
@@ -66,6 +67,20 @@ build() {
                 echo "tiles:"
                 echo "  profile: /tiles-profiles/full.lua"
                 echo "geocoding: true"
+            fi
+            if [ -n "${MOTIS_GBFS_URL:-}" ]; then
+                # Bikes, scooters and cars to rent, for the first and last mile
+                # (sharedmobility.ch: one Lamassu manifest over all providers,
+                # which asks for an e-mail address in Authorization).
+                echo "gbfs:"
+                echo "  feeds:"
+                echo "    ch:"
+                echo "      url: $MOTIS_GBFS_URL"
+                if [ -n "${MOTIS_GBFS_AUTHORIZATION:-}" ]; then
+                    echo "      headers:"
+                    echo "        Authorization: $MOTIS_GBFS_AUTHORIZATION"
+                fi
+                echo "  update_interval: 60"
             fi
         fi
         echo "timetable:"
