@@ -47,6 +47,21 @@ def test_other_parameters_and_endpoints_are_asked_anew(api):
     assert api.calls["n"] == 4
 
 
+@pytest.mark.parametrize(
+    ("path", "query", "seconds"),
+    [
+        ("/v1/connections", b"from=Bern&to=Thun", 100),
+        ("/v1/connections", b"from=Bern&to=Thun&time=", 100),
+        ("/v1/connections", b"from=Bern&to=Thun&time=08:00", 30),
+        ("/v1/connections", b"from=Bern&to=Thun&date=2026-10-06", 30),
+        ("/v1/stationboard", b"station=Bern", 30),
+    ],
+)
+def test_connections_from_now_are_kept_longer(path, query, seconds, monkeypatch):
+    monkeypatch.setattr(settings, "CONNECTIONS_NOW_CACHE_SECONDS", 100)
+    assert response_cache.seconds_kept(path, query) == seconds
+
+
 def test_v1_from_search_ch_is_not_kept(api, monkeypatch):
     monkeypatch.setattr(settings, "V1_FROM_TIMETABLE", False)
     api.get("/v1/stationboard?station=Bern")

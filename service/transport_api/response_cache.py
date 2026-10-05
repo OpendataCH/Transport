@@ -1,9 +1,14 @@
-"""A shared 30-second memory of the answers that are asked again and again.
+"""A shared short memory of the answers that are asked again and again.
 
 Thousands of displays and home automations ask for the same station board or
 connection every minute. The answer cannot change faster than the real-time
 feed, which is renewed every 30 seconds, so an answer given in the last 30
 seconds is given again, from Redis, to every worker alike.
+
+Connections asked "from now" are kept longer (CONNECTIONS_NOW_CACHE_SECONDS):
+Home Assistant, nearly all of their traffic, asks the same connection every
+90 seconds, which a 30-second memory never meets. Kept a little longer, every
+second poll is answered here, at the price of delays up to that old.
 
 Only what the service computes itself is kept: station boards and
 connections under /v1 and /v2 when they answer from the timetable, and only
@@ -35,9 +40,21 @@ def cached_path(path: str) -> bool:
     return path.startswith("/v1/") and settings.V1_FROM_TIMETABLE
 
 
+def _pairs(query: bytes) -> list[tuple[str, str]]:
+    return sorted(parse_qsl(query.decode("latin-1"), keep_blank_values=True))
+
+
 def cache_key(path: str, query: bytes) -> str:
-    pairs = sorted(parse_qsl(query.decode("latin-1"), keep_blank_values=True))
-    return PREFIX + path + "?" + urlencode(pairs)
+    return PREFIX + path + "?" + urlencode(_pairs(query))
+
+
+def seconds_kept(path: str, query: bytes) -> int:
+    """How long the answer is kept: longer for a connection from now."""
+    if path.endswith("/connections"):
+        asked = {name for name, value in _pairs(query) if value}
+        if not asked & {"date", "time"}:
+            return settings.CONNECTIONS_NOW_CACHE_SECONDS
+    return SECONDS
 
 
 class ResponseCacheMiddleware:
@@ -88,7 +105,7 @@ class ResponseCacheMiddleware:
         try:
             async with redis.pipeline(transaction=False) as pipe:
                 pipe.hset(key, mapping={"type": content_type, "body": bytes(body)})
-                pipe.expire(key, SECONDS)
+                pipe.expire(key, seconds_kept(scope["path"], scope.get("query_string", b"")))
                 await pipe.execute()
         except Exception as exc:  # noqa: BLE001
             log.warning("answer cache unwritable: %r", exc)
