@@ -163,6 +163,10 @@
     </header>
 
     <p class="pull-right">
+        <a class="btn btn-link" id="api-link" href="#" rel="noopener" target="_blank" hidden>
+            <span class="glyphicon glyphicon-link"></span>
+            API request
+        </a>
         <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/connections.html" target="_blank" rel="noopener">
             <span class="glyphicon glyphicon-new-window"></span>
             Source Code
@@ -216,8 +220,7 @@
 
     <footer class="footer">
         <hr>
-        <p>Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
-        <p><a href="/privacy.html">Privacy policy</a></p>
+        <p>Powered by <a href="https://opendata.ch/">Opendata.ch</a> · <a href="/privacy.html">Privacy policy</a></p>
     </footer>
 </div>
 
@@ -410,6 +413,11 @@
     function ask(query) {
         var params = new URLSearchParams();
         Object.keys(query).forEach(function (k) { if (query[k] !== '' && query[k] != null) params.set(k, query[k]); });
+        // The request behind what is shown, linked next to the source code.
+        var link = document.getElementById('api-link');
+        link.href = location.origin + '/' + api() + '/connections?' + params;
+        link.title = link.href;
+        link.hidden = false;
         return fetch('../' + api() + '/connections?' + params).then(function (response) {
             if (!response.ok) throw new Error('Error from API: ' + response.status + ' ' + response.statusText);
             return response.json();

@@ -90,6 +90,10 @@
 
     <article>
         <p class="pull-right">
+            <a class="btn btn-link" id="api-link" href="#" rel="noopener" target="_blank" hidden>
+                <span class="glyphicon glyphicon-link"></span>
+                API request
+            </a>
             <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/stationboard.html" target="_blank" rel="noopener">
                 <span class="glyphicon glyphicon-new-window"></span>
                 Source Code
@@ -109,16 +113,11 @@
 
         <section id="board" aria-live="polite"><!--board--></section>
 
-        <details id="api" class="api" hidden>
-            <summary>API request behind this board</summary>
-            <p><a id="api-link" href="#" rel="noopener"><code id="api-url"></code></a></p>
-        </details>
     </article>
 
     <footer class="footer">
         <hr>
-        <p>Timetable data: <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> · Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
-        <p><a href="/privacy.html">Privacy policy</a></p>
+        <p>Timetable data: <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> · Powered by <a href="https://opendata.ch/">Opendata.ch</a> · <a href="/privacy.html">Privacy policy</a></p>
     </footer>
 
     </div>
@@ -228,9 +227,10 @@
     // The request this board is built from, for whoever wants to build their own.
     function showApi(params, address) {
         var api = location.origin + '/v1/stationboard?' + params;
-        document.getElementById('api-url').textContent = api;
-        document.getElementById('api-link').href = api;
-        document.getElementById('api').hidden = false;
+        var link = document.getElementById('api-link');
+        link.href = api;
+        link.title = api;
+        link.hidden = false;
     }
 
     function setType(value) {
