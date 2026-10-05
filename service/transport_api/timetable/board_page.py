@@ -140,9 +140,8 @@ def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
     if not journeys:
         return out[0] + '<p class="text-muted">No departures found.</p>'
     out.append('<table class="board"><thead><tr><th>Time</th><th>Line</th>')
-    out.append(
-        f'<th>{"From" if arrivals else "To"}</th><th class="pl">Platform</th></tr></thead><tbody>'
-    )
+    # The line's destination either way: /v1 gives it for arrivals too.
+    out.append('<th>To</th><th class="pl">Platform</th></tr></thead><tbody>')
     for journey in journeys:
         stop = journey["stop"]
         at = (stop.get("arrival") if arrivals else None) or stop.get("departure") or ""
