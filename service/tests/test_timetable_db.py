@@ -247,3 +247,28 @@ def test_locations_by_coordinate_name_the_nearest_address_first(api):
     assert first["icon"] is None
     assert 10 < first["distance"] < 15 and not float(first["distance"]).is_integer()
     assert answer["stations"][1]["name"] == "Beta"
+
+
+def test_a_linked_station_board_is_drawn_on_the_server(api):
+    page = api.get("/examples/stationboard.html", params={"station": "Alpha"}).text
+    assert "<title>Departures from Alpha - Transport</title>" in page
+    assert 'rel="canonical"' in page and "stationboard.html?station=Alpha" in page
+    assert '"@context": "https://schema.org"' in page
+    assert '<table class="board">' in page
+    assert 'value="Alpha"' in page
+
+
+def test_the_plain_board_page_without_a_station(api):
+    page = api.get("/examples/stationboard.html").text
+    assert "<!--board-->" in page and 'rel="canonical"' not in page
+
+
+def test_the_sitemap_lists_the_busiest_boards(api):
+    xml = api.get("/sitemap.xml").text
+    assert "examples/stationboard.html?station=Alpha" in xml
+
+
+def test_robots_keep_the_test_host_out(api):
+    assert "Disallow: /\n" in api.get("/robots.txt", headers={"host": "test-x.example"}).text
+    live = api.get("/robots.txt").text
+    assert "Sitemap:" in live and "Disallow: /v1/" in live

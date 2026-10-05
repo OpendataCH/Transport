@@ -1,115 +1,81 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
 
-    <title>Stationboard Example - Transport API</title>
+    <title>Station Board - Transport</title>
+    <meta name="description" content="Departures from any Swiss stop, live from the open Swiss public transport API: line, destination, platform and real-time delays." />
+    <!--head-->
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../media/css/layout.css" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
-    <script>
-
-    $(function () {
-
-        var station = '8501120';
-
-        function refresh() {
-            if (station) {
-                $.get('../v1/stationboard', {id: station, limit: 15}, function(data) {
-                    $('#stationboard tbody').empty();
-                    $(data.stationboard).each(function () {
-                        var prognosis, departure, delay, line = '<tr><td>';
-                        departure = moment(this.stop.departure);
-                        if (this.stop.prognosis.departure) {
-                            prognosis = moment(this.stop.prognosis.departure);
-                            delay = (prognosis.valueOf() - departure.valueOf()) / 60000;
-                            line += departure.format('HH:mm') + ' <strong>+' + delay + ' min</strong>';
-                        } else {
-                            line += departure.format('HH:mm');
-                        }
-                        line += '</td><td>' + this.name + '</td><td>' + this.to + '</td></tr>';
-                        $('#stationboard tbody').append(line);
-                    });
-                }, 'json');
-            }
-        }
-
-        $('#station').autocomplete({
-            source: function (request, response) {
-                $.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
-                    response($.map(data.stations, function(station) {
-                        return {
-                            label: station.name,
-                            station: station
-                        }
-                    }));
-                }, 'json');
-            },
-            select: function (event, ui) {
-                station = ui.item.station.id;
-                refresh();
-            }
-        });
-
-        setInterval(refresh, 30000);
-        refresh();
-    });
-
-    </script>
     <style>
-        h3 {
-             margin: 40px 0 20px;
+        :root {
+            --ink: #383a3d;
+            --muted: #767a80;
+            --line: #e2e4e7;
+            --long-distance: #c60018;
+            --regional: #2d327d;
+            --local: #5a5f66;
+            --late: #c60018;
         }
+        [hidden] { display: none !important; }
 
-        .ui-widget,
-        .ui-widget input {
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-        }
+        .board-form { display: flex; gap: 8px; margin-bottom: 16px; }
+        .board-form .form-control { flex: 1; min-width: 0; }
+        .board-form select { flex: 0 0 auto; width: auto; }
 
-        .ui-autocomplete {
+        #board-title { margin-top: 24px; }
+        #board-title small { display: block; margin-top: 4px; }
+
+        table.board { width: 100%; border-collapse: collapse; }
+        .board th {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-bottom: 1px solid var(--line);
+            padding: 6px 8px;
             text-align: left;
         }
+        .board td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+        .board .t { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 16px; }
+        .board .pl { text-align: right; white-space: nowrap; color: var(--muted); }
+        .board .pl.changed { color: var(--late); font-weight: 600; }
+        .late { color: var(--late); font-weight: 600; font-size: .85em; }
+        .cancelled { color: var(--late); text-decoration: line-through; }
 
-        strong {
-            color: #d10505;
+        .badge-product {
+            display: inline-block;
+            min-width: 2.6em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+            background: var(--local);
+            white-space: nowrap;
         }
+        .badge-product.long-distance { background: var(--long-distance); }
+        .badge-product.regional { background: var(--regional); }
 
-        .column {
-            float: right;
+        .updated { color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+        @media (max-width: 639px) {
+            .board .op { display: none; }
         }
-
-        .media {
-            padding-top: 30px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            padding: 8px;
-            line-height: 18px;
-            vertical-align: top;
-            border-bottom: 1px solid #DDD;
-        }
-
     </style>
 </head>
 
 <body>
 
 <div class="container">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-sm-10 col-sm-offset-1">
 
     <header>
         <h1><a href="../">Transport</a></h1>
@@ -118,43 +84,165 @@
 
     <article>
         <p class="pull-right">
-            <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/stationboard.html" target="_blank">
+            <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/stationboard.html" target="_blank" rel="noopener">
                 <span class="glyphicon glyphicon-new-window"></span>
                 Source Code
             </a>
         </p>
-        <h3>Stationboard Example</h3>
-        <div class="ui-widget station">
-            <input class="form-control" id="station" value="Lausanne" placeholder="Station" />
-        </div>
-        <div class="media">
-        </div>
+        <h3>Station Board Example</h3>
+        <p class="text-muted">The next departures from a stop, live: <code>/v1/locations</code> for the suggestions, <code>/v1/stationboard</code> for the board. Link to a board with <code>?station=Bern</code>.</p>
 
-        <table id="stationboard">
-            <colgroup>
-                <col width="120">
-                <col width="140">
-                <col width="230">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th align="left">Zeit</th>
-                    <th>&nbsp;</th>
-                    <th align="left">Nach</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <form class="board-form" id="board-form" autocomplete="off">
+            <input class="form-control" id="station" name="station" list="station-list" placeholder="Stop or station" aria-label="Stop or station" required />
+            <datalist id="station-list"></datalist>
+            <select class="form-control" id="type" aria-label="Departures or arrivals">
+                <option value="departure">Departures</option>
+                <option value="arrival">Arrivals</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+
+        <section id="board" aria-live="polite"><!--board--></section>
     </article>
 
     <footer class="footer">
         <hr>
-        <p>Powered by <a href="http://opendata.ch/">Opendata.ch</a></p>
+        <p>Timetable data: <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> · Powered by <a href="https://opendata.ch/">Opendata.ch</a></p>
         <p><a href="/privacy.html">Privacy policy</a></p>
     </footer>
 
     </div>
 </div>
+
+<script>
+(function () {
+    'use strict';
+
+    var LONG_DISTANCE = ['IC', 'ICE', 'ICN', 'IR', 'IRE', 'EC', 'EN', 'TGV', 'RJ', 'RJX', 'NJ', 'PE', 'GEX', 'BEX', 'VAE', 'EXT', 'CNL'];
+    var REGIONAL = ['S', 'SN', 'R', 'RE', 'RB', 'TER'];
+
+    var input = document.getElementById('station');
+    var type = document.getElementById('type');
+    var timer = null;
+
+    function el(tag, attributes, children) {
+        var node = document.createElement(tag);
+        Object.keys(attributes || {}).forEach(function (k) {
+            if (k === 'text') node.textContent = attributes[k]; else node.setAttribute(k, attributes[k]);
+        });
+        (children || []).forEach(function (c) {
+            if (c !== null && c !== undefined) node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+        });
+        return node;
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function clock(value) {
+        var d = new Date(value.replace(/([+-]\d\d)(\d\d)$/, '$1:$2'));
+        return pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+
+    // The line as people read it on the platform: "IR 90", "S1", "Bus 11".
+    function line(journey) {
+        var category = journey.category || '';
+        var number = journey.number || '';
+        if (!number || number === category) return category;
+        if (category === 'B' || category === 'BUS') return 'Bus ' + number;
+        if (category === 'T') return 'Tram ' + number;
+        return LONG_DISTANCE.indexOf(category) >= 0 ? category + ' ' + number : category + number;
+    }
+    function badge(journey) {
+        var category = (journey.category || '').toUpperCase();
+        var kind = LONG_DISTANCE.indexOf(category) >= 0 ? ' long-distance' : REGIONAL.indexOf(category) >= 0 ? ' regional' : '';
+        return el('span', {class: 'badge-product' + kind, text: line(journey)});
+    }
+
+    function draw(data) {
+        var station = data.station || {};
+        var rows = (data.stationboard || []).map(function (journey) {
+            var stop = journey.stop;
+            var at = type.value === 'arrival' ? stop.arrival || stop.departure : stop.departure;
+            var changed = stop.prognosis && stop.prognosis.platform;
+            return el('tr', {}, [
+                el('td', {class: 't'}, [clock(at), stop.delay > 0 ? el('span', {class: 'late', text: ' +' + stop.delay}) : null]),
+                el('td', {}, [badge(journey)]),
+                el('td', {}, [journey.to || '', journey.operator ? el('span', {class: 'text-muted op', text: ' · ' + journey.operator}) : null]),
+                el('td', {class: 'pl' + (changed ? ' changed' : ''), text: changed || stop.platform || ''})
+            ]);
+        });
+        var section = document.getElementById('board');
+        section.textContent = '';
+        section.appendChild(el('h2', {id: 'board-title', class: 'h3'}, [
+            (type.value === 'arrival' ? 'Arrivals at ' : 'Departures from ') + (station.name || input.value)
+        ]));
+        if (!rows.length) {
+            section.appendChild(el('p', {class: 'text-muted', text: 'No departures found.'}));
+            return;
+        }
+        section.appendChild(el('table', {class: 'board'}, [
+            el('thead', {}, [el('tr', {}, [
+                el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {text: type.value === 'arrival' ? 'From' : 'To'}),
+                el('th', {class: 'pl', text: 'Platform'})
+            ])]),
+            el('tbody', {}, rows)
+        ]));
+        var now = new Date();
+        section.appendChild(el('p', {class: 'updated', text: 'Updated ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ', every 30 seconds.'}));
+        document.title = (type.value === 'arrival' ? 'Arrivals at ' : 'Departures from ') + (station.name || input.value) + ' - Transport';
+    }
+
+    function load(push) {
+        var name = input.value.trim();
+        if (!name) return;
+        var params = new URLSearchParams({station: name, limit: 20});
+        if (type.value === 'arrival') params.set('type', 'arrival');
+        fetch('../v1/stationboard?' + params).then(function (r) { return r.json(); }).then(function (data) {
+            draw(data);
+            if (data.station && data.station.name) input.value = data.station.name;
+            var address = new URLSearchParams({station: input.value});
+            if (type.value === 'arrival') address.set('type', 'arrival');
+            history[push ? 'pushState' : 'replaceState']({}, '', '?' + address);
+        }).catch(function () {});
+        clearTimeout(timer);
+        timer = setTimeout(function () { load(false); }, 30000);
+    }
+
+    // Suggestions as one types: stops only, a board needs one.
+    var suggesting = null;
+    input.addEventListener('input', function () {
+        clearTimeout(suggesting);
+        var term = input.value.trim();
+        if (term.length < 2) return;
+        suggesting = setTimeout(function () {
+            fetch('../v1/locations?type=station&query=' + encodeURIComponent(term))
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var list = document.getElementById('station-list');
+                    list.textContent = '';
+                    (data.stations || []).forEach(function (s) {
+                        if (s.id && s.name) list.appendChild(el('option', {value: s.name}));
+                    });
+                }).catch(function () {});
+        }, 200);
+    });
+    input.addEventListener('focus', function () { this.select(); });
+    document.getElementById('board-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        load(true);
+    });
+    type.addEventListener('change', function () { load(true); });
+
+    var params = new URLSearchParams(location.search);
+    input.value = params.get('station') || params.get('id') || input.getAttribute('data-default') || 'Bern';
+    if (params.get('type') === 'arrival') type.value = 'arrival';
+    // The server has already drawn the board for a linked station; refresh it
+    // in a while, or draw it now when it has not.
+    if (document.querySelector('#board table')) {
+        timer = setTimeout(function () { load(false); }, 30000);
+    } else {
+        load(false);
+    }
+})();
+</script>
 
 </body>
 </html>
