@@ -960,13 +960,13 @@
             <h4>Shared mobility</h4>
             <ul>
                 <li><strong>What we fetch:</strong> bikes, scooters and cars to rent, as GBFS from <a href="https://github.com/SFOE/sharedmobility" rel="external noopener noreferrer">sharedmobility.ch</a> of the Swiss Federal Office of Energy.</li>
-                <li><strong>At the source and here:</strong> every minute. The <a href="routing/">journey planner page</a> uses them for the first and last mile; <code>/v1</code> does not.</li>
+                <li><strong>At the source and here:</strong> every minute. The <a href="routing/">journey planner page</a> offers them for the first and last mile; <code>/connections</code> reaches and leaves the stops on foot, as it always has.</li>
             </ul>
 
             <h4>Operator names</h4>
             <ul>
                 <li><strong>What we fetch:</strong> the names operators go by in the national timetable's HAFAS data (<a href="https://data.opentransportdata.swiss/dataset/timetable-54-2026-hrdf" rel="external noopener noreferrer">HRDF</a>), from opentransportdata.swiss.</li>
-                <li><strong>In the API:</strong> <code>operator</code> reads "BLS-bls" rather than "BLS AG (bls)", as it always has; renewed once a timetable year.</li>
+                <li><strong>In the API:</strong> <code>operator</code> gives these shortened names, not the full company names.</li>
             </ul>
 
             <p>The source code is on <a href="https://gitlab.com/opendata.ch/Transport">GitLab</a>. If you show the data, please name its source: <em>Timetable data: opentransportdata.swiss</em>.</p>
@@ -976,7 +976,7 @@
             <ul>
                 <li><strong>2012:</strong> Opendata.ch starts the Transport API, written by Fabian Vogler (<a href="https://github.com/fabian" rel="external noopener noreferrer">GitHub</a>, <a href="https://gitlab.com/opendata.ch/Transport/-/commits/master?author=Fabian%20Vogler" rel="external noopener noreferrer">his commits on GitLab</a>) and the community, on top of the SBB's timetable interface.</li>
                 <li><strong>2017:</strong> the SBB systems behind it are to be switched off. search.ch steps in with its own web service, and from <a href="https://opendata.ch/2017/06/search-ch-rettet-transport-opendata-ch/" rel="external noopener noreferrer">31 July 2017</a> the API translates its answers.</li>
-                <li><strong>2026:</strong> the national timetable and its real-time data are open data, so the API answers from them directly: its own copy of the timetable and its own journey planner. The parameters and the answers of <code>/v1</code> stay as they were.</li>
+                <li><strong>5 October 2026:</strong> the national timetable and its real-time data are open data, so the API answers from them directly: its own copy of the timetable and its own journey planner. The parameters and the answers of <code>/v1</code> stay as they were.</li>
             </ul>
 
         </article>
