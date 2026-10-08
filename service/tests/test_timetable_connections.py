@@ -1,4 +1,4 @@
-"""/v2/connections: MOTIS answers in, /v1's shape out.
+"""Connections: MOTIS answers in, /v1's shape out.
 
 The router is replaced by a recorded answer on the small test feed; the
 stations and trips it names are looked up in a real Postgres, so these tests
@@ -18,13 +18,15 @@ from gtfs_feed import TODAY, write_feed
 
 from transport_api import errors
 from transport_api.models import ConnectionsResponse
-from transport_api.timetable import connections as v2
-from transport_api.timetable import importer, places
+from transport_api.timetable import connections, importer, places
 
 
 def test_trip_id_drops_day_time_and_dataset():
-    assert v2._trip_id("20261006_07:59_ch_.ojp-91-81-A.1.TA.658.j26") == ".ojp-91-81-A.1.TA.658.j26"
-    assert v2._trip_id("plain") == "plain"
+    assert (
+        connections._trip_id("20261006_07:59_ch_.ojp-91-81-A.1.TA.658.j26")
+        == ".ojp-91-81-A.1.TA.658.j26"
+    )
+    assert connections._trip_id("plain") == "plain"
 
 
 @pytest.mark.parametrize(
@@ -42,25 +44,25 @@ def test_trip_id_drops_day_time_and_dataset():
     ],
 )
 def test_products_are_named_as_search_ch_names_them(category, route, product):
-    assert v2._product({"category": category, "route_short_name": route}) == product
+    assert connections._product({"category": category, "route_short_name": route}) == product
 
 
 def test_a_trip_only_real_time_knows_gets_its_category_from_the_line():
-    trip = v2._trip_of_leg(
+    trip = connections._trip_of_leg(
         {"routeShortName": "IC81", "tripShortName": "10818", "agencyName": "SBB"}
     )
     assert trip["category"] == "IC"
-    assert v2._product(trip) == "IC 81"
+    assert connections._product(trip) == "IC 81"
 
 
 def test_delay_cuts_the_seconds():
-    assert v2._delay("2026-10-05T06:02:59Z", "2026-10-05T06:00:00Z") == 2
-    assert v2._delay("2026-10-05T06:00:00Z", "2026-10-05T06:00:00Z") == 0
+    assert connections._delay("2026-10-05T06:02:59Z", "2026-10-05T06:00:00Z") == 2
+    assert connections._delay("2026-10-05T06:00:00Z", "2026-10-05T06:00:00Z") == 0
 
 
 def test_modes_translate_to_motis():
-    assert v2._modes(["bus", "ship"]) == ["BUS", "COACH", "FERRY"]
-    assert v2._modes(["all"]) is None
+    assert connections._modes(["bus", "ship"]) == ["BUS", "COACH", "FERRY"]
+    assert connections._modes(["all"]) is None
 
 
 def trip(start, end):
@@ -92,7 +94,7 @@ class PagingMotis:
 def test_arrival_pages_are_cut_as_v1_cuts_them(page, expected):
     """Page 0 arrives last before the time, page 1 is the next ones after it."""
     motis = PagingMotis()
-    got = asyncio.run(v2._arrival_page(motis, {"arriveBy": "true"}, 2, page))
+    got = asyncio.run(connections._arrival_page(motis, {"arriveBy": "true"}, 2, page))
     assert [i["endTime"][11:16] for i in got] == expected
 
 
@@ -250,8 +252,8 @@ def api(loaded):
 
     app = FastAPI(lifespan=lifespan)
     errors.install(app)
-    app.include_router(v2.router, prefix="/v2")
-    app.dependency_overrides[v2.get_motis] = lambda: motis
+    app.include_router(connections.router, prefix="/v2")
+    app.dependency_overrides[connections.get_motis] = lambda: motis
     with TestClient(app) as client:
         client.motis = motis
         yield client
@@ -336,7 +338,7 @@ def test_a_walk_between_stations_is_its_seconds():
         "from": {"stopId": "ch_a", "parentId": "ch_A", "name": "A"},
         "to": {"stopId": "ch_b", "parentId": "ch_B", "name": "B"},
     }
-    section = v2._section(leg, {}, {}, None)
+    section = connections._section(leg, {}, {}, None)
     assert section["walk"] == {"duration": 180}
 
 
