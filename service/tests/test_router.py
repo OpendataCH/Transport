@@ -89,3 +89,17 @@ def test_the_timetable_database_fails_in_the_envelope(error, message):
 def test_without_a_database_url_there_is_no_pool(monkeypatch):
     monkeypatch.setattr(settings, "DATABASE_URL", None)
     assert asyncio.run(db.connect()) is None
+
+
+def test_the_api_asks_the_database_without_parallel_plans(monkeypatch):
+    """Parallel workers of many boards at once exhaust Postgres' shared memory."""
+    made = {}
+
+    async def create_pool(url, **options):
+        made.update(options, url=url)
+        return "pool"
+
+    monkeypatch.setattr(settings, "DATABASE_URL", "postgresql://db/transport")
+    monkeypatch.setattr(db.asyncpg, "create_pool", create_pool)
+    assert asyncio.run(db.connect()) == "pool"
+    assert made["server_settings"] == {"max_parallel_workers_per_gather": "0"}

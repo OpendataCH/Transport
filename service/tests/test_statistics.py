@@ -72,16 +72,25 @@ def test_a_rate_limited_request_is_neither_call_nor_error(client, timetable, red
     assert redis.get(f"stats:errors:{today()}") is None
 
 
-def test_a_failure_is_a_plain_exception(client, timetable, redis):
+def test_an_outage_is_counted_apart_from_a_bug(client, timetable, redis):
     timetable.raises(errors.ApiError(503, "The router is not reachable."))
 
     assert client.get("/v1/connections", params={"from": "Bern", "to": "Thun"}).status_code == 503
 
+    name = statistics.SERVICE_UNAVAILABLE
     assert redis.get(f"stats:errors:{today()}") == "1"
-    assert redis.hget("stats:exceptions:Exception", "calls") == "1"
+    assert redis.hget(f"stats:exceptions:{name}", "calls") == "1"
     # A failed call is still a call, as in the PHP.
     assert redis.get(f"stats:calls:{today()}") == "1"
     assert redis.zcard(f"stats:top:routes:{today()}") == 0
+
+
+def test_a_failure_inside_is_a_plain_exception(client, timetable, redis):
+    timetable.raises(errors.ApiError(500, "DateTime::__construct(): Failed to parse time string"))
+
+    assert client.get("/v1/stationboard", params={"station": "Bern"}).status_code == 500
+
+    assert redis.hget("stats:exceptions:Exception", "calls") == "1"
 
 
 def test_an_unknown_path_is_a_not_found(client, redis):

@@ -14,7 +14,17 @@ async def connect() -> asyncpg.Pool | None:
     """
     if not settings.DATABASE_URL:
         return None
-    return await asyncpg.create_pool(settings.DATABASE_URL, min_size=0, max_size=10)
+    # No parallel plans for the API's queries. Each parallel worker asks for a
+    # segment of shared memory, and under load the workers of many station
+    # boards at once exhaust it: Postgres answers "could not resize shared
+    # memory segment" and the board is a 500. Thousands of small queries gain
+    # nothing from parallelism anyway; the importer keeps it.
+    return await asyncpg.create_pool(
+        settings.DATABASE_URL,
+        min_size=0,
+        max_size=10,
+        server_settings={"max_parallel_workers_per_gather": "0"},
+    )
 
 
 async def fetch(pool: asyncpg.Pool, query: str, *args) -> list[asyncpg.Record]:

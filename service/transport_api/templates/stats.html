@@ -302,7 +302,7 @@
                         <thead><tr><th>When</th><th>Days</th><th class="text-right">Stop times</th><th class="text-right">Minutes</th></tr></thead>
                         <tbody>
                         {% for i in sources.imports %}<tr title="{{ i.name }}, window file {{ i.size }}"><td>{{ i.at }}</td><td>{{ i.window }}</td><td class="text-right">{{ i.stop_times }}</td><td class="text-right">{{ i.minutes }}</td></tr>
-                        {% else %}<tr><td colspan="4" class="text-muted">Recorded from 5. October 2026 on.</td></tr>{% endfor %}
+                        {% else %}<tr><td colspan="4" class="text-muted">None since recording began on 5. October 2026: the days held now were imported on {{ sources.loaded.imported }}. They are imported again when a new timetable file appears, or when the days held move on (once a week).</td></tr>{% endfor %}
                         </tbody>
                     </table>
                 </div>

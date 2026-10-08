@@ -59,6 +59,9 @@ NOT_FOUND = "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"
 METHOD_NOT_ALLOWED = "Symfony\\Component\\HttpKernel\\Exception\\MethodNotAllowedHttpException"
 BAD_REQUEST = "Symfony\\Component\\HttpKernel\\Exception\\BadRequestHttpException"
 HTTP_EXCEPTION = "Symfony\\Component\\HttpKernel\\Exception\\HttpException"
+# The timetable database or the router not there (503): an outage, not a bug,
+# so counted apart from the 500s. The PHP never answered 503.
+SERVICE_UNAVAILABLE = "ServiceUnavailable"
 # A single value where a list belongs (see fields.NotAList). The PHP dies of a
 # TypeError there and never reached its counter; here it is counted.
 TYPE_ERROR = "TypeError"
@@ -277,6 +280,8 @@ def exception_for(status: int, recorded: str | None) -> str | None:
         return BAD_REQUEST
     if status < 500:
         return HTTP_EXCEPTION
+    if status == 503:
+        return SERVICE_UNAVAILABLE
     return EXCEPTION
 
 

@@ -64,7 +64,12 @@ KNOWN_EXCEPTIONS = {
     ),
     "Exception": (
         "500",
-        "timetable.search.ch answered with a server error, an error message or invalid JSON",
+        "An unexpected failure inside the API. Until 5 October 2026 mostly "
+        "timetable.search.ch answering with a server error, an error message or invalid JSON",
+    ),
+    "ServiceUnavailable": (
+        "503",
+        "The timetable database or the router was not available (a restart, an outage)",
     ),
     "Buzz\\Exception\\RequestException": (
         "500",
