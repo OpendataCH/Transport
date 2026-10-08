@@ -13,8 +13,7 @@ from transport_api.mapping import ZURICH
 
 
 @pytest.fixture
-def api(monkeypatch):
-    monkeypatch.setattr(settings, "V1_FROM_TIMETABLE", True)
+def api():
     redis = fakeredis.FakeAsyncRedis(decode_responses=True)
     calls = {"n": 0}
     app = FastAPI()
@@ -84,10 +83,3 @@ def test_a_time_close_to_now_counts_as_now(query, now):
     assert (key == response_cache.cache_key("/v1/connections", b"to=Thun&from=Bern")) is now
     kept = response_cache.seconds_kept("/v1/connections", query, NOW)
     assert (kept == settings.CONNECTIONS_NOW_CACHE_SECONDS) is now
-
-
-def test_v1_from_search_ch_is_not_kept(api, monkeypatch):
-    monkeypatch.setattr(settings, "V1_FROM_TIMETABLE", False)
-    api.get("/v1/stationboard?station=Bern")
-    api.get("/v1/stationboard?station=Bern")
-    assert api.calls["n"] == 2

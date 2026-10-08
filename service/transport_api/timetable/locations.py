@@ -1,7 +1,7 @@
-"""`/v2/locations` from the timetable database, in the shape of `/v1`.
+"""`/v1/locations` (and `/v2`) from the timetable database.
 
-Stations only: the GTFS feed has no addresses, so a search that search.ch
-would answer with a street comes back without it.
+Stations from the GTFS feed; addresses and points of interest from the
+router's place search (`places.py`), when it runs.
 """
 
 import math

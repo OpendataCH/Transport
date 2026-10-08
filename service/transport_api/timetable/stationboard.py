@@ -1,4 +1,4 @@
-"""`/v2/stationboard` from the timetable database, in the shape of `/v1`.
+"""`/v1/stationboard` (and `/v2`) from the timetable database.
 
 A board is the stop times at the platforms of one station, on the service
 days that can reach the requested moment and the day after it: today's,
@@ -14,18 +14,23 @@ import asyncpg
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import PlainTextResponse
 
+from .. import errors, phptime
 from ..encoding import PhpJson
 from ..fields import Fields
 from ..mapping import DEPRECATED_TYPES, ZURICH
 from ..models import Errors, StationBoardResponse
 from ..query import as_list, parameter, truthy
-from ..stationboard import DEFAULT_LIMIT, moment_of, over_the_limit
 from . import db
 from .locations import BY_NAME, _like_escape
 from .mapping import journey, location, moment, service_day_start, stop
 from .names import normalize
 
 router = APIRouter()
+
+# The default when nobody says otherwise, and the ceiling above which /v1
+# refuses. Both are the PHP's.
+DEFAULT_LIMIT = "40"
+MAX_LIMIT = 420
 
 # How far ahead a board looks. A quiet stop may have its next departure in
 # the morning; nothing in the timetable is further away than a day. A busy
@@ -338,3 +343,31 @@ def _count(limit: str) -> int:
         return max(int(float(limit)), 1)
     except ValueError:
         return int(DEFAULT_LIMIT)
+
+
+def over_the_limit(limit: str) -> bool:
+    """`$limit > 420`, with PHP 8's comparison rules.
+
+    A numeric string is compared as a number. A non-numeric one makes PHP cast
+    the *number* to a string and compare the two as text - so `limit=abc` is
+    "greater" than `420` and refused, while `limit=4abc` is not. Silly, and
+    what the endpoint does.
+    """
+    try:
+        return float(limit) > MAX_LIMIT
+    except ValueError:
+        return limit > str(MAX_LIMIT)
+
+
+def moment_of(given: str | None) -> datetime:
+    """The moment to ask about: what was given, or now, in Zurich."""
+    now = datetime.now(ZURICH)
+    if not given:
+        return now
+    parsed = phptime.parse(given, now, convert_offset=False)
+    if parsed is not None:
+        return parsed
+
+    # /v1 lets the DateTime constructor throw here, which its error handler
+    # turns into a 500 naming the string it could not read.
+    raise errors.ApiError(500, f"DateTime::__construct(): Failed to parse time string ({given})")

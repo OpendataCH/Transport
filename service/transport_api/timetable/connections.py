@@ -1,4 +1,4 @@
-"""`/v2/connections` from our own router, in the shape of `/v1`.
+"""`/v1/connections` (and `/v2`) from our own router.
 
 MOTIS (motis-project, MIT) runs beside this service on the same GTFS feed and
 the same real time, and does the routing; this module asks it and writes the
@@ -6,8 +6,9 @@ answer the way `/v1` does. Stations are resolved, and lines described, from
 the timetable database, so that a connection names its stops and its trains
 exactly as the station board does.
 
-Differences to /v1 that follow from the source: at most two `via` stops (what
-MOTIS takes), no pass-through points in a pass list.
+Differences to what /v1 answered from search.ch that follow from the source:
+at most two `via` stops (what MOTIS takes), no pass-through points in a pass
+list.
 """
 
 import re
@@ -17,16 +18,7 @@ from typing import Annotated, Any
 import asyncpg
 from fastapi import APIRouter, Depends, Query, Request
 
-from .. import settings
-from ..connections import (
-    DEFAULT_LIMIT,
-    DEFAULT_PAGE,
-    _is_arrival_time,
-    _number,
-    _page,
-    _validate,
-    _when,
-)
+from .. import phptime, settings
 from ..encoding import PhpErrorJson, PhpJson
 from ..fields import Fields
 from ..mapping import DEPRECATED_TYPES, ZURICH, duration_of
@@ -44,7 +36,16 @@ router = APIRouter()
 # MOTIS prefixes every stop and trip id with the dataset's tag.
 DATASET = "ch_"
 
+DEFAULT_LIMIT = 4
+DEFAULT_PAGE = 0
+
+MAX_LIMIT = 16
+MAX_PAGE = 10
+# What MOTIS takes. search.ch took five.
 MAX_VIA = 2
+
+# A page is cut out of the first sixteen connections, as /v1 always has.
+WINDOW = 16
 
 # /v1's means of transport, as MOTIS modes.
 MODES = {
@@ -131,8 +132,6 @@ async def search_connections(
     limit_value = _number(limit, DEFAULT_LIMIT)
     page_value = _number(page, DEFAULT_PAGE)
     problems = _validate(limit_value, page_value, places)
-    if len(places) > MAX_VIA:
-        problems.append(f"Invalid via count (max {MAX_VIA} allowed on /v2).")
     if problems:
         return PhpErrorJson(status_code=400, content={"errors": problems})
 
@@ -513,3 +512,72 @@ def _modes(transportations: list[str]) -> list[str] | None:
         if kind in TRANSPORTATIONS:
             modes += [m for m in MODES[kind] if m not in modes]
     return modes or None
+
+
+def _page(connections: list[dict], limit: int, page: int) -> list[dict]:
+    """The page /v1 cuts out of the connections found.
+
+    The offset is clamped into the first sixteen results, which is why a high
+    page with a high limit quietly returns the tail of the window instead of
+    an empty list.
+    """
+    offset = min(max(page * limit, 0), WINDOW - limit)
+    return connections[offset : offset + limit]
+
+
+def _validate(limit: int, page: int, via: list[str]) -> list[str]:
+    problems = []
+    if limit > MAX_LIMIT:
+        problems.append(f"Maximal value of argument `limit` is {MAX_LIMIT}.")
+    if page > MAX_PAGE:
+        problems.append(f"Maximal value of argument `page` is {MAX_PAGE}.")
+    if len(via) > MAX_VIA:
+        problems.append(f"Invalid via count (max {MAX_VIA} allowed).")
+    return problems
+
+
+def _number(value: str | None, default: int) -> int:
+    """A count, as PHP would read it: anything unreadable is the default."""
+    if not truthy(value):
+        return default
+    try:
+        return int(float(value))
+    except ValueError:
+        return default
+
+
+def _is_arrival_time(value: str | None) -> bool:
+    """`0`, `1`, `false`, `true` - and anything else leaves it alone."""
+    return value in ("1", "true")
+
+
+def _when(combined: str | None, date: str | None, time: str | None) -> datetime:
+    """The moment to search from: `datetime`, or `date` and `time`, or now.
+
+    Either half may be missing, and each falls back to the current day or the
+    current minute on its own - which is what makes `time=23:50` without a date
+    mean tonight.
+    """
+    now = datetime.now(ZURICH)
+
+    # What cannot be read becomes the epoch, not now: strtotime() says false
+    # and /v1 formats that as 1970-01-01 01:00.
+    if truthy(combined):
+        return _parse(combined) or phptime.EPOCH
+
+    day = (_parse(date) or phptime.EPOCH) if truthy(date) else None
+    clock = (_parse(time, reference=day or now) or phptime.EPOCH) if truthy(time) else None
+
+    return (day or now).replace(
+        hour=(clock or now).hour,
+        minute=(clock or now).minute,
+        second=0,
+        microsecond=0,
+    )
+
+
+def _parse(value: str | None, reference: datetime | None = None) -> datetime | None:
+    """What `strtotime()` would make of it, for the shapes clients send."""
+    if not value:
+        return None
+    return phptime.parse(value, reference or datetime.now(ZURICH), convert_offset=True)

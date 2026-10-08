@@ -52,8 +52,6 @@
         .when input[type=time] { width: 7.5em; }
         .when .btn-group .btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
         .when .spacer { flex: 1; }
-        .when .api { color: var(--muted); font-size: 12px; }
-        .when .api select { display: inline-block; width: auto; height: 28px; padding: 2px 6px; font-size: 12px; }
         .link-button { background: none; border: 0; padding: 0; color: #337ab7; }
         .sharing { font-weight: normal; margin: 0; }
 
@@ -223,13 +221,6 @@
             <label class="sharing" title="Shared bikes, scooters and cars to and from the stops (sharedmobility.ch)"><input type="checkbox" name="sharing"> bikes &amp; scooters</label>
             <button type="submit" class="btn btn-primary">Search</button>
             <span class="spacer"></span>
-            <!-- The source switch stays for testing (?api=v1-old); it is not shown. -->
-            <label class="api" hidden>API
-                <select class="form-control" name="api">
-                    <option value="v1">v1 (opentransportdata.swiss)</option>
-                    <option value="v1-old">v1-old (search.ch)</option>
-                </select>
-            </label>
         </div>
     </form>
 
@@ -553,7 +544,7 @@
         document.getElementById('api-link').hidden = false;
     }
 
-    function api() { return field('api').value === 'v1-old' ? 'v1-old' : 'v1'; }
+    function api() { return 'v1'; }
 
     function ask(query) {
         var params = new URLSearchParams();
@@ -637,7 +628,6 @@
         ['from', 'to', 'via', 'date', 'time'].forEach(function (k) { if (asked[k]) params.set(k, asked[k]); });
         if (arrival) params.set('arrival', '1');
         if (field('sharing').checked) params.set('sharedMobility', '1');
-        if (api() === 'v1-old') params.set('api', 'v1-old');
         history.replaceState({}, '', '?' + params);
     }
 
@@ -714,7 +704,6 @@
     if (field('via').value) { field('via').hidden = false; document.getElementById('add-via').hidden = true; }
     setArrival(params.get('arrival') === '1');
     field('sharing').checked = params.get('sharedMobility') === '1';
-    field('api').value = params.get('api') === 'v1-old' ? 'v1-old' : 'v1';
 
     if (field('from').value && field('to').value) {
         search();

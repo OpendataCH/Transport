@@ -1,8 +1,11 @@
 # Transport API
 
 The Swiss public transport API behind **https://transport.opendata.ch**, run by
-[Opendata.ch](https://opendata.ch). It is a free, stateless front for
-[timetable.search.ch](https://timetable.search.ch/api/help).
+[Opendata.ch](https://opendata.ch). It answers from its own copy of the national
+timetable and its real-time feed on
+[opentransportdata.swiss](https://opentransportdata.swiss/), routed by
+[MOTIS](https://github.com/motis-project/motis). Until October 2026 it was a
+front for [timetable.search.ch](https://timetable.search.ch/api/help).
 
 - API documentation: https://transport.opendata.ch/docs.html
 - Statistics: https://transport.opendata.ch/stats

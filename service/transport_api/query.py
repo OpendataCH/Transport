@@ -1,18 +1,13 @@
 """How PHP reads a query string, and why it matters here.
 
-/v1 reads its parameters through `parse_str`, which has two habits that no
-other language shares and that both change answers:
+/v1 reads its parameters through `parse_str`, which has a habit that no
+other language shares and that changes answers:
 
 - **The last occurrence wins, and it sets the type.** `via=a&via=b` is the
   string `b`, not a list of two - so a client that repeats a parameter without
   brackets gets only its last value. `via[]=a&via[]=b` is the list. Mixing the
   two spellings means the later one decides which it is.
-- **`isset` is not truthiness.** An empty string is set; a null is not. Half
-  the assignments in the old mapping turn on that difference, and an empty
-  string coming through as null instead is a difference in the answer.
 """
-
-from typing import Any
 
 from fastapi import Request
 
@@ -53,12 +48,3 @@ def truthy(value: str | None) -> bool:
     not intentions.
     """
     return value is not None and value != "" and value != "0"
-
-
-def isset(entry: dict, key: str) -> bool:
-    """`isset($json->key)` - present and not null. An empty string counts."""
-    return entry.get(key) is not None
-
-
-def value(entry: dict, key: str) -> Any:
-    return entry.get(key)

@@ -11,8 +11,7 @@ Home Assistant, nearly all of their traffic, asks the same connection every
 second poll is answered here, at the price of delays up to that old. A date
 and time within two minutes of the present count as "from now" too.
 
-Only what the service computes itself is kept: station boards and
-connections under /v1 and /v2 when they answer from the timetable, and only
+Only station boards and connections under /v1 and /v2 are kept, and only
 answers with status 200. The key is the path with its query, its parameters
 sorted, so that `?a=1&b=2` and `?b=2&a=1` meet.
 
@@ -39,11 +38,7 @@ NOW_TOLERANCE = 120
 
 def cached_path(path: str) -> bool:
     """Whether an answer to this path is kept."""
-    if not path.endswith(CACHED_ENDPOINTS):
-        return False
-    if path.startswith("/v2/"):
-        return True
-    return path.startswith("/v1/") and settings.V1_FROM_TIMETABLE
+    return path.endswith(CACHED_ENDPOINTS) and path.startswith(("/v1/", "/v2/"))
 
 
 def _pairs(query: bytes) -> list[tuple[str, str]]:

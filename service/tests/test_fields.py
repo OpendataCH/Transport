@@ -7,9 +7,11 @@ API before it was written down.
 """
 
 import pytest
-from conftest import fixture
+from conftest import station
 
 from transport_api.fields import Fields, NotAList, apply, tree_of
+
+BERN = station("8507000", "Bern", 46.948832, 7.439131, icon="train")
 
 
 def filtered(value, *paths):
@@ -56,8 +58,8 @@ def test_null_survives_being_asked_for():
     assert filtered({"a": None, "b": 1}, "a") == {"a": None}
 
 
-def test_the_filter_reaches_into_a_real_answer(client, search_ch):
-    search_ch.returns(fixture("locations/searchch_response.json"))
+def test_the_filter_reaches_into_a_real_answer(client, timetable):
+    timetable.returns([BERN])
 
     body = client.get(
         "/v1/locations",
@@ -67,21 +69,21 @@ def test_the_filter_reaches_into_a_real_answer(client, search_ch):
     assert body["stations"][0] == {"name": "Bern", "icon": "train"}
 
 
-def test_a_field_nobody_has_empties_the_whole_document(client, search_ch):
-    search_ch.returns(fixture("locations/searchch_response.json"))
+def test_a_field_nobody_has_empties_the_whole_document(client, timetable):
+    timetable.returns([BERN])
 
     body = client.get("/v1/locations", params={"query": "Be", "fields[]": "nonexistent"}).json()
 
     assert body == []
 
 
-def test_fields_without_brackets_is_a_bare_500(client, search_ch):
+def test_fields_without_brackets_is_a_bare_500(client, timetable):
     """What a TypeError escaping Silex looks like from outside: empty body."""
     response = client.get("/v1/locations", params={"query": "Be", "fields": "abc"})
 
     assert response.status_code == 500
     assert response.content == b""
-    assert search_ch.requests == []
+    assert timetable.queries == []
 
 
 def test_the_last_spelling_in_the_query_string_decides():

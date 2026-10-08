@@ -5,12 +5,11 @@
 
 Checks what breaks silently rather than what the unit tests already cover: the
 build and timezone the host reports, the website files, the statistics page in
-its shapes, the error envelope, and one real question to search.ch. Standard
-library only, so it runs in any Python image, in CI and on a laptop.
+its shapes, the error envelope, and one real question to the timetable.
+Standard library only, so it runs in any Python image, in CI and on a laptop.
 
-One request goes to search.ch through the API. A `429` there is accepted: it is
-search.ch throttling the caller, and it still proves the path through the
-service works and answers in the /v1 envelope.
+Without a timetable (`--no-timetable`, the image alone in CI) the question
+must be answered with the 503 that says so, in the /v1 envelope.
 
 Exits non-zero if any check fails, and says which.
 """
@@ -72,7 +71,7 @@ def wait_until_up(base: str, seconds: int) -> None:
         time.sleep(1)
 
 
-def checks(base: str, version: str | None, redis: bool):
+def checks(base: str, version: str | None, redis: bool, timetable: bool = True):
     """(name, function) pairs; each function raises AssertionError on failure."""
 
     def health():
@@ -132,11 +131,12 @@ def checks(base: str, version: str | None, redis: bool):
             window = get(base, path + "?format=window&window=24h").json()
             assert window["window"] == "24h" and window["granularity"] == "hour", window.keys()
 
-    def search_ch():
+    def timetable_question():
         answer = get(base, "/v1/locations?query=Bern")
-        if answer.status == 429:
+        if not timetable:
+            assert answer.status == 503, f"{answer.status}: {answer.text[:200]}"
             message = answer.json()["errors"][0]["message"]
-            assert "timetable.search.ch" in message, message
+            assert "not configured" in message, message
             return
         assert answer.status == 200, f"{answer.status}: {answer.text[:200]}"
         stations = answer.json()["stations"]
@@ -151,7 +151,7 @@ def checks(base: str, version: str | None, redis: bool):
         ("redirects", redirects),
         ("404 in the error envelope", not_found),
         ("statistics page, both names", statistics),
-        ("one question to search.ch", search_ch),
+        ("one question to the timetable", timetable_question),
     ]
 
 
@@ -160,13 +160,16 @@ def main() -> int:
     parser.add_argument("base", help="e.g. https://transport.opendata.ch")
     parser.add_argument("--version", help="the build /v1/health must report")
     parser.add_argument("--no-redis", action="store_true", help="the host runs without statistics")
+    parser.add_argument(
+        "--no-timetable", action="store_true", help="the host runs without a timetable database"
+    )
     parser.add_argument("--wait", type=int, default=60, help="seconds to wait for health")
     args = parser.parse_args()
     base = args.base.rstrip("/")
 
     wait_until_up(base, args.wait)
     failed = 0
-    for name, check in checks(base, args.version, not args.no_redis):
+    for name, check in checks(base, args.version, not args.no_redis, not args.no_timetable):
         try:
             check()
             print(f"ok    {name}")

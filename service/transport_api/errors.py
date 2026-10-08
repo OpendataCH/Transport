@@ -1,9 +1,7 @@
 """Errors in the shape /v1 uses: `{"errors": [{"message": …}]}`.
 
-Same envelope, same status codes. An upstream 429 is passed through as 429,
-because it is the caller's to retry and 8.3 % of production traffic is exactly
-this; everything else the upstream does wrong becomes a 500 with a message
-naming search.ch, exactly as the PHP application answers today.
+A 429 is the caller's to retry: the router is busy (timetable/router.py).
+A 503 says the timetable or the router is not there.
 """
 
 from fastapi import FastAPI, Request, Response
@@ -17,12 +15,10 @@ from .fields import NotAList
 class ApiError(Exception):
     """An error that is answered in the /v1 envelope."""
 
-    def __init__(self, status_code: int, message: str, stats_exception: str | None = None) -> None:
+    def __init__(self, status_code: int, message: str) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.message = message
-        # The class /stats.php counts this under, when the status alone does not say.
-        self.stats_exception = stats_exception
 
     def response(self) -> PhpErrorJson:
         return PhpErrorJson(
@@ -31,39 +27,9 @@ class ApiError(Exception):
         )
 
 
-# The messages are the PHP's, word for word, including the upstream body
-# appended whole - untrimmed and untruncated. Two recorded fixtures assert
-# exactly these strings, which is reason enough not to tidy them.
-def rate_limited(detail: str) -> ApiError:
-    return ApiError(429, f"Rate limit error from timetable.search.ch: {detail}")
-
-
-def server_error(detail: str) -> ApiError:
-    return ApiError(500, f"Server error from timetable.search.ch: {detail}")
-
-
-def unreachable(detail: str) -> ApiError:
-    """search.ch did not answer at all: the same 500 as server_error, counted apart."""
-    return ApiError(
-        500,
-        f"Server error from timetable.search.ch: {detail}",
-        stats_exception=statistics.REQUEST_EXCEPTION,
-    )
-
-
-def invalid_json(detail: str) -> ApiError:
-    return ApiError(500, f"Invalid JSON from timetable.search.ch: {detail}")
-
-
-def upstream_error(detail: str) -> ApiError:
-    return ApiError(500, f"Error from timetable.search.ch: {detail}")
-
-
 def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
-    async def _api_error(request: Request, exc: ApiError) -> PhpErrorJson:
-        if exc.stats_exception is not None:
-            request.state.stats_exception = exc.stats_exception
+    async def _api_error(_: Request, exc: ApiError) -> PhpErrorJson:
         return exc.response()
 
     @app.exception_handler(NotAList)

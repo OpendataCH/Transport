@@ -86,9 +86,9 @@ build:image:service:
 
 # The image just built, started as a container and asked what matters: that it
 # comes up, reports this build and Europe/Zurich, serves the website and the
-# statistics page, answers in the /v1 error envelope and reaches search.ch.
-# No Redis here, so the statistics page is checked in its "not configured"
-# form. The servers deploy by SHA tag, so an image that fails here is never
+# statistics page and answers in the /v1 error envelope. No Redis and no
+# timetable here, so the statistics page and the question to the timetable
+# are checked in their "not configured" form. The servers deploy by SHA tag, so an image that fails here is never
 # rolled out by accident - but `latest` has already moved; do not deploy
 # `latest`.
 smoke:image:
@@ -100,7 +100,7 @@ smoke:image:
     - name: "${CI_REGISTRY_IMAGE}/service:${CI_COMMIT_SHORT_SHA}"
       alias: transport
   script:
-    - python service/tools/smoke.py http://transport:8000 --version "${CI_COMMIT_SHORT_SHA}" --no-redis
+    - python service/tools/smoke.py http://transport:8000 --version "${CI_COMMIT_SHORT_SHA}" --no-redis --no-timetable
 
 # The same checks against the servers, after a deploy there. Buttons, since
 # deploying is a step on the server and not part of this pipeline.

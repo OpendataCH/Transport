@@ -10,8 +10,8 @@ from datetime import datetime
 
 import pytest
 
-from transport_api import connections, stationboard
 from transport_api.mapping import ZURICH
+from transport_api.timetable import connections, stationboard
 
 DAY = datetime(2026, 9, 25, 12, 0, tzinfo=ZURICH)
 

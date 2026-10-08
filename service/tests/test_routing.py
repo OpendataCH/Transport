@@ -1,14 +1,12 @@
 """What this service answers, and what it leaves alone.
 
-Until stage S6 the rule here was the opposite one: the service refused the
-whole `/v1` surface, so that a location block written too broadly could not
-shadow the old contract with a half-built answer. S6 is the deliberate end of
-that guard - `/v1` is now this service's own prefix. `/v2` was an alias of it
-until locations and station boards moved to our own timetable (timetable/).
-The website around the API is served here too; see test_website.py.
+`/v1` is this service's own prefix and `/v2` its alias; both answer from our
+own timetable (timetable/). The website around the API is served here too;
+see test_website.py.
 """
 
 import pytest
+from conftest import station
 
 PREFIXES = ["/v1", "/v2"]
 
@@ -18,20 +16,12 @@ def test_both_prefixes_answer(client, prefix):
     assert client.get(f"{prefix}/health").json()["status"] == "ok"
 
 
-def test_v2_reads_the_timetable_and_not_search_ch(client, search_ch):
-    """Without a database, /v2 says so - it does not fall back to search.ch."""
-    search_ch.returns([{"label": "Bern", "id": "8507000", "iconclass": "sl-icon-type-train"}])
-
-    assert client.get("/v1/locations", params={"query": "Bern"}).json()["stations"]
-    answer = client.get("/v2/locations", params={"query": "Bern"})
+@pytest.mark.parametrize("prefix", PREFIXES)
+def test_without_a_database_both_prefixes_say_so(client, prefix):
+    """There is no other source to fall back to."""
+    answer = client.get(f"{prefix}/locations", params={"query": "Bern"})
     assert answer.status_code == 503
-    assert len(search_ch.requests) == 1
-
-
-def test_v2_connections_still_ask_search_ch(client, search_ch):
-    search_ch.returns({"connections": [], "points": []})
-    client.get("/v2/connections", params={"from": "Bern", "to": "Basel"})
-    assert search_ch.last.url.path.endswith("route.json")
+    assert "not configured" in answer.json()["errors"][0]["message"]
 
 
 def test_the_api_version_is_the_one_the_prefix_promises(client):
@@ -71,7 +61,7 @@ def test_a_browser_may_call_it_from_anywhere(client):
     assert response.headers["access-control-allow-origin"] == "*"
 
 
-def test_the_bytes_are_the_ones_php_would_have_written(client, search_ch):
+def test_the_bytes_are_the_ones_php_would_have_written(client, timetable):
     """Not just the same data - the same encoding.
 
     `json_encode` escapes non-ASCII and forward slashes; nothing else does.
@@ -79,7 +69,7 @@ def test_the_bytes_are_the_ones_php_would_have_written(client, search_ch):
     but one that matches on raw bytes can, and there are tens of thousands of
     unattended callers nobody can survey.
     """
-    search_ch.returns([{"label": "Zürich HB", "id": "8503000", "dist": 1}])
+    timetable.returns([station("8503000", "Zürich HB", 47.378177, 8.540212)])
 
     raw = client.get("/v1/locations", params={"query": "Z"}).content
 
@@ -87,17 +77,12 @@ def test_the_bytes_are_the_ones_php_would_have_written(client, search_ch):
     assert "ü".encode() not in raw
 
 
-def test_a_slash_in_a_value_is_escaped_too(client, search_ch):
-    search_ch.returns(
-        {
-            "stop": {"id": "1", "name": "Somewhere"},
-            "connections": [{"time": "2026-09-24 09:00:00", "track": "43/44"}],
-        }
-    )
+def test_a_slash_in_a_value_is_escaped_too(client, timetable):
+    timetable.returns([station(None, "Bern, Bahnhof/Bubenbergplatz", 46.948, 7.439)])
 
-    raw = client.get("/v1/stationboard", params={"station": "x"}).content
+    raw = client.get("/v1/locations", params={"query": "x"}).content
 
-    assert b'"43\\/44"' in raw
+    assert b'"Bern, Bahnhof\\/Bubenbergplatz"' in raw
 
 
 def test_plans_beyond_the_router_capacity_are_refused(monkeypatch):

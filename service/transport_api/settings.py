@@ -19,18 +19,8 @@ TIMEZONE = "Europe/Zurich"
 # build time; a working copy says "dev".
 VERSION = os.environ.get("SERVICE_VERSION", "dev")
 
-# Where the upstream timetable lives - the one address the whole service is
-# about. Overridable so that a replay stub can take its place in a test run
-# without touching anything else.
-UPSTREAM_URL = os.environ.get("UPSTREAM_URL", "https://timetable.search.ch/api/")
-
-# Seconds to wait for search.ch, just inside the 60 the vhost allows.
-#
-# /v1 sets no timeout at all, and a cross-border query has been measured at
-# nine seconds - so a shorter limit here would answer 500 where /v1 answers
-# data, which is a difference we would have introduced ourselves. Waiting is
-# cheap in this service in a way it is not in the old one: the request is
-# awaited, not blocking a process.
+# Seconds to wait for the router, just inside the 60 the vhost allows.
+# (The name is from when the upstream was search.ch.)
 UPSTREAM_TIMEOUT = float(os.environ.get("UPSTREAM_TIMEOUT", "55"))
 
 # The Redis that /stats.php reads, e.g. `redis://redis:6379/0` - the same one
@@ -82,8 +72,8 @@ GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
 GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
 OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 
-# The router behind /v2/connections (MOTIS, on the same feed), e.g.
-# `http://motis:8080`. Unset, /v2/connections asks search.ch as /v1 does.
+# The router behind /connections (MOTIS, on the same feed), e.g.
+# `http://motis:8080`. Unset, /connections answers 503.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
 
 # Journey plans one worker asks the router at once, and how long a plan may
@@ -95,11 +85,6 @@ MOTIS_QUEUE_SECONDS = float(os.environ.get("MOTIS_QUEUE_SECONDS", "3"))
 # from the cache. Home Assistant asks the same one every 90 seconds, so a
 # little more than that answers every second poll (see response_cache.py).
 CONNECTIONS_NOW_CACHE_SECONDS = int(os.environ.get("CONNECTIONS_NOW_CACHE_SECONDS", "100"))
-
-# Which source answers /v1. On, /v1 (and its alias /v2) answer from our own
-# timetable and router, and the search.ch translation moves to /v1-old. Off,
-# /v1 asks search.ch as it always has, and /v2 is the timetable experiment.
-V1_FROM_TIMETABLE = os.environ.get("V1_FROM_TIMETABLE", "0") not in ("0", "false", "")
 
 # The Swiss OpenStreetMap extract, for the router's walks between stops - a
 # bus stop and a station are rarely linked in the timetable itself. Unset, the

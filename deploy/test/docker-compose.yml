@@ -26,8 +26,6 @@ services:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
       MOTIS_URL: http://motis:8080
-      # /v1 answers from the timetable; search.ch stays at /v1-old.
-      V1_FROM_TIMETABLE: "1"
     depends_on:
       redis: {condition: service_healthy}
       # Started, not healthy: /v1 must not wait for the timetable database

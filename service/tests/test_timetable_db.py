@@ -200,12 +200,6 @@ def test_board_without_a_stop_is_empty(api):
     assert _board(api) == {"station": None, "stationboard": []}
 
 
-def test_v1_is_untouched(api, search_ch):
-    search_ch.returns([])
-    api.get("/v1/locations", params={"query": "Bern"})
-    assert search_ch.requests, "/v1 still asks search.ch"
-
-
 def test_a_delay_holds_until_the_next_report(api):
     # Reported at the first stop only; GTFS-RT means it to carry on.
     run(_sql("INSERT INTO rt.stop_delay VALUES ('t-morning', $1, 1, NULL, 4)", TODAY))

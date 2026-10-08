@@ -27,7 +27,8 @@ uvicorn transport_api.main:app --reload --port 8000
 Or with Redis, from the repository root: `docker compose up --build`, then
 `http://localhost:8000/`.
 
-The tests read recorded search.ch answers from `tests/fixtures/`. Nothing in
+The timetable tests need a Postgres in `TEST_DATABASE_URL` (CI has one) and
+are skipped without it; the router is replaced by recorded answers. Nothing in
 the suite touches the network.
 
 ## /v1 does not change
@@ -38,25 +39,25 @@ because tens of thousands of unattended clients depend on it. Its oddities are
 reproduced on purpose and named where they sit in the code, among them:
 
 - `stations` is the key, although the list carries addresses too;
-- `x` is latitude and `y` longitude, computed from the Swiss grid;
+- `x` is latitude and `y` longitude;
 - `score` is always `null`; `icon` is missing rather than `null`;
 - a repeated parameter without brackets keeps its last value (PHP's `parse_str`);
 - times with fractions of a second and day-first dates are accepted (`phptime.py`);
 - JSON is escaped like `json_encode` (`ü`, `\/`);
-- errors keep the `{"errors": [{"message": …}]}` envelope, and an upstream `429`
-  is passed through.
+- errors keep the `{"errors": [{"message": …}]}` envelope; a busy router is a
+  `429`.
 
-`tools/diff_v1_v2.py` and `tools/shadow.py` compare two running
-implementations request by request; they were how this one was checked against
-the PHP one.
+`tools/shadow.py` and `tools/compare_random.py` compare two running hosts
+request by request; they were how this one was checked against the PHP one and
+against search.ch.
 
 ## Things this service must keep doing
 
 - **Europe/Zurich.** The image sets `TZ`; `/v1/health` reports the zone with
   its offset, so a container on UTC shows up in the smoke test.
-- **Forward the caller.** search.ch rate-limits on the IP address, User-Agent
-  and optional `key` we pass along. `X-Forwarded-For` is trusted from anyone, so
-  the container must only be reachable through the proxy in front of it.
+- **Know the caller.** The statistics tell clients apart by their address.
+  `X-Forwarded-For` is trusted from anyone, so the container must only be
+  reachable through the proxy in front of it.
 - **Count for /stats.php.** With `REDIS_URL` set, every API request is counted
   in the keys the PHP application used (`statistics.py`). The website and the
   statistics page are not counted. A Redis failure never costs an answer.
@@ -67,7 +68,7 @@ the PHP one.
   GitLab.
 - `tools/smoke.py <base URL>` asks a running instance what breaks silently:
   build and timezone, website, statistics page, error envelope, one question to
-  search.ch. CI runs it against the image it just built (`smoke:image`), and
+  the timetable. CI runs it against the image it just built (`smoke:image`), and
   offers it as buttons against staging and production after a deploy
   (`smoke:staging`, `smoke:production`).
 

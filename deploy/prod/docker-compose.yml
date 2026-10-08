@@ -2,9 +2,9 @@
 # and the website around it, Redis keeps the counters behind /stats.php, and
 # access-log keeps the vhost's access log.
 #
-# /v2 answers from our own copy of the national timetable: `db` holds it,
-# `ingest` loads it from opentransportdata.swiss (feed and real time), and
-# `motis` routes /v2/connections on the same feed. /v1 still asks search.ch.
+# /v1 (and /v2) answer from our own copy of the national timetable: `db`
+# holds it, `ingest` loads it from opentransportdata.swiss (feed and real
+# time), and `motis` routes connections on the same feed.
 #
 # The image is built by the CI of gitlab.com/opendata.ch/Transport and pulled
 # from its registry; nothing is built here. The registry is public, so no
@@ -44,8 +44,6 @@ services:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
       MOTIS_URL: http://motis:8080
-      # /v1 answers from the timetable; search.ch stays at /v1-old.
-      V1_FROM_TIMETABLE: "1"
     depends_on:
       redis: {condition: service_healthy}
       # Started, not healthy: /v1 must not wait for the timetable or router.

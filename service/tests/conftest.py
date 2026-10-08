@@ -1,68 +1,63 @@
-"""Test fixtures, including the recorded search.ch answers.
+"""Test fixtures.
 
-`fixtures/` holds recorded search.ch answers paired with the answer /v1 gave
-to each - the corpus the PHP suite was built on, and the proof that this
-service answers as that implementation did.
+`timetable` stands in for the database and the router, for the tests that are
+about what happens around an answer - headers, encoding, `fields[]`,
+statistics - rather than about the timetable itself. The timetable is tested
+against a real Postgres in test_timetable_db.py and
+test_timetable_connections.py.
 """
 
-import json
-from pathlib import Path
-
-import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from transport_api import settings
-from transport_api import upstream as upstream_module
+from transport_api import errors
 from transport_api.main import app
-from transport_api.upstream import Upstream
-
-FIXTURES = Path(__file__).resolve().parent / "fixtures"
-
-
-def fixture(name: str):
-    """Read a recorded upstream answer, e.g. `locations/searchch_response.json`."""
-    return json.loads((FIXTURES / name).read_text())
+from transport_api.timetable import connections, db, locations, router, stationboard
+from transport_api.timetable.mapping import location
 
 
-class FakeSearchCh:
-    """search.ch, replaced by something that answers on command and remembers.
+class FakeTimetable:
+    """The timetable, replaced by something that answers on command and remembers.
 
-    It is an `httpx.MockTransport`, so the code under test still builds a real
-    request - which is how the tests can assert what was actually sent.
+    `/locations?query=` gives the stations set with `returns`; a station board
+    and a connection search find no stop and give their empty answers.
+    `raises` makes every one of them fail instead.
     """
 
     def __init__(self) -> None:
-        self.requests: list[httpx.Request] = []
-        self._respond = lambda request: httpx.Response(200, json=[])
-        self._client = httpx.AsyncClient(
-            base_url=settings.UPSTREAM_URL,
-            transport=httpx.MockTransport(self._handle),
-        )
+        self.queries: list[str] = []
+        self._stations: list[dict] = []
+        self._error: errors.ApiError | None = None
 
-    def returns(self, payload, status_code: int = 200) -> None:
-        self._respond = lambda request: httpx.Response(status_code, json=payload)
+    def returns(self, stations: list[dict]) -> None:
+        self._stations = stations
 
-    def returns_text(self, text: str, status_code: int = 200) -> None:
-        self._respond = lambda request: httpx.Response(status_code, text=text)
+    def raises(self, error: errors.ApiError) -> None:
+        self._error = error
 
-    def raises(self, error: Exception) -> None:
-        def respond(request: httpx.Request) -> httpx.Response:
-            raise error
+    async def by_query(self, pool, motis, query: str, kind: str) -> list[dict]:
+        self.queries.append(query)
+        self._fail()
+        return self._stations
 
-        self._respond = respond
+    async def station(self, pool, wanted: str):
+        self.queries.append(wanted)
+        self._fail()
+        return None
 
-    def _handle(self, request: httpx.Request) -> httpx.Response:
-        self.requests.append(request)
-        return self._respond(request)
+    async def endpoint(self, pool, motis, text: str):
+        self.queries.append(text)
+        self._fail()
+        return None
 
-    @property
-    def last(self) -> httpx.Request:
-        assert self.requests, "nothing was sent upstream"
-        return self.requests[-1]
+    def _fail(self) -> None:
+        if self._error is not None:
+            raise self._error
 
-    def upstream(self) -> Upstream:
-        return Upstream(self._client)
+
+def station(id_: str | None, name: str, lat: float, lon: float, **extra) -> dict:
+    """A location as /v1 writes it."""
+    return location(id_, name, lat, lon, **extra)
 
 
 @pytest.fixture
@@ -71,8 +66,13 @@ def client() -> TestClient:
 
 
 @pytest.fixture
-def search_ch():
-    fake = FakeSearchCh()
-    app.dependency_overrides[upstream_module.get_upstream] = fake.upstream
+def timetable(monkeypatch):
+    fake = FakeTimetable()
+    monkeypatch.setattr(locations, "_by_query", fake.by_query)
+    monkeypatch.setattr(stationboard, "_station", fake.station)
+    monkeypatch.setattr(connections, "_endpoint", fake.endpoint)
+    app.dependency_overrides[db.get_pool] = lambda: None
+    app.dependency_overrides[router.get_motis] = lambda: None
+    app.dependency_overrides[router.motis_or_none] = lambda: None
     yield fake
     app.dependency_overrides.clear()

@@ -6,9 +6,8 @@ history runs on from 2012 across the change of implementation. The page itself
 is `stats_page.py`.
 
 The exception classes are recorded under the names the PHP gave them, where
-the failure is the same one: a timeout of search.ch is still a
-`Buzz\\Exception\\RequestException` on the page, because what the reader wants
-to know is how often search.ch did not answer, not which library noticed.
+the failure is the same one: a 404 is still a `NotFoundHttpException` on the
+page. The classes that named a failure of search.ch stay in the history.
 
 On top of what the PHP always counted there are four things (the PHP counted
 them too in its last weeks, with the same rules):
@@ -56,7 +55,6 @@ NAME_MAX = 80
 
 # The PHP exception class names, for the failures that are the same failure.
 EXCEPTION = "Exception"
-REQUEST_EXCEPTION = "Buzz\\Exception\\RequestException"
 NOT_FOUND = "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"
 METHOD_NOT_ALLOWED = "Symfony\\Component\\HttpKernel\\Exception\\MethodNotAllowedHttpException"
 BAD_REQUEST = "Symfony\\Component\\HttpKernel\\Exception\\BadRequestHttpException"
@@ -84,7 +82,7 @@ CLIENT_KINDS = [
 ]
 
 # Paths that are the service watching itself, not a client asking.
-UNCOUNTED = ("/v1/health", "/v2/health", "/v1-old/health")
+UNCOUNTED = ("/v1/health", "/v2/health")
 
 
 def connect():

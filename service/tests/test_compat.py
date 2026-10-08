@@ -3,13 +3,15 @@
 Each expectation is what the PHP host answered on 24. September 2026.
 """
 
-from conftest import fixture
+from conftest import station
 
 from transport_api.encoding import PhpErrorJson
 
+BERN = station("8507000", "Bern", 46.948832, 7.439131, icon="train")
 
-def test_head_is_answered_like_get_without_a_body(client, search_ch):
-    search_ch.returns(fixture("locations/searchch_response.json"))
+
+def test_head_is_answered_like_get_without_a_body(client, timetable):
+    timetable.returns([BERN])
 
     response = client.head("/v1/locations", params={"query": "Bern"})
 
@@ -18,8 +20,8 @@ def test_head_is_answered_like_get_without_a_body(client, search_ch):
     assert response.headers["content-type"] == "application/json"
 
 
-def test_every_answer_allows_any_origin_and_no_caching(client, search_ch):
-    search_ch.returns(fixture("locations/searchch_response.json"))
+def test_every_answer_allows_any_origin_and_no_caching(client, timetable):
+    timetable.returns([BERN])
 
     response = client.get("/v1/locations", params={"query": "Bern"})
 
@@ -27,8 +29,8 @@ def test_every_answer_allows_any_origin_and_no_caching(client, search_ch):
     assert response.headers["cache-control"] == "no-cache"
 
 
-def test_the_origin_header_is_not_doubled(client, search_ch):
-    search_ch.returns(fixture("locations/searchch_response.json"))
+def test_the_origin_header_is_not_doubled(client, timetable):
+    timetable.returns([BERN])
 
     response = client.get(
         "/v1/locations", params={"query": "Bern"}, headers={"Origin": "https://example.org"}

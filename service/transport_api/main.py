@@ -2,22 +2,11 @@
 
 It answers **`/v1`**, the contract tens of thousands of unattended clients
 speak, written to be indistinguishable from the PHP application it replaced,
-and **`/v2`**: the same parameters and the same JSON, but locations and station
-boards read from our own copy of the national timetable (`timetable/`)
-instead of search.ch, and connections come from our own router (MOTIS) when
-MOTIS_URL is set - otherwise from search.ch.
+and its alias **`/v2`**. Both answer from our own copy of the national
+timetable (`timetable/`) and our own router (MOTIS). Until October 2026 /v1
+translated the answers of search.ch; that path is gone.
 
-Stage S6 is what made `/v1` the documented prefix here. Until then this service
-refused the whole `/v1` surface on purpose, so that a routing mistake could not
-shadow the old contract with a half-built answer. That guard has done its work
-and is retired; the PHP application now serves only the website around the
-API.
-
-The machine-readable description covers `/v1`. `/v2` is an experiment and is
-kept out of the document until it has been compared long enough.
-
-With V1_FROM_TIMETABLE on, the timetable answers `/v1` as well, and the
-search.ch translation moves to `/v1-old`.
+The machine-readable description covers `/v1`.
 """
 
 from contextlib import asynccontextmanager
@@ -35,16 +24,12 @@ from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from . import (
     compat,
-    connections,
     errors,
     licenses_page,
-    locations,
     response_cache,
     settings,
-    stationboard,
     statistics,
     stats_page,
-    upstream,
 )
 from .models import ApiInfo
 from .timetable import board_page, routing_ui
@@ -58,18 +43,15 @@ from .timetable import stationboard as timetable_stationboard
 # thing; only the first is described.
 PREFIX = "/v1"
 ALIAS = "/v2"
-# The search.ch translation, once /v1 answers from the timetable.
-OLD = "/v1-old"
 
 # What `/v1/` and `/v2/` report about themselves. /v1 says 1.0 because that is
 # what it has always said and the answer is compared byte for byte.
-API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0", OLD: "1.0"}
+API_VERSIONS = {PREFIX: "1.0", ALIAS: "2.0"}
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """One connection pool for the life of the process, not one per request."""
-    app.state.http = upstream.build_client()
     app.state.timetable = await timetable_db.connect()
     app.state.motis = (
         httpx.AsyncClient(base_url=settings.MOTIS_URL, timeout=settings.UPSTREAM_TIMEOUT)
@@ -81,7 +63,6 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-        await app.state.http.aclose()
         if app.state.timetable is not None:
             await app.state.timetable.close()
         if app.state.motis is not None:
@@ -96,12 +77,7 @@ app = FastAPI(
     summary="The Swiss public transport API",
     description=(
         "Timetable data for Swiss public transport, from the national timetable "
-        "and its real-time feed on [opentransportdata.swiss](https://opentransportdata.swiss/). "
-        "The answers of search.ch, which this API translated before, stay at `/v1-old`."
-        if settings.V1_FROM_TIMETABLE
-        else "Timetable data for Swiss public transport, from "
-        "[search.ch](https://timetable.search.ch/). This service translates; "
-        "it stores nothing."
+        "and its real-time feed on [opentransportdata.swiss](https://opentransportdata.swiss/)."
     ),
     lifespan=lifespan,
     # Under the prefix, so that the nginx location block is the only thing that
@@ -129,10 +105,8 @@ app.add_middleware(
     statistics_of=lambda: getattr(app.state, "statistics", None),
 )
 
-# X-Forwarded-For becomes the request's client address. This is the single
-# most consequential line in the service: search.ch rate-limits on the caller
-# we name, so without it every caller in the world shares one bucket and
-# throttles each other - and the only symptom is a rise in 429s. It is done
+# X-Forwarded-For becomes the request's client address, so that the
+# statistics tell callers apart rather than counting nginx as one. It is done
 # here rather than by a uvicorn flag so that a test can exercise it.
 # Trusting every proxy is safe because the container is never reached except
 # through the nginx in front of it.
@@ -190,26 +164,13 @@ def info_of(api_version: str):
     return info
 
 
-def from_search_ch(prefix: str) -> bool:
-    """Whether a prefix is answered by the search.ch translation."""
-    return prefix == OLD or (prefix == PREFIX and not settings.V1_FROM_TIMETABLE)
-
-
 for prefix, api_version in API_VERSIONS.items():
     router = APIRouter(prefix=prefix)
     router.add_api_route("/", info_of(api_version), summary="What this API is")
     router.add_api_route("/health", health, summary="Liveness and identity of the service")
-    if from_search_ch(prefix):
-        router.include_router(locations.router, tags=["locations"])
-        router.include_router(stationboard.router, tags=["stationboard"])
-        router.include_router(connections.router, tags=["connections"])
-    else:
-        router.include_router(timetable_locations.router, tags=["locations"])
-        router.include_router(timetable_stationboard.router, tags=["stationboard"])
-        router.include_router(
-            timetable_connections.router if settings.MOTIS_URL else connections.router,
-            tags=["connections"],
-        )
+    router.include_router(timetable_locations.router, tags=["locations"])
+    router.include_router(timetable_stationboard.router, tags=["stationboard"])
+    router.include_router(timetable_connections.router, tags=["connections"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
 
 
