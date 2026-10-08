@@ -154,6 +154,7 @@ async def search_connections(
         "detailedTransfers": "false",
         "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
+        "pedestrianSpeed": settings.MOTIS_PEDESTRIAN_SPEED,
     }
     if truthy(shared_mobility) and shared_mobility.lower() not in ("0", "false"):
         # A shared vehicle may take the place of the walk to the first stop

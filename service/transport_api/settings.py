@@ -106,3 +106,10 @@ GTFS_WALK_SETS_TRANSFER = os.environ.get("GTFS_WALK_SETS_TRANSFER", "1") not in 
 # 15 minutes, which loses connections search.ch finds with a 16-minute walk
 # at either end (Yverdon-les-Bains to Philosophes).
 MOTIS_MAX_WALK_SECONDS = int(os.environ.get("MOTIS_MAX_WALK_SECONDS", "1200"))
+
+# Walking speed, metres a second, on the way to the first stop and from the
+# last. The router walks along the streets to the platform itself, at about
+# 1.2 by default: near a large station that came out minutes longer than
+# search.ch's walks. 1.4 is about 5 km/h, what journey planners assume.
+# Walks between stops are fixed when the router imports and are not changed.
+MOTIS_PEDESTRIAN_SPEED = os.environ.get("MOTIS_PEDESTRIAN_SPEED", "1.4")

@@ -196,19 +196,19 @@
                     <tr>
                         <td><code>from</code></td>
                         <td>required</td>
-                        <td>Specifies the departure location of the connection</td>
-                        <td>Lausanne</td>
+                        <td class="description">Specifies the departure location of the connection: a stop (name or id), an address, or a coordinate <code>latitude,longitude</code> in WGS84. From an address or a coordinate the connection begins with the walk to the first stop.</td>
+                        <td>Lausanne<br><code>46.5168,6.6291</code></td>
                     </tr>
                     <tr>
                         <td><code>to</code></td>
                         <td>required</td>
-                        <td>Specifies the arrival location of the connection</td>
+                        <td class="description">Specifies the arrival location of the connection, in the same forms as <code>from</code></td>
                         <td>Genève</td>
                     </tr>
                     <tr>
                         <td><code>via</code></td>
                         <td>optional</td>
-                        <td class="description">Specifies up to five via locations. When specifying several vias, array notation (<code>via[]=via1&amp;via[]=via2</code>) is required.</td>
+                        <td class="description">Specifies up to two via stops. When specifying several vias, array notation (<code>via[]=via1&amp;via[]=via2</code>) is required.</td>
                         <td>Bern</td>
                     </tr>
                     <tr>
@@ -957,7 +957,7 @@
             <h4>Connections</h4>
             <ul>
                 <li><strong>How:</strong> computed here by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner (MIT licence), on the very file of timetable days the database holds and on the same real-time feed, read every minute. For a journey it finds the connections that are best in arrival time and in the number of changes, and <code>/connections</code> writes them in the form <code>/v1</code> has always used: sections, products, platforms, delays.</li>
-                <li><strong>Changes and walks:</strong> transfer times are those of the national timetable, per station; where the timetable gives a walk to a neighbouring stop that is shorter than the station's transfer time, the walk counts, as in the official journey planners. Walks between stops the timetable does not link, and the way from an address to the first stop and from the last stop to the destination, follow the streets of OpenStreetMap - up to 20 minutes on foot.</li>
+                <li><strong>Changes and walks:</strong> transfer times are those of the national timetable, per station; where the timetable gives a walk to a neighbouring stop that is shorter than the station's transfer time, the walk counts, as in the official journey planners. Walks between stops the timetable does not link, and the way from an address or a coordinate to the first stop and from the last stop to the destination, follow the streets of OpenStreetMap - up to 20 minutes on foot. The way to the first stop and from the last is walked at 1.4 m/s (about 5 km/h) to the platform itself, so near a large station it can take a few minutes more than to the station's entrance.</li>
                 <li><strong>In the API:</strong> each new timetable and each weekly move of the days held rebuilds the planner, which takes 10 to 20 minutes. It is built beside the running one, which keeps answering until the new one takes over within seconds.</li>
             </ul>
 

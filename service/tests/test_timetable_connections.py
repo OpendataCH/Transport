@@ -269,6 +269,8 @@ def test_a_connection_in_the_shape_of_v1(api):
     assert api.motis.params["fromPlace"] == "ch_ch:1:sloid:1"
     assert api.motis.params["toPlace"] == "ch_8500003"
     assert api.motis.params["directModes"] == ""
+    # About 5 km/h to the first stop, as journey planners walk.
+    assert api.motis.params["pedestrianSpeed"] == "1.4"
 
     assert answer["from"]["id"] == "8500001"
     assert answer["stations"]["to"][0]["name"] == "Gamma, Dorf"
