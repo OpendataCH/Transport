@@ -34,12 +34,12 @@ test:service:
     - ruff check .
     - ruff format --check .
     # The report and the coverage show up in merge requests and on the
-    # pipeline; below 90 % the job fails.
+    # pipeline; below 94 % the job fails.
     - >-
       pytest -q
       --junitxml=report.xml
       --cov=transport_api --cov-report=term --cov-report=xml:coverage.xml
-      --cov-fail-under=90
+      --cov-fail-under=94
   coverage: '/^TOTAL.*\s(\d+)%$/'
   artifacts:
     when: always

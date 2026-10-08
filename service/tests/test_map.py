@@ -135,3 +135,92 @@ def test_station_ids_are_those_of_v1():
     assert tmap._station_id("ch_Parentch:1:sloid:3000") == "8503000"
     assert tmap._station_id("ch_ch:1:sloid:2119:3:2") == "8502119"
     assert tmap._station_id("ch_8500002:0:1") == "8500002"
+    assert tmap._station_id(None) is None
+
+
+def test_a_point_that_is_no_coordinate_is_refused(api):
+    response = api.get("/v2/map/vehicles", params={"min": "Bern", "max": "47.05,7.50"})
+    assert response.status_code == 400
+    assert "latitude,longitude" in response.json()["errors"][0]["message"]
+
+
+def test_the_stations_are_the_busiest_first(api, monkeypatch):
+    async def fetch(pool, query, *args):
+        return [
+            {
+                "id": "8507000",
+                "name": "Bern",
+                "lat": 46.9488321,
+                "lon": 7.4391,
+                "mode": "train",
+                "departures": 1200,
+            }
+        ]
+
+    monkeypatch.setattr(tmap.db, "fetch", fetch)
+    response = api.get("/v2/map/stations")
+    assert response.json()["stations"] == [["8507000", "Bern", 46.948832, 7.4391, "train", 1200]]
+    assert "max-age" in response.headers["cache-control"]
+
+
+class Unreachable(FakeMotis):
+    """Nothing on foot from the point asked for; everything from a station."""
+
+    async def get(self, path, params):
+        if path == "/api/v6/one-to-all" and params["one"] != "ch_station":
+            self.calls.append((path, params))
+            return {"all": []}
+        answer = await super().get(path, params)
+        # A place the router cannot name, and one without a time: both left out.
+        answer["all"] += [{"place": {}, "duration": 3}, {"place": {"name": "X"}}]
+        return answer
+
+
+def test_reachable_starts_at_the_nearest_station_when_nothing_is_on_foot(api, monkeypatch):
+    motis = Unreachable()
+    api.app.dependency_overrides[tmap.get_motis] = lambda: motis
+
+    async def fetch(pool, query, *args):
+        return [{"id": "8507000", "name": "Bern", "lat": 46.9488, "lon": 7.4391}]
+
+    async def router_place(pool, start):
+        return "ch_station"
+
+    monkeypatch.setattr(tmap.db, "fetch", fetch)
+    monkeypatch.setattr(tmap, "router_place", router_place)
+    answer = api.get(
+        "/v2/map/reachable", params={"x": 47.2, "y": 7.2, "time": "2026-10-05T08:00:00Z"}
+    ).json()
+
+    assert answer["from"] == {"lat": 46.9488, "lon": 7.4391, "id": "8507000", "name": "Bern"}
+    assert [s["id"] for s in answer["stops"]] == ["8500002"]
+    assert motis.calls[0][1]["time"] == "2026-10-05T08:00:00Z"
+
+
+def test_an_unknown_trip_is_a_404(api):
+    class NoTrip(FakeMotis):
+        async def get(self, path, params):
+            return {"legs": []}
+
+    api.app.dependency_overrides[tmap.get_motis] = lambda: NoTrip()
+    response = api.get("/v2/map/trip", params={"id": "nothing"})
+    assert response.status_code == 404
+
+
+def test_a_delay_needs_both_times():
+    assert tmap._delay(None, "2026-10-05T06:00:00Z") is None
+    assert tmap._delay("2026-10-05T06:00:00Z", "2026-10-05T06:03:30Z") == 3
+
+
+def test_the_cache_drops_what_has_expired_once_it_is_full(monkeypatch):
+    import asyncio
+
+    tmap._cache.clear()
+    for index in range(2001):
+        tmap._cache[("old", index)] = (0.0, index)
+
+    async def produce():
+        return "fresh"
+
+    assert asyncio.run(tmap._cached(("new",), 60, produce)) == "fresh"
+    assert list(tmap._cache) == [("new",)]

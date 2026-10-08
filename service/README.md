@@ -64,7 +64,7 @@ against search.ch.
 
 ## Checks
 
-- `pytest` in CI, with a JUnit report and coverage (at least 90 %) shown in
+- `pytest` in CI, with a JUnit report and coverage (at least 94 %) shown in
   GitLab.
 - `tools/smoke.py <base URL>` asks a running instance what breaks silently:
   build and timezone, website, statistics page, error envelope, one question to
