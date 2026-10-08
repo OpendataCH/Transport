@@ -1,5 +1,6 @@
 """/stats.php, read from the keys the PHP application and this service write."""
 
+import asyncio
 import json
 from datetime import datetime, timedelta
 
@@ -323,3 +324,16 @@ def test_the_day_view_has_the_last_30_days_with_the_429s(client, redis):
         "ratelimited": 40,
     }
     assert days[0]["calls"] == 0 and days[0]["rate"] is None
+
+
+def test_the_most_asked_for_over_days_are_summed_in_redis(redis):
+    redis.zadd("stats:top:routes:2026-10-07", {"Bern → Thun": 5, "Basel → Olten": 9})
+    redis.zadd("stats:top:routes:2026-10-08", {"Bern → Thun": 7, "Zug → Baar": 1})
+    reader = stats_page.Reader(app.state.statistics.redis)
+
+    top = asyncio.run(reader.top_places("routes", ["2026-10-07", "2026-10-08"], count=2))
+
+    assert top == [("Bern → Thun", 12.0), ("Basel → Olten", 9.0)]
+    # Only the top crosses the wire; the union stays in Redis for a minute.
+    (union,) = redis.keys("stats:tmp:top:routes:*")
+    assert 0 < redis.ttl(union) <= 60

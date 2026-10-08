@@ -341,10 +341,13 @@ class Reader:
             return []
         if len(keys) == 1:
             return await self._redis.zrevrange(keys[0], 0, count - 1, withscores=True)
-        # ZUNION answers lowest first, ties in ascending order; reversed, that is
-        # exactly ZREVRANGE's order over the union.
-        union = await self._redis.zunion(keys, withscores=True)
-        return list(reversed(union))[:count]
+        # The union is built in Redis and only its top is read back. Today's set
+        # is not trimmed until the day is over - 32'000 pairs on 8 October 2026 -
+        # and carrying all of it across took longer than REDIS_TIMEOUT allows.
+        union = f"stats:tmp:top:{kind}:{dates[0]}:{dates[-1]}:{len(dates)}"
+        await self._redis.zunionstore(union, keys)
+        await self._redis.expire(union, 60)
+        return await self._redis.zrevrange(union, 0, count - 1, withscores=True)
 
     async def recorded_place_days(self, dates: list[str]) -> list[str]:
         """The days among `dates` that have any station or pair counted, oldest first."""
