@@ -352,4 +352,7 @@ def test_places_keep_to_the_town_asked_for():
     assert places._in_town([museum], "Museum, Luzern") == [museum]
     assert places._in_town([willisau, luzern], "Bahnhofplatz 5") == [willisau, luzern]
     assert places._in_town([luzern], "Bahnhofplatz 5, 6003 Luzern") == [luzern]
+    # Town first, as search.ch and /locations name an address.
+    assert places._in_town([willisau, luzern], "Luzern, Bahnhofplatz 5") == [luzern]
+    assert places._in_town([willisau, luzern], "6003 Luzern, Bahnhofplatz 5") == [luzern]
     assert places.house_number("Weberstrasse 9.1, Aarburg") == "9.1"

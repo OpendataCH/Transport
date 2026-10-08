@@ -106,16 +106,22 @@ async def search(
 
 
 def _in_town(places: list[Place], text: str) -> list[Place]:
-    """Only the places in the town a query names after its comma.
+    """Only the places in the town a query names beside its comma.
 
     "Bahnhofplatz 5, Luzern" means Luzern, however well a Bahnhofplatz 5
     elsewhere matches the street. An address in another town is dropped -
     no answer is better than a wrong one; a point of interest stays, after
     those in the town, since its name is what was asked for.
+
+    The town is the side without the house number: after the comma as people
+    write it, before the comma as search.ch and /locations name an address
+    ("Zürich, Bahnhofbrücke 1"), which clients pass on to /connections.
     """
     if "," not in text:
         return places
-    town = normalize(re.sub(r"\b\d{4}\b", "", text.rsplit(",", 1)[1]))
+    head, tail = (re.sub(r"\b\d{4}\b", "", part) for part in text.rsplit(",", 1))
+    side = head if house_number(tail) and not house_number(head) else tail
+    town = normalize(side)
     if not town:
         return places
 
