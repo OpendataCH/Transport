@@ -7,7 +7,7 @@ the timetable database, so that a connection names its stops and its trains
 exactly as the station board does.
 
 Differences to /v1 that follow from the source: at most two `via` stops (what
-MOTIS takes), no addresses, no pass-through points in a pass list.
+MOTIS takes), no pass-through points in a pass list.
 """
 
 import re
@@ -33,6 +33,7 @@ from ..mapping import DEPRECATED_TYPES, ZURICH, duration_of
 from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
 from . import db, places
+from .locations import _exact_metres
 from .mapping import journey, line_number, location, stop
 from .names import normalize, operator_name
 from .router import Motis, get_motis, motis_or_none  # noqa: F401 - re-exported
@@ -223,13 +224,18 @@ async def _arrival_page(motis: "Motis", params: dict, limit: int, page: int) -> 
 async def _endpoint(
     pool: asyncpg.Pool, motis: Motis, text: str
 ) -> "asyncpg.Record | places.Place | None":
-    """Where a connection starts or ends: a stop, an address or a point of interest.
+    """Where a connection starts or ends: a coordinate, a stop, an address or
+    a point of interest.
 
-    A text with a house number is tried as an address first - a stop of that
+    A coordinate is taken as it stands; the router walks from it to the stops
+    nearby. A text with a house number is tried as an address first - a stop of that
     name would be a coincidence, a street with that name a near certainty.
     Otherwise a stop, and an address or a point of interest when no stop
     matches.
     """
+    coordinate = places.point(text)
+    if coordinate is not None:
+        return await _at(motis, *coordinate)
     station = await _station(pool, text)
     if text.isdigit() or (station is not None and normalize(station["name"]) == normalize(text)):
         return station
@@ -240,6 +246,21 @@ async def _endpoint(
         return station
     matches = await places.search(motis, text, ("address", "poi"), limit=1)
     return matches[0] if matches else None
+
+
+async def _at(motis: Motis, lat: float, lon: float) -> places.Place:
+    """A coordinate as a place: where it is, named after the address there.
+
+    The connection starts at the point asked for, not at the address; without
+    an address nearby the name is the coordinate itself.
+    """
+    name = f"{lat},{lon}"
+    address = await places.nearest_address(motis, lat, lon)
+    if address is not None and (
+        _exact_metres(lat, lon, address.lat, address.lon) <= places.NEAREST_ADDRESS_METRES
+    ):
+        name = address.name
+    return places.Place(name=name, lat=lat, lon=lon, kind="address")
 
 
 async def _router_place(pool: asyncpg.Pool, end) -> str:

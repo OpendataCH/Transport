@@ -27,6 +27,9 @@ KINDS = {"address": "ADDRESS", "poi": "PLACE"}
 # The administrative level of a Swiss municipality in OpenStreetMap.
 MUNICIPALITY = 8
 
+# "47.3769,8.5417": a point in WGS84 degrees, latitude first.
+POINT = re.compile(r"^\s*(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)\s*$")
+
 
 @dataclass
 class Place:
@@ -43,6 +46,21 @@ class Place:
     def coordinate(self) -> str:
         """The form the router takes for a place that is no stop."""
         return f"{self.lat},{self.lon}"
+
+
+def point(text: str) -> tuple[float, float] | None:
+    """The latitude and longitude `text` gives, when it is nothing but a coordinate.
+
+    search.ch took `from=47.3769,8.5417` as a start of its own, and /v1 passed
+    the parameter through - undocumented, but in use.
+    """
+    match = POINT.match(text)
+    if match is None:
+        return None
+    lat, lon = float(match.group(1)), float(match.group(2))
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+        return None
+    return lat, lon
 
 
 def house_number(text: str) -> str | None:

@@ -19,7 +19,7 @@ from gtfs_feed import TODAY, write_feed
 from transport_api import errors
 from transport_api.models import ConnectionsResponse
 from transport_api.timetable import connections as v2
-from transport_api.timetable import importer
+from transport_api.timetable import importer, places
 
 
 def test_trip_id_drops_day_time_and_dataset():
@@ -196,6 +196,18 @@ GEOCODE = [
     }
 ]
 
+REVERSE_GEOCODE = [
+    {
+        "type": "ADDRESS",
+        "street": "Neufeldstrasse",
+        "houseNumber": "101",
+        "zip": "3012",
+        "lat": 46.957123,
+        "lon": 7.434012,
+        "areas": [{"name": "Bern", "adminLevel": 8.0}],
+    }
+]
+
 
 class FakeMotis:
     def __init__(self) -> None:
@@ -206,6 +218,8 @@ class FakeMotis:
         return PLAN
 
     async def get(self, path, params):
+        if path == "/api/v1/reverse-geocode":
+            return REVERSE_GEOCODE if params["place"].startswith("46.9") else []
         assert path == "/api/v1/geocode"
         return GEOCODE if "Neufeld" in params["text"] else []
 
@@ -336,6 +350,50 @@ def test_a_connection_from_an_address_starts_at_its_coordinate(api):
     assert answer["from"]["id"] is None
     assert answer["from"]["name"] == "Bern, Neufeldstrasse 101"
     assert answer["from"]["coordinate"]["x"] == 46.957123
+
+
+@needs_database
+def test_a_connection_from_a_coordinate_starts_at_that_point(api):
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "46.9572,7.4341", "to": "8500003", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    # The point asked for, not the address that names it.
+    assert api.motis.params["fromPlace"] == "46.9572,7.4341"
+    assert answer["from"]["id"] is None
+    assert answer["from"]["name"] == "Neufeldstrasse 101, 3012 Bern"
+    assert answer["from"]["coordinate"]["x"] == 46.9572
+    assert answer["connections"]
+
+
+@needs_database
+def test_a_coordinate_without_an_address_nearby_is_its_own_name(api):
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "Alpha", "to": "47.5, 8.25", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    assert api.motis.params["toPlace"] == "47.5,8.25"
+    assert answer["to"]["name"] == "47.5,8.25"
+
+
+@needs_database
+def test_an_address_too_far_off_does_not_name_a_coordinate(api):
+    # About 330 metres north of Neufeldstrasse 101.
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "46.96,7.4341", "to": "8500003", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    assert api.motis.params["fromPlace"] == "46.96,7.4341"
+    assert answer["from"]["name"] == "46.96,7.4341"
+
+
+def test_only_a_bare_coordinate_is_a_point():
+    assert places.point("47.3769,8.5417") == (47.3769, 8.5417)
+    assert places.point(" 46.95 , 7.43 ") == (46.95, 7.43)
+    assert places.point("Bern") is None
+    assert places.point("8507000") is None
+    assert places.point("Weberstrasse 9, Aarburg") is None
+    assert places.point("91.0,8.5") is None
 
 
 @needs_database
