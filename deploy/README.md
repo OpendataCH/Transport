@@ -20,8 +20,9 @@ MOTIS (`ghcr.io/motis-project/motis`).
 3. Prod only: copy `prod/transport.slice` to `/etc/systemd/system/` and run
    `systemctl daemon-reload`. Every container sits below it
    (`cgroup_parent`), so the stack shares one memory cap of 7 GB without swap
-   and yields CPU and disk to the portal. Without the file systemd still
-   creates the slice, but with no limits at all.
+   and yields CPU and disk to the portal. Without the file systemd would still
+   create the slice, only with no limits at all, so `slice-check` in the
+   compose file stops `docker compose up` until the cap is there.
 4. `docker compose up -d`. The ingest container downloads the timetable
    feeds and imports them; MOTIS waits for the first window and builds from it.
 

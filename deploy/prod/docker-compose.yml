@@ -38,6 +38,30 @@ x-gentle-io: &gentle-io
         rate: 300
 
 services:
+  # Refuses to bring the stack up outside its envelope. Without
+  # /etc/systemd/system/transport.slice, systemd still creates the slice for
+  # cgroup_parent, only with no limit at all - the stack would run exactly as
+  # it did before 9.10.2026, and nothing would say so. This reads the cap and
+  # fails when there is none; the services below wait for it to succeed.
+  slice-check:
+    image: redis:8-alpine
+    cgroup_parent: transport.slice
+    restart: "no"
+    command:
+      - sh
+      - -c
+      - >-
+        test "$$(cat /memory.max)" != max ||
+        { echo "transport.slice has no memory cap: install deploy/prod/transport.slice"; exit 1; }
+    volumes:
+      - type: bind
+        source: /sys/fs/cgroup/transport.slice/memory.max
+        target: /memory.max
+        read_only: true
+        bind:
+          create_host_path: false
+    network_mode: none
+
   service:
     image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
     mem_limit: 1g
@@ -107,6 +131,8 @@ services:
     restart: unless-stopped
     cgroup_parent: transport.slice
     entrypoint: ["sh", "/motis-run.sh"]
+    depends_on:
+      slice-check: {condition: service_completed_successfully}
     environment:
       OTD_API_KEY: ${OTD_API_KEY:-}
       MOTIS_PAST_DAYS: "7"
@@ -171,6 +197,8 @@ services:
       timeout: 5s
       retries: 10
     # Internal only: no published port.
+    depends_on:
+      slice-check: {condition: service_completed_successfully}
     networks: [transport]
 
   # The access log of the transport vhost: nginx sends it over syslog, this
@@ -194,6 +222,8 @@ services:
     healthcheck:
       disable: true
     ports: ["172.18.0.1:5514:5514/udp"]
+    depends_on:
+      slice-check: {condition: service_completed_successfully}
     networks: [transport]
 
   redis:
@@ -210,6 +240,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    depends_on:
+      slice-check: {condition: service_completed_successfully}
     networks: [transport]
 
 volumes:
