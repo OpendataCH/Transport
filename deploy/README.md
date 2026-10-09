@@ -17,7 +17,12 @@ MOTIS (`ghcr.io/motis-project/motis`).
    `docker/motis-run.sh` and (prod) `docker/access_log_receiver.py`.
 2. Copy `env.example` to `/opt/transport/.env` and fill it in. It is the only
    place secrets live.
-3. `docker compose up -d`. The ingest container downloads the timetable
+3. Prod only: copy `prod/transport.slice` to `/etc/systemd/system/` and run
+   `systemctl daemon-reload`. Every container sits below it
+   (`cgroup_parent`), so the stack shares one memory cap of 7 GB without swap
+   and yields CPU and disk to the portal. Without the file systemd still
+   creates the slice, but with no limits at all.
+4. `docker compose up -d`. The ingest container downloads the timetable
    feeds and imports them; MOTIS waits for the first window and builds from it.
 
 ## Deploy a build

@@ -1,0 +1,13 @@
+# Envelope for the transport.opendata.ch stack (/opt/transport): all its
+# containers run below this slice (cgroup_parent). Above MemoryHigh the kernel
+# reclaims and throttles the stack, MemoryMax is the hard cap, no swap. Low
+# CPU/IO weight: under contention the portal wins, transport gets slower.
+[Unit]
+Description=transport.opendata.ch containers
+
+[Slice]
+MemoryHigh=6G
+MemoryMax=7G
+MemorySwapMax=0
+CPUWeight=20
+IOWeight=20
