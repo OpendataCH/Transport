@@ -1,0 +1,164 @@
+# transport.opendata.ch on its second host, since 11.10.2026: the API service,
+# the timetable database, its loader, the router and the counters behind
+# /stats.php. On OPEN-PRD they took the portal down twice the same day - first
+# the router's memory, then, with the router moved, the database's CPU.
+#
+# The public entry stays on OPEN-PRD: DNS, the shared nginx (plain http without
+# a redirect for the devices that cannot follow one, the access log) and the
+# vhost's upstream 172.18.0.1:8086. There a tunnel container publishes that
+# port and forwards it over ssh to 127.0.0.1:18086 here (deploy/prod; 8086 is
+# taken on this host).
+#
+# The service trusts X-Forwarded-For from anyone (ProxyHeadersMiddleware,
+# trusted_hosts="*"), which is safe only because it is published on loopback
+# and reached through that tunnel alone. Never publish it on another address.
+#
+# .env: SERVICE_IMAGE_TAG, DB_PASSWORD, OTD_API_KEY (one key per environment,
+# five requests a minute: ingest takes two, motis one).
+#
+# The host carries other services: every container has a fixed share.
+name: transport
+
+x-logging: &logging
+  logging:
+    driver: json-file
+    options: {max-size: "20m", max-file: "3"}
+
+services:
+  service:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 2g
+    memswap_limit: 2g
+    cpus: 4
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      WEB_CONCURRENCY: "6"
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      MOTIS_URL: http://motis:8080
+    depends_on:
+      redis: {condition: service_healthy}
+      db: {condition: service_started}
+      motis: {condition: service_started}
+    ports: ["127.0.0.1:18086:8000"]
+    networks: [transport]
+    <<: *logging
+
+  # The timetable loader: the feed when a new one appears, real time every 30
+  # seconds. One process, so that the API workers do not each poll the key.
+  ingest:
+    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
+    mem_limit: 3g
+    memswap_limit: 3g
+    cpus: 2
+    pull_policy: always
+    restart: unless-stopped
+    command: ["python", "-m", "transport_api.timetable.ingest"]
+    healthcheck:
+      disable: true
+    environment:
+      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
+      GTFS_DAYS: "90"
+      GTFS_WINDOW_STEP_DAYS: "7"
+      GTFS_PAST_DAYS: "7"
+      OTD_API_KEY: ${OTD_API_KEY:-}
+      OSM_URL: https://download.geofabrik.de/europe/switzerland-latest.osm.pbf
+    volumes:
+      - gtfscache:/var/cache/gtfs
+    depends_on:
+      db: {condition: service_healthy}
+    networks: [transport]
+    <<: *logging
+
+  # The router behind /connections; motis-run.sh is docker/motis-run.sh from
+  # this repository, copied next to this file. It follows /gtfs/CURRENT.
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    mem_limit: 8g
+    memswap_limit: 8g
+    cpus: 6
+    restart: unless-stopped
+    entrypoint: ["sh", "/motis-run.sh"]
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+      MOTIS_PAST_DAYS: "7"
+      MOTIS_DAYS: "150"
+      MOTIS_OSM: /gtfs/osm/switzerland.osm.pbf
+      MOTIS_TILES: "1"
+      MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
+      MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
+      MOTIS_REVERSE_GEOCODING: "1"
+    volumes:
+      - ./motis-run.sh:/motis-run.sh:ro
+      - gtfscache:/gtfs:ro
+      - motisdata:/data
+    networks: [transport]
+    <<: *logging
+
+  db:
+    image: postgres:18-alpine
+    # Room for the whole timetable in memory: station boards and the stops of
+    # every connection are read from here, dozens of times a second.
+    mem_limit: 6g
+    memswap_limit: 6g
+    cpus: 4
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: transport
+    # Everything in here is reloaded from the feed, so a lost commit costs
+    # nothing.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=2GB
+      - -c
+      - effective_cache_size=4GB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - work_mem=32MB
+      - -c
+      - synchronous_commit=off
+      - -c
+      - max_wal_size=2GB
+      - -c
+      - max_connections=200
+    shm_size: 2560m
+    volumes:
+      - timetable:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "transport"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [transport]
+    <<: *logging
+
+  redis:
+    image: redis:8-alpine
+    mem_limit: 512m
+    restart: unless-stopped
+    # The counters behind /stats are the only state; an RDB snapshot every few
+    # minutes is enough.
+    command: ["redis-server", "--save", "300", "10", "--appendonly", "no"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [transport]
+    <<: *logging
+
+volumes:
+  redisdata:
+  timetable:
+  gtfscache:
+  motisdata:
+
+networks:
+  transport:

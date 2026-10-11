@@ -1,135 +1,27 @@
-# transport.opendata.ch, containerised: one service answers the API under /v1
-# and the website around it, Redis keeps the counters behind /stats.php, and
-# access-log keeps the vhost's access log.
+# transport.opendata.ch on OPEN-PRD: only the public entry since 11.10.2026.
 #
-# /v1 (and /v2) answer from our own copy of the national timetable: `db`
-# holds it, `ingest` loads it from opentransportdata.swiss (feed and real
-# time), and `motis` routes connections on the same feed.
+# The API, its timetable database, the loader, the router and the counters
+# behind /stats.php run on a second host (deploy/oparl). Here they took the
+# portal down twice in one day: first the router's memory, then - with the
+# router moved - the database's CPU, at an ordinary 60 requests a second.
 #
-# The image is built by the CI of gitlab.com/opendata.ch/Transport and pulled
-# from its registry; nothing is built here. The registry is public, so no
-# credentials are needed. To move to another build, change SERVICE_IMAGE_TAG
-# in .env and run `docker compose up -d` - and to roll back, put the old tag
-# back. That is the whole deployment procedure.
+# What stays here is what the outside world sees: DNS, the shared nginx with
+# the transport vhost (plain http without a redirect, the connection cap, the
+# access log) and its upstream 172.18.0.1:8086. That port is now published by
+# `edge`, an ssh tunnel to the service on the second host. MOTIS_SSH_DEST in
+# .env names user@host; the key in ./motis-link may forward the service's port
+# there and nothing else. nginx keeps setting X-Forwarded-For, so the service
+# still sees and counts the real callers.
 #
-# .env also holds DB_PASSWORD (internal only) and OTD_API_KEY (GTFS-RT,
-# Bitwarden "opentransportdata.swiss - API-Manager"; one key per environment,
-# five requests a minute: ingest takes two, motis one).
-#
-# This host freezes under many small disk accesses (see the portal's notes on
-# OPEN-PRD), and the timetable containers are the ones that write in bulk. They
-# are capped in operations per second on sda, which holds /mnt/data/docker, and
-# in memory, so that an import can slow itself down but never the portal.
-#
-# The whole stack runs below transport.slice (deploy/prod/transport.slice in
-# /etc/systemd/system): 7 GB at most together, throttled above 6 GB, no swap,
-# and a low CPU and IO weight. Each limit below is also its memswap_limit, since
-# Docker otherwise allows as much swap again - on 9.10.2026 that let the stack
-# push the host into swap until it froze, at a steady load of requests.
+# Back to the local stack: the previous revision of this file (service, db,
+# ingest, motis, redis); their volumes are still on this host.
 name: transport
 
-x-gentle-io: &gentle-io
-  blkio_config:
-    device_read_iops:
-      - path: /dev/sda
-        rate: 300
-    device_write_iops:
-      - path: /dev/sda
-        rate: 300
-
 services:
-  # Refuses to bring the stack up outside its envelope. Without
-  # /etc/systemd/system/transport.slice, systemd still creates the slice for
-  # cgroup_parent, only with no limit at all - the stack would run exactly as
-  # it did before 9.10.2026, and nothing would say so. This reads the cap and
-  # fails when there is none; the services below wait for it to succeed.
-  slice-check:
-    image: redis:8-alpine
-    cgroup_parent: transport.slice
-    restart: "no"
-    command:
-      - sh
-      - -c
-      - >-
-        test "$$(cat /memory.max)" != max ||
-        { echo "transport.slice has no memory cap: install deploy/prod/transport.slice"; exit 1; }
-    volumes:
-      - type: bind
-        source: /sys/fs/cgroup/transport.slice/memory.max
-        target: /memory.max
-        read_only: true
-        bind:
-          create_host_path: false
-    network_mode: none
-
-  service:
-    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
-    mem_limit: 1g
-    memswap_limit: 1g
-    pull_policy: always
-    restart: unless-stopped
-    cgroup_parent: transport.slice
-    environment:
-      WEB_CONCURRENCY: "3"
-      # The Redis stats.php reads: /v1 is answered here, so this service keeps
-      # the counters the PHP one used to write. Unset, nothing is counted.
-      REDIS_URL: redis://redis:6379/0
-      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
-      MOTIS_URL: http://motis:8080
-    depends_on:
-      redis: {condition: service_healthy}
-      # Started, not healthy: /v1 must not wait for the timetable or router.
-      db: {condition: service_started}
-      motis: {condition: service_started}
-    # Published on the opendata-net gateway: the reverse proxy is the only
-    # thing that may reach it.
-    ports: ["172.18.0.1:8086:8000"]
-    networks: [transport]
-
-  # The timetable loader: the feed when a new one appears (to its end, seven
-  # days back), real time every 30 seconds. One process, so that the API
-  # workers do not each poll against the key's limit.
-  ingest:
-    image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
-    mem_limit: 1500m
-    memswap_limit: 1500m
-    <<: *gentle-io
-    pull_policy: always
-    restart: unless-stopped
-    cgroup_parent: transport.slice
-    command: ["python", "-m", "transport_api.timetable.ingest"]
-    # The image's check asks the API on port 8000, which this process is not.
-    healthcheck:
-      disable: true
-    environment:
-      DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
-      # 90 days ahead: across the timetable change the window reads two
-      # years, and to the end of the next one would not fit the router.
-      GTFS_DAYS: "90"
-      # Moved on weekly: each move rebuilds the router, map tiles included.
-      GTFS_WINDOW_STEP_DAYS: "7"
-      GTFS_PAST_DAYS: "7"
-      OTD_API_KEY: ${OTD_API_KEY:-}
-      # The Swiss OpenStreetMap extract for the router, renewed monthly.
-      OSM_URL: https://download.geofabrik.de/europe/switzerland-latest.osm.pbf
-    volumes:
-      - gtfscache:/var/cache/gtfs
-    depends_on:
-      db: {condition: service_healthy}
-    networks: [transport]
-
-  # The router behind /connections runs on a second host since 11.10.2026
-  # (deploy/motis-oparl): here it shared 12 GB with the portal and pushed the
-  # host into swap. This container is only the way to it - an ssh tunnel,
-  # under the name the service already asks (MOTIS_URL=http://motis:8080).
-  # MOTIS_SSH_DEST in .env names user@host; the key in ./motis-link may
-  # forward that one port and write into the router's timetable folder,
-  # nothing else. Back to a local router: the motis service of the previous
-  # revision of this file.
-  motis:
+  edge:
     image: alpine:3.22
-    mem_limit: 64m
-    memswap_limit: 64m
+    mem_limit: 128m
+    memswap_limit: 128m
     restart: unless-stopped
     cgroup_parent: transport.slice
     entrypoint:
@@ -141,82 +33,20 @@ services:
         -o UserKnownHostsFile=/k/known_hosts -o StrictHostKeyChecking=yes
         -o BatchMode=yes -o ExitOnForwardFailure=yes
         -o ServerAliveInterval=15 -o ServerAliveCountMax=3
-        -L 0.0.0.0:8080:127.0.0.1:8090 $${MOTIS_SSH_DEST}
+        -L 0.0.0.0:8086:127.0.0.1:18086 $${MOTIS_SSH_DEST}
     environment:
       MOTIS_SSH_DEST: ${MOTIS_SSH_DEST:?MOTIS_SSH_DEST in .env}
     volumes:
       - ./motis-link:/k:ro
-    networks: [transport]
-
-  # Pushes the window ingest imported, and the OSM extract, to the router
-  # (motis-link/gtfs-sync.sh): it must route on the feed this database holds.
-  gtfs-sync:
-    image: alpine:3.22
-    mem_limit: 128m
-    memswap_limit: 128m
-    restart: unless-stopped
-    cgroup_parent: transport.slice
-    entrypoint: ["sh", "/k/gtfs-sync.sh"]
-    environment:
-      MOTIS_SSH_DEST: ${MOTIS_SSH_DEST:?MOTIS_SSH_DEST in .env}
-    volumes:
-      - ./motis-link:/k:ro
-      - gtfscache:/g:ro
-    networks: [transport]
-
-  db:
-    image: postgres:18-alpine
-    # Enough for the hot part of the timetable to stay in memory (shared
-    # buffers and the file cache both count here): a station board read from
-    # disk is a hundred times slower than one read from memory.
-    mem_limit: 2560m
-    memswap_limit: 2560m
-    # Writes are capped like the other bulk writers; reads are not - a cold
-    # read under a cap is what made station boards take seconds.
-    blkio_config:
-      device_write_iops:
-        - path: /dev/sda
-          rate: 300
-    restart: unless-stopped
-    cgroup_parent: transport.slice
-    environment:
-      POSTGRES_USER: transport
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: transport
-    # Everything in here is reloaded from the feed, so a lost commit costs
-    # nothing; sized for a host that runs a good deal besides.
-    command:
-      - postgres
-      - -c
-      - shared_buffers=768MB
-      - -c
-      - effective_cache_size=1792MB
-      - -c
-      - maintenance_work_mem=512MB
-      - -c
-      - work_mem=32MB
-      - -c
-      - synchronous_commit=off
-      - -c
-      - max_wal_size=2GB
-    shm_size: 512m
-    volumes:
-      - timetable:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "transport"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    # Internal only: no published port.
-    depends_on:
-      slice-check: {condition: service_completed_successfully}
+    # Published on the opendata-net gateway: the reverse proxy is the only
+    # thing that may reach it.
+    ports: ["172.18.0.1:8086:8086"]
     networks: [transport]
 
   # The access log of the transport vhost: nginx sends it over syslog, this
   # keeps it as daily files for 30 days (access_log_receiver.py, from docker/
   # in the repository). It runs in the image of the Python service because
-  # that has Python and the Zurich zone already. Root inside, only to write
-  # to a fresh named volume; it listens on the gateway alone, like the others.
+  # that has Python and the Zurich zone already.
   access-log:
     image: registry.gitlab.com/opendata.ch/transport/service:${SERVICE_IMAGE_TAG:-latest}
     restart: unless-stopped
@@ -233,34 +63,10 @@ services:
     healthcheck:
       disable: true
     ports: ["172.18.0.1:5514:5514/udp"]
-    depends_on:
-      slice-check: {condition: service_completed_successfully}
-    networks: [transport]
-
-  redis:
-    image: redis:8-alpine
-    restart: unless-stopped
-    cgroup_parent: transport.slice
-    # The counters behind /stats are the only state; an RDB snapshot every few
-    # minutes is enough, and losing a few is not worth an AOF write per request.
-    command: ["redis-server", "--save", "300", "10", "--appendonly", "no"]
-    volumes:
-      - redisdata:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      slice-check: {condition: service_completed_successfully}
     networks: [transport]
 
 volumes:
-  redisdata:
   accesslogs:
-  timetable:
-  gtfscache:
-  motisdata:
 
 networks:
   transport:
