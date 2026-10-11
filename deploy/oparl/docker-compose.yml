@@ -37,10 +37,11 @@ services:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
       MOTIS_URL: http://motis:8080
-      # "From now" connections kept 50 s instead of the default 100: delays
-      # at most that old. Home Assistant's 90-second poll now always misses,
-      # which this host can carry (decided 11.10.2026).
-      CONNECTIONS_NOW_CACHE_SECONDS: "50"
+      # "From now" connections kept 60 s instead of the default 100: the
+      # router takes real time in once a minute, so a shorter cache is hardly
+      # fresher and a longer one only older. Home Assistant's 90-second poll
+      # now always misses, which this host can carry (decided 11.10.2026).
+      CONNECTIONS_NOW_CACHE_SECONDS: "60"
     depends_on:
       redis: {condition: service_healthy}
       db: {condition: service_started}
