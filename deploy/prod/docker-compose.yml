@@ -118,39 +118,50 @@ services:
       db: {condition: service_healthy}
     networks: [transport]
 
-  # The router behind /connections. motis-run.sh (from the repository's
-  # docker/ folder, copied next to this file) imports the window named in
-  # /gtfs/CURRENT - written by the importer - and follows it.
+  # The router behind /connections runs on a second host since 11.10.2026
+  # (deploy/motis-oparl): here it shared 12 GB with the portal and pushed the
+  # host into swap. This container is only the way to it - an ssh tunnel,
+  # under the name the service already asks (MOTIS_URL=http://motis:8080).
+  # MOTIS_SSH_DEST in .env names user@host; the key in ./motis-link may
+  # forward that one port and write into the router's timetable folder,
+  # nothing else. Back to a local router: the motis service of the previous
+  # revision of this file.
   motis:
-    image: ghcr.io/motis-project/motis:2.11.3
-    # The import of the window to the end of the feed peaks near 2.5 GB, with
-    # the street network near 3.7 GB.
-    mem_limit: 6g
-    memswap_limit: 6g
-    <<: *gentle-io
+    image: alpine:3.22
+    mem_limit: 64m
+    memswap_limit: 64m
     restart: unless-stopped
     cgroup_parent: transport.slice
-    entrypoint: ["sh", "/motis-run.sh"]
-    depends_on:
-      slice-check: {condition: service_completed_successfully}
+    entrypoint:
+      - sh
+      - -c
+      - >-
+        apk add -q --no-cache openssh-client &&
+        exec ssh -N -i /k/id_ed25519
+        -o UserKnownHostsFile=/k/known_hosts -o StrictHostKeyChecking=yes
+        -o BatchMode=yes -o ExitOnForwardFailure=yes
+        -o ServerAliveInterval=15 -o ServerAliveCountMax=3
+        -L 0.0.0.0:8080:127.0.0.1:8090 $${MOTIS_SSH_DEST}
     environment:
-      OTD_API_KEY: ${OTD_API_KEY:-}
-      MOTIS_PAST_DAYS: "7"
-      MOTIS_DAYS: "150"
-      # Fetched by ingest; walks between stops along streets once it is there.
-      MOTIS_OSM: /gtfs/osm/switzerland.osm.pbf
-      # Map tiles and place search for the router page at /routing/.
-      MOTIS_TILES: "1"
-      # Bikes, scooters and cars to rent (sharedmobility.ch, BFE): the
-      # address is how the feed asks callers to identify themselves.
-      MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
-      MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
-      # The address nearest a coordinate, first in /locations?x&y.
-      MOTIS_REVERSE_GEOCODING: "1"
+      MOTIS_SSH_DEST: ${MOTIS_SSH_DEST:?MOTIS_SSH_DEST in .env}
     volumes:
-      - ./motis-run.sh:/motis-run.sh:ro
-      - gtfscache:/gtfs:ro
-      - motisdata:/data
+      - ./motis-link:/k:ro
+    networks: [transport]
+
+  # Pushes the window ingest imported, and the OSM extract, to the router
+  # (motis-link/gtfs-sync.sh): it must route on the feed this database holds.
+  gtfs-sync:
+    image: alpine:3.22
+    mem_limit: 128m
+    memswap_limit: 128m
+    restart: unless-stopped
+    cgroup_parent: transport.slice
+    entrypoint: ["sh", "/k/gtfs-sync.sh"]
+    environment:
+      MOTIS_SSH_DEST: ${MOTIS_SSH_DEST:?MOTIS_SSH_DEST in .env}
+    volumes:
+      - ./motis-link:/k:ro
+      - gtfscache:/g:ro
     networks: [transport]
 
   db:

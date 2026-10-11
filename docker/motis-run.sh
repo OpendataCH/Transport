@@ -41,7 +41,9 @@ wanted() {
     f=$(feed)
     [ -n "$f" ] || return 0
     o=$(osm)
-    if [ -n "$o" ]; then f="$f+osm$(wc -c < "$o" | tr -d ' ')"; fi
+    # stat, not `wc -c`: busybox wc reads the whole 550 MB extract to count
+    # it, and this runs every minute.
+    if [ -n "$o" ]; then f="$f+osm$(stat -c %s "$o")"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_GBFS_URL:-}" ]; then f="$f+gbfs"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_REVERSE_GEOCODING:-}" ]; then f="$f+rgeo"; fi

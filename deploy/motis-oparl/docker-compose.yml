@@ -1,0 +1,46 @@
+# The router behind transport.opendata.ch/v1/connections, moved off OPEN-PRD
+# on 11.10.2026: there it shared 12 GB with the portal and pushed the host into
+# swap twice. Everything else of the API (service, database, ingest, Redis)
+# stays on OPEN-PRD; only the routing runs here.
+#
+# Reachable only on loopback. OPEN-PRD reaches it through an ssh tunnel as
+# user `transport`, whose key may forward 127.0.0.1:8090 and write into
+# ./gtfs through rrsync, nothing else (/home/transport/.ssh/authorized_keys).
+# OPEN-PRD's `gtfs-sync` container pushes the timetable window it imported and
+# the OSM extract into ./gtfs, CURRENT last; motis-run.sh (a copy of
+# docker/motis-run.sh from gitlab.com/opendata.ch/Transport) follows CURRENT
+# and rebuilds. The router must read the very window the database on OPEN-PRD
+# holds, or stop and trip ids would not match - so it is never fetched here.
+#
+# .env holds OTD_API_KEY (real time, the PRD key; one request a minute).
+name: transport-motis
+
+services:
+  motis:
+    image: ghcr.io/motis-project/motis:2.11.3
+    entrypoint: ["sh", "/motis-run.sh"]
+    restart: unless-stopped
+    # The host carries other services; the router gets a fixed share of it.
+    mem_limit: 8g
+    memswap_limit: 8g
+    cpus: 6
+    environment:
+      OTD_API_KEY: ${OTD_API_KEY:-}
+      MOTIS_PAST_DAYS: "7"
+      MOTIS_DAYS: "150"
+      MOTIS_OSM: /gtfs/osm/switzerland.osm.pbf
+      MOTIS_TILES: "1"
+      MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
+      MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
+      MOTIS_REVERSE_GEOCODING: "1"
+    volumes:
+      - ./motis-run.sh:/motis-run.sh:ro
+      - ./gtfs:/gtfs:ro
+      - motisdata:/data
+    ports: ["127.0.0.1:8090:8080"]
+    logging:
+      driver: json-file
+      options: {max-size: "20m", max-file: "3"}
+
+volumes:
+  motisdata:
