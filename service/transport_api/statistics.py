@@ -171,6 +171,11 @@ def client_kind(user_agent: str | None, origin: str | None = None) -> str:
     ai = ai_client(user_agent, origin)
     if ai is not None:
         return ai[1]
+    return plain_kind(user_agent)
+
+
+def plain_kind(user_agent: str | None) -> str:
+    """The kind of client a User-Agent names before AI clients had kinds of their own."""
     if not user_agent or user_agent == "-":
         return "none"
     for kind, pattern in CLIENT_KINDS:
