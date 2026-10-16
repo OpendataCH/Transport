@@ -135,6 +135,30 @@ def test_the_window_names_the_ai_clients(client, redis):
     ]
 
 
+def test_a_window_of_years_reads_the_daily_counters_and_only_the_hours_that_are_left(
+    client, redis, monkeypatch
+):
+    now = datetime.now(ZONE)
+    day(redis, (now - timedelta(days=3000)).date().isoformat(), 70, errors=7)
+    day(redis, now.date().isoformat(), 30)
+    redis.hset(f"stats:hourly:{now:%Y-%m-%dT%H}", mapping={"calls": 30, "client:ai-agent": 2})
+    asked = []
+    hourly = stats_page.Reader.hourly
+
+    async def counting(self, hours, at):
+        asked.append(hours)
+        return await hourly(self, hours, at)
+
+    monkeypatch.setattr(stats_page.Reader, "hourly", counting)
+
+    data = client.get("/stats.php", params={"format": "window", "window": "3650d"}).json()
+
+    assert data["window"] == "3650d"
+    assert (data["calls"], data["errors"]) == (100, 7)
+    assert asked == [statistics.HOURLY_TTL // 3600]
+    assert data["clientKinds"][0]["requests"] == 2
+
+
 def test_an_unknown_window_is_the_last_day(client, redis):
     data = client.get("/stats.php", params={"format": "window", "window": "1y"}).json()
 

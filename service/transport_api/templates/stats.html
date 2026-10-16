@@ -239,7 +239,7 @@
                 <span class="stats-window-loading text-muted" style="display: none;"><small>Loading …</small></span>
             </form>
 {%- endmacro %}
-            <section class="stats-pane" data-pane="clients" role="tabpanel" hidden>
+            <section class="stats-pane" id="tab-clients" data-pane="clients" role="tabpanel" hidden>
             <h2 id="clients">Who calls</h2>
             {{ window_control("clients", "who calls and requests by hour") }}
             <p class="text-muted" id="statsClientsNote"></p>
@@ -256,6 +256,7 @@
                         </thead>
                         <tbody id="statsClientKinds"></tbody>
                     </table>
+                    <p class="text-muted"><small class="stats-counted-from"></small></p>
                 </div>
                 <div class="col-sm-6">
                     <h3>Distinct clients per day</h3>
@@ -280,7 +281,7 @@
             </div>
             </section>
 
-            <section class="stats-pane" data-pane="ai" role="tabpanel" hidden>
+            <section class="stats-pane" id="tab-ai" data-pane="ai" role="tabpanel" hidden>
             <h2 id="ai">AI clients</h2>
             {{ window_control("ai", "AI clients") }}
             <p class="text-muted"><small>Requests from clients that say they are an AI or run inside one: crawlers that read for training and search, assistants fetching for a person (ChatGPT, Claude, Perplexity …), apps running in the Claude desktop app or built in Claude, ChatGPT, Lovable and the like (recognised by the page they call from), and agents and MCP servers that name themselves. Not counted: programs that someone wrote with the help of an AI (ChatGPT, Claude, Cursor …) and now runs on their own. They call the API with the user agent of their programming language, such as python-requests or node, and cannot be told apart from any other script. The real share of AI is therefore higher than this table shows. Recorded since 24. September 2026, the weeks before the service counted them itself filled in from the access logs.</small></p>
@@ -296,7 +297,9 @@
                             </tr>
                         </thead>
                         <tbody id="statsAiClients"></tbody>
+                        <tfoot id="statsAiTotal"></tfoot>
                     </table>
+                    <p class="text-muted"><small class="stats-counted-from"></small></p>
                 </div>
             </div>
             </section>
@@ -624,6 +627,7 @@
                             '</tr>';
                     });
                     $('#statsClientKinds').html(kinds.length ? kinds.join('') : empty(3, 'Nothing recorded in this window yet.'));
+                    countedFrom('#tab-clients', data);
 
                     var today = moment().format('YYYY-MM-DD');
                     var days = $.map(data.clientDays, function (d) {
@@ -647,6 +651,25 @@
                             '</tr>';
                     });
                     $('#statsAiClients').html(ai.length ? ai.join('') : empty(4, 'No AI client in this window.'));
+
+                    var total = 0;
+                    $.each(data.aiClients || [], function (i, c) {
+                        total += c.requests;
+                    });
+                    $('#statsAiTotal').html(ai.length ?
+                        '<tr><th>Total</th><th></th>' +
+                        '<th class="text-right stats-number">' + number(total) + '</th>' +
+                        '<th class="text-right stats-number">' + percent(total, data.kindsTotal, 2) + '</th></tr>' : '');
+                    countedFrom('#tab-ai', data);
+                }
+
+                // kinds of client live hourly for 35 days: a longer window says where it really starts
+                function countedFrom(pane, data) {
+                    var since = data.since ? moment(data.since) : null;
+                    var long = data.granularity === 'day' && since && since.isAfter(moment().subtract(parseInt(data.window, 10) || 0, 'days').add(1, 'day'));
+                    $(pane).find('.stats-counted-from').text(long || data.window === 'all'
+                        ? (since ? 'Counted from ' + since.format('DD.MM.YYYY HH:mm') + ' on: the counts by hour are kept for 35 days.' : '')
+                        : '');
                 }
 
                 function renderPlaces(data) {

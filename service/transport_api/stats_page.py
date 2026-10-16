@@ -21,7 +21,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .encoding import PhpErrorJson
-from .statistics import AI_CLIENTS, ZONE, summarise
+from .statistics import AI_CLIENTS, HOURLY_TTL, SUMMARY_TTL, TOP_TTL, ZONE, summarise
 
 router = APIRouter()
 
@@ -41,6 +41,10 @@ WINDOWS = {
     "7d": "Last 7 days",
     "14d": "Last 14 days",
     "30d": "Last 30 days",
+    "365d": "Last year",
+    "730d": "Last 2 years",
+    "1825d": "Last 5 years",
+    "3650d": "Last 10 years",
     "all": "Since 2015",
 }
 
@@ -407,7 +411,9 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
         ]
     else:
         days = 14 if key == "all" else size
-        buckets = await reader.hourly((days - 1) * 24 + now.hour + 1, now.timestamp())
+        # Hours past their lifetime are gone; a window of years reads only what is left.
+        hours = min((days - 1) * 24 + now.hour + 1, HOURLY_TTL // 3600)
+        buckets = await reader.hourly(hours, now.timestamp())
         daily = await reader.days(days, now.date())
 
         ratelimited: dict[str, int] = {}
@@ -489,17 +495,22 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
     async def top(kind: str) -> list[dict]:
         return [
             {"name": str(name), "requests": int(requests)}
-            for name, requests in await reader.top_places(kind, dates)
+            for name, requests in await reader.top_places(kind, place_dates)
         ]
 
+    # Likewise the daily sets: stations and pairs live 35 days, client summaries 400.
+    place_dates = dates[-(TOP_TTL // 86400) :]
+    client_dates = dates[-(SUMMARY_TTL // 86400) :]
     client_days = [
         {"date": date, **summary}
-        for date, summary in (await reader.client_days(dates, now.date().isoformat())).items()
+        for date, summary in (
+            await reader.client_days(client_dates, now.date().isoformat())
+        ).items()
     ]
 
     # The places are counted per calendar day, so the tables cover whole days
     # whatever the window says; the page names the days it actually shows.
-    place_days = await reader.recorded_place_days(dates)
+    place_days = await reader.recorded_place_days(place_dates)
     places_days = (
         {
             "from": place_days[0],
