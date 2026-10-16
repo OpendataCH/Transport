@@ -105,6 +105,10 @@ table.connections tr.section {
     margin-bottom: 20px;
 }
 
+.stats-tabs {
+    margin: 10px 0 20px 0;
+}
+
 .stats-window input[type="range"] {
     display: inline-block;
     width: 260px;

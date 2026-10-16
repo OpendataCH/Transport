@@ -134,6 +134,36 @@
 
         <article>
             <h2>Statistics</h2>
+            <script>
+            // the view lives in the query string, so a link opens the same tab and windows
+            var statsUrl = {
+                get: function (name) {
+                    var match = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.search);
+                    return match ? decodeURIComponent(match[1]) : null;
+                },
+                set: function (name, value, fallback) {
+                    var params = window.location.search.replace(/^\?/, '').split('&').filter(function (pair) {
+                        return pair && pair.split('=')[0] !== name;
+                    });
+                    if (value !== null && value !== fallback) {
+                        params.push(name + '=' + encodeURIComponent(value));
+                    }
+                    var query = params.length ? '?' + params.join('&') : window.location.pathname;
+                    window.history.replaceState(null, '', query + window.location.hash);
+                }
+            };
+            </script>
+
+            <ul class="nav nav-tabs stats-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="?tab=overview" data-tab="overview" role="tab">Overview</a></li>
+                <li role="presentation"><a href="?tab=clients" data-tab="clients" role="tab">Clients</a></li>
+                <li role="presentation"><a href="?tab=ai" data-tab="ai" role="tab">AI clients</a></li>
+                <li role="presentation"><a href="?tab=places" data-tab="places" role="tab">Stations &amp; connections</a></li>
+                <li role="presentation"><a href="?tab=errors" data-tab="errors" role="tab">Errors</a></li>
+                {% if sources %}<li role="presentation"><a href="?tab=sources" data-tab="sources" role="tab">Data sources</a></li>{% endif %}
+            </ul>
+
+            <section class="stats-pane" data-pane="overview" role="tabpanel">
             <div class="row">
                 <div class="col-sm-4">
                     <p>
@@ -183,7 +213,7 @@
                         <li class="text-muted">Nothing recorded yet.</li>
                         {% endfor %}
                     </ul>
-                    <p><small><a href="#places">More stations and connections</a></small></p>
+                    <p><small><a href="?tab=places" data-tab="places">More stations and connections</a></small></p>
                 </div>
                 <div class="col-sm-4">
                     <h2 title="Top 5 since 22. November 2015">Errors</h2>
@@ -192,12 +222,26 @@
                             <li title="{{ error.exception }}{% if error.description %} – {{ error.description }}{% endif %}"><span class="value">{{ error.name }}</span>{% if error.status %} <span class="label label-default">{{ error.status }}</span>{% endif %} <span class="text-disabled">{{ error.calls | number }}</span></li>
                         {% endfor %}
                     </ul>
-                    <p><small><a href="#error-details">All errors in detail</a></small></p>
+                    <p><small><a href="?tab=errors" data-tab="errors">All errors in detail</a></small></p>
                 </div>
             </div>
+            </section>
 
+{% macro window_control(part, title) -%}
+            <form class="form-inline stats-window" data-part="{{ part }}" onsubmit="return false;">
+                <label for="statsWindow-{{ part }}" class="sr-only">Time window for {{ title }}</label>
+                <select id="statsWindow-{{ part }}" class="form-control input-sm">
+                    {% for key, label in windows.items() %}
+                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <input type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window for {{ title }}">
+                <span class="stats-window-loading text-muted" style="display: none;"><small>Loading …</small></span>
+            </form>
+{%- endmacro %}
+            <section class="stats-pane" data-pane="clients" role="tabpanel" hidden>
             <h2 id="clients">Who calls</h2>
-            <p class="text-muted"><small>Time window: <span class="stats-window-label"></span> · <a href="#error-details">change</a></small></p>
+            {{ window_control("clients", "who calls") }}
             <p class="text-muted" id="statsClientsNote"></p>
             <div class="row">
                 <div class="col-sm-6">
@@ -229,7 +273,17 @@
                 </div>
             </div>
 
-            <h3 id="ai">AI clients</h3>
+            <h3>Requests by hour of the day</h3>
+            {{ window_control("profile", "requests by hour of the day") }}
+            <p class="text-muted"><small>Average requests per hour, rate-limited ones included, over the hours of the window that were recorded.</small></p>
+            <div style="position: relative;">
+                <canvas id="statsProfile" width="800" height="160" style="width: 100%;"></canvas>
+            </div>
+            </section>
+
+            <section class="stats-pane" data-pane="ai" role="tabpanel" hidden>
+            <h2 id="ai">AI clients</h2>
+            {{ window_control("ai", "AI clients") }}
             <p class="text-muted"><small>Requests from clients that say they are an AI or run inside one: crawlers that read for training and search, assistants fetching for a person (ChatGPT, Claude, Perplexity …), apps running in the Claude desktop app or built in Claude, ChatGPT, Lovable and the like (recognised by the page they call from), and agents and MCP servers that name themselves. A script an AI wrote for someone looks like any other script and is not counted here. Recorded since 24. September 2026, the weeks before the service counted them itself filled in from the access logs.</small></p>
             <div class="row">
                 <div class="col-sm-8">
@@ -246,15 +300,11 @@
                     </table>
                 </div>
             </div>
+            </section>
 
-            <h3>Requests by hour of the day</h3>
-            <p class="text-muted"><small>Average requests per hour, rate-limited ones included, over the hours of the window that were recorded.</small></p>
-            <div style="position: relative;">
-                <canvas id="statsProfile" width="800" height="160" style="width: 100%;"></canvas>
-            </div>
-
+            <section class="stats-pane" data-pane="places" role="tabpanel" hidden>
             <h2 id="places">What is asked for</h2>
-            <p class="text-muted"><small>Time window: <span class="stats-window-label"></span> · <a href="#error-details">change</a></small></p>
+            {{ window_control("places", "what is asked for") }}
             <p class="text-muted"><small>Counted exactly as the clients wrote them. A station can be asked for by its name or by its number, the Swiss stop ID (8507000 is Bern), and the count does not look either up: «Bern», «bern» and «8507000» are three entries for the same station, and a station may therefore rank lower than it is asked for. Rate-limited and failed requests are not counted.</small></p>
             <p id="statsPlacesDays"></p>
             <div class="row">
@@ -274,7 +324,10 @@
                 </div>
             </div>
 
+            </section>
+
             {% if sources %}
+            <section class="stats-pane" data-pane="sources" role="tabpanel" hidden>
             <h2 id="sources">Data sources</h2>
             <p class="text-muted"><small>What the API answers from, and when it was fetched. Each timetable file is a complete version, not a change to the one before; real time is a complete snapshot every 30 seconds. See <a href="docs.html#source">Source</a>.</small></p>
             <div class="row">
@@ -325,8 +378,10 @@
                     </table>
                 </div>
             </div>
+            </section>
             {% endif %}
 
+            <section class="stats-pane" data-pane="places" role="tabpanel" hidden>
             <h2 id="history">Stations 2012–2017</h2>
             <p class="text-muted"><small>The most asked-for stations from 10. August 2012 until 8. June 2017, when the API moved to timetable.search.ch and this count stopped.</small></p>
             <div class="row">
@@ -342,6 +397,9 @@
                 </div>
             </div>
 
+            </section>
+
+            <section class="stats-pane" data-pane="errors" role="tabpanel" hidden>
             <h2 id="error-rates">Calls and errors</h2>
             <p class="text-muted"><small>Errors are answers the API could not give: search.ch failing or timing out, unknown paths, wrong methods, invalid parameters. Rate-limited requests (HTTP 429) are not errors and not counted here. Errors are counted from 22. November 2015 on.</small></p>
             <div class="btn-group btn-group-sm stats-range" role="group" aria-label="Range of the chart">
@@ -362,7 +420,11 @@
                 };
                 var thisYear = String(new Date().getFullYear());
                 var today = moment().format('YYYY-MM-DD');
-                var range = 'years';
+                var range = statsUrl.get('chart') === 'days' ? 'days' : 'years';
+                $('.stats-range button').each(function () {
+                    var on = $(this).data('range') === range;
+                    $(this).toggleClass('active', on).attr('aria-pressed', on ? 'true' : 'false');
+                });
 
                 function thousands(value) {
                     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
@@ -448,6 +510,7 @@
 
                 $('.stats-range button').on('click', function () {
                     range = $(this).data('range');
+                    statsUrl.set('chart', range, 'years');
                     $('.stats-range button').removeClass('active').attr('aria-pressed', 'false');
                     $(this).addClass('active').attr('aria-pressed', 'true');
                     chart.data.labels = $.map(rows(), label);
@@ -460,16 +523,7 @@
             <h2 id="error-details">Errors in detail</h2>
 
 
-            <form class="form-inline stats-window" onsubmit="return false;">
-                <label for="statsWindowSelect" class="sr-only">Time window</label>
-                <select id="statsWindowSelect" class="form-control input-sm">
-                    {% for key, label in windows.items() %}
-                    <option value="{{ key }}"{% if key == window.window %} selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <input id="statsWindowSlider" type="range" min="0" max="{{ windows | length - 1 }}" step="1" aria-label="Time window">
-                <span id="statsWindowLoading" class="text-muted" style="display: none;"><small>Loading …</small></span>
-            </form>
+            {{ window_control("errors", "errors in detail") }}
 
             <div class="row stats-summary">
                 <div class="col-xs-6 col-sm-3"><p>Calls<br/><span class="lead" id="statsSumCalls"></span></p></div>
@@ -494,6 +548,7 @@
                     <tbody id="statsExceptions"></tbody>
                 </table>
             </div>
+            </section>
 
             <script>
             (function () {
@@ -522,10 +577,9 @@
                     return $('<div>').text(value).html();
                 }
 
-                function render(data) {
+                function renderErrors(data) {
                     // the all-time view has totals by class only; its rows are the last 14 days
                     $('.stats-summary').toggle(data.window !== 'all');
-                    $('.stats-window-label').text(data.label);
                     var calls = data.calls + (data.ratelimited || 0);
                     $('#statsSumCalls').text(number(data.calls));
                     $('#statsSumErrors').text(number(data.errors));
@@ -552,10 +606,6 @@
                             '</tr>';
                     });
                     $('#statsExceptions').html(exceptions.length ? exceptions.join('') : '<tr><td colspan="5" class="text-muted">No errors recorded in this window.</td></tr>');
-
-                    renderClients(data);
-                    renderPlaces(data);
-                    renderProfile(data);
                 }
 
                 function empty(columns, message) {
@@ -576,16 +626,6 @@
                     });
                     $('#statsClientKinds').html(kinds.length ? kinds.join('') : empty(3, 'Nothing recorded in this window yet.'));
 
-                    var ai = $.map(data.aiClients || [], function (c) {
-                        return '<tr>' +
-                            '<td>' + text(c.name) + '</td>' +
-                            '<td class="text-muted">' + text(c.kind) + '</td>' +
-                            '<td class="text-right stats-number">' + number(c.requests) + '</td>' +
-                            '<td class="text-right stats-number">' + percent(c.requests, data.kindsTotal, 2) + '</td>' +
-                            '</tr>';
-                    });
-                    $('#statsAiClients').html(ai.length ? ai.join('') : empty(4, 'No AI client in this window.'));
-
                     var today = moment().format('YYYY-MM-DD');
                     var days = $.map(data.clientDays, function (d) {
                         return '<tr>' +
@@ -596,6 +636,18 @@
                             '</tr>';
                     });
                     $('#statsClientDays').html(days.length ? days.join('') : empty(4, 'Nothing recorded in this window yet.'));
+                }
+
+                function renderAi(data) {
+                    var ai = $.map(data.aiClients || [], function (c) {
+                        return '<tr>' +
+                            '<td>' + text(c.name) + '</td>' +
+                            '<td class="text-muted">' + text(c.kind) + '</td>' +
+                            '<td class="text-right stats-number">' + number(c.requests) + '</td>' +
+                            '<td class="text-right stats-number">' + percent(c.requests, data.kindsTotal, 2) + '</td>' +
+                            '</tr>';
+                    });
+                    $('#statsAiClients').html(ai.length ? ai.join('') : empty(4, 'No AI client in this window.'));
                 }
 
                 function renderPlaces(data) {
@@ -665,39 +717,102 @@
                     });
                 }
 
-                var select = $('#statsWindowSelect');
-                var slider = $('#statsWindowSlider');
-                var request = null;
-                var timer = null;
+                // every section has its own time window and redraws only itself
+                var renderers = {
+                    errors: renderErrors,
+                    clients: renderClients,
+                    ai: renderAi,
+                    profile: renderProfile,
+                    places: renderPlaces
+                };
 
-                function load(key) {
-                    if (request) {
-                        request.abort();
+                $('.stats-window').each(function () {
+                    var form = $(this);
+                    var draw = renderers[form.data('part')];
+                    var select = form.find('select');
+                    var slider = form.find('input[type="range"]');
+                    var loading = form.find('.stats-window-loading');
+                    var request = null;
+                    var timer = null;
+
+                    var part = form.data('part');
+
+                    function load(key) {
+                        statsUrl.set(part, key, initial.window);
+                        if (request) {
+                            request.abort();
+                        }
+                        loading.show();
+                        request = $.getJSON('?format=window&window=' + encodeURIComponent(key), draw).always(function () {
+                            loading.hide();
+                        });
                     }
-                    $('#statsWindowLoading').show();
-                    request = $.getJSON('?format=window&window=' + encodeURIComponent(key), function (data) {
-                        render(data);
-                    }).always(function () {
-                        $('#statsWindowLoading').hide();
+
+                    select.on('change', function () {
+                        slider.val(windows.indexOf(select.val()));
+                        load(select.val());
                     });
+
+                    // the slider follows the select while dragging and loads once it rests
+                    slider.on('input change', function () {
+                        select.val(windows[slider.val()]);
+                        clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            load(select.val());
+                        }, 250);
+                    });
+
+                    var asked = statsUrl.get(part);
+                    if (asked !== null && asked !== initial.window && windows.indexOf(asked) !== -1) {
+                        select.val(asked);
+                        slider.val(windows.indexOf(asked));
+                        load(asked);
+                    } else {
+                        slider.val(windows.indexOf(initial.window));
+                        draw(initial);
+                    }
+                });
+            })();
+            </script>
+            <script>
+            (function () {
+                var tabs = $('.stats-tabs a[data-tab]').map(function () { return $(this).data('tab'); }).get();
+
+                function show(tab, remember) {
+                    if (tabs.indexOf(tab) === -1) {
+                        tab = 'overview';
+                    }
+                    $('.stats-tabs li').each(function () {
+                        var on = $(this).find('a').data('tab') === tab;
+                        $(this).toggleClass('active', on).find('a').attr('aria-selected', on ? 'true' : 'false');
+                    });
+                    $('.stats-pane').each(function () {
+                        this.hidden = $(this).data('pane') !== tab;
+                    });
+                    // a chart drawn while its tab was hidden has no size yet
+                    $.each(Chart.instances, function (id, chart) {
+                        chart.resize();
+                    });
+                    if (remember) {
+                        statsUrl.set('tab', tab, 'overview');
+                    }
                 }
 
-                select.on('change', function () {
-                    slider.val(windows.indexOf(select.val()));
-                    load(select.val());
+                $(document).on('click', 'a[data-tab]', function (event) {
+                    event.preventDefault();
+                    show($(this).data('tab'), true);
+                    if (!$(this).closest('.stats-tabs').length) {
+                        $('.stats-tabs')[0].scrollIntoView();
+                    }
                 });
 
-                // the slider follows the select while dragging and loads once it rests
-                slider.on('input change', function () {
-                    select.val(windows[slider.val()]);
-                    clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        load(select.val());
-                    }, 250);
-                });
-
-                slider.val(windows.indexOf(initial.window));
-                render(initial);
+                // an old anchor (#places, #error-details …) opens the tab that holds it
+                var target = /^#[A-Za-z][\w-]*$/.test(window.location.hash) ? $(window.location.hash) : $();
+                var pane = target.closest('.stats-pane').data('pane');
+                show(statsUrl.get('tab') || pane || 'overview', false);
+                if (target.length) {
+                    target[0].scrollIntoView();
+                }
             })();
             </script>
         </article>
