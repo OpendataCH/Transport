@@ -21,7 +21,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .encoding import PhpErrorJson
-from .statistics import ZONE, summarise
+from .statistics import AI_CLIENTS, ZONE, summarise
 
 router = APIRouter()
 
@@ -46,6 +46,8 @@ WINDOWS = {
 
 # What the kinds of client in statistics.CLIENT_KINDS are called on the page.
 CLIENT_KIND_LABELS = {
+    "ai-agent": "AI assistants and agents",
+    "ai-crawler": "AI crawlers",
     "homeassistant": "Home Assistant",
     "browser": "Browsers and displays",
     "script": "Scripts and servers",
@@ -305,12 +307,14 @@ class Reader:
         result = []
         for start, bucket in zip(starts, buckets, strict=True):
             bucket = bucket or {}
-            exceptions, clients = {}, {}
+            exceptions, clients, ai = {}, {}, {}
             for field, value in bucket.items():
                 if field.startswith("exception:"):
                     exceptions[field[10:]] = int(value)
                 elif field.startswith("client:"):
                     clients[field[7:]] = int(value)
+                elif field.startswith("ai:"):
+                    ai[field[3:]] = int(value)
             result.append(
                 {
                     "hour": f"{start:%Y-%m-%dT%H}:00",
@@ -320,6 +324,7 @@ class Reader:
                     "ratelimited": int(bucket.get("ratelimited", 0)),
                     "exceptions": exceptions,
                     "clients": clients,
+                    "ai": ai,
                 }
             )
         return result
@@ -458,6 +463,21 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
         for kind, count in kinds.items()
     ]
 
+    named: dict[str, int] = {}
+    for b in buckets:
+        for name, count in b["ai"].items():
+            named[name] = named.get(name, 0) + count
+    ai_kinds = {name: kind for name, kind, _ in AI_CLIENTS}
+    ai_clients = [
+        {
+            "name": name,
+            "kind": CLIENT_KIND_LABELS[ai_kinds.get(name, "ai-agent")],
+            "requests": count,
+            "share": _share(count, kinds_total),
+        }
+        for name, count in _descending(named).items()
+    ]
+
     sums, hours = [0] * 24, [0] * 24
     for b in buckets:
         if b["recorded"]:
@@ -504,6 +524,7 @@ async def window(reader: Reader, key: str | None, now: datetime | None = None) -
         "rows": list(reversed(rows)),
         "clientKinds": client_kinds,
         "kindsTotal": kinds_total,
+        "aiClients": ai_clients,
         "clientDays": list(reversed(client_days)),
         "stations": await top("stations"),
         "routes": await top("routes"),

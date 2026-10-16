@@ -12,7 +12,8 @@ page. The classes that named a failure of search.ch stay in the history.
 On top of what the PHP always counted there are four things (the PHP counted
 them too in its last weeks, with the same rules):
 
-- the kind of client per hour, from the User-Agent;
+- the kind of client per hour, from the User-Agent (and, since October 2026,
+  each AI client by name, see AI_CLIENTS);
 - the stations and the from → to pairs asked for, per day;
 - the distinct clients per day, as keyed hashes of the address. The key rotates
   every day, and once the day is over only a summary is kept - how many, and
@@ -66,8 +67,58 @@ SERVICE_UNAVAILABLE = "ServiceUnavailable"
 # TypeError there and never reached its counter; here it is counted.
 TYPE_ERROR = "TypeError"
 
+# AI clients by name, first match wins, checked before CLIENT_KINDS because most
+# of them also call themselves Mozilla. The kind is `ai-crawler` for a bot that
+# reads on its own (training, search) and `ai-agent` for one acting for a person
+# asking now: an assistant fetching, an app running inside an AI tool, an agent
+# or MCP server that says what it is. Only what identifies itself is caught - a
+# script an AI wrote for someone sends python-requests like any other.
+AI_CLIENTS = [
+    (name, kind, re.compile(pattern, re.I))
+    for name, kind, pattern in [
+        ("OpenAI GPTBot", "ai-crawler", r"gptbot"),
+        ("OpenAI OAI-SearchBot", "ai-crawler", r"oai-searchbot"),
+        ("Anthropic ClaudeBot", "ai-crawler", r"claudebot"),
+        ("Anthropic Claude-SearchBot", "ai-crawler", r"claude-searchbot"),
+        ("PerplexityBot", "ai-crawler", r"perplexitybot"),
+        ("Common Crawl CCBot", "ai-crawler", r"ccbot"),
+        ("ByteDance Bytespider", "ai-crawler", r"bytespider"),
+        ("Amazonbot", "ai-crawler", r"amazonbot"),
+        ("Meta externalagent", "ai-crawler", r"meta-externalagent"),
+        ("Applebot-Extended", "ai-crawler", r"applebot-extended"),
+        ("DuckAssistBot", "ai-crawler", r"duckassistbot"),
+        ("ChatGPT", "ai-agent", r"chatgpt-user|chatgpt agent|openai file downloader"),
+        ("Claude Code", "ai-agent", r"claude-user \(claude-code"),
+        ("Claude", "ai-agent", r"claude-user"),
+        ("Claude Desktop app", "ai-agent", r"\) claude/\d"),
+        ("Perplexity", "ai-agent", r"perplexity-user"),
+        ("Mistral Le Chat", "ai-agent", r"mistralai-user"),
+        ("Meta AI", "ai-agent", r"meta-externalfetcher"),
+        ("GitHub Copilot", "ai-agent", r"copilot"),
+        ("Cursor", "ai-agent", r"\) cursor/\d"),
+        ("MCP server", "ai-agent", r"mcp"),
+        (
+            "Other self-declared agent",
+            "ai-agent",
+            r"claude|anthropic|openai|deepseek|\bllm|langchain|[-_ ]agent\b|\bagent[/-]",
+        ),
+    ]
+]
+
+# Apps built and run inside an AI tool, recognised by the page they call from
+# (Origin or Referer) when their User-Agent is just the browser's.
+AI_ORIGINS = [
+    ("App in Claude", re.compile(r"claude\.ai|claudeusercontent|anthropic", re.I)),
+    ("App in ChatGPT", re.compile(r"chatgpt\.(com|site)|oaiusercontent|openai", re.I)),
+    ("App in Lovable", re.compile(r"lovable", re.I)),
+    ("App in v0", re.compile(r"v0\.dev|v0\.app|vusercontent", re.I)),
+    ("App in Bolt", re.compile(r"bolt\.new|stackblitz|webcontainer", re.I)),
+    ("App in Gemini", re.compile(r"gemini\.google|aistudio|scf\.usercontent\.goog", re.I)),
+]
+
 # Kinds of client, first match wins. The PHP application used the same list in
 # the same order; changing it changes what the history before and after means.
+# Since October 2026 the two AI kinds come first.
 CLIENT_KINDS = [
     ("homeassistant", re.compile(r"homeassistant", re.I)),
     ("microcontroller", re.compile(r"esp32|esp8266|arduino|micropython", re.I)),
@@ -102,8 +153,24 @@ def connect():
     )
 
 
-def client_kind(user_agent: str | None) -> str:
-    """The kind of client a User-Agent names: one of CLIENT_KINDS, or none/other."""
+def ai_client(user_agent: str | None, origin: str | None = None) -> tuple[str, str] | None:
+    """The AI client a request comes from, as (name, kind), or None."""
+    if user_agent:
+        for name, kind, pattern in AI_CLIENTS:
+            if pattern.search(user_agent):
+                return name, kind
+    if origin:
+        for name, pattern in AI_ORIGINS:
+            if pattern.search(origin):
+                return name, "ai-agent"
+    return None
+
+
+def client_kind(user_agent: str | None, origin: str | None = None) -> str:
+    """The kind of client a request names: an AI kind, one of CLIENT_KINDS, or none/other."""
+    ai = ai_client(user_agent, origin)
+    if ai is not None:
+        return ai[1]
     if not user_agent or user_agent == "-":
         return "none"
     for kind, pattern in CLIENT_KINDS:
@@ -142,6 +209,7 @@ class Statistics:
         exception: str | None,
         client_ip: str | None,
         user_agent: str | None,
+        origin: str | None = None,
         now: datetime | None = None,
     ) -> None:
         now = (now or datetime.now(ZONE)).astimezone(ZONE)
@@ -151,7 +219,10 @@ class Statistics:
         client_id = await self._client_id(date, client_ip)
 
         pipe = self._redis.pipeline(transaction=False)
-        pipe.hincrby(hourly, f"client:{client_kind(user_agent)}", 1)
+        pipe.hincrby(hourly, f"client:{client_kind(user_agent, origin)}", 1)
+        ai = ai_client(user_agent, origin)
+        if ai is not None:
+            pipe.hincrby(hourly, f"ai:{ai[0]}", 1)
 
         if status == 429:
             # Neither a call nor an error, as in the PHP.
@@ -336,6 +407,8 @@ class StatisticsMiddleware:
                 exception=exception_for(status, recorded),
                 client_ip=client[0] if client else None,
                 user_agent=headers.get(b"user-agent", b"").decode("latin-1") or None,
+                origin=(headers.get(b"origin") or headers.get(b"referer") or b"").decode("latin-1")
+                or None,
             )
         except Exception:
             log.warning("statistics not recorded", exc_info=True)

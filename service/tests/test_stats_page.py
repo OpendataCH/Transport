@@ -110,6 +110,30 @@ def test_an_hour_window_reads_the_hourly_buckets(client, redis):
     assert data["profile"][now.hour] == 100
 
 
+def test_the_window_names_the_ai_clients(client, redis):
+    now = datetime.now(ZONE)
+    redis.hset(
+        f"stats:hourly:{now:%Y-%m-%dT%H}",
+        mapping={
+            "calls": 200,
+            "client:homeassistant": 190,
+            "client:ai-agent": 8,
+            "client:ai-crawler": 2,
+            "ai:Claude Code": 6,
+            "ai:App in Claude": 2,
+            "ai:OpenAI GPTBot": 2,
+        },
+    )
+
+    data = client.get("/stats.php", params={"format": "window", "window": "1h"}).json()
+
+    assert data["aiClients"] == [
+        {"name": "Claude Code", "kind": "AI assistants and agents", "requests": 6, "share": 3},
+        {"name": "App in Claude", "kind": "AI assistants and agents", "requests": 2, "share": 1},
+        {"name": "OpenAI GPTBot", "kind": "AI crawlers", "requests": 2, "share": 1},
+    ]
+
+
 def test_an_unknown_window_is_the_last_day(client, redis):
     data = client.get("/stats.php", params={"format": "window", "window": "1y"}).json()
 

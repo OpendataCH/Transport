@@ -229,6 +229,24 @@
                 </div>
             </div>
 
+            <h3 id="ai">AI clients</h3>
+            <p class="text-muted"><small>Requests from clients that say they are an AI or run inside one: crawlers that read for training and search, assistants fetching for a person (ChatGPT, Claude, Perplexity …), apps running in the Claude desktop app or built in Claude, ChatGPT, Lovable and the like (recognised by the page they call from), and agents and MCP servers that name themselves. A script an AI wrote for someone looks like any other script and is not counted here. Recorded from 17. October 2026 on.</small></p>
+            <div class="row">
+                <div class="col-sm-8">
+                    <table class="table table-condensed stats-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Kind</th>
+                                <th class="text-right">Requests</th>
+                                <th class="text-right">Share of all</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsAiClients"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <h3>Requests by hour of the day</h3>
             <p class="text-muted"><small>Average requests per hour, rate-limited ones included, over the hours of the window that were recorded.</small></p>
             <div style="position: relative;">
@@ -557,6 +575,16 @@
                             '</tr>';
                     });
                     $('#statsClientKinds').html(kinds.length ? kinds.join('') : empty(3, 'Nothing recorded in this window yet.'));
+
+                    var ai = $.map(data.aiClients || [], function (c) {
+                        return '<tr>' +
+                            '<td>' + text(c.name) + '</td>' +
+                            '<td class="text-muted">' + text(c.kind) + '</td>' +
+                            '<td class="text-right stats-number">' + number(c.requests) + '</td>' +
+                            '<td class="text-right stats-number">' + percent(c.requests, data.kindsTotal, 2) + '</td>' +
+                            '</tr>';
+                    });
+                    $('#statsAiClients').html(ai.length ? ai.join('') : empty(4, 'No AI client in this window.'));
 
                     var today = moment().format('YYYY-MM-DD');
                     var days = $.map(data.clientDays, function (d) {

@@ -122,6 +122,32 @@ def test_the_kind_of_client_is_counted_per_hour(client, timetable, redis):
     assert redis.hget(this_hour(), "client:homeassistant") == "1"
 
 
+def test_an_ai_client_is_counted_by_name(client, timetable, redis):
+    board(client, **{"User-Agent": "Claude-User (claude-code/2.1.295)"})
+
+    assert redis.hget(this_hour(), "client:ai-agent") == "1"
+    assert redis.hget(this_hour(), "ai:Claude Code") == "1"
+
+
+def test_an_app_built_in_an_ai_tool_is_known_by_its_origin(client, timetable, redis):
+    board(
+        client,
+        **{
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15",
+            "Origin": "https://www.claudeusercontent.com",
+        },
+    )
+
+    assert redis.hget(this_hour(), "client:ai-agent") == "1"
+    assert redis.hget(this_hour(), "ai:App in Claude") == "1"
+
+
+def test_an_ordinary_client_is_no_ai_client(client, timetable, redis):
+    board(client, **{"User-Agent": "HomeAssistant/2026.9.3 aiohttp/3.14.3"})
+
+    assert not [field for field in redis.hkeys(this_hour()) if field.startswith("ai:")]
+
+
 @pytest.mark.parametrize(
     "user_agent, kind",
     [
@@ -132,6 +158,17 @@ def test_the_kind_of_client_is_counted_per_hour(client, timetable, redis):
         ("python-requests/2.34.2", "script"),
         ("got (https://github.com/sindresorhus/got)", "script"),
         ("mobilitepourtous.ch/1.0 (+https://mobilitepourtous.ch)", "other"),
+        ("Mozilla/5.0 (KHTML, like Gecko; compatible; GPTBot/1.0)", "ai-crawler"),
+        ("Mozilla/5.0 (compatible; ClaudeBot/1.0; +claudebot@anthropic.com)", "ai-crawler"),
+        ("Claude-User (claude-code/2.1.295; +https://support.anthropic.com/)", "ai-agent"),
+        (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Claude/2.26454.2 Chrome/152.0.7977.130 Safari/537.36",
+            "ai-agent",
+        ),
+        ("pilot-agent/swiss-transport-connections (+https://pilotprotocol.network)", "ai-agent"),
+        ("swissyphus/0.5.0 (MCP server; +https://github.com/cwellbournewood)", "ai-agent"),
+        ("Faraday v0.15.4", "other"),
         ("-", "none"),
         (None, "none"),
     ],
