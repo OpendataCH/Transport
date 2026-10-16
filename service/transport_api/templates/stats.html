@@ -241,7 +241,7 @@
 {%- endmacro %}
             <section class="stats-pane" data-pane="clients" role="tabpanel" hidden>
             <h2 id="clients">Who calls</h2>
-            {{ window_control("clients", "who calls") }}
+            {{ window_control("clients", "who calls and requests by hour") }}
             <p class="text-muted" id="statsClientsNote"></p>
             <div class="row">
                 <div class="col-sm-6">
@@ -274,7 +274,6 @@
             </div>
 
             <h3>Requests by hour of the day</h3>
-            {{ window_control("profile", "requests by hour of the day") }}
             <p class="text-muted"><small>Average requests per hour, rate-limited ones included, over the hours of the window that were recorded.</small></p>
             <div style="position: relative;">
                 <canvas id="statsProfile" width="800" height="160" style="width: 100%;"></canvas>
@@ -717,18 +716,22 @@
                     });
                 }
 
-                // every section has its own time window and redraws only itself
+                // every tab has one time window and redraws only what it shows
                 var renderers = {
-                    errors: renderErrors,
-                    clients: renderClients,
-                    ai: renderAi,
-                    profile: renderProfile,
-                    places: renderPlaces
+                    errors: [renderErrors],
+                    clients: [renderClients, renderProfile],
+                    ai: [renderAi],
+                    places: [renderPlaces]
                 };
 
                 $('.stats-window').each(function () {
                     var form = $(this);
-                    var draw = renderers[form.data('part')];
+                    var parts = renderers[form.data('part')];
+                    function draw(data) {
+                        $.each(parts, function (i, render) {
+                            render(data);
+                        });
+                    }
                     var select = form.find('select');
                     var slider = form.find('input[type="range"]');
                     var loading = form.find('.stats-window-loading');

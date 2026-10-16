@@ -311,15 +311,14 @@ def test_the_page_carries_the_years_for_the_charts(client, redis):
     assert '"calls":1000' in page
 
 
-def test_every_section_has_its_own_time_window(client, redis):
-    """Each section chooses its window next to its own table or chart, and every
-    window control sits in a tab the tab bar names."""
+def test_every_tab_has_one_time_window(client, redis):
+    """Each tab with figures over time chooses its window once, for all it shows,
+    and every tab the bar names has its pane."""
     page = client.get("/stats").text
 
     order = [
         page.index('id="clients"'),
         page.index('id="statsWindow-clients"'),
-        page.index('id="statsWindow-profile"'),
         page.index('id="statsWindow-ai"'),
         page.index('id="places"'),
         page.index('id="statsWindow-places"'),
@@ -330,6 +329,7 @@ def test_every_section_has_its_own_time_window(client, redis):
     ]
     assert order == sorted(order)
     assert "stats-window-label" not in page
+    assert page.count('class="form-inline stats-window"') == 4
     tabs = re.findall(r'role="presentation"[^>]*><a href="\?tab=(\w+)"', page)
     panes = set(re.findall(r'data-pane="(\w+)"', page))
     assert tabs[0] == "overview"
