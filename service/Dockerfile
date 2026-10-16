@@ -47,4 +47,5 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=5 --start-period=10s \
 # days. uvicorn's own would be a second copy of every caller's address and
 # query - coordinates included - in the container log, with no say over how
 # long it stays.
-CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY:-2} --no-access-log"]
+# --http: uvicorn's own parser, but taking raw UTF-8 in the URL - see raw_utf8.py.
+CMD ["sh", "-c", "exec python -m uvicorn transport_api.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY:-2} --no-access-log --http transport_api.raw_utf8:RawUtf8HttpToolsProtocol"]

@@ -11,12 +11,15 @@ refuses:
 - **an offset** such as `Z` on a connection search, which `strtotime()`
   converts to local time rather than dropping.
 
+Hour 24 is read too: PHP takes `2026-10-16T24:00:00` as midnight at the start
+of the next day, and so do a few scripts that ask for "the end of today".
+
 Everything else `strtotime()` knows (`tomorrow`, `next monday`, ...) is not
 sent by anyone and is left out on purpose.
 """
 
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .mapping import ZURICH
 
@@ -26,6 +29,7 @@ from .mapping import ZURICH
 EPOCH = datetime(1970, 1, 1, 1, 0, tzinfo=ZURICH)
 
 _FRACTION = re.compile(r"(\d{1,2}:\d{2}:\d{2})\.\d+")
+_HOUR_24 = re.compile(r"(^|[ T])24(?=:\d{2})")
 
 _PATTERNS = (
     "%Y-%m-%d %H:%M:%S",
@@ -48,11 +52,14 @@ def parse(value: str, reference: datetime, *, convert_offset: bool) -> datetime 
     string names.
     """
     value = _FRACTION.sub(r"\1", value.strip())
+    value, hour_24 = _HOUR_24.subn(r"\g<1>00", value)
+    next_day = timedelta(days=1 if hour_24 else 0)
     try:
         parsed = datetime.fromisoformat(value)
     except ValueError:
         parsed = None
     if parsed is not None:
+        parsed += next_day
         if parsed.tzinfo is not None and convert_offset:
             return parsed.astimezone(ZURICH)
         return parsed.replace(tzinfo=ZURICH)
@@ -64,5 +71,5 @@ def parse(value: str, reference: datetime, *, convert_offset: bool) -> datetime 
             continue
         if pattern.startswith("%H"):
             parsed = parsed.replace(year=reference.year, month=reference.month, day=reference.day)
-        return parsed.replace(tzinfo=ZURICH)
+        return (parsed + next_day).replace(tzinfo=ZURICH)
     return None

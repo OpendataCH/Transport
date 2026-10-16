@@ -37,6 +37,11 @@ def fmt(moment: datetime) -> str:
         # What it cannot read is false, and false is the epoch.
         ("garbage", None, None, "1970-01-01 01:00"),
         (None, "not-a-date", "08:00", "1970-01-01 08:00"),
+        # Hour 24 is midnight at the start of the next day - but a separate
+        # time only gives its clock, so the date stays.
+        (None, "2026-10-16", "24:00", "2026-10-16 00:00"),
+        ("2026-10-16T24:15:00Z", None, None, "2026-10-17 02:15"),
+        ("2026-10-16T25:00:00", None, None, "1970-01-01 01:00"),
         # A comma is not a decimal point to PHP.
         (None, "2026-09-30", "13:15:00,5", "2026-09-30 01:00"),
     ],
@@ -54,6 +59,10 @@ def test_connections_read_the_time_as_strtotime_does(combined, date, time, expec
         # new DateTime() keeps the wall clock of an offset.
         ("2026-12-01T06:00:00Z", "2026-12-01 06:00"),
         ("2026-09-14T10:00:00+0200", "2026-09-14 10:00"),
+        # Hour 24 is the next day, minutes and all; 25 is not read.
+        ("2026-10-16T24:00:00", "2026-10-17 00:00"),
+        ("16.10.2026 24:30", "2026-10-17 00:30"),
+        ("2026-12-31 24:00", "2027-01-01 00:00"),
     ],
 )
 def test_the_board_reads_the_time_as_datetime_does(given, expected):
