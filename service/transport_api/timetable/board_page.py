@@ -214,16 +214,8 @@ async def robots(request: Request) -> Response:
     if _is_test(request):
         text = "User-agent: *\nDisallow: /\n"
     else:
-        # The API itself is not for search engines; the website is. An
-        # assistant fetching a connection because somebody asked it to is a
-        # client of the API, not a crawler — these agents read robots.txt and
-        # would otherwise refuse the very calls the API exists for. A group of
-        # their own replaces `*` for them.
-        text = (
-            "User-agent: Claude-User\nUser-agent: ChatGPT-User\nUser-agent: Perplexity-User\n"
-            "User-agent: MistralAI-User\nAllow: /\n\n"
-            "User-agent: *\nDisallow: /v1/\nDisallow: /v2/\nDisallow: /v1-old/\n"
-            "Disallow: /api/\nDisallow: /tiles/\n"
-            f"Sitemap: {request.base_url}sitemap.xml\n"
-        )
+        # Nothing is closed: the API is there to be called, by people, by
+        # programs and by the assistants they ask, and a crawler that wants
+        # to follow it may. The sitemap points at what is worth indexing.
+        text = f"User-agent: *\nAllow: /\nSitemap: {request.base_url}sitemap.xml\n"
     return _uncounted(request, PlainTextResponse(text))
