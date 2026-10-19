@@ -10,7 +10,7 @@ The schemas `gtfs`, `gtfs_next` and `rt` in it are replaced.
 
 import asyncio
 import os
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 
 import asyncpg
 import pytest
@@ -19,8 +19,9 @@ from gtfs_feed import TODAY, write_feed
 
 from transport_api import settings
 from transport_api.main import app
+from transport_api.mapping import ZURICH
 from transport_api.models import LocationsResponse, StationBoardResponse
-from transport_api.timetable import importer
+from transport_api.timetable import board_page, importer
 
 DATABASE = os.environ.get("TEST_DATABASE_URL")
 
@@ -243,7 +244,16 @@ def test_locations_by_coordinate_name_the_nearest_address_first(api):
     assert answer["stations"][1]["name"] == "Beta"
 
 
-def test_a_linked_station_board_is_drawn_on_the_server(api):
+def test_a_linked_station_board_is_drawn_on_the_server(api, monkeypatch):
+    # The page asks for the departures after "now"; the feed only runs from
+    # TODAY for 14 days, so the clock is set to the morning of TODAY — with
+    # the real one the test expired on 19.10.2026.
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime.combine(TODAY, time(7, 0), tzinfo=ZURICH)
+
+    monkeypatch.setattr(board_page, "datetime", Clock)
     page = api.get("/examples/stationboard.html", params={"station": "Alpha"}).text
     assert "<title>Departures from Alpha - Transport</title>" in page
     assert 'rel="canonical"' in page and "stationboard.html?station=Alpha" in page
