@@ -266,3 +266,14 @@ def test_robots_keep_the_test_host_out(api):
     assert "Disallow: /\n" in api.get("/robots.txt", headers={"host": "test-x.example"}).text
     live = api.get("/robots.txt").text
     assert "Sitemap:" in live and "Disallow: /v1/" in live
+
+
+def test_robots_let_assistants_call_the_api(api):
+    from urllib.robotparser import RobotFileParser
+
+    robots = RobotFileParser()
+    robots.parse(api.get("/robots.txt").text.splitlines())
+    url = "https://transport.opendata.ch/v1/connections?from=Bern&to=Basel"
+    assert robots.can_fetch("Claude-User", url)
+    assert not robots.can_fetch("Googlebot", url)
+    assert not robots.can_fetch("ClaudeBot", url)
