@@ -7,7 +7,7 @@ differ where the sources do - the operator is the GTFS agency name, not
 search.ch's abbreviation, and there are no addresses.
 """
 
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from ..mapping import ZURICH, iso
@@ -47,8 +47,14 @@ def service_day_start(day) -> datetime:
 
     Midnight on most days; on the two days the clocks change it is an hour
     off midnight, which is exactly what keeps the published times right.
+
+    The arithmetic is in UTC: Python adds and subtracts on a zoneinfo
+    datetime in wall-clock time, so twelve hours back from noon in Zurich is
+    midnight even on those two days - and the station board, which counts
+    real seconds from `.timestamp()`, looked an hour off the requested time.
     """
-    return datetime(day.year, day.month, day.day, 12, tzinfo=ZURICH) - timedelta(hours=12)
+    noon = datetime(day.year, day.month, day.day, 12, tzinfo=ZURICH)
+    return noon.astimezone(UTC) - timedelta(hours=12)
 
 
 def moment(day, seconds: int) -> datetime:

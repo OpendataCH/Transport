@@ -15,7 +15,7 @@ from datetime import datetime, time, timedelta
 import asyncpg
 import pytest
 from fastapi.testclient import TestClient
-from gtfs_feed import TODAY, write_feed
+from gtfs_feed import CLOCKS_BACK, TODAY, write_feed
 
 from transport_api import settings
 from transport_api.main import app
@@ -32,7 +32,7 @@ def run(coroutine):
     return asyncio.run(coroutine)
 
 
-async def _load(path, today=TODAY, days=14):
+async def _load(path, today=TODAY, days=21):
     connection = await asyncpg.connect(DATABASE)
     try:
         return await importer.load(connection, path, today, days)
@@ -155,6 +155,13 @@ def test_board_reaches_into_tomorrows_service_day(api):
     assert answer["stationboard"][0]["stop"]["departure"] == "2026-10-07T08:00:00+0200"
 
 
+def test_board_starts_at_the_requested_time_on_the_day_the_clocks_go_back(api):
+    # Two trips leave at 08:00. Asked at 07:59 on 25.10.2026 the board used to
+    # start at 08:59 and skip both.
+    answer = _board(api, id="8500001", limit="1", datetime=f"{CLOCKS_BACK} 07:59")
+    assert answer["stationboard"][0]["stop"]["departure"] == "2026-10-25T08:00:00+0100"
+
+
 def test_board_skips_a_removed_day(api):
     tuesday = TODAY + timedelta(days=1)  # "daily" is removed on the 6th
     answer = _board(api, id="8500001", limit="3", datetime=f"{tuesday} 07:00")
@@ -246,7 +253,7 @@ def test_locations_by_coordinate_name_the_nearest_address_first(api):
 
 def test_a_linked_station_board_is_drawn_on_the_server(api, monkeypatch):
     # The page asks for the departures after "now"; the feed only runs from
-    # TODAY for 14 days, so the clock is set to the morning of TODAY — with
+    # TODAY for 21 days, so the clock is set to the morning of TODAY — with
     # the real one the test expired on 19.10.2026.
     class Clock(datetime):
         @classmethod

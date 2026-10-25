@@ -72,6 +72,16 @@ def test_service_day_counts_from_noon_minus_twelve_hours():
     assert eight.utcoffset() == timedelta(hours=1)
 
 
+@pytest.mark.parametrize("day", [CLOCKS_BACK, date(2027, 3, 28)])
+def test_the_board_query_and_the_published_times_count_from_the_same_instant(day):
+    # The board's SQL adds seconds to the start's timestamp; the published
+    # time comes from `moment`. On the days the clocks change the two drifted
+    # an hour apart, and the board started an hour after the requested time.
+    eight = moment(day, 8 * 3600)
+    assert int(service_day_start(day).timestamp()) + 8 * 3600 == int(eight.timestamp())
+    assert (eight.hour, eight.minute) == (8, 0)
+
+
 def test_a_trip_past_midnight_lands_on_the_next_calendar_day():
     late = moment(TODAY, importer.seconds("24:10:00"))
     assert (late.date(), late.hour, late.minute) == (date(2026, 10, 6), 0, 10)
