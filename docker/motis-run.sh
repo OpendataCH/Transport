@@ -33,7 +33,7 @@ feed() { cat "$FEEDS/CURRENT" 2>/dev/null | tr -d '[:space:]'; }
 osm() { if [ -n "${MOTIS_OSM:-}" ] && [ -s "$MOTIS_OSM" ]; then echo "$MOTIS_OSM"; fi; }
 # Raise when the configuration written below changes: a running router
 # rebuilds only when what it is built from changes, and this is part of it.
-CONFIG_REVISION=3
+CONFIG_REVISION=4
 
 # What the router should be built from: the window, the street network with
 # its size when there is one, and the configuration.
@@ -93,6 +93,10 @@ build() {
         echo "timetable:"
         echo "  first_day: $(first_day)"
         echo "  num_days: ${MOTIS_DAYS:-150}"
+        # For a route without agency_id: the feed has carried one since
+        # October 2026 (91-A00-7-j26-1), and without a default the whole
+        # import fails with "timezone not set".
+        echo "  default_timezone: Europe/Zurich"
         # Vehicles on the map (/api/v6/map/trips), for the map example. The
         # Swiss feed has no shapes.txt, so they move in straight lines
         # between stops.
@@ -154,10 +158,16 @@ prebuilt() { cat "$DATA/next/FEED" 2>/dev/null | tr -d '[:space:]'; }
 if [ "$(loaded)" != "$(wanted)" ]; then
     if [ "$(prebuilt)" = "$(wanted)" ]; then
         echo "motis-run: using the prebuilt $(prebuilt)"
+        swap
+    elif build; then
+        swap
+    elif [ -d "$DATA/current" ]; then
+        # An old timetable routes; a restart loop on a bad feed does not.
+        FAILED=$(wanted)
+        echo "motis-run: import of $FAILED failed; still routing on $(loaded)" >&2
     else
-        build || exit 1
+        exit 1
     fi
-    swap
 fi
 serve
 
