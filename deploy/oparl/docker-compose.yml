@@ -79,7 +79,7 @@ services:
   # The router behind /connections; motis-run.sh is docker/motis-run.sh from
   # this repository, copied next to this file. It follows /gtfs/CURRENT.
   motis:
-    image: ghcr.io/motis-project/motis:2.11.3
+    image: ghcr.io/motis-project/motis:2.11.4
     mem_limit: 8g
     memswap_limit: 8g
     cpus: 6

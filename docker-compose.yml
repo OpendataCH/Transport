@@ -43,7 +43,7 @@ services:
   # The router behind /v2/connections, on the feed the database holds; see
   # docker/motis-run.sh. Its port is published for looking at it directly.
   motis:
-    image: ghcr.io/motis-project/motis:2.11.3
+    image: ghcr.io/motis-project/motis:2.11.4
     # The import of the window peaks near 2 GB; a limit keeps a bad feed
     # from pushing the whole host into the OOM killer, as the full year did.
     mem_limit: 3g

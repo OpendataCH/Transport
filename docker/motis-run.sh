@@ -34,9 +34,13 @@ osm() { if [ -n "${MOTIS_OSM:-}" ] && [ -s "$MOTIS_OSM" ]; then echo "$MOTIS_OSM
 # Raise when the configuration written below changes: a running router
 # rebuilds only when what it is built from changes, and this is part of it.
 CONFIG_REVISION=4
+# The MOTIS release itself is part of it too: an import is only safe to read
+# with the binary that wrote it (2.11.4 changed how import packs its data), so
+# a new image rebuilds like a new feed instead of serving the old directory.
+MOTIS_VERSION=$(/motis --version 2>/dev/null | head -n 1 | tr -d '[:space:]')
 
 # What the router should be built from: the window, the street network with
-# its size when there is one, and the configuration.
+# its size when there is one, the MOTIS release and the configuration.
 wanted() {
     f=$(feed)
     [ -n "$f" ] || return 0
@@ -47,7 +51,7 @@ wanted() {
     if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_GBFS_URL:-}" ]; then f="$f+gbfs"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_REVERSE_GEOCODING:-}" ]; then f="$f+rgeo"; fi
-    echo "$f+r$CONFIG_REVISION"
+    echo "$f+motis${MOTIS_VERSION:-unknown}+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
 
