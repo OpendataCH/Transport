@@ -60,3 +60,13 @@ docker compose up -d motis   # takes the prebuilt data over in seconds
 
 Replace `motis-run.sh` on a host with a new file (`install … new && mv`), never
 by writing into the running script.
+
+## Update MOTIS
+
+The MOTIS version is part of what the router is built from, so a new image
+always rebuilds instead of reading an import the old release wrote. On the
+second host build it beside the running router: put the new image into the
+compose file, then run the `motis-run.sh build` container shown above (without
+the `-e`) and `docker compose up -d motis` once it has exited. The 2.11.4 build
+took 2 minutes there (07.11.2026); test, timetable only, imports in about 40 s
+and can simply be restarted.
