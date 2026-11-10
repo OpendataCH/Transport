@@ -1,0 +1,12 @@
+{
+  "name": "Transport API",
+  "short_name": "Transport",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#E61414",
+  "icons": [
+    { "src": "/media/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/media/images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

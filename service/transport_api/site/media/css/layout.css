@@ -16,6 +16,19 @@ header .sign-in {
     padding-bottom: 40px;
 }
 
+/* The logo sits in front of the wordmark and scales with it */
+h1 .logo {
+    height: 0.9em;
+    width: auto;
+    margin-right: 0.12em;
+    vertical-align: -0.1em;
+}
+
+h1 a:hover,
+h1 a:focus {
+    text-decoration: none;
+}
+
 h1,
 h2,
 h3 {
@@ -24,11 +37,11 @@ h3 {
 
 h1 {
     margin: 40px 0 5px 0;
-    /* Scales with the viewport so the wordmark never overflows a phone screen */
-    font-size: clamp(3em, 17vw, 8em);
+    /* Scales with the viewport so logo and wordmark fit a phone screen on one line */
+    font-size: clamp(2.5em, 12.5vw, 8em);
     line-height: 1;
     color: #a20d0d;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
 }
 
 h1 a,

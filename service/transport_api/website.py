@@ -31,6 +31,7 @@ MEDIA_TYPES = {
     ".html": "text/html",
     ".ico": "image/vnd.microsoft.icon",
     ".json": "application/json",
+    ".webmanifest": "application/manifest+json",
 }
 
 # Old addresses of pages that moved, relative to the site root.

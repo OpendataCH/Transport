@@ -206,6 +206,11 @@ def licenses(request: Request) -> HTMLResponse:
 <head>
     <meta charset="utf-8">
     <title>Licenses - Transport API</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#E61414" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="media/css/layout.css" />
@@ -219,7 +224,7 @@ def licenses(request: Request) -> HTMLResponse:
 <div class="container">
     <div class="col-sm-10 col-sm-offset-1">
         <header>
-            <h1><a href="./">Transport</a></h1>
+            <h1><a href="./"><img class="logo" src="/media/images/logo.svg" alt="" />Transport</a></h1>
             <p>Swiss public transport API</p>
         </header>
         <article>
