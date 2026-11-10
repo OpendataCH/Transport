@@ -24,9 +24,11 @@ h3 {
 
 h1 {
     margin: 40px 0 5px 0;
-    font-size: 8em;
+    /* Scales with the viewport so the wordmark never overflows a phone screen */
+    font-size: clamp(3em, 17vw, 8em);
     line-height: 1;
     color: #a20d0d;
+    overflow-wrap: anywhere;
 }
 
 h1 a,
@@ -41,11 +43,50 @@ h1 .second {
     left: -20px;
 }
 
-@media screen and (max-width: 480px) {
-    h1 {
-        font-size: 4em;
+/* Landing page: the main links as an even grid of buttons */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+@media screen and (max-width: 767px) {
+    header {
+        padding-bottom: 15px;
+        margin-bottom: 10px;
     }
 
+    h1 {
+        margin-top: 20px;
+    }
+
+    h2 {
+        margin: 25px 0 15px 0;
+    }
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .actions .btn {
+        padding: 12px 8px;
+        font-size: 16px;
+    }
+
+    .footer {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
 }
 
 h2 {

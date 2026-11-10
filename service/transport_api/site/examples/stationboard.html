@@ -24,10 +24,18 @@
         }
         [hidden] { display: none !important; }
 
-        .board-form { display: flex; gap: 8px; margin-bottom: 16px; }
+        /* clear: the floated "Source Code" link would otherwise squeeze the flex form */
+        .board-form { display: flex; gap: 8px; margin-bottom: 16px; clear: both; }
         .board-form .form-control { flex: 1; min-width: 0; }
         .switch { flex: 0 0 auto; display: flex; }
-        @media (max-width: 639px) { .board-form { flex-wrap: wrap; } .board-form .form-control { flex-basis: 100%; } }
+        @media (max-width: 639px) {
+            .board-form { flex-wrap: wrap; }
+            /* 16px keeps iOS from zooming into the field on focus */
+            .board-form .form-control { flex-basis: 100%; height: 40px; font-size: 16px; }
+            .board-form .switch { flex: 1; display: flex; }
+            .board-form .switch .btn { flex: 1; }
+            .board-form [type=submit] { flex: 1; }
+        }
         .switch .btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
         .api { margin-top: 20px; font-size: 13px; }
         .api summary { cursor: pointer; color: var(--muted); }
