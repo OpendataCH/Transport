@@ -44,7 +44,7 @@ services:
     networks: [transport]
 
   # The access log of the transport vhost: nginx sends it over syslog, this
-  # keeps it as daily files for 30 days (access_log_receiver.py, from docker/
+  # keeps it as daily files for 14 days (access_log_receiver.py, from docker/
   # in the repository). It runs in the image of the Python service because
   # that has Python and the Zurich zone already.
   access-log:
@@ -55,7 +55,7 @@ services:
     command: ["python", "/ops/access_log_receiver.py"]
     environment:
       LOG_DIR: /logs
-      LOG_KEEP_DAYS: "30"
+      LOG_KEEP_DAYS: "14"
     volumes:
       - ./access_log_receiver.py:/ops/access_log_receiver.py:ro
       - accesslogs:/logs
