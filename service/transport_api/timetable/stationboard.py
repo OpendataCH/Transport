@@ -122,7 +122,7 @@ async def station_board(
     fields: Annotated[Fields, Depends(Fields.of)],
     station: Annotated[str | None, Query(description="The stop to report on.")] = None,
     id: Annotated[  # noqa: A002 - the name is part of the /v1 contract
-        str | None, Query(description="The stop id, as an alternative to `station`.")
+        str | None, Query(description="The stop id, as an alternative to `station`; wins over it.")
     ] = None,
     limit: Annotated[str, Query(description="Number of departures, at most 420.")] = DEFAULT_LIMIT,
     transportations: Annotated[
@@ -145,7 +145,9 @@ async def station_board(
     if over_the_limit(limit):
         return PlainTextResponse("Invalid value for Parameter `limit`.", status_code=400)
 
-    wanted = station if truthy(station) else id
+    # The documented /v1 contract: an id wins over a station name. The PHP
+    # did the opposite, which silently queried another stop (OpendataCH/Transport#226).
+    wanted = id if truthy(id) else station
     if not truthy(wanted):
         return PhpJson(content=fields.apply({"station": None, "stationboard": []}))
 

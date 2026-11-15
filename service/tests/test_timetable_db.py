@@ -133,6 +133,11 @@ def test_board_by_id(api):
     assert first["passList"][-1]["departure"] is None
 
 
+def test_board_id_takes_precedence_over_station(api):
+    answer = _board(api, station="Beta", id="8500001", limit="1", datetime=f"{TODAY} 07:00")
+    assert answer["station"]["id"] == "8500001"
+
+
 def test_board_by_name_includes_the_headway_runs(api):
     answer = _board(api, station="Alpha", limit="10", datetime=f"{TODAY} 08:30")
     times = [j["stop"]["departure"][11:16] for j in answer["stationboard"]]
