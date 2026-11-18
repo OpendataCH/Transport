@@ -155,10 +155,11 @@ def test_a_client_stop_id_becomes_the_routers(given, router_id):
 @pytest.mark.parametrize(
     ("router_id", "public"),
     [
-        ("ch_Parentch:1:sloid:7000", "ch:1:sloid:7000"),
+        ("ch_Parentch:1:sloid:7000", "8507000"),
+        ("ch_Parentch:1:sloid:76646", "8576646"),
         ("ch_ch:1:sloid:7000:4:8", "ch:1:sloid:7000:4:8"),
         ("ch_Parent8301700", "8301700"),
-        ("ch_ch:1:sloid:258", "ch:1:sloid:258"),
+        ("ch_ch:1:sloid:258", "8500258"),
     ],
 )
 def test_the_routers_stop_id_becomes_the_clients(router_id, public):
@@ -184,7 +185,8 @@ def test_the_answer_is_repaired(api):
 
     # Stop ids as clients know them, in the namespace OJP puts them in.
     assert root.find(f".//{S}StopPlaceRef") is None
-    assert root.find(f".//{J}StopPlace/{J}StopPlaceRef").text == "ch:1:sloid:7000"
+    assert root.find(f".//{J}StopPlace/{J}StopPlaceRef").text == "8507000"
+    assert root.find(f".//{J}OperatingDayRef").text == "2026-11-19"
     refs = [e.text for e in root.iter(f"{S}StopPointRef")]
     assert refs == ["ch:1:sloid:7000:5:10", "ch:1:sloid:16161:1:2", "8301700"]
 
@@ -337,3 +339,13 @@ def test_a_transfers_track_goes_into_a_path_guidance_section():
     assert section is not None
     assert section.find(f"{J}Length") is None
     assert answer.find(f".//{J}JourneyTrack/{J}TrackSection/{J}Length").text == "1200"
+
+
+def test_a_trip_info_names_the_day_as_the_router_does(api):
+    request = b"""<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri">
+<OJPRequest><siri:ServiceRequest><OJPTripInfoRequest>
+<JourneyRef>20261119_07:42_ch_.ojp-91-1-E.1.TA.581.j26</JourneyRef>
+<OperatingDayRef>2026-11-19</OperatingDayRef>
+</OJPTripInfoRequest></siri:ServiceRequest></OJPRequest></OJP>"""
+    assert api.post("/ojp20", content=request).status_code == 200
+    assert b"<OperatingDayRef>20261119</OperatingDayRef>" in api.seen[0]

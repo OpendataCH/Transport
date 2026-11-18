@@ -8,8 +8,10 @@ to it and puts right what an OJP client in Switzerland would trip over:
 - **Stop ids.** MOTIS knows a stop by its own id: the dataset tag, and for a
   station the GTFS parent - `ch_Parentch:1:sloid:7000` for Bern,
   `ch_ch:1:sloid:7000:4:8` for its platform 8. Clients send and expect the
-  SLOID (`ch:1:sloid:7000`) or the DiDok number (`8507000`). Both directions
-  are translated; the router's own ids are accepted as they are.
+  SLOID (`ch:1:sloid:7000`) or the DiDok number (`8507000`), and get back
+  what the national planner answers: the DiDok number for a station, the
+  SLOID for a platform. The router's own ids are accepted as they are; an
+  operating day is written `2026-11-19`, as there, not `20261119`.
 - **Namespace prefixes.** MOTIS finds elements by their literal prefix, so a
   request is written out again with OJP as the default namespace and `siri:`
   for SIRI, whatever prefixes the client chose.
@@ -109,13 +111,37 @@ def to_router(stop_id: str) -> str:
 
 
 def from_router(stop_id: str) -> str:
-    """The id a client knows for one of the router's: SLOID, or the number abroad."""
+    """The id a client knows for one of the router's.
+
+    As the national planner answers: a station by its DiDok number
+    (`8507000`, `8301700` abroad), a platform by its SLOID
+    (`ch:1:sloid:7000:4:8`).
+    """
     stop_id = stop_id.strip()
     if stop_id.startswith(DATASET):
         stop_id = stop_id[len(DATASET) :]
     if stop_id.startswith(PARENT):
         stop_id = stop_id[len(PARENT) :]
+    match = SLOID.fullmatch(stop_id)
+    if match and len(match.group(1)) <= 5:
+        return "85" + match.group(1).zfill(5)
     return stop_id
+
+
+def _day_to_router(day: str) -> str:
+    return day.strip().replace("-", "")
+
+
+def _day_from_router(day: str) -> str:
+    """`20261119` as the national planner writes an operating day: `2026-11-19`."""
+    day = day.strip()
+    return f"{day[:4]}-{day[4:6]}-{day[6:]}" if len(day) == 8 and day.isdigit() else day
+
+
+def _translate_days(root: ET.Element, translate) -> None:
+    for element in root.iter(_o("OperatingDayRef")):
+        if element.text:
+            element.text = translate(element.text)
 
 
 def _translate_ids(root: ET.Element, translate) -> None:
@@ -387,6 +413,7 @@ def repair(root: ET.Element) -> None:
             text = ET.SubElement(element, _o("Text"), {XML_LANG: language})
             text.text, element.text = element.text, None
     _translate_ids(root, from_router)
+    _translate_days(root, _day_from_router)
     _prune(root)
     _mend_tracks(root)
     for element in root.iter():
@@ -464,6 +491,7 @@ async def ojp20(request: Request) -> Response:
     try:
         root, kind = parse_request(await request.body())
         _translate_ids(root, to_router)
+        _translate_days(root, _day_to_router)
         body = write(root)
     except BadRequest as exc:
         return _plain(400, str(exc))
