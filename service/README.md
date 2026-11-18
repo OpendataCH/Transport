@@ -10,6 +10,7 @@ The API and the website around it, in one FastAPI application.
 | `/v2/…` | the same routes, undocumented |
 | `/`, `/docs.html`, `/examples/`, `/showcase.html`, `/swagger.json` | the website, from `transport_api/site/` |
 | `/stats` (and the old `/stats.php`) | the statistics page, read from Redis |
+| `POST /ojp20` | Open Journey Planner 2.0, answered by the router (`timetable/ojp.py`) |
 
 Documentation for operators is in the
 [wiki](https://gitlab.com/opendata.ch/Transport/-/wikis/home).
@@ -50,6 +51,19 @@ reproduced on purpose and named where they sit in the code, among them:
 `tools/shadow.py` and `tools/compare_random.py` compare two running hosts
 request by request; they were how this one was checked against the PHP one and
 against search.ch.
+
+## /ojp20
+
+OJP 2.0, the XML interface of the national journey planner on
+opentransportdata.swiss, at the same path. MOTIS answers it itself; the route
+in front translates stop ids (SLOID `ch:1:sloid:7000` or DiDok `8507000` in,
+SLOID out, instead of the router's `ch_Parentch:1:sloid:7000`), rewrites the
+namespace prefixes the router insists on, and repairs its answers until they
+validate against the OJP 2.0 schema. Trip, stop event, trip info and location
+requests pass; fares, refinement and the rest do not. Location requests by
+name or stop id need `MOTIS_GEOCODING=1`, i.e. a router built with
+`MOTIS_TILES`: without its place search, MOTIS 2.11.4 crashes on a lookup by
+id.
 
 ## Things this service must keep doing
 

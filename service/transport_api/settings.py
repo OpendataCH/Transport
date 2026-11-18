@@ -76,6 +76,11 @@ OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 # `http://motis:8080`. Unset, /connections answers 503.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
 
+# Whether the router was built with its place search (MOTIS_TILES on the
+# router). Without it, an OJP location request for a stop id crashes MOTIS
+# 2.11.4 - it reads the missing search unchecked - so /ojp20 refuses it.
+MOTIS_GEOCODING = os.environ.get("MOTIS_GEOCODING", "0") not in ("0", "false", "")
+
 # Journey plans one worker asks the router at once, and how long a plan may
 # wait for its turn before it is refused with 429 (see timetable/router.py).
 MOTIS_CONCURRENCY = int(os.environ.get("MOTIS_CONCURRENCY", "4"))
