@@ -7,11 +7,15 @@ to it and puts right what an OJP client in Switzerland would trip over:
 
 - **Stop ids.** MOTIS knows a stop by its own id: the dataset tag, and for a
   station the GTFS parent - `ch_Parentch:1:sloid:7000` for Bern,
-  `ch_ch:1:sloid:7000:4:8` for its platform 8. Clients send and expect the
-  SLOID (`ch:1:sloid:7000`) or the DiDok number (`8507000`), and get back
-  what the national planner answers: the DiDok number for a station, the
-  SLOID for a platform. The router's own ids are accepted as they are; an
-  operating day is written `2026-11-19`, as there, not `20261119`.
+  `ch_ch:1:sloid:7000:4:8` for its platform 8. Clients send the SLOID
+  (`ch:1:sloid:7000`) or the DiDok number (`8507000`) and get back the
+  SLOID, as the national planner answers (compared 19.11.2026). The router's
+  own ids are accepted as they are; an operating day is written
+  `2026-11-19`, as there, not `20261119`.
+- **The service.** The router names a trip's line and little else. From the
+  timetable the answer gets what the national planner gives as well: the
+  public code (`IC1`, `20`), the product category (`IC`, InterCity) and the
+  train number (`707`).
 - **Namespace prefixes.** MOTIS finds elements by their literal prefix, so a
   request is written out again with OJP as the default namespace and `siri:`
   for SIRI, whatever prefixes the client chose.
@@ -36,6 +40,8 @@ from fastapi import APIRouter, Request
 from fastapi.responses import Response
 
 from .. import errors, settings
+from . import db
+from .connections import TRIPS, _trip_id
 from .router import plan_slot
 
 router = APIRouter(include_in_schema=False)
@@ -111,21 +117,14 @@ def to_router(stop_id: str) -> str:
 
 
 def from_router(stop_id: str) -> str:
-    """The id a client knows for one of the router's.
+    """The id a client knows for one of the router's: the feed's own.
 
-    As the national planner answers: a station by its DiDok number
-    (`8507000`, `8301700` abroad), a platform by its SLOID
-    (`ch:1:sloid:7000:4:8`).
+    As the national planner answers: a station by its SLOID
+    (`ch:1:sloid:7000`), a platform too (`ch:1:sloid:7000:4:8`), a station
+    abroad by its number (`8301700`).
     """
-    stop_id = stop_id.strip()
-    if stop_id.startswith(DATASET):
-        stop_id = stop_id[len(DATASET) :]
-    if stop_id.startswith(PARENT):
-        stop_id = stop_id[len(PARENT) :]
-    match = SLOID.fullmatch(stop_id)
-    if match and len(match.group(1)) <= 5:
-        return "85" + match.group(1).zfill(5)
-    return stop_id
+    stop_id = stop_id.strip().removeprefix(DATASET)
+    return stop_id.removeprefix(PARENT)
 
 
 def _day_to_router(day: str) -> str:
@@ -398,8 +397,17 @@ def _language(root: ET.Element) -> str:
     return (found.text or "").strip() if found is not None and found.text else "de"
 
 
-def repair(root: ET.Element) -> None:
-    """Make the router's answer valid OJP 2.0, with the stop ids clients know."""
+def journeys(root: ET.Element) -> list[str]:
+    """The trips of the router's answer, as the timetable names them."""
+    found = {_trip_id(e.text.strip()) for e in root.iter(_o("JourneyRef")) if e.text}
+    return sorted(found)
+
+
+def repair(root: ET.Element, trips: dict | None = None) -> None:
+    """Make the router's answer valid OJP 2.0, with the stop ids clients know.
+
+    `trips` are the timetable's rows for `journeys(root)`, by trip id.
+    """
     language = _language(root)
     for element in list(root.iter()):
         if element.tag in RENAMED:
@@ -415,6 +423,7 @@ def repair(root: ET.Element) -> None:
     _translate_ids(root, from_router)
     _translate_days(root, _day_from_router)
     _prune(root)
+    _complete_services(root, trips or {}, language)
     _mend_tracks(root)
     for element in root.iter():
         ranks = _RANKS.get(_local(element.tag))
@@ -456,6 +465,69 @@ def _mend_tracks(root: ET.Element) -> None:
         ):
             for length in parent.findall(_o("Length")):
                 parent.remove(length)
+
+
+# The categories of the feed (route_desc) by their names, as the national
+# planner writes them. One not listed keeps its short name alone.
+CATEGORIES = {
+    "B": "Bus",
+    "BN": "Nachtbus",
+    "BAT": "Schiff",
+    "EC": "EuroCity",
+    "EN": "EuroNight",
+    "EV": "Ersatzverkehr",
+    "EXT": "Extrazug",
+    "FUN": "Standseilbahn",
+    "GB": "Gondelbahn",
+    "IC": "InterCity",
+    "ICE": "InterCityExpress",
+    "ICN": "InterCity-Neigezug",
+    "IR": "InterRegio",
+    "IRE": "InterRegio-Express",
+    "M": "Metro",
+    "NJ": "Nightjet",
+    "PB": "Luftseilbahn",
+    "PE": "Panorama-Express",
+    "R": "Regio",
+    "RE": "RegioExpress",
+    "RJX": "railjet xpress",
+    "S": "S-Bahn",
+    "SL": "Sesselbahn",
+    "SN": "Nacht-S-Bahn",
+    "T": "Tram",
+    "TGV": "TGV",
+}
+
+
+def _text(parent: ET.Element, name: str, value: str, language: str) -> None:
+    element = ET.SubElement(parent, _o(name))
+    ET.SubElement(element, _o("Text"), {XML_LANG: language}).text = value
+
+
+def _complete_services(root: ET.Element, trips: dict, language: str) -> None:
+    """Public code, product category and train number, where the router has none.
+
+    The public code is the line as published (`IC1`, `20`); the rest comes
+    from the timetable. A trip it does not have - an extra train from real
+    time - keeps what the router gave.
+    """
+    for service in root.iter(_o("Service")):
+        if service.find(_o("PublicCode")) is None:
+            published = service.find(_o("PublishedServiceName"))
+            code = "".join(published.itertext()).strip() if published is not None else ""
+            if code:
+                ET.SubElement(service, _o("PublicCode")).text = code
+        trip = trips.get(_trip_id((service.findtext(_o("JourneyRef")) or "").strip()))
+        if trip is None:
+            continue
+        category = trip["category"]
+        if category and service.find(_o("ProductCategory")) is None:
+            product = ET.SubElement(service, _o("ProductCategory"))
+            if category in CATEGORIES:
+                _text(product, "Name", CATEGORIES[category], language)
+            _text(product, "ShortName", category, language)
+        if trip["short_name"] and service.find(_o("TrainNumber")) is None:
+            ET.SubElement(service, _o("TrainNumber")).text = trip["short_name"]
 
 
 def _prune(parent: ET.Element) -> None:
@@ -516,12 +588,27 @@ async def ojp20(request: Request) -> Response:
         tree = ET.fromstring(answer.content)
     except ET.ParseError:
         return _plain(502, "The router's answer is not XML.")
-    repair(tree)
+    repair(tree, await _trips(request, journeys(tree)))
     ET.indent(tree)
     try:
         return Response(write(tree), media_type=XML_TYPE)
     except BadRequest as exc:  # the router wrote an element of a third namespace
         return _plain(502, str(exc))
+
+
+async def _trips(request: Request, trip_ids: list[str]) -> dict:
+    """The timetable's rows for these trips; none without the timetable.
+
+    The router's answer is complete without them, so a database that is not
+    there or not loaded yet costs the extras, not the answer.
+    """
+    pool = getattr(request.app.state, "timetable", None)
+    if pool is None or not trip_ids:
+        return {}
+    try:
+        return {r["trip_id"]: r for r in await db.fetch(pool, TRIPS, trip_ids)}
+    except errors.ApiError:
+        return {}
 
 
 async def _post(client: httpx.AsyncClient, body: bytes) -> httpx.Response:

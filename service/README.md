@@ -59,7 +59,9 @@ opentransportdata.swiss, at the same path. MOTIS answers it itself; the route
 in front translates stop ids (SLOID `ch:1:sloid:7000` or DiDok `8507000` in,
 SLOID out, instead of the router's `ch_Parentch:1:sloid:7000`), rewrites the
 namespace prefixes the router insists on, and repairs its answers until they
-validate against the OJP 2.0 schema. Trip, stop event, trip info and location
+validate against the OJP 2.0 schema. Each service gets its public code,
+product category and train number from the timetable, as the national
+planner gives them. Trip, stop event, trip info and location
 requests pass; fares, refinement and the rest do not. Location requests by
 name or stop id need `MOTIS_GEOCODING=1`, i.e. a router built with
 `MOTIS_TILES`: without its place search, MOTIS 2.11.4 crashes on a lookup by

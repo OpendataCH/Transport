@@ -155,11 +155,15 @@ def test_a_client_stop_id_becomes_the_routers(given, router_id):
 @pytest.mark.parametrize(
     ("router_id", "public"),
     [
-        ("ch_Parentch:1:sloid:7000", "8507000"),
-        ("ch_Parentch:1:sloid:76646", "8576646"),
+        ("ch_Parentch:1:sloid:7000", "ch:1:sloid:7000"),
+        ("ch_Parentch:1:sloid:76646", "ch:1:sloid:76646"),
         ("ch_ch:1:sloid:7000:4:8", "ch:1:sloid:7000:4:8"),
+        (
+            "ch_ch:1:sloid:7000_gen:ch:1:sloid:7000:6:13_pf:13AB",
+            "ch:1:sloid:7000_gen:ch:1:sloid:7000:6:13_pf:13AB",
+        ),
         ("ch_Parent8301700", "8301700"),
-        ("ch_ch:1:sloid:258", "8500258"),
+        ("ch_ch:1:sloid:258", "ch:1:sloid:258"),
     ],
 )
 def test_the_routers_stop_id_becomes_the_clients(router_id, public):
@@ -185,7 +189,7 @@ def test_the_answer_is_repaired(api):
 
     # Stop ids as clients know them, in the namespace OJP puts them in.
     assert root.find(f".//{S}StopPlaceRef") is None
-    assert root.find(f".//{J}StopPlace/{J}StopPlaceRef").text == "8507000"
+    assert root.find(f".//{J}StopPlace/{J}StopPlaceRef").text == "ch:1:sloid:7000"
     assert root.find(f".//{J}OperatingDayRef").text == "2026-11-19"
     refs = [e.text for e in root.iter(f"{S}StopPointRef")]
     assert refs == ["ch:1:sloid:7000:5:10", "ch:1:sloid:16161:1:2", "8301700"]
@@ -217,6 +221,58 @@ def test_the_answer_is_repaired(api):
         == "de"
     )
     assert root.find(f".//{J}Trip/{J}Distance") is None
+
+
+class Timetable:
+    """The timetable database, answering the trips query with one RE1."""
+
+    def __init__(self):
+        self.asked: list = []
+
+    async def fetch(self, query, trip_ids):
+        self.asked.append(trip_ids)
+        return [
+            {
+                "trip_id": ".ojp-91-1-E.1.TA.581.j26",
+                "short_name": "3063",
+                "category": "RE",
+                "route_short_name": "RE1",
+                "headsign": "Thun",
+                "operator": "SBB",
+            }
+        ]
+
+
+def test_the_service_gets_category_and_train_number_from_the_timetable(api):
+    timetable = Timetable()
+    api.app.state.timetable = timetable
+    root = ET.fromstring(api.post("/ojp20", content=TRIP_REQUEST).content)
+    assert timetable.asked == [[".ojp-91-1-E.1.TA.581.j26"]]
+
+    service = root.find(f".//{J}Service")
+    product = service.find(f"{J}ProductCategory")
+    assert product.find(f"{J}Name/{J}Text").text == "RegioExpress"
+    assert product.find(f"{J}ShortName/{J}Text").text == "RE"
+    assert service.find(f"{J}TrainNumber").text == "3063"
+    names = [child.tag for child in service]
+    assert names.index(f"{J}Mode") < names.index(f"{J}ProductCategory")
+    assert names.index(f"{J}PublishedServiceName") < names.index(f"{J}TrainNumber")
+    assert names.index(f"{J}TrainNumber") < names.index(f"{S}OperatorRef")
+
+
+def test_the_public_code_is_the_published_line():
+    answer = ET.fromstring(
+        b"""<OJP xmlns="http://www.vdv.de/ojp"><Service>
+        <JourneyRef>20261119_07:10_ch_x</JourneyRef>
+        <PublishedServiceName>20</PublishedServiceName>
+        <Mode><PtMode>bus</PtMode></Mode></Service></OJP>"""
+    )
+    ojp.repair(answer)  # no timetable: the line still names the code
+    service = answer.find(f"{J}Service")
+    assert service.find(f"{J}PublicCode").text == "20"
+    assert service.find(f"{J}ProductCategory") is None
+    assert service.find(f"{J}TrainNumber") is None
+    assert [c.tag for c in service][:2] == [f"{J}JourneyRef", f"{J}PublicCode"]
 
 
 def test_the_trip_info_placeholder_and_track_are_mended():
