@@ -403,6 +403,46 @@ def test_a_stop_lookup_needs_the_routers_place_search(api, monkeypatch):
     assert b"<StopPlaceRef>ch_Parentch:1:sloid:7000</StopPlaceRef>" in api.seen[-1]
 
 
+def test_a_walk_between_two_stops_is_a_transfer():
+    answer = ET.fromstring(
+        b"""<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri">
+        <Leg><Id>1</Id><ContinuousLeg>
+          <LegStart><siri:StopPointRef>ch_Parentch:1:sloid:76646</siri:StopPointRef>
+            <Name><Text>Bern, Bahnhof</Text></Name></LegStart>
+          <LegEnd><siri:StopPointRef>ch_ch:1:sloid:7000:5:10</siri:StopPointRef>
+            <Name><Text>Bern</Text></Name></LegEnd>
+          <Service><PersonalModeOfOperation>own</PersonalModeOfOperation>
+            <PersonalMode>foot</PersonalMode></Service>
+          <Duration>PT4M</Duration>
+          <LegTrack><TrackSection><TrackSectionStart><Name>A</Name></TrackSectionStart>
+            <Duration>PT4M</Duration><Length>9</Length></TrackSection></LegTrack>
+        </ContinuousLeg></Leg>
+        <Leg><Id>2</Id><ContinuousLeg>
+          <LegStart><GeoPosition><siri:Longitude>7.4</siri:Longitude>
+            <siri:Latitude>46.9</siri:Latitude></GeoPosition><Name><Text>x</Text></Name></LegStart>
+          <LegEnd><siri:StopPointRef>ch_ch:1:sloid:7000:5:10</siri:StopPointRef></LegEnd>
+          <Service><PersonalMode>foot</PersonalMode></Service><Duration>PT9M</Duration>
+        </ContinuousLeg></Leg></OJP>"""
+    )
+    ojp.repair(answer)
+    first, second = answer.findall(f"{J}Leg")
+    transfer = first.find(f"{J}TransferLeg")
+    assert first.find(f"{J}ContinuousLeg") is None
+    assert [c.tag for c in transfer] == [
+        f"{J}TransferType",
+        f"{J}LegStart",
+        f"{J}LegEnd",
+        f"{J}Duration",
+        f"{J}PathGuidance",
+    ]
+    assert transfer.find(f"{J}TransferType").text == "walk"
+    assert transfer.find(f"{J}LegStart/{S}StopPointRef").text == "ch:1:sloid:76646"
+    section = transfer.find(f"{J}PathGuidance/{J}PathGuidanceSection/{J}TrackSection")
+    assert section is not None and section.find(f"{J}Length") is None
+    # From an address it stays the walk it is.
+    assert second.find(f"{J}ContinuousLeg") is not None
+
+
 def test_a_transfers_track_goes_into_a_path_guidance_section():
     answer = ET.fromstring(
         b"""<OJP xmlns="http://www.vdv.de/ojp"><TransferLeg><PathGuidance>

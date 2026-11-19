@@ -467,7 +467,9 @@ def _mend_tracks(root: ET.Element) -> None:
     """The line of a leg: the end's stop where it belongs, no length in points.
 
     The router writes the end stop of a timed leg's track section into its
-    start; puts a transfer's track section straight into PathGuidance, where
+    start; writes the walk to the first train and from the last one as a
+    continuous leg, where the national planner has a transfer; puts a
+    transfer's track section straight into PathGuidance, where
     OJP wants it in a PathGuidanceSection; and gives the tracks of timed,
     continuous and transfer legs the number of points of the drawn line as
     `Length`, which OJP counts in metres. Only a trip info's JourneyTrack has
@@ -481,6 +483,12 @@ def _mend_tracks(root: ET.Element) -> None:
             if len(refs) == 2 and end is not None and end.find(_s("StopPointRef")) is None:
                 start.remove(refs[1])
                 end.insert(0, refs[1])
+    for leg in root.iter(_o("Leg")):
+        walk = leg.find(_o("ContinuousLeg"))
+        if walk is not None and _between_stops(walk):
+            index = list(leg).index(walk)
+            leg.remove(walk)
+            leg.insert(index, _transfer(walk))
     for guidance in root.iter(_o("PathGuidance")):
         for index, child in enumerate(list(guidance)):
             if child.tag == _o("TrackSection"):
@@ -558,6 +566,42 @@ def _complete_services(root: ET.Element, trips: dict, language: str) -> None:
             _text(product, "ShortName", category, language)
         if trip["short_name"] and service.find(_o("TrainNumber")) is None:
             ET.SubElement(service, _o("TrainNumber")).text = trip["short_name"]
+
+
+def _stop_of(place: ET.Element | None) -> bool:
+    return place is not None and (
+        place.find(_s("StopPointRef")) is not None or place.find(_o("StopPlaceRef")) is not None
+    )
+
+
+def _between_stops(leg: ET.Element) -> bool:
+    """Whether a continuous leg is a walk from one stop to another."""
+    mode = leg.findtext(f"{_o('Service')}/{_o('PersonalMode')}")
+    return (
+        (mode or "").strip() == "foot"
+        and _stop_of(leg.find(_o("LegStart")))
+        and _stop_of(leg.find(_o("LegEnd")))
+    )
+
+
+def _transfer(walk: ET.Element) -> ET.Element:
+    """The walk as the transfer the national planner writes for it.
+
+    A continuous leg is the way from an address or a place; between two
+    stops the national planner writes a transfer on foot, with the line
+    walked as its path guidance.
+    """
+    transfer = ET.Element(_o("TransferLeg"))
+    ET.SubElement(transfer, _o("TransferType")).text = "walk"
+    for name in ("LegStart", "LegEnd", "Duration"):
+        found = walk.find(_o(name))
+        if found is not None:
+            transfer.append(found)
+    sections = walk.findall(f"{_o('LegTrack')}/{_o('TrackSection')}")
+    if sections:
+        guidance = ET.SubElement(transfer, _o("PathGuidance"))
+        guidance.extend(sections)
+    return transfer
 
 
 def _prune(parent: ET.Element) -> None:
