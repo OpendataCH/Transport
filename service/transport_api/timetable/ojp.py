@@ -24,6 +24,11 @@ to it and puts right what an OJP client in Switzerland would trip over:
   their `<Text>`, `Distance` counts the points of the drawn line instead of
   metres. Each of these is repaired here; see `repair`.
 
+A departure board asks the router for twice the departures it wants and
+keeps that many: MOTIS 2.11.4 counts a trip with real time twice while it
+collects them and merges the two only afterwards, so Thun asked for ten
+gives eight.
+
 Only the four requests MOTIS knows pass: trip, stop event, trip info and
 location information. A journey plan takes one of the worker's router slots,
 as `/v1/connections` does. A location request by name or stop id needs the
@@ -150,6 +155,31 @@ def _translate_ids(root: ET.Element, translate) -> None:
 
 
 # --- the request ------------------------------------------------------------
+
+# The most departures the router hands out at once (its stoptimes limit).
+ROUTER_MAX_STOP_EVENTS = 1024
+
+
+def widen_stop_events(root: ET.Element) -> int | None:
+    """Ask the router for twice the departures wanted; the number wanted.
+
+    The router counts a trip it has real time for once from the timetable
+    and once from real time, and drops the double only after it has counted
+    `n` - asked for ten, it may give eight. None when no number is given.
+    """
+    found = root.find(f".//{_o('OJPStopEventRequest')}/{_o('Params')}/{_o('NumberOfResults')}")
+    if found is None or not (found.text or "").strip().isdigit():
+        return None
+    wanted = int(found.text)
+    found.text = str(min(2 * wanted, ROUTER_MAX_STOP_EVENTS))
+    return wanted
+
+
+def keep_stop_events(root: ET.Element, wanted: int) -> None:
+    """The first `wanted` departures of the router's answer."""
+    for delivery in root.iter(_o("OJPStopEventDelivery")):
+        for extra in delivery.findall(_o("StopEventResult"))[wanted:]:
+            delivery.remove(extra)
 
 
 class BadRequest(Exception):
@@ -562,6 +592,7 @@ async def ojp20(request: Request) -> Response:
         return _plain(503, "The router is not configured.")
     try:
         root, kind = parse_request(await request.body())
+        wanted = widen_stop_events(root) if kind == "OJPStopEventRequest" else None
         _translate_ids(root, to_router)
         _translate_days(root, _day_to_router)
         body = write(root)
@@ -588,6 +619,8 @@ async def ojp20(request: Request) -> Response:
         tree = ET.fromstring(answer.content)
     except ET.ParseError:
         return _plain(502, "The router's answer is not XML.")
+    if wanted is not None:
+        keep_stop_events(tree, wanted)
     repair(tree, await _trips(request, journeys(tree)))
     ET.indent(tree)
     try:

@@ -304,6 +304,26 @@ def test_the_trip_info_placeholder_and_track_are_mended():
     assert section.find(f"{J}Length") is None
 
 
+def test_a_departure_board_asks_for_twice_and_keeps_what_was_wanted(api):
+    request = STOP_EVENT_REQUEST.replace(
+        b"</Location>", b"</Location><Params><NumberOfResults>2</NumberOfResults></Params>"
+    )
+    results = "".join(f"<StopEventResult><Id>{i}</Id></StopEventResult>" for i in range(1, 5))
+    api.answers.append(
+        httpx.Response(
+            200,
+            content=(
+                '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri">'
+                "<OJPResponse><siri:ServiceDelivery><OJPStopEventDelivery>"
+                f"{results}</OJPStopEventDelivery></siri:ServiceDelivery></OJPResponse></OJP>"
+            ).encode(),
+        )
+    )
+    root = ET.fromstring(api.post("/ojp20", content=request).content)
+    assert b"<NumberOfResults>4</NumberOfResults>" in api.seen[0]
+    assert [e.text for e in root.iter(f"{J}Id")] == ["1", "2"]
+
+
 def test_a_stop_event_passes_too(api):
     assert api.post("/ojp20", content=STOP_EVENT_REQUEST).status_code == 200
     assert b"<StopPlaceRef>ch_Parentch:1:sloid:7100</StopPlaceRef>" in api.seen[0]
