@@ -97,7 +97,7 @@
         .row { display: flex; align-items: center; gap: 10px; }
         .row .t { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .track { flex: 1; display: flex; align-items: center; min-width: 0; }
-        .seg { display: flex; align-items: center; min-width: 30px; }
+        .seg { display: flex; align-items: center; min-width: 30px; position: relative; container-type: inline-size; --ico: 26px; }
         .seg .bar { flex: 1; height: 2px; background: var(--ink); margin: 0 2px; }
         .seg.walk .bar { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 8px); }
         .ico {
@@ -140,6 +140,11 @@
         .occupancy svg.on { fill: var(--ink); }
         .occupancy .class.full svg.on { fill: var(--late); }
         .ride .occupancy { margin-left: 8px; }
+        /* In the overview each ride shows its occupancy below its own stretch
+           of the line; a short stretch keeps 2nd class only, or nothing. */
+        .seg-load { position: absolute; top: calc(100% + 6px); left: calc(50% + var(--ico) / 2); transform: translateX(-50%); line-height: 18px; }
+        @container (max-width: 150px) { .seg-load .class:first-child { display: none; } }
+        @container (max-width: 80px) { .seg-load { display: none; } }
         .head .price { color: var(--ink); font-size: 13px; font-weight: 600; white-space: nowrap; }
         .head .price small { color: var(--muted); font-weight: normal; }
 
@@ -180,7 +185,7 @@
             .row .t { font-size: 16px; }
             .ico { width: 22px; height: 22px; }
             .ico svg { width: 13px; height: 13px; }
-            .seg { min-width: 22px; }
+            .seg { min-width: 22px; --ico: 22px; }
             .when .spacer { display: none; }
 
             /* Phone: line and destination take the first line of the card
@@ -555,7 +560,10 @@
         var total = sections.reduce(function (sum, s) { return sum + Math.max(1, sectionMinutes(s)); }, 0) || 1;
         var track = el('span', {class: 'track'}, sections.map(function (s) {
             var kind = kindOf(s);
-            var seg = el('span', {class: 'seg' + (s.journey ? '' : ' walk')}, [icon(kind), el('span', {class: 'bar'})]);
+            var load = s.journey && occupancy(s.journey.capacity1st, s.journey.capacity2nd);
+            var seg = el('span', {class: 'seg' + (s.journey ? '' : ' walk')}, [
+                icon(kind), el('span', {class: 'bar'}), load && el('span', {class: 'seg-load'}, [load])
+            ]);
             seg.style.flex = String(Math.max(1, sectionMinutes(s)) / total * 100);
             return seg;
         }).concat([icon('pin')]));
@@ -574,7 +582,6 @@
             ]),
             el('div', {class: 'foot'}, [
                 el('span', {text: start}),
-                occupancy(connection.capacity1st, connection.capacity2nd),
                 el('span', {text: duration(connection.duration)})
             ])
         ]);
