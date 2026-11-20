@@ -92,7 +92,8 @@
         .head { display: flex; align-items: center; gap: 6px; font-size: 16px; margin-bottom: 8px; }
         .head .line { font-weight: 700; white-space: nowrap; }
         .head .towards { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .head .changes { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+        .head .meta { margin-left: auto; display: flex; align-items: baseline; gap: 6px; }
+        .head .changes { color: var(--muted); font-size: 13px; white-space: nowrap; }
         .row { display: flex; align-items: center; gap: 10px; }
         .row .t { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .track { flex: 1; display: flex; align-items: center; min-width: 0; }
@@ -185,8 +186,8 @@
             /* Phone: line and destination take the first line of the card
                head, changes and price go to a second one below. */
             .head { flex-wrap: wrap; row-gap: 2px; }
-            .head .towards { flex: 1 1 60%; min-width: 0; }
-            .head .changes { margin-left: 26px; }
+            .head .towards { flex: 1 1 0; min-width: 0; }
+            .head .meta { flex: 0 0 100%; padding-left: 26px; }
             .head .price { margin-left: auto; }
 
             /* Phone: from and to stacked, the swap button beside both,
@@ -544,9 +545,11 @@
             ? [icon(kindOf(firstRide), 'flat'), el('span', {class: 'line', text: vehicle(firstRide.journey)}),
                el('span', {class: 'towards', text: 'towards ' + (firstRide.journey.to || '')})]
             : [icon('walk', 'flat'), el('span', {class: 'line', text: 'Walk'})];
-        head.push(el('span', {class: 'changes', text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')}));
         var price = el('span', {class: 'price'});
-        head.push(price);
+        head.push(el('span', {class: 'meta'}, [
+            el('span', {class: 'changes', text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')}),
+            price
+        ]));
         fare(connection, price);
 
         var total = sections.reduce(function (sum, s) { return sum + Math.max(1, sectionMinutes(s)); }, 0) || 1;
