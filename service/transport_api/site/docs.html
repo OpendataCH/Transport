@@ -37,7 +37,6 @@
                         <li><a href="#connections">/connections</a></li>
                         <li><a href="#stationboard">/stationboard</a></li>
                         <li><a href="#fare">/fare</a></li>
-                        <li><a href="#ojp">/ojp20 (Open Journey Planner 2.0)</a></li>
                     </ul>
                 </li>
                 <li>
@@ -54,6 +53,9 @@
                 </li>
                 <li>
                     <a href="#limit-response">Limit response</a>
+                </li>
+                <li>
+                    <a href="#ojp">Open Journey Planner (OJP 2.0)</a>
                 </li>
                 <li>
                     <a href="#source">Source</a>
@@ -553,49 +555,6 @@
 
             <hr/>
 
-            <h3 id="ojp">/ojp20</h3>
-
-            <p>The same timetable and journey planner, in the <a href="https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp-landing-page/" rel="external noopener noreferrer">Open Journey Planner 2.0</a> standard (OJP, CEN/TS 17118): the XML interface of the national journey planner, so that an application written for it can use this API by changing the address. No key is needed.</p>
-
-            <h4>Resource URL</h4>
-            <pre><code>POST http://transport.opendata.ch/ojp20</code></pre>
-
-            <h4>Supported requests</h4>
-            <ul>
-                <li><code>OJPTripRequest</code>: connections between stops, addresses or coordinates.</li>
-                <li><code>OJPStopEventRequest</code>: departures or arrivals at a stop.</li>
-                <li><code>OJPTripInfoRequest</code>: all calls of one journey, by the <code>JourneyRef</code> and <code>OperatingDayRef</code> of an earlier answer.</li>
-                <li><code>OJPLocationInformationRequest</code>: stops by name, by id or within a rectangle.</li>
-            </ul>
-            <p>Fare, refinement and other requests are not supported. Send the request with <code>Content-Type: text/xml</code>; the namespace prefixes are free (<code>siri:</code> and <code>ojp:</code> as you like).</p>
-
-            <h4>Stop ids</h4>
-            <p>Stops are named as by the national planner: a station by its SLOID (<code>ch:1:sloid:7000</code>), a platform by its own (<code>ch:1:sloid:7000:4:8</code>). In requests the DiDok number (<code>8507000</code>) works as well. An operating day is written <code>2026-11-20</code>.</p>
-
-            <h4>Example request</h4>
-            <pre>
-&lt;OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" version="2.0"&gt;
-  &lt;OJPRequest&gt;&lt;siri:ServiceRequest&gt;
-    &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
-    &lt;siri:RequestorRef&gt;my-app&lt;/siri:RequestorRef&gt;
-    &lt;OJPTripRequest&gt;
-      &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
-      &lt;Origin&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:7000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Bern&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;
-        &lt;DepArrTime&gt;2026-11-20T07:30:00Z&lt;/DepArrTime&gt;&lt;/Origin&gt;
-      &lt;Destination&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:3000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Zürich HB&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;&lt;/Destination&gt;
-      &lt;Params&gt;&lt;NumberOfResults&gt;4&lt;/NumberOfResults&gt;&lt;/Params&gt;
-    &lt;/OJPTripRequest&gt;
-  &lt;/siri:ServiceRequest&gt;&lt;/OJPRequest&gt;
-&lt;/OJP&gt;
-            </pre>
-
-            <h4>What the answers contain</h4>
-            <p>Valid OJP 2.0, with platforms, real-time times, the line (<code>PublicCode</code>), its category (<code>ProductCategory</code>, <code>Mode/ShortName</code>), the train number and, for trains, the expected occupancy at each departure (<code>ExpectedDepartureOccupancy</code>). A trip of this interface can be priced by the national fare service (OJPFare) as it stands. Different from the national planner: <code>LineRef</code>, <code>JourneyRef</code> and <code>OperatorRef</code> are this planner's own; disruption messages (situations), service attributes and CO<sub>2</sub> figures are not given. Connections are the same planner's as in <a href="#connections">/connections</a>.</p>
-
-            <p>Errors are plain text: <code>400</code> for a request this interface does not take, <code>429</code> when the planner is busy, <code>502</code> when it fails.</p>
-
-            <hr/>
-
             <h3 id="api-objects">API Objects</h3>
 
             <p>API responses are composites of the following objects:</p>
@@ -1012,6 +971,49 @@
     // ...
 }
             </pre>
+
+            <hr/>
+
+            <h2 id="ojp">Open Journey Planner (OJP 2.0)</h2>
+
+            <p>Besides the JSON API above, the same timetable and journey planner answer at <code>/ojp20</code> - outside <code>/v1</code>, at the path the national planner uses - in the <a href="https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp-landing-page/" rel="external noopener noreferrer">Open Journey Planner 2.0</a> standard (OJP, CEN/TS 17118): the XML interface of the national journey planner, so that an application written for it can use this API by changing the address. No key is needed.</p>
+
+            <h3>Resource URL</h3>
+            <pre><code>POST http://transport.opendata.ch/ojp20</code></pre>
+
+            <h3>Supported requests</h3>
+            <ul>
+                <li><code>OJPTripRequest</code>: connections between stops, addresses or coordinates.</li>
+                <li><code>OJPStopEventRequest</code>: departures or arrivals at a stop.</li>
+                <li><code>OJPTripInfoRequest</code>: all calls of one journey, by the <code>JourneyRef</code> and <code>OperatingDayRef</code> of an earlier answer.</li>
+                <li><code>OJPLocationInformationRequest</code>: stops by name, by id or within a rectangle.</li>
+            </ul>
+            <p>Fare, refinement and other requests are not supported. Send the request with <code>Content-Type: text/xml</code>; the namespace prefixes are free (<code>siri:</code> and <code>ojp:</code> as you like).</p>
+
+            <h3>Stop ids</h3>
+            <p>Stops are named as by the national planner: a station by its SLOID (<code>ch:1:sloid:7000</code>), a platform by its own (<code>ch:1:sloid:7000:4:8</code>). In requests the DiDok number (<code>8507000</code>) works as well. An operating day is written <code>2026-11-20</code>.</p>
+
+            <h3>Example request</h3>
+            <pre>
+&lt;OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" version="2.0"&gt;
+  &lt;OJPRequest&gt;&lt;siri:ServiceRequest&gt;
+    &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
+    &lt;siri:RequestorRef&gt;my-app&lt;/siri:RequestorRef&gt;
+    &lt;OJPTripRequest&gt;
+      &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
+      &lt;Origin&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:7000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Bern&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;
+        &lt;DepArrTime&gt;2026-11-20T07:30:00Z&lt;/DepArrTime&gt;&lt;/Origin&gt;
+      &lt;Destination&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:3000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Zürich HB&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;&lt;/Destination&gt;
+      &lt;Params&gt;&lt;NumberOfResults&gt;4&lt;/NumberOfResults&gt;&lt;/Params&gt;
+    &lt;/OJPTripRequest&gt;
+  &lt;/siri:ServiceRequest&gt;&lt;/OJPRequest&gt;
+&lt;/OJP&gt;
+            </pre>
+
+            <h3>What the answers contain</h3>
+            <p>Valid OJP 2.0, with platforms, real-time times, the line (<code>PublicCode</code>), its category (<code>ProductCategory</code>, <code>Mode/ShortName</code>), the train number and, for trains, the expected occupancy at each departure (<code>ExpectedDepartureOccupancy</code>). A trip of this interface can be priced by the national fare service (OJPFare) as it stands. Different from the national planner: <code>LineRef</code>, <code>JourneyRef</code> and <code>OperatorRef</code> are this planner's own; disruption messages (situations), service attributes and CO<sub>2</sub> figures are not given. Connections are the same planner's as in <a href="#connections">/connections</a>.</p>
+
+            <p>Errors are plain text: <code>400</code> for a request this interface does not take, <code>429</code> when the planner is busy, <code>502</code> when it fails.</p>
 
             <hr/>
 
