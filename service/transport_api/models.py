@@ -110,7 +110,11 @@ class Journey(BaseModel):
     name: str | None
     category: str | None
     subcategory: str | None = Field(description="Only ever null on this path.")
-    categoryCode: int | None = Field(description="Only ever null on this path.")  # noqa: N815
+    categoryCode: int | None = Field(  # noqa: N815
+        description="The product class, as HAFAS numbered it: 0 high-speed train, "
+        "1 InterCity/EuroCity, 2 InterRegio, 3 regional train, 4 boat, 5 S-Bahn, "
+        "6 bus, 7 cableway, 8 special train, 9 tram or metro; null if unknown."
+    )
     number: str | None
     operator: str | None
     to: str | None = Field(description="The final destination of the line.")
