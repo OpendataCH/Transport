@@ -62,6 +62,7 @@ def test_the_rides_are_taken_with_the_operators_number_and_utc():
             "arrival": "2026-11-20T07:28:00Z",
             "category": "IC",
             "operator": "11",
+            "via": [],
         }
     ]
     with pytest.raises(fare.Unpriceable):
@@ -149,3 +150,26 @@ def test_what_cannot_be_priced_is_refused(api, monkeypatch):
     assert api.post("/v1/fare", json={"sections": "x"}).status_code == 400
     monkeypatch.setattr(settings, "OJP_FARE_KEY", None)
     assert api.post("/v1/fare", json=BERN_ZURICH).status_code == 503
+
+
+def test_the_stops_between_are_sent_and_tell_routes_apart():
+    """Bern-Spiez runs via Thun or via Belp: NOVA prices it only with the stops."""
+
+    def ride(via):
+        leg = section("8507000", "8507483", "2026-11-20T20:34:00+0100", "2026-11-20T21:03:00+0100")
+        leg["journey"]["passList"] = [
+            {"station": {"id": "8507000"}, "arrival": None, "departure": "2026-11-20T20:34:00+0100"},
+            {"station": {"id": via}, "arrival": "2026-11-20T20:51:00+0100", "departure": "2026-11-20T20:53:00+0100"},
+            {"station": {"id": "8507483"}, "arrival": "2026-11-20T21:03:00+0100", "departure": None},
+        ]
+        return {"sections": [leg]}
+
+    thun = fare.rides(ride("8507100"))
+    assert thun[0]["via"] == [
+        {"id": "8507100", "arrival": "2026-11-20T19:51:00Z", "departure": "2026-11-20T19:53:00Z"}
+    ]
+    body = fare.request_body(thun, fare.NO_CARD).decode()
+    assert "<LegIntermediate><siri:StopPointRef>8507100</siri:StopPointRef>" in body
+    assert "<Order>2</Order></LegIntermediate><LegAlight>" in body
+    assert "<Order>3</Order></LegAlight>" in body
+    assert fare.cache_key(thun) != fare.cache_key(fare.rides(ride("8507050")))

@@ -92,6 +92,31 @@ def _utc(value: str) -> str:
     return moment.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _via(journey: dict, start: str, end: str) -> list[dict]:
+    """The stops a ride passes between boarding and alighting.
+
+    NOVA needs them where two lines join the same stations: Bern-Spiez runs
+    via Thun or via Belp, and without the stops it gives no price at all.
+    """
+    stops = []
+    for stop in journey.get("passList") or []:
+        station = str((stop.get("station") or {}).get("id") or "")
+        time = stop.get("departure") or stop.get("arrival")
+        if not station or not time or station in (start, end):
+            continue
+        try:
+            stops.append(
+                {
+                    "id": station,
+                    "arrival": _utc(stop.get("arrival") or time),
+                    "departure": _utc(time),
+                }
+            )
+        except (TypeError, ValueError):
+            continue
+    return stops
+
+
 def rides(connection: dict) -> list[dict]:
     """The sections of a /v1 connection that are rides, as NOVA needs them."""
     found = []
@@ -115,6 +140,7 @@ def rides(connection: dict) -> list[dict]:
                 "arrival": _utc(arrival["arrival"]),
                 "category": journey["category"],
                 "operator": operator,
+                "via": _via(journey, str(start), str(end)),
             }
         )
     if not found:
@@ -130,7 +156,10 @@ def timetable_year(day: date) -> int:
 
 def cache_key(legs: list[dict]) -> str:
     year = timetable_year(date.fromisoformat(legs[0]["departure"][:10]))
-    route = [(leg["from"], leg["to"], leg["category"], leg["operator"]) for leg in legs]
+    route = [
+        (leg["from"], [stop["id"] for stop in leg.get("via", [])], leg["to"], leg["category"], leg["operator"])
+        for leg in legs
+    ]
     digest = hashlib.sha1(json.dumps([year, route]).encode()).hexdigest()
     return f"fare:route:{digest}"
 
@@ -141,16 +170,27 @@ def request_body(legs: list[dict], card: str) -> bytes:
     def text(value: str) -> str:
         return f'<Text xml:lang="de">{_escape(value)}</Text>'
 
+    def between(stops: list[dict]) -> str:
+        return "".join(
+            f"<LegIntermediate><siri:StopPointRef>{_escape(stop['id'])}</siri:StopPointRef>"
+            f"<StopPointName>{text(stop['id'])}</StopPointName>"
+            f"<ServiceArrival><TimetabledTime>{stop['arrival']}</TimetabledTime></ServiceArrival>"
+            f"<ServiceDeparture><TimetabledTime>{stop['departure']}</TimetabledTime></ServiceDeparture>"
+            f"<Order>{order}</Order></LegIntermediate>"
+            for order, stop in enumerate(stops, 2)
+        )
+
     xml_legs = "".join(
         f"<Leg><Id>{n}</Id><TimedLeg>"
         f"<LegBoard><siri:StopPointRef>{_escape(leg['from'])}</siri:StopPointRef>"
         f"<StopPointName>{text(leg['from'])}</StopPointName>"
         f"<ServiceDeparture><TimetabledTime>{leg['departure']}</TimetabledTime></ServiceDeparture>"
         f"<Order>1</Order></LegBoard>"
+        f"{between(leg.get('via', []))}"
         f"<LegAlight><siri:StopPointRef>{_escape(leg['to'])}</siri:StopPointRef>"
         f"<StopPointName>{text(leg['to'])}</StopPointName>"
         f"<ServiceArrival><TimetabledTime>{leg['arrival']}</TimetabledTime></ServiceArrival>"
-        f"<Order>2</Order></LegAlight>"
+        f"<Order>{len(leg.get('via', [])) + 2}</Order></LegAlight>"
         f"<Service><OperatingDayRef>{leg['departure'][:10]}</OperatingDayRef>"
         f"<JourneyRef>{n}</JourneyRef>"
         f"<siri:LineRef>{_escape(leg['category'])}</siri:LineRef>"
