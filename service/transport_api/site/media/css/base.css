@@ -11,7 +11,9 @@
     box-sizing: border-box;
 }
 
+/* 1rem is 10px, as the pages were measured with it */
 html {
+    font-size: 10px;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
@@ -71,7 +73,7 @@ h4, h5, h6 {
 
 h1 { font-size: 36px; }
 h2 { font-size: 30px; }
-h3 { font-size: 24px; }
+h3, .h3 { font-size: 24px; }
 h4 { font-size: 18px; }
 h5 { font-size: 14px; }
 h6 { font-size: 12px; }
