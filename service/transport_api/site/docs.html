@@ -36,6 +36,8 @@
                         <li><a href="#locations">/locations</a></li>
                         <li><a href="#connections">/connections</a></li>
                         <li><a href="#stationboard">/stationboard</a></li>
+                        <li><a href="#fare">/fare</a></li>
+                        <li><a href="#ojp">/ojp20 (Open Journey Planner 2.0)</a></li>
                     </ul>
                 </li>
                 <li>
@@ -520,6 +522,80 @@
 
             <hr/>
 
+            <h3 id="fare">/fare</h3>
+
+            <p>What a connection costs: the price of a point-to-point ticket (Streckenbillett) for one adult, full and with a half-fare travelcard, in both classes. Send one connection exactly as <a href="#connections">/connections</a> returned it; the price comes from the national fare service (NOVA) on opentransportdata.swiss.</p>
+
+            <h4>Resource URL</h4>
+            <pre><code>POST http://transport.opendata.ch/v1/fare</code></pre>
+
+            <h4>Request body</h4>
+            <p>One <a href="#connection">connection object</a> as JSON, with its <code>sections</code>. Walks cost nothing and are left out; each ride needs its stations, times, <code>category</code> and <code>operator</code>, as <code>/connections</code> gives them.</p>
+
+            <h4>Example request</h4>
+            <pre><code>curl -X POST http://transport.opendata.ch/v1/fare \
+     -H 'Content-Type: application/json' \
+     -d "$(curl -s 'http://transport.opendata.ch/v1/connections?from=Bern&amp;to=Basel&amp;limit=1' | jq '.connections[0]')"</code></pre>
+
+            <h4>Example response</h4>
+            <pre>
+{
+    "currency": "CHF",
+    "product": "Streckenbillett",
+    "fares": {
+        "2nd": {"full": 42.0, "halfFare": 21.0},
+        "1st": {"full": 72.0, "halfFare": 36.0}
+    }
+}
+            </pre>
+
+            <p>A price is kept for a week per route - the same stations, categories and operators, at any time of day - and asked again after the timetable change in December. The fare service allows this API a limited number of requests: when they are spent for the minute or the day, <code>/fare</code> answers <code>503</code>; try again later or show the connection without a price. <code>400</code> means a connection that cannot be priced (only walks, an operator the fare service does not know), <code>404</code> one the fare service has no price for. Saver tickets, regional passes and children's fares are not covered.</p>
+
+            <hr/>
+
+            <h3 id="ojp">/ojp20</h3>
+
+            <p>The same timetable and journey planner, in the <a href="https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp-landing-page/" rel="external noopener noreferrer">Open Journey Planner 2.0</a> standard (OJP, CEN/TS 17118): the XML interface of the national journey planner, so that an application written for it can use this API by changing the address. No key is needed.</p>
+
+            <h4>Resource URL</h4>
+            <pre><code>POST http://transport.opendata.ch/ojp20</code></pre>
+
+            <h4>Supported requests</h4>
+            <ul>
+                <li><code>OJPTripRequest</code>: connections between stops, addresses or coordinates.</li>
+                <li><code>OJPStopEventRequest</code>: departures or arrivals at a stop.</li>
+                <li><code>OJPTripInfoRequest</code>: all calls of one journey, by the <code>JourneyRef</code> and <code>OperatingDayRef</code> of an earlier answer.</li>
+                <li><code>OJPLocationInformationRequest</code>: stops by name, by id or within a rectangle.</li>
+            </ul>
+            <p>Fare, refinement and other requests are not supported. Send the request with <code>Content-Type: text/xml</code>; the namespace prefixes are free (<code>siri:</code> and <code>ojp:</code> as you like).</p>
+
+            <h4>Stop ids</h4>
+            <p>Stops are named as by the national planner: a station by its SLOID (<code>ch:1:sloid:7000</code>), a platform by its own (<code>ch:1:sloid:7000:4:8</code>). In requests the DiDok number (<code>8507000</code>) works as well. An operating day is written <code>2026-11-20</code>.</p>
+
+            <h4>Example request</h4>
+            <pre>
+&lt;OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" version="2.0"&gt;
+  &lt;OJPRequest&gt;&lt;siri:ServiceRequest&gt;
+    &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
+    &lt;siri:RequestorRef&gt;my-app&lt;/siri:RequestorRef&gt;
+    &lt;OJPTripRequest&gt;
+      &lt;siri:RequestTimestamp&gt;2026-11-20T07:00:00Z&lt;/siri:RequestTimestamp&gt;
+      &lt;Origin&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:7000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Bern&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;
+        &lt;DepArrTime&gt;2026-11-20T07:30:00Z&lt;/DepArrTime&gt;&lt;/Origin&gt;
+      &lt;Destination&gt;&lt;PlaceRef&gt;&lt;StopPlaceRef&gt;ch:1:sloid:3000&lt;/StopPlaceRef&gt;&lt;Name&gt;&lt;Text&gt;Zürich HB&lt;/Text&gt;&lt;/Name&gt;&lt;/PlaceRef&gt;&lt;/Destination&gt;
+      &lt;Params&gt;&lt;NumberOfResults&gt;4&lt;/NumberOfResults&gt;&lt;/Params&gt;
+    &lt;/OJPTripRequest&gt;
+  &lt;/siri:ServiceRequest&gt;&lt;/OJPRequest&gt;
+&lt;/OJP&gt;
+            </pre>
+
+            <h4>What the answers contain</h4>
+            <p>Valid OJP 2.0, with platforms, real-time times, the line (<code>PublicCode</code>), its category (<code>ProductCategory</code>, <code>Mode/ShortName</code>), the train number and, for trains, the expected occupancy at each departure (<code>ExpectedDepartureOccupancy</code>). A trip of this interface can be priced by the national fare service (OJPFare) as it stands. Different from the national planner: <code>LineRef</code>, <code>JourneyRef</code> and <code>OperatorRef</code> are this planner's own; disruption messages (situations), service attributes and CO<sub>2</sub> figures are not given. Connections are the same planner's as in <a href="#connections">/connections</a>.</p>
+
+            <p>Errors are plain text: <code>400</code> for a request this interface does not take, <code>429</code> when the planner is busy, <code>502</code> when it fails.</p>
+
+            <hr/>
+
             <h3 id="api-objects">API Objects</h3>
 
             <p>API responses are composites of the following objects:</p>
@@ -631,12 +707,12 @@
                     </tr>
                     <tr>
                         <td><code>capacity1st</code></td>
-                        <td>The maximum estimated occupation load of 1st class coaches</td>
+                        <td>The highest occupancy expected in 1st class on the way: 1 low, 2 medium, 3 high. From the railways' forecast, for trains of SBB, BLS, SOB, Thurbo and zb; <code>null</code> for other vehicles and trains without a forecast</td>
                         <td>1</td>
                     </tr>
                     <tr>
                         <td><code>capacity2nd</code></td>
-                        <td>The maximum estimated occupation load of 2nd class coaches</td>
+                        <td>The same for 2nd class</td>
                         <td>2</td>
                     </tr>
                     <tr>
@@ -702,12 +778,12 @@
                     </tr>
                     <tr>
                         <td><code>capacity1st</code></td>
-                        <td>The estimated occupation load of 1st class coaches</td>
+                        <td>The occupancy expected in 1st class when the train leaves this stop: 1 low, 2 medium, 3 high, <code>null</code> when unknown (see <a href="#source">Source</a>)</td>
                         <td>1</td>
                     </tr>
                     <tr>
                         <td><code>capacity2nd</code></td>
-                        <td>The estimated occupation load of 2nd class coaches</td>
+                        <td>The same for 2nd class</td>
                         <td>2</td>
                     </tr>
                 </tbody>
@@ -844,12 +920,12 @@
                     </tr>
                     <tr>
                         <td><code>capacity1st</code></td>
-                        <td>The maximum estimated occupation load of 1st class coaches</td>
+                        <td>The highest occupancy expected in 1st class on the way: 1 low, 2 medium, 3 high. From the railways' forecast, for trains of SBB, BLS, SOB, Thurbo and zb; <code>null</code> for other vehicles and trains without a forecast</td>
                         <td>1</td>
                     </tr>
                     <tr>
                         <td><code>capacity2nd</code></td>
-                        <td>The maximum estimated occupation load of 2nd class coaches</td>
+                        <td>The same for 2nd class</td>
                         <td>2</td>
                     </tr>
                 </tbody>
@@ -980,6 +1056,20 @@
                 <li><strong>At the source and here:</strong> every minute. <code>/connections</code> with <code>sharedMobility=1</code> and the <a href="routing/">journey planner page</a> use them for the way to the first stop and from the last; without the parameter, <code>/connections</code> walks, as it always has.</li>
             </ul>
 
+            <h4>Occupancy</h4>
+            <ul>
+                <li><strong>What we fetch:</strong> the <a href="https://data.opentransportdata.swiss/en/dataset/occupancy-forecast-json-dataset" rel="external noopener noreferrer">occupancy forecast</a> of the railways from opentransportdata.swiss: how full each train is expected to be when it leaves each station, in both classes. It covers trains of SBB, BLS, SOB, Thurbo and zb.</li>
+                <li><strong>At the source:</strong> published once a night, for three months ahead.</li>
+                <li><strong>What we do with it:</strong> fetched twice a day; the coming week is loaded.</li>
+                <li><strong>In the API:</strong> <code>capacity1st</code> and <code>capacity2nd</code> of stops, journeys and connections, and <code>ExpectedDepartureOccupancy</code> in <code>/ojp20</code>.</li>
+            </ul>
+
+            <h4>Fares</h4>
+            <ul>
+                <li><strong>What we ask:</strong> the national fare service (NOVA, <a href="https://opendata.swiss/en/perma/ojpfare@oevch" rel="external noopener noreferrer">OJPFare</a>, beta) on opentransportdata.swiss, for <code>/fare</code>. It is sent the stations, times, categories and operators of the connection - nothing about who asks.</li>
+                <li><strong>In the API:</strong> a price is kept a week per route and renewed with the December timetable.</li>
+            </ul>
+
             <h4>Operator names</h4>
             <ul>
                 <li><strong>What we fetch:</strong> the names operators go by in the national timetable's HAFAS data (<a href="https://data.opentransportdata.swiss/dataset/timetable-54-2026-hrdf" rel="external noopener noreferrer">HRDF</a>), from opentransportdata.swiss.</li>
@@ -994,6 +1084,7 @@
                 <li><strong>2012:</strong> Opendata.ch starts the Transport API, written by Fabian Vogler (<a href="https://github.com/fabian" rel="external noopener noreferrer">GitHub</a>, <a href="https://gitlab.com/opendata.ch/Transport/-/commits/master?author=Fabian%20Vogler" rel="external noopener noreferrer">his commits on GitLab</a>) and the community, on top of the SBB's timetable interface.</li>
                 <li><strong>2017:</strong> the SBB systems behind it are to be switched off. search.ch steps in with its own web service, and from <a href="https://opendata.ch/2017/06/search-ch-rettet-transport-opendata-ch/" rel="external noopener noreferrer">31 July 2017</a> the API translates its answers.</li>
                 <li><strong>5 October 2026:</strong> the national timetable and its real-time data are open data, so the API answers from them directly: its own copy of the timetable and its own journey planner. The parameters and the answers of <code>/v1</code> stay as they were.</li>
+                <li><strong>November 2026:</strong> <code>capacity1st</code> and <code>capacity2nd</code> carry the railways' occupancy forecast, <code>/fare</code> prices a connection, and <code>/ojp20</code> answers in the Open Journey Planner 2.0 standard.</li>
             </ul>
 
         </article>
