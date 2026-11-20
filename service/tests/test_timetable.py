@@ -262,6 +262,25 @@ def test_a_window_across_the_change_reads_both_years(tmp_path):
     assert (info["feed_start_date"], info["feed_end_date"]) == ("20261210", "20261216")
 
 
+def test_the_years_vehicles_stay_apart(tmp_path, monkeypatch):
+    """Block ids repeat across the years; merged as they are, MOTIS hangs."""
+    import gtfs_feed
+
+    trips = gtfs_feed.FILES["trips.txt"].splitlines()
+    with_blocks = "\n".join(
+        [trips[0] + ",block_id"] + [f'{line},"b-1"' for line in trips[1:3]] + trips[3:]
+    )
+    monkeypatch.setitem(gtfs_feed.FILES, "trips.txt", with_blocks)
+    paths = _year_feeds(tmp_path)
+    target = tmp_path / "window.zip"
+    importer.write_window_feed(paths, target, date(2026, 12, 10), date(2026, 12, 16))
+    with zipfile.ZipFile(target) as feed:
+        blocks = {r["trip_id"]: r["block_id"] for r in importer.rows(feed, "trips.txt")}
+    assert blocks["t-morning"] == blocks["t-night"] == "b-1"
+    assert blocks["n-morning"] == blocks["n-night"] == "20261101:b-1"
+    assert blocks["t-headway"] == blocks["n-headway"] == ""
+
+
 def test_a_window_inside_one_year_reads_only_that_feed(tmp_path):
     paths = _year_feeds(tmp_path)
     counts = importer.write_window_feed(paths, tmp_path / "w.zip", TODAY, TODAY + timedelta(days=3))
@@ -366,3 +385,24 @@ def test_places_keep_to_the_town_asked_for():
     assert places._in_town([willisau, luzern], "Luzern, Bahnhofplatz 5") == [luzern]
     assert places._in_town([willisau, luzern], "6003 Luzern, Bahnhofplatz 5") == [luzern]
     assert places.house_number("Weberstrasse 9.1, Aarburg") == "9.1"
+
+
+def test_a_trip_that_stays_seated_into_a_million_ways_loses_those_transfers(tmp_path):
+    """12 December 2026: four successors per bus trip, MOTIS never finished."""
+    layers = [[f"L{d}-{i}" for i in range(4)] for d in range(8)]
+    lines = ["from_trip_id,to_trip_id,transfer_type"]
+    for upper, lower in zip(layers, layers[1:], strict=False):
+        lines += [f"{a},{b},4" for a in upper for b in lower]
+    lines += ["ok-1,ok-2,4", "ok-2,ok-3,4"]
+    path = tmp_path / "feed.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("transfers.txt", "\n".join(lines))
+    trips = {t: "bad-day" for layer in layers for t in layer}
+    trips |= {"ok-1": "daily", "ok-2": "daily", "ok-3": "daily"}
+    days = {"bad-day": [date(2026, 12, 12)], "daily": [date(2026, 12, 11), date(2026, 12, 12)]}
+    with zipfile.ZipFile(path) as feed:
+        tangled = importer.tangled_trips(feed, days, trips)
+    # 4^7 chains from the top: the upper layers go, a short chain stays.
+    assert set(layers[0]) <= tangled
+    assert not {"ok-1", "ok-2", "ok-3"} & tangled
+    assert not set(layers[-1]) & tangled
