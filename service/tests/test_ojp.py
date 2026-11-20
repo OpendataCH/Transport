@@ -254,6 +254,9 @@ def test_the_service_gets_category_and_train_number_from_the_timetable(api):
     assert product.find(f"{J}Name/{J}Text").text == "RegioExpress"
     assert product.find(f"{J}ShortName/{J}Text").text == "RE"
     assert service.find(f"{J}TrainNumber").text == "3063"
+    mode = service.find(f"{J}Mode")
+    assert [c.tag for c in mode] == [f"{J}PtMode", f"{J}ShortName"]
+    assert mode.find(f"{J}ShortName/{J}Text").text == "RE"
     names = [child.tag for child in service]
     assert names.index(f"{J}Mode") < names.index(f"{J}ProductCategory")
     assert names.index(f"{J}PublishedServiceName") < names.index(f"{J}TrainNumber")

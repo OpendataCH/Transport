@@ -543,10 +543,12 @@ def _text(parent: ET.Element, name: str, value: str, language: str) -> None:
 
 
 def _complete_services(root: ET.Element, trips: dict, language: str) -> None:
-    """Public code, product category and train number, where the router has none.
+    """Public code, category and train number, where the router has none.
 
     The public code is the line as published (`IC1`, `20`); the rest comes
-    from the timetable. A trip it does not have - an extra train from real
+    from the timetable: the category as the mode's short name, as the
+    national planner writes it and the fare service needs it, and as the
+    product category. A trip it does not have - an extra train from real
     time - keeps what the router gave.
     """
     for service in root.iter(_o("Service")):
@@ -559,6 +561,10 @@ def _complete_services(root: ET.Element, trips: dict, language: str) -> None:
         if trip is None:
             continue
         category = trip["category"]
+        mode = service.find(_o("Mode"))
+        if category and mode is not None and mode.find(_o("ShortName")) is None:
+            # The fare service (OJPFare, NOVA) prices a leg only with it.
+            _text(mode, "ShortName", category, language)
         if category and service.find(_o("ProductCategory")) is None:
             product = ET.SubElement(service, _o("ProductCategory"))
             if category in CATEGORIES:
