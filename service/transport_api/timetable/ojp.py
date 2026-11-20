@@ -38,14 +38,17 @@ on the lookup by id instead of refusing it.
 
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Iterator
+from datetime import date
 from xml.sax.saxutils import escape, quoteattr
 
+import asyncpg
 import httpx
 from fastapi import APIRouter, Request
 from fastapi.responses import Response
 
 from .. import errors, settings
-from . import db
+from . import db, occupancy
 from .connections import TRIPS, _trip_id
 from .router import plan_slot
 
@@ -463,6 +466,68 @@ def repair(root: ET.Element, trips: dict | None = None) -> None:
             element[:] = children
 
 
+# --- occupancy ----------------------------------------------------------------
+
+# The calls a vehicle leaves from: where occupancy is given, as the national
+# planner gives it.
+DEPARTING_CALLS = ("LegBoard", "LegIntermediate", "CallAtStop")
+
+
+def _didok(stop_id: str) -> int | None:
+    """`ch:1:sloid:7000:4:8` -> 8507000, the number the forecast names a station by."""
+    match = SLOID.match(stop_id)
+    if match and len(match.group(1)) <= 5:
+        return 8500000 + int(match.group(1))
+    return int(stop_id) if stop_id.isdigit() else None
+
+
+def _runs(root: ET.Element) -> Iterator[tuple[ET.Element, tuple[date, str, str]]]:
+    """Each leg and stop event with a train, and the train: (day, operator, number)."""
+    for run in [*root.iter(_o("TimedLeg")), *root.iter(_o("StopEvent"))]:
+        service = run.find(_o("Service"))
+        if service is None:
+            continue
+        day = (service.findtext(_o("OperatingDayRef")) or "").strip()
+        operator = (service.findtext(_s("OperatorRef")) or "").strip()
+        number = (service.findtext(_o("TrainNumber")) or "").strip()
+        try:
+            yield run, (date.fromisoformat(day), operator, number)
+        except ValueError:
+            continue
+
+
+def trains(root: ET.Element) -> set[tuple[date, str, str]]:
+    """The trains of a repaired answer, to look their occupancy up."""
+    return {train for _, train in _runs(root) if all(train)}
+
+
+def add_occupancy(root: ET.Element, forecast: dict) -> None:
+    """The expected occupancy of each departure, from the railways' forecast.
+
+    `forecast` is `occupancy.lookup` for `trains(root)`. A call it has no
+    word on is left as it is.
+    """
+    if not forecast:
+        return
+    for run, train in _runs(root):
+        for name in DEPARTING_CALLS:
+            for call in run.iter(_o(name)):
+                if call.find(_o("ServiceDeparture")) is None:
+                    continue
+                station = _didok((call.findtext(_s("StopPointRef")) or "").strip())
+                levels = forecast.get((*train, station))
+                if not levels:
+                    continue
+                for fare_class, level in zip(("firstClass", "secondClass"), levels, strict=True):
+                    if level is None:
+                        continue
+                    expected = ET.SubElement(call, _s("ExpectedDepartureOccupancy"))
+                    ET.SubElement(expected, _s("FareClass")).text = fare_class
+                    ET.SubElement(expected, _s("OccupancyLevel")).text = occupancy.NAMES[level]
+                ranks = _RANKS[_local(call.tag)]
+                call[:] = sorted(call, key=lambda child: ranks.get(child.tag, len(ranks)))
+
+
 def _mend_tracks(root: ET.Element) -> None:
     """The line of a leg: the end's stop where it belongs, no length in points.
 
@@ -672,6 +737,7 @@ async def ojp20(request: Request) -> Response:
     if wanted is not None:
         keep_stop_events(tree, wanted)
     repair(tree, await _trips(request, journeys(tree)))
+    add_occupancy(tree, await _occupancy(request, trains(tree)))
     ET.indent(tree)
     try:
         return Response(write(tree), media_type=XML_TYPE)
@@ -691,6 +757,17 @@ async def _trips(request: Request, trip_ids: list[str]) -> dict:
     try:
         return {r["trip_id"]: r for r in await db.fetch(pool, TRIPS, trip_ids)}
     except errors.ApiError:
+        return {}
+
+
+async def _occupancy(request: Request, wanted: set) -> dict:
+    """The forecast for these trains; none without it, as for `_trips`."""
+    pool = getattr(request.app.state, "timetable", None)
+    if pool is None or not wanted:
+        return {}
+    try:
+        return await occupancy.lookup(pool, wanted)
+    except (asyncpg.PostgresError, OSError):
         return {}
 
 

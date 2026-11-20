@@ -61,7 +61,9 @@ SLOID out, instead of the router's `ch_Parentch:1:sloid:7000`), rewrites the
 namespace prefixes the router insists on, and repairs its answers until they
 validate against the OJP 2.0 schema. Each service gets its public code,
 product category and train number from the timetable, as the national
-planner gives them. Trip, stop event, trip info and location
+planner gives them; each departure of a train its expected occupancy in
+both classes, from the railways' forecast (`timetable/occupancy.py`, loaded
+by the ingest loop into `rt.occupancy`). Trip, stop event, trip info and location
 requests pass; fares, refinement and the rest do not. Location requests by
 name or stop id need `MOTIS_GEOCODING=1`, i.e. a router built with
 `MOTIS_TILES`: without its place search, MOTIS 2.11.4 crashes on a lookup by

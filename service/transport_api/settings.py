@@ -72,6 +72,14 @@ GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
 GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
 OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 
+# The railways' occupancy forecast (timetable/occupancy.py): free, no key, one
+# ZIP a day. Empty switches it off. Days of it kept ahead, today included.
+OCCUPANCY_URL = os.environ.get(
+    "OCCUPANCY_URL",
+    "https://data.opentransportdata.swiss/dataset/occupancy-forecast-json-dataset/permalink",
+)
+OCCUPANCY_DAYS = max(int(os.environ.get("OCCUPANCY_DAYS", "7")), 1)
+
 # The router behind /connections (MOTIS, on the same feed), e.g.
 # `http://motis:8080`. Unset, /connections answers 503.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None

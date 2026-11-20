@@ -1,7 +1,10 @@
 """`/ojp20` passed through to the router, with Swiss stop ids and valid OJP 2.0."""
 
 import asyncio
+import json
 import xml.etree.ElementTree as ET
+import zipfile
+from datetime import date
 
 import httpx
 import pytest
@@ -9,7 +12,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from transport_api import settings
-from transport_api.timetable import ojp, router
+from transport_api.timetable import occupancy, ojp, router
 
 J = "{http://www.vdv.de/ojp}"
 S = "{http://www.siri.org.uk/siri}"
@@ -224,13 +227,26 @@ def test_the_answer_is_repaired(api):
 
 
 class Timetable:
-    """The timetable database, answering the trips query with one RE1."""
+    """The timetable database: one RE1, and its forecast leaving Bern."""
 
     def __init__(self):
         self.asked: list = []
+        self.forecast: list = []
 
-    async def fetch(self, query, trip_ids):
-        self.asked.append(trip_ids)
+    async def fetch(self, query, *args):
+        if "rt.occupancy" in query:
+            self.forecast.append(args)
+            return [
+                {
+                    "day": date(2026, 11, 19),
+                    "operator": "33",
+                    "train": "3063",
+                    "station": 8507000,
+                    "first": 1,
+                    "second": 3,
+                }
+            ]
+        self.asked.append(args[0])
         return [
             {
                 "trip_id": ".ojp-91-1-E.1.TA.581.j26",
@@ -261,6 +277,59 @@ def test_the_service_gets_category_and_train_number_from_the_timetable(api):
     assert names.index(f"{J}Mode") < names.index(f"{J}ProductCategory")
     assert names.index(f"{J}PublishedServiceName") < names.index(f"{J}TrainNumber")
     assert names.index(f"{J}TrainNumber") < names.index(f"{S}OperatorRef")
+
+
+def test_a_departure_gets_the_forecast_occupancy(api):
+    timetable = Timetable()
+    api.app.state.timetable = timetable
+    root = ET.fromstring(api.post("/ojp20", content=TRIP_REQUEST).content)
+    assert timetable.forecast == [([date(2026, 11, 19)], ["33"], ["3063"])]
+
+    board = root.find(f".//{J}LegBoard")
+    expected = board.findall(f"{S}ExpectedDepartureOccupancy")
+    assert [(e.findtext(f"{S}FareClass"), e.findtext(f"{S}OccupancyLevel")) for e in expected] == [
+        ("firstClass", "manySeatsAvailable"),
+        ("secondClass", "standingRoomOnly"),
+    ]
+    names = [child.tag for child in board]
+    assert names.index(f"{J}Order") < names.index(f"{S}ExpectedDepartureOccupancy")
+    # Wankdorf is not in the forecast; the arrival in Milan is no departure.
+    assert root.find(f".//{J}LegIntermediate/{S}ExpectedDepartureOccupancy") is None
+    assert root.find(f".//{J}LegAlight/{S}ExpectedDepartureOccupancy") is None
+
+
+def test_the_forecast_file_becomes_rows(tmp_path):
+    day = {
+        "operatorRef": "11",
+        "opDate": "2026-11-20",
+        "trains": [
+            {
+                "trainNumber": "707",
+                "sections": [
+                    {
+                        "departureStationId": "8507000",
+                        "expectedDepartureOccupancies": [
+                            {"fareClass": "firstClass", "occupancyLevel": "manySeatsAvailable"},
+                            {"fareClass": "secondClass ", "occupancyLevel": "fewSeatsAvailable"},
+                        ],
+                    },
+                    {
+                        "departureStationId": "8503000",
+                        "expectedDepartureOccupancies": [
+                            {"fareClass": "firstClass", "occupancyLevel": "unknown"}
+                        ],
+                    },
+                ],
+            }
+        ],
+    }
+    path = tmp_path / "occupancy.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("2026-11-20/operator-11.json", json.dumps(day))
+        archive.writestr("2026-12-20/operator-11.json", json.dumps({**day, "opDate": "2026-12-20"}))
+    assert list(occupancy.rows(path, date(2026, 11, 20), 7)) == [
+        (date(2026, 11, 20), "11", "707", 8507000, 1, 2)
+    ]
 
 
 def test_the_public_code_is_the_published_line():
