@@ -179,3 +179,16 @@ def journey(
         "capacity1st": None,
         "capacity2nd": None,
     }
+
+
+def set_capacity(stop_: dict, levels: tuple | None) -> None:
+    """The occupancy a train leaves this stop with, 1 (low) to 3 (high), in its prognosis."""
+    if levels:
+        stop_["prognosis"]["capacity1st"], stop_["prognosis"]["capacity2nd"] = levels
+
+
+def highest_capacity(stops: list[dict]) -> tuple[int | None, int | None]:
+    """The fullest any of these stops is expected to be, per class - /v1's journey value."""
+    first = [s["prognosis"]["capacity1st"] for s in stops if s and s["prognosis"]["capacity1st"]]
+    second = [s["prognosis"]["capacity2nd"] for s in stops if s and s["prognosis"]["capacity2nd"]]
+    return max(first, default=None), max(second, default=None)

@@ -75,8 +75,11 @@ class Prognosis(BaseModel):
         "/v1 that is reproduced here on purpose."
     )
     departure: str | None = Field(description="Expected departure, same format.")
-    capacity1st: int | None = Field(description="Only ever null on this path.")
-    capacity2nd: int | None = Field(description="Only ever null on this path.")
+    capacity1st: int | None = Field(
+        description="Expected occupancy in first class: 1 low, 2 medium, 3 high. "
+        "From the railways' forecast (SBB, BLS, SOB, Thurbo, zb trains); null otherwise."
+    )
+    capacity2nd: int | None = Field(description="The same for second class.")
 
 
 class Stop(BaseModel):
@@ -112,8 +115,11 @@ class Journey(BaseModel):
     operator: str | None
     to: str | None = Field(description="The final destination of the line.")
     passList: list[Stop]  # noqa: N815
-    capacity1st: int | None = Field(description="Only ever null on this path.")
-    capacity2nd: int | None = Field(description="Only ever null on this path.")
+    capacity1st: int | None = Field(
+        description="Expected occupancy in first class: 1 low, 2 medium, 3 high. "
+        "From the railways' forecast (SBB, BLS, SOB, Thurbo, zb trains); null otherwise."
+    )
+    capacity2nd: int | None = Field(description="The same for second class.")
 
 
 class StationBoardJourney(Journey):
@@ -177,8 +183,11 @@ class Connection(BaseModel):
     transfers: int
     service: None = Field(description="Only ever null on this path; it came from HAFAS.")
     products: list[str] = Field(description="The lines used, in order.")
-    capacity1st: int | None = Field(description="Only ever null on this path.")
-    capacity2nd: int | None = Field(description="Only ever null on this path.")
+    capacity1st: int | None = Field(
+        description="Expected occupancy in first class: 1 low, 2 medium, 3 high. "
+        "From the railways' forecast (SBB, BLS, SOB, Thurbo, zb trains); null otherwise."
+    )
+    capacity2nd: int | None = Field(description="The same for second class.")
     sections: list[Section] | None = Field(
         description="Null - not an empty list - when no leg says what it is."
     )

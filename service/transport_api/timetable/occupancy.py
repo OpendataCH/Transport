@@ -161,3 +161,39 @@ async def lookup(pool, trains: set[tuple[date, str, str]]) -> dict:
         (r["day"], r["operator"], r["train"], r["station"]): (r["first"], r["second"])
         for r in found
     }
+
+
+# The forecast of trains by number and operating day, without the operator:
+# /v1 knows a trip's operator by name only. Train numbers do not repeat among
+# the railways of the forecast on a day at one station, and only trains ask.
+BY_TRAIN = """
+SELECT day, train, station, first, second
+FROM rt.occupancy
+WHERE (day, train) IN (SELECT * FROM unnest($1::date[], $2::text[]))
+"""
+
+
+async def by_train(pool, trains: set[tuple[date, str]]) -> dict:
+    """{(day, train number): {DiDok number: (first, second)}}; empty when unknown.
+
+    The forecast is an extra: a database without its table yet answers
+    nothing rather than an error.
+    """
+    if not trains:
+        return {}
+    days, numbers = zip(*trains, strict=True)
+    try:
+        found = await pool.fetch(BY_TRAIN, list(days), list(numbers))
+    except (asyncpg.PostgresError, OSError):
+        return {}
+    forecast: dict = {}
+    for r in found:
+        forecast.setdefault((r["day"], r["train"]), {})[r["station"]] = (r["first"], r["second"])
+    return forecast
+
+
+def at(levels: dict | None, station_id: str | None) -> tuple | None:
+    """The levels a train leaves a station with; None if the forecast has no word."""
+    if not levels or not station_id or not str(station_id).isdigit():
+        return None
+    return levels.get(int(station_id))
