@@ -114,25 +114,25 @@ BROWSER = [
         "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
     ),
     (
-        "jQuery 3.7.1",
+        "jQuery 4.1.0",
         "Statistics page",
         "MIT",
         "https://jquery.com/",
         "https://jquery.org/license/",
     ),
     (
-        "Chart.js 4.5.1, chartjs-plugin-zoom 2.2.0, chartjs-adapter-moment 1.0.1",
+        "Chart.js 4.6.1, chartjs-plugin-zoom 2.2.0, chartjs-adapter-moment 1.0.1",
         "Charts of the statistics page",
         "MIT",
         "https://www.chartjs.org/",
-        "https://github.com/chartjs/Chart.js/blob/v4.5.1/LICENSE.md",
+        "https://github.com/chartjs/Chart.js/blob/v4.6.1/LICENSE.md",
     ),
     (
-        "Moment.js 2.30.1, Hammer.js 2.0.8",
+        "Moment.js 2.31.0, Hammer.js 2.0.8",
         "Time axis and zoom of the statistics page",
         "MIT",
         "https://momentjs.com/",
-        "https://github.com/moment/moment/blob/2.30.1/LICENSE",
+        "https://github.com/moment/moment/blob/2.31.0/LICENSE",
     ),
 ]
 
