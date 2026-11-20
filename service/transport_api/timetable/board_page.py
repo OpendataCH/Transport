@@ -128,9 +128,17 @@ def _operator(name: str | None) -> str:
     return re.split(r"[-/]", name or "")[0].strip()
 
 
+# Stops named under the destination, as on the boards in the stations.
+VIA = 3
+
+# The occupancy forecast in words, 1 to 3 as /v1 counts it.
+OCCUPANCY = {1: "many seats available", 2: "few seats available", 3: "standing room only"}
+
+
 def _line(journey: dict) -> str:
     category = journey.get("category") or ""
-    number = journey.get("number") or ""
+    # A train without a line name goes by its number, padded to six digits.
+    number = (journey.get("number") or "").lstrip("0") or journey.get("number") or ""
     if not number or number == category:
         return category
     if category in ("B", "BUS"):
@@ -138,6 +146,31 @@ def _line(journey: dict) -> str:
     if category == "T":
         return f"Tram {number}"
     return f"{category} {number}" if category in LONG_DISTANCE else f"{category}{number}"
+
+
+def _via(journey: dict) -> str:
+    """The first stops after this one, short of the destination."""
+    names = [(s.get("station") or {}).get("name") for s in (journey.get("passList") or [])[1:-1]]
+    names = [n for n in names if n]
+    if not names:
+        return ""
+    return "via " + ", ".join(names[:VIA]) + (" …" if len(names) > VIA else "")
+
+
+def _occupancy(prognosis: dict) -> str:
+    """Three dots per class, filled to the expected occupancy."""
+    out = []
+    for label, key in (("1st", "capacity1st"), ("2nd", "capacity2nd")):
+        level = prognosis.get(key)
+        if level not in OCCUPANCY:
+            continue
+        dots = "".join(f'<i class="{"on" if i < level else ""}"></i>' for i in range(3))
+        title = f"{label} class: {OCCUPANCY[level]}"
+        out.append(
+            f'<span class="occ-class l{level}" title="{title}" aria-label="{title}">'
+            f"<b>{label[0]}</b>{dots}</span>"
+        )
+    return "".join(out)
 
 
 def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
@@ -149,7 +182,9 @@ def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
         '<table class="board"><thead><tr><th>Time</th><th>Line</th><th class="op">Operator</th>'
     )
     # The line's destination either way: /v1 gives it for arrivals too.
-    out.append('<th>To</th><th class="pl">Platform</th></tr></thead><tbody>')
+    out.append(
+        '<th>To</th><th class="occ">Occupancy</th><th class="pl">Platform</th></tr></thead><tbody>'
+    )
     for journey in journeys:
         stop = journey["stop"]
         at = (stop.get("arrival") if arrivals else None) or stop.get("departure") or ""
@@ -165,12 +200,16 @@ def _board_html(name: str, journeys: list[dict], arrivals: bool) -> str:
         )
         late = f' <span class="late">+{delay}</span>' if delay > 0 else ""
         operator = journey.get("operator")
+        via = "" if arrivals else _via(journey)
+        via_html = f'<span class="via">{html.escape(via)}</span>' if via else ""
         out.append(
-            "<tr>"
+            '<tr class="journey">'
             f'<td class="t">{html.escape(at[11:16])}{late}</td>'
             f'<td><span class="badge-product{kind}">{html.escape(_line(journey))}</span></td>'
             f'<td class="op">{html.escape(_operator(operator))}</td>'
-            f"<td>{html.escape(journey.get('to') or '')}</td>"
+            f'<td class="to"><span class="dest">{html.escape(journey.get("to") or "")}</span>'
+            f"{via_html}</td>"
+            f'<td class="occ">{_occupancy(stop.get("prognosis") or {})}</td>'
             f'<td class="pl{" changed" if changed else ""}">'
             f"{html.escape(changed or stop.get('platform') or '')}</td>"
             "</tr>"

@@ -85,8 +85,30 @@
 
         .updated { color: var(--muted); font-size: 12px; margin-top: 8px; }
 
+        .board .to .dest { display: block; }
+        .board .via { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+        .board .occ { white-space: nowrap; }
+        .occ-class { display: inline-flex; align-items: center; gap: 2px; margin-right: 8px; }
+        .occ-class b { font-size: 11px; font-weight: 600; color: var(--muted); margin-right: 2px; }
+        .occ-class i { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--muted); }
+        .occ-class i.on { background: var(--muted); }
+        .occ-class.l2 i.on { background: #e9a100; border-color: #e9a100; }
+        .occ-class.l3 i.on { background: var(--late); border-color: var(--late); }
+
+        /* A row opens to the whole run after this stop. */
+        .board tr.journey.js { cursor: pointer; }
+        .board tr.journey.js:hover td { background: #f6f7f8; }
+        .board tr.journey.open td { border-bottom-color: transparent; }
+        .board tr.stops > td { padding: 0 8px 12px; }
+        .stops ol { list-style: none; margin: 0; padding: 0 0 0 14px; border-left: 2px solid var(--line); }
+        .stops li { display: flex; gap: 12px; padding: 2px 0; font-size: 13px; }
+        .stops li .t { font-variant-numeric: tabular-nums; min-width: 5.5em; color: var(--muted); }
+        .stops .number { color: var(--muted); font-size: 12px; margin: 0 0 6px; }
+        .hint { color: var(--muted); font-size: 12px; }
+
         @media (max-width: 639px) {
             .board .op { display: none; }
+            .occ-class:first-child:not(:last-child) { display: none; }
         }
             .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
         .api-panel code { word-break: break-all; }
@@ -172,7 +194,8 @@
     // The line as people read it on the platform: "IR 90", "S1", "Bus 11".
     function line(journey) {
         var category = journey.category || '';
-        var number = journey.number || '';
+        // A train without a line name goes by its number, padded to six digits.
+        var number = (journey.number || '').replace(/^0+(?=\d)/, '');
         if (!number || number === category) return category;
         if (category === 'B' || category === 'BUS') return 'Bus ' + number;
         if (category === 'T') return 'Tram ' + number;
@@ -191,19 +214,84 @@
         return el('span', {class: 'badge-product' + kind, text: line(journey)});
     }
 
+    var VIA = 3;
+    var OCCUPANCY = {1: 'many seats available', 2: 'few seats available', 3: 'standing room only'};
+    var opened = {};
+
+    // The first stops after this one, short of the destination.
+    function via(journey) {
+        var names = (journey.passList || []).slice(1, -1).map(function (s) {
+            return s.station && s.station.name;
+        }).filter(Boolean);
+        if (!names.length) return '';
+        return 'via ' + names.slice(0, VIA).join(', ') + (names.length > VIA ? ' …' : '');
+    }
+
+    // Three dots per class, filled to the expected occupancy.
+    function occupancy(prognosis) {
+        return [['1st', 'capacity1st'], ['2nd', 'capacity2nd']].map(function (c) {
+            var level = prognosis && prognosis[c[1]];
+            if (!OCCUPANCY[level]) return null;
+            var title = c[0] + ' class: ' + OCCUPANCY[level];
+            var dots = [0, 1, 2].map(function (i) { return el('i', {class: i < level ? 'on' : ''}); });
+            return el('span', {class: 'occ-class l' + level, title: title, 'aria-label': title},
+                [el('b', {text: c[0].charAt(0)})].concat(dots));
+        });
+    }
+
+    function key(journey) { return journey.name + ' ' + journey.stop.departure; }
+
+    // The whole run after this stop, with the delays known for it.
+    function stops(journey) {
+        var items = (journey.passList || []).slice(1).map(function (s) {
+            var at = s.arrival || s.departure;
+            return el('li', {}, [
+                el('span', {class: 't'}, [at ? clock(at) : '', s.delay > 0 ? el('span', {class: 'late', text: ' +' + s.delay}) : null]),
+                el('span', {text: (s.station && s.station.name) || ''})
+            ]);
+        });
+        var number = (journey.name || '').replace(/^0+(?=\d)/, '');
+        return el('tr', {class: 'stops'}, [el('td', {colspan: '6'}, [
+            number ? el('p', {class: 'number', text: 'Train or course number ' + number}) : null,
+            items.length ? el('ol', {}, items) : el('p', {class: 'hint', text: 'Ends here.'})
+        ])]);
+    }
+
+    function toggle(row, journey) {
+        var next = row.nextSibling;
+        if (next && next.classList.contains('stops')) {
+            next.parentNode.removeChild(next);
+            row.classList.remove('open');
+            row.setAttribute('aria-expanded', 'false');
+            delete opened[key(journey)];
+            return;
+        }
+        row.parentNode.insertBefore(stops(journey), next);
+        row.classList.add('open');
+        row.setAttribute('aria-expanded', 'true');
+        opened[key(journey)] = true;
+    }
+
     function draw(data) {
         var station = data.station || {};
         var rows = (data.stationboard || []).map(function (journey) {
             var stop = journey.stop;
             var at = type.value === 'arrival' ? stop.arrival || stop.departure : stop.departure;
             var changed = stop.prognosis && stop.prognosis.platform;
-            return el('tr', {}, [
+            var line = type.value === 'arrival' ? '' : via(journey);
+            var row = el('tr', {class: 'journey js', tabindex: '0', 'aria-expanded': 'false'}, [
                 el('td', {class: 't'}, [clock(at), stop.delay > 0 ? el('span', {class: 'late', text: ' +' + stop.delay}) : null]),
                 el('td', {}, [badge(journey)]),
                 el('td', {class: 'op', text: operator(journey.operator)}),
-                el('td', {text: journey.to || ''}),
+                el('td', {class: 'to'}, [el('span', {class: 'dest', text: journey.to || ''}), line ? el('span', {class: 'via', text: line}) : null]),
+                el('td', {class: 'occ'}, occupancy(stop.prognosis)),
                 el('td', {class: 'pl' + (changed ? ' changed' : ''), text: changed || stop.platform || ''})
             ]);
+            row.addEventListener('click', function () { toggle(row, journey); });
+            row.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(row, journey); }
+            });
+            return {row: row, journey: journey};
         });
         var section = document.getElementById('board');
         section.textContent = '';
@@ -217,12 +305,14 @@
         section.appendChild(el('table', {class: 'board'}, [
             el('thead', {}, [el('tr', {}, [
                 el('th', {text: 'Time'}), el('th', {text: 'Line'}), el('th', {class: 'op', text: 'Operator'}), el('th', {text: 'To'}),
-                el('th', {class: 'pl', text: 'Platform'})
+                el('th', {class: 'occ', text: 'Occupancy'}), el('th', {class: 'pl', text: 'Platform'})
             ])]),
-            el('tbody', {}, rows)
+            el('tbody', {}, rows.map(function (r) { return r.row; }))
         ]));
+        // What was open stays open across the refresh.
+        rows.forEach(function (r) { if (opened[key(r.journey)]) toggle(r.row, r.journey); });
         var now = new Date();
-        section.appendChild(el('p', {class: 'updated', text: 'Updated ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ', every 30 seconds.'}));
+        section.appendChild(el('p', {class: 'updated', text: 'Updated ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ', every 30 seconds. Click a row for all its stops. Occupancy: forecast of SBB, BLS, SOB, Thurbo and zb, first and second class.'}));
         document.title = (type.value === 'arrival' ? 'Arrivals at ' : 'Departures from ') + (station.name || input.value) + ' - Transport';
     }
 
@@ -317,7 +407,9 @@
         var here = new URLSearchParams({station: input.value});
         if (type.value === 'arrival') { initial.set('type', 'arrival'); here.set('type', 'arrival'); }
         showApi(initial, here);
-        timer = setTimeout(function () { load(false); }, 30000);
+        // The drawn rows carry no stops to open; the same board from the
+        // API does, and replaces them unnoticed.
+        load(false);
     } else {
         load(false);
     }
