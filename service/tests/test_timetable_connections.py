@@ -499,3 +499,21 @@ def test_shared_vehicles_only_when_asked_for(api, monkeypatch):
         "to_station": None,
         "url": "https://example.org/lime",
     }
+
+
+def test_the_category_gives_the_product_class_as_hafas_numbered_it():
+    from transport_api.timetable.mapping import category_code
+
+    assert [category_code(c) for c in ("TGV", "IC", "IR", "RE", "S", "B", "T", "BAT", "FUN")] == [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        9,
+        4,
+        7,
+    ]
+    assert category_code(None) is None
+    assert category_code("XYZ") is None

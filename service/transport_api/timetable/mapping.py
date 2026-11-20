@@ -171,7 +171,7 @@ def journey(
         "name": journey_name(trip_short_name),
         "category": category,
         "subcategory": None,
-        "categoryCode": None,
+        "categoryCode": category_code(category),
         "number": line_number(route_short_name, category, trip_short_name),
         "operator": operator,
         "to": destination(headsign),
@@ -192,3 +192,28 @@ def highest_capacity(stops: list[dict]) -> tuple[int | None, int | None]:
     first = [s["prognosis"]["capacity1st"] for s in stops if s and s["prognosis"]["capacity1st"]]
     second = [s["prognosis"]["capacity2nd"] for s in stops if s and s["prognosis"]["capacity2nd"]]
     return max(first, default=None), max(second, default=None)
+
+
+# The product classes of the SBB's HAFAS, which /v1 passed on as
+# `categoryCode` until 2017 (the CATEGORY code of its answers): 0 high-speed
+# trains, 1 InterCity and EuroCity, 2 InterRegio, 3 regional trains, 4 boats,
+# 5 S-Bahn, 6 buses, 7 cableways and rack railways, 8 special trains, 9 trams
+# and metros. Read off the fixtures of the old application (TGV 0, IC 1, IR 2,
+# RE 3, S 5, Bus and Tro 6, Tram and NFT 9) and the HAFAS class list.
+CATEGORY_CODES = {
+    **dict.fromkeys(("ICE", "TGV", "RJ", "RJX", "FR", "FA", "THA"), 0),
+    **dict.fromkeys(("IC", "ICN", "EC", "EN", "NJ", "CNL"), 1),
+    **dict.fromkeys(("IR", "IRE", "PE"), 2),
+    **dict.fromkeys(("RE", "R", "D", "TER", "RB", "REX", "TE2", "RER"), 3),
+    **dict.fromkeys(("BAT", "FAE", "BAV"), 4),
+    **dict.fromkeys(("S", "SN"), 5),
+    **dict.fromkeys(("B", "BN", "BP", "CAR", "EXB", "EV", "NFB", "KB", "TX", "RUB"), 6),
+    **dict.fromkeys(("FUN", "PB", "GB", "SL", "ASC", "CC", "ZB"), 7),
+    **dict.fromkeys(("EXT", "ARZ", "AT", "VAE"), 8),
+    **dict.fromkeys(("T", "NFT", "M"), 9),
+}
+
+
+def category_code(category: str | None) -> int | None:
+    """`IC` -> 1: the HAFAS product class /v1 gave as `categoryCode`; None if unknown."""
+    return CATEGORY_CODES.get((category or "").strip().upper())
