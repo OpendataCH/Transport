@@ -93,13 +93,6 @@ SERVICES = [
 
 BROWSER = [
     (
-        "Bootstrap 3.4.1",
-        "Layout of the pages",
-        "MIT",
-        "https://getbootstrap.com/docs/3.4/",
-        "https://github.com/twbs/bootstrap/blob/v3.4.1/LICENSE",
-    ),
-    (
         "Leaflet 1.9.4",
         "Map example",
         "BSD-2-Clause",
@@ -108,7 +101,7 @@ BROWSER = [
     ),
     (
         "Tabler Icons",
-        "Icons of the connection search",
+        "Icons of the pages and the connection search",
         "MIT",
         "https://tabler.io/icons",
         "https://github.com/tabler/tabler-icons/blob/main/LICENSE",
@@ -240,11 +233,15 @@ def licenses(request: Request) -> HTMLResponse:
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#E61414" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="media/css/base.css" />
     <link rel="stylesheet" href="media/css/layout.css" />
     <style>
         .lic td {{ font-size: 13px; }}
         .lic td:nth-child(2), .lic td:nth-child(3) {{ white-space: nowrap; }}
+        @media (max-width: 767px) {{
+            .lic td:nth-child(2), .lic td:nth-child(3) {{ white-space: normal; }}
+            .lic {{ display: block; overflow-x: auto; }}
+        }}
         #filter {{ max-width: 22rem; margin-bottom: 8px; }}
     </style>
 </head>
