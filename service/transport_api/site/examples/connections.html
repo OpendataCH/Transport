@@ -139,6 +139,8 @@
         .occupancy svg.on { fill: var(--ink); }
         .occupancy .class.full svg.on { fill: var(--late); }
         .ride .occupancy { margin-left: 8px; }
+        .head .price { color: var(--ink); font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .head .price small { color: var(--muted); font-weight: normal; }
 
         .late { color: var(--late); font-weight: 600; font-size: .85em; }
         .changed { color: var(--late); }
@@ -536,6 +538,9 @@
                el('span', {class: 'towards', text: 'towards ' + (firstRide.journey.to || '')})]
             : [icon('walk', 'flat'), el('span', {class: 'line', text: 'Walk'})];
         head.push(el('span', {class: 'changes', text: connection.transfers === 0 ? 'direct' : connection.transfers + (connection.transfers === 1 ? ' change' : ' changes')}));
+        var price = el('span', {class: 'price'});
+        head.push(price);
+        fare(connection, price);
 
         var total = sections.reduce(function (sum, s) { return sum + Math.max(1, sectionMinutes(s)); }, 0) || 1;
         var track = el('span', {class: 'track'}, sections.map(function (s) {
@@ -571,6 +576,28 @@
             details.hidden = !open;
         });
         return box;
+    }
+
+    // The fare of a point-to-point ticket, second class, from /v1/fare.
+    // Asked for each connection shown; kept on the server per route.
+    function chf(value) { return value.toFixed(2); }
+    function fare(connection, target) {
+        fetch('../' + api() + '/fare', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(connection)
+        }).then(function (response) {
+            return response.ok ? response.json() : null;
+        }).then(function (answer) {
+            var second = answer && answer.fares && answer.fares['2nd'];
+            if (!second || second.full == null) return;
+            target.title = 'Point-to-point ticket, 2nd class' +
+                (answer.fares['1st'] && answer.fares['1st'].full != null ? '; 1st class CHF ' + chf(answer.fares['1st'].full) : '');
+            target.appendChild(document.createTextNode('CHF ' + chf(second.full)));
+            if (second.halfFare != null) {
+                target.appendChild(el('small', {text: ' · ½ ' + chf(second.halfFare)}));
+            }
+        }).catch(function () {});
     }
 
     function key(connection) {

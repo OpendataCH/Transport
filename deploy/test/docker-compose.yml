@@ -11,7 +11,8 @@
 # back. That is the whole deployment procedure.
 #
 # .env also holds DB_PASSWORD (the timetable database, internal only) and
-# OTD_API_KEY (GTFS-RT, Bitwarden "opentransportdata.swiss - API-Manager").
+# OTD_API_KEY (GTFS-RT) and OJP_FARE_KEY (OJP Fare), both in Bitwarden
+# "opentransportdata.swiss - API-Manager".
 name: transport
 
 services:
@@ -26,6 +27,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
       MOTIS_URL: http://motis:8080
+      # /v1/fare: the national fare service with its own key (product OJP Fare).
+      OJP_FARE_KEY: ${OJP_FARE_KEY:-}
     depends_on:
       redis: {condition: service_healthy}
       # Started, not healthy: /v1 must not wait for the timetable database
@@ -50,6 +53,8 @@ services:
     environment:
       DATABASE_URL: postgresql://transport:${DB_PASSWORD}@db:5432/transport
       GTFS_DAYS: "14"
+      # Three days of the occupancy forecast: this loader has 1.5 GB.
+      OCCUPANCY_DAYS: "3"
       OTD_API_KEY: ${OTD_API_KEY:-}
     volumes:
       - gtfscache:/var/cache/gtfs

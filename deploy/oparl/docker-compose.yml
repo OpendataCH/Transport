@@ -13,7 +13,7 @@
 # trusted_hosts="*"), which is safe only because it is published on loopback
 # and reached through that tunnel alone. Never publish it on another address.
 #
-# .env: SERVICE_IMAGE_TAG, DB_PASSWORD, OTD_API_KEY (one key per environment,
+# .env: SERVICE_IMAGE_TAG, DB_PASSWORD, OJP_FARE_KEY, OTD_API_KEY (one key per environment,
 # five requests a minute: ingest takes two, motis one).
 #
 # The host carries other services: every container has a fixed share.
@@ -40,6 +40,8 @@ services:
       # The router below is built with MOTIS_TILES, which brings its place
       # search: /ojp20 may pass location requests by name and stop id.
       MOTIS_GEOCODING: "1"
+      # /v1/fare: the national fare service with its own key (product OJP Fare).
+      OJP_FARE_KEY: ${OJP_FARE_KEY:-}
       # "From now" connections kept 60 s instead of the default 100: the
       # router takes real time in once a minute, so a shorter cache is hardly
       # fresher and a longer one only older. Home Assistant's 90-second poll

@@ -35,6 +35,7 @@ from .models import ApiInfo
 from .timetable import board_page, ojp, routing_ui
 from .timetable import connections as timetable_connections
 from .timetable import db as timetable_db
+from .timetable import fare as timetable_fare
 from .timetable import locations as timetable_locations
 from .timetable import map as timetable_map
 from .timetable import stationboard as timetable_stationboard
@@ -171,6 +172,7 @@ for prefix, api_version in API_VERSIONS.items():
     router.include_router(timetable_locations.router, tags=["locations"])
     router.include_router(timetable_stationboard.router, tags=["stationboard"])
     router.include_router(timetable_connections.router, tags=["connections"])
+    router.include_router(timetable_fare.router, tags=["fare"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
 
 

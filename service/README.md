@@ -10,6 +10,7 @@ The API and the website around it, in one FastAPI application.
 | `/v2/…` | the same routes, undocumented |
 | `/`, `/docs.html`, `/examples/`, `/showcase.html`, `/swagger.json` | the website, from `transport_api/site/` |
 | `/stats` (and the old `/stats.php`) | the statistics page, read from Redis |
+| `POST /v1/fare` | What a connection costs, from the national fare service (`timetable/fare.py`); needs `OJP_FARE_KEY` and Redis |
 | `POST /ojp20` | Open Journey Planner 2.0, answered by the router (`timetable/ojp.py`) |
 
 Documentation for operators is in the
