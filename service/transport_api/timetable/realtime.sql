@@ -38,3 +38,16 @@ CREATE TABLE IF NOT EXISTS rt.fetch_log (
     detail  jsonb
 );
 CREATE INDEX IF NOT EXISTS fetch_log_source_at ON rt.fetch_log (source, at);
+
+-- The occupancy forecast (occupancy.py), replaced once a day: per train -
+-- operator, number and operating day as in the timetable - and station it
+-- leaves, 1 (many seats), 2 (few) or 3 (standing room) in each class.
+CREATE TABLE IF NOT EXISTS rt.occupancy (
+    day      date     NOT NULL,
+    operator text     NOT NULL,
+    train    text     NOT NULL,
+    station  integer  NOT NULL,
+    first    smallint,
+    second   smallint,
+    PRIMARY KEY (day, operator, train, station)
+);

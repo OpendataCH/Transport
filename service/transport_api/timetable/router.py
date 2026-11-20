@@ -1,6 +1,7 @@
 """The client of the router (MOTIS), shared by the routes that ask it."""
 
 import asyncio
+from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import Request
@@ -22,6 +23,22 @@ def _plan_slots() -> asyncio.Semaphore:
     return _plans
 
 
+@asynccontextmanager
+async def plan_slot():
+    """One of the worker's journey-plan slots, or 429 when none frees up in time."""
+    slots = _plan_slots()
+    try:
+        await asyncio.wait_for(slots.acquire(), timeout=settings.MOTIS_QUEUE_SECONDS)
+    except TimeoutError:
+        raise errors.ApiError(
+            429, "Rate limit error: too many requests at the moment, please try again."
+        ) from None
+    try:
+        yield
+    finally:
+        slots.release()
+
+
 class Motis:
     """The router, behind one HTTP client for the life of the process."""
 
@@ -29,17 +46,8 @@ class Motis:
         self._client = client
 
     async def plan(self, params: dict[str, str]) -> dict:
-        slots = _plan_slots()
-        try:
-            await asyncio.wait_for(slots.acquire(), timeout=settings.MOTIS_QUEUE_SECONDS)
-        except TimeoutError:
-            raise errors.ApiError(
-                429, "Rate limit error: too many requests at the moment, please try again."
-            ) from None
-        try:
+        async with plan_slot():
             return await self.get("/api/v6/plan", params)
-        finally:
-            slots.release()
 
     async def get(self, path: str, params: dict[str, str]) -> dict | list:
         """One call to the router's API; its failures in the /v1 envelope."""

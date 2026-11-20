@@ -32,9 +32,10 @@ from . import (
     stats_page,
 )
 from .models import ApiInfo
-from .timetable import board_page, routing_ui
+from .timetable import board_page, ojp, routing_ui
 from .timetable import connections as timetable_connections
 from .timetable import db as timetable_db
+from .timetable import fare as timetable_fare
 from .timetable import locations as timetable_locations
 from .timetable import map as timetable_map
 from .timetable import stationboard as timetable_stationboard
@@ -116,7 +117,7 @@ app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -171,6 +172,7 @@ for prefix, api_version in API_VERSIONS.items():
     router.include_router(timetable_locations.router, tags=["locations"])
     router.include_router(timetable_stationboard.router, tags=["stationboard"])
     router.include_router(timetable_connections.router, tags=["connections"])
+    router.include_router(timetable_fare.router, tags=["fare"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
 
 
@@ -178,6 +180,8 @@ for prefix, api_version in API_VERSIONS.items():
 app.include_router(timetable_map.router, prefix=ALIAS, include_in_schema=False)
 # The router's own web interface, at /routing/.
 app.include_router(routing_ui.router)
+# The Open Journey Planner 2.0 interface, answered by the router.
+app.include_router(ojp.router)
 # The station board example drawn on the server, the sitemap and robots.txt.
 app.include_router(board_page.router)
 

@@ -72,9 +72,32 @@ GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
 GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
 OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 
+# The railways' occupancy forecast (timetable/occupancy.py): free, no key, one
+# ZIP a day. Empty switches it off. Days of it kept ahead, today included.
+OCCUPANCY_URL = os.environ.get(
+    "OCCUPANCY_URL",
+    "https://data.opentransportdata.swiss/dataset/occupancy-forecast-json-dataset/permalink",
+)
+OCCUPANCY_DAYS = max(int(os.environ.get("OCCUPANCY_DAYS", "7")), 1)
+
+# The national fare service (NOVA over OJP) behind /v1/fare, and its own key
+# from api-manager.opentransportdata.swiss (product OJP Fare). Unset, /fare
+# answers 503. The plan allows 20 000 requests a day and 50 a minute; below
+# that, prices of a route are kept for FARE_CACHE_DAYS days.
+OJP_FARE_URL = os.environ.get("OJP_FARE_URL", "https://api.opentransportdata.swiss/ojpfare")
+OJP_FARE_KEY = os.environ.get("OJP_FARE_KEY") or None
+FARE_PER_MINUTE = int(os.environ.get("FARE_PER_MINUTE", "40"))
+FARE_PER_DAY = int(os.environ.get("FARE_PER_DAY", "18000"))
+FARE_CACHE_DAYS = int(os.environ.get("FARE_CACHE_DAYS", "7"))
+
 # The router behind /connections (MOTIS, on the same feed), e.g.
 # `http://motis:8080`. Unset, /connections answers 503.
 MOTIS_URL = os.environ.get("MOTIS_URL") or None
+
+# Whether the router was built with its place search (MOTIS_TILES on the
+# router). Without it, an OJP location request for a stop id crashes MOTIS
+# 2.11.4 - it reads the missing search unchecked - so /ojp20 refuses it.
+MOTIS_GEOCODING = os.environ.get("MOTIS_GEOCODING", "0") not in ("0", "false", "")
 
 # Journey plans one worker asks the router at once, and how long a plan may
 # wait for its turn before it is refused with 429 (see timetable/router.py).

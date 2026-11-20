@@ -20,9 +20,17 @@ from ..fields import Fields
 from ..mapping import DEPRECATED_TYPES, ZURICH
 from ..models import Errors, StationBoardResponse
 from ..query import as_list, parameter, truthy
-from . import db
+from . import db, occupancy
 from .locations import BY_NAME, _like_escape
-from .mapping import journey, location, moment, service_day_start, stop
+from .mapping import (
+    highest_capacity,
+    journey,
+    location,
+    moment,
+    service_day_start,
+    set_capacity,
+    stop,
+)
 from .names import normalize
 
 router = APIRouter()
@@ -66,7 +74,7 @@ WHERE st.stop = ANY($1::int[])
 """
 
 TRIPS = """
-SELECT t.idx, t.headsign, t.short_name, t.last_seq,
+SELECT t.idx, t.headsign, t.short_name, t.last_seq, t.mode,
        r.short_name AS route_short_name, r.category, a.name AS operator,
        term.id AS terminal_id
 FROM gtfs.trips t
@@ -272,10 +280,21 @@ async def _journeys(
     for call in await db.fetch(pool, CALLS, trip_ids, days):
         calls.setdefault(call["trip"], []).append(call)
 
+    # The railways' occupancy forecast, for the trains among them.
+    forecast = await occupancy.by_train(
+        pool,
+        {
+            (r["day"], trips[r["trip"]]["short_name"])
+            for r in rows
+            if trips[r["trip"]]["mode"] == "train" and trips[r["trip"]]["short_name"]
+        },
+    )
+
     now = datetime.now(ZURICH).replace(microsecond=0)
     journeys = []
     for row in rows:
         trip = trips[row["trip"]]
+        levels = forecast.get((row["day"], trip["short_name"])) if trip["mode"] == "train" else None
         here = next(c for c in calls[row["trip"]] if c["seq"] == row["seq"])
         terminal = location(trip["terminal_id"], None, None, None)
         at = moment(row["day"], row["arr_s"] if arrivals else row["dep_s"])
@@ -283,8 +302,13 @@ async def _journeys(
 
         # /v1 reads the board's time into `departure` whichever way the board
         # faces, and builds the head stop's station from the terminal.
-        def head(station: dict, _at=at, _delay=delay, _here=here, _terminal=terminal) -> dict:
-            return stop(
+        # A train that ends here leaves with nobody.
+        leaving = occupancy.at(levels, here["id"]) if row["seq"] != trip["last_seq"] else None
+
+        def head(
+            station: dict, _at=at, _delay=delay, _here=here, _terminal=terminal, _leaving=leaving
+        ) -> dict:
+            board_stop = stop(
                 station,
                 None,
                 _at,
@@ -294,37 +318,38 @@ async def _journeys(
                 now,
                 location_=dict(_terminal),
             )
+            set_capacity(board_stop, _leaving)
+            return board_stop
 
         pass_list = [head(dict(terminal))]
         for call in calls[row["trip"]]:
             if call["seq"] <= row["seq"]:
                 continue
             place = location(call["id"], call["name"], call["lat"], call["lon"])
-            pass_list.append(
-                stop(
-                    place,
-                    moment(row["day"], call["arr_s"]),
-                    None if call["seq"] == trip["last_seq"] else moment(row["day"], call["dep_s"]),
-                    None,
-                    call["arrival_delay"],
-                    call["departure_delay"],
-                    now,
-                )
+            last = call["seq"] == trip["last_seq"]
+            checkpoint = stop(
+                place,
+                moment(row["day"], call["arr_s"]),
+                None if last else moment(row["day"], call["dep_s"]),
+                None,
+                call["arrival_delay"],
+                call["departure_delay"],
+                now,
             )
+            if not last:
+                set_capacity(checkpoint, occupancy.at(levels, call["id"]))
+            pass_list.append(checkpoint)
 
-        journeys.append(
-            {
-                "stop": head(board_station),
-                **journey(
-                    trip_short_name=trip["short_name"],
-                    route_short_name=trip["route_short_name"],
-                    category=trip["category"],
-                    operator=trip["operator"],
-                    headsign=trip["headsign"],
-                    pass_list=pass_list,
-                ),
-            }
+        line = journey(
+            trip_short_name=trip["short_name"],
+            route_short_name=trip["route_short_name"],
+            category=trip["category"],
+            operator=trip["operator"],
+            headsign=trip["headsign"],
+            pass_list=pass_list,
         )
+        line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
+        journeys.append({"stop": head(board_station), **line})
     return journeys
 
 

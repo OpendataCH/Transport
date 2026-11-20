@@ -14,6 +14,8 @@ takes ten minutes on a slow disk and happens every day.
   publication. Importing earlier would leave every delay matching nothing
   for hours. The same feed is re-imported each day to move the window on.
 - **Real time**, every 30 seconds, when OTD_API_KEY is set.
+- **Occupancy forecast**, checked hourly, fetched twice a day: the next
+  OCCUPANCY_DAYS days of it, loaded anew when the file or the day changes.
 """
 
 import asyncio
@@ -21,6 +23,7 @@ import logging
 import re
 import sys
 import time
+import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -28,7 +31,7 @@ import asyncpg
 import httpx
 
 from .. import settings
-from . import fetch_log, importer, realtime
+from . import fetch_log, importer, occupancy, realtime
 
 log = logging.getLogger("transport_api.timetable.ingest")
 
@@ -159,7 +162,7 @@ async def run() -> None:
     await connection.execute(importer.sql("realtime.sql"))
     await connection.close()
     state: dict[str, str | None] = {"version": None}
-    await asyncio.gather(_realtime(state), _timetable(state))
+    await asyncio.gather(_realtime(state), _timetable(state), _occupancy())
 
 
 async def _realtime(state: dict[str, str | None]) -> None:
@@ -223,6 +226,61 @@ async def _timetable(state: dict[str, str | None]) -> None:
             await fetch_log.prune(connection)
         except (httpx.HTTPError, asyncpg.PostgresError, OSError, RuntimeError) as exc:
             log.error("timetable refresh failed: %r", exc)
+            wait = 600
+        if connection.is_closed():
+            connection = await _connect()
+        await asyncio.sleep(wait)
+
+
+OCCUPANCY_EVERY = 3600
+
+
+async def refresh_occupancy(connection: asyncpg.Connection, loaded: tuple | None) -> tuple | None:
+    """Load the forecast if the file or the first day changed; what is loaded now."""
+    path = await asyncio.to_thread(occupancy.download, Path(settings.GTFS_CACHE))
+    if path is None:
+        return loaded
+    today = datetime.now(importer.ZURICH).date()
+    current = (path.stat().st_mtime, today)
+    if current == loaded:
+        return loaded
+    started = time.monotonic()
+    records = await asyncio.to_thread(
+        lambda: list(occupancy.rows(path, today, settings.OCCUPANCY_DAYS))
+    )
+    count = await occupancy.store(connection, records)
+    seconds = round(time.monotonic() - started, 1)
+    log.info("occupancy: %d sections from %s on, %ss", count, today, seconds)
+    await fetch_log.record(
+        connection,
+        "occupancy",
+        name=path.name,
+        bytes_=path.stat().st_size,
+        items=count,
+        seconds=seconds,
+    )
+    return current
+
+
+async def _occupancy() -> None:
+    if not settings.OCCUPANCY_URL:
+        log.info("no OCCUPANCY_URL: the occupancy forecast is off")
+        return
+    connection = await _connect()
+    loaded = None
+    while True:
+        wait = OCCUPANCY_EVERY
+        try:
+            loaded = await refresh_occupancy(connection, loaded)
+        except (
+            httpx.HTTPError,
+            asyncpg.PostgresError,
+            OSError,
+            ValueError,
+            KeyError,
+            zipfile.BadZipFile,
+        ) as exc:
+            log.error("occupancy refresh failed: %r", exc)
             wait = 600
         if connection.is_closed():
             connection = await _connect()

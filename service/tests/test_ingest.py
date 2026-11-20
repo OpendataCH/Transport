@@ -88,7 +88,7 @@ def test_the_fetch_log_keeps_thirty_days():
     assert "interval '30 days'" in connection.statements[0][0]
 
 
-def test_run_creates_the_real_time_tables_once_and_starts_both(monkeypatch):
+def test_run_creates_the_real_time_tables_once_and_starts_all_three(monkeypatch):
     setup = Connection()
     connections_from(monkeypatch, setup)
     started = []
@@ -101,11 +101,16 @@ def test_run_creates_the_real_time_tables_once_and_starts_both(monkeypatch):
 
     monkeypatch.setattr(ingest, "_realtime", task("realtime"))
     monkeypatch.setattr(ingest, "_timetable", task("timetable"))
+
+    async def forecast():
+        started.append(("occupancy", None))
+
+    monkeypatch.setattr(ingest, "_occupancy", forecast)
     asyncio.run(ingest.run())
 
     assert "rt." in setup.statements[0][0]
     assert setup.closed
-    assert [name for name, _ in started] == ["realtime", "timetable"]
+    assert [name for name, _ in started] == ["realtime", "timetable", "occupancy"]
     assert started[0][1] is started[1][1]
 
 
@@ -256,3 +261,23 @@ def test_a_database_that_is_starting_is_waited_for(monkeypatch):
     monkeypatch.setattr(ingest.asyncio, "sleep", sleep)
     assert asyncio.run(ingest._connect()) == "connection"
     assert len(attempts) == 2
+
+
+def test_the_forecast_is_loaded_again_only_when_file_or_day_change(monkeypatch, tmp_path):
+    path = tmp_path / "occupancy.zip"
+    path.write_bytes(b"")
+    monkeypatch.setattr(ingest.occupancy, "download", lambda cache: path)
+    monkeypatch.setattr(ingest.occupancy, "rows", lambda p, first, days: iter([("row",)]))
+    stored = []
+
+    async def store(connection, records):
+        stored.append(list(records))
+        return 1
+
+    monkeypatch.setattr(ingest.occupancy, "store", store)
+    connection = Connection()
+    loaded = asyncio.run(ingest.refresh_occupancy(connection, None))
+    assert stored == [[("row",)]]
+    assert asyncio.run(ingest.refresh_occupancy(connection, loaded)) == loaded
+    assert len(stored) == 1
+    assert "rt.fetch_log" in connection.statements[0][0]

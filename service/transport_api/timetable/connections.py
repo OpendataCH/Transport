@@ -12,7 +12,7 @@ list.
 """
 
 import re
-from datetime import datetime
+from datetime import date, datetime
 from typing import Annotated, Any
 
 import asyncpg
@@ -24,9 +24,9 @@ from ..fields import Fields
 from ..mapping import DEPRECATED_TYPES, ZURICH, duration_of
 from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
-from . import db, places
+from . import db, occupancy, places
 from .locations import _exact_metres
-from .mapping import journey, line_number, location, stop
+from .mapping import highest_capacity, journey, line_number, location, set_capacity, stop
 from .names import normalize, operator_name
 from .router import Motis, get_motis, motis_or_none  # noqa: F401 - re-exported
 from .stationboard import TRANSPORTATIONS, _station
@@ -65,7 +65,7 @@ WHERE s.stop_id = ANY($1::text[])
 
 TRIPS = """
 SELECT t.trip_id, t.short_name, t.headsign, r.short_name AS route_short_name, r.category,
-       a.name AS operator
+       a.name AS operator, t.mode
 FROM gtfs.trips t
 JOIN gtfs.routes r ON r.idx = t.route
 LEFT JOIN gtfs.agency a ON a.idx = r.agency
@@ -304,13 +304,37 @@ async def _connections(pool: asyncpg.Pool, itineraries: list[dict]) -> list[dict
                 trip_ids.add(_trip_id(leg["tripId"]))
     stations = {r["stop_id"]: r for r in await db.fetch(pool, STATIONS, list(stop_ids))}
     trips = {r["trip_id"]: r for r in await db.fetch(pool, TRIPS, list(trip_ids))}
+    forecast = await occupancy.by_train(
+        pool,
+        {
+            (_service_day(leg["tripId"]), trips[_trip_id(leg["tripId"])]["short_name"])
+            for itinerary in itineraries
+            for leg in itinerary["legs"]
+            if _is_train(trips.get(_trip_id(leg.get("tripId") or "")))
+            and _service_day(leg["tripId"])
+        },
+    )
     now = datetime.now(ZURICH).replace(microsecond=0)
-    return [_connection(i, stations, trips, now) for i in itineraries]
+    return [_connection(i, stations, trips, forecast, now) for i in itineraries]
 
 
-def _connection(itinerary: dict, stations: dict, trips: dict, now: datetime) -> dict:
+def _is_train(trip) -> bool:
+    return trip is not None and trip["mode"] == "train" and bool(trip["short_name"])
+
+
+def _service_day(motis_trip_id: str) -> date | None:
+    """`20261120_05:25_ch_...` -> the trip's service day, 20 November 2026."""
+    try:
+        return datetime.strptime(motis_trip_id[:8], "%Y%m%d").date()
+    except ValueError:
+        return None
+
+
+def _connection(
+    itinerary: dict, stations: dict, trips: dict, forecast: dict, now: datetime
+) -> dict:
     legs = [leg for leg in itinerary["legs"] if not _transfer_within_station(leg)]
-    sections = [_section(leg, stations, trips, now) for leg in legs]
+    sections = [_section(leg, stations, trips, forecast, now) for leg in legs]
     first, last = legs[0], legs[-1]
     products = [
         _product(trips.get(_trip_id(leg["tripId"])) or _trip_of_leg(leg))
@@ -328,8 +352,15 @@ def _connection(itinerary: dict, stations: dict, trips: dict, now: datetime) -> 
         "transfers": itinerary.get("transfers", 0),
         "service": None,
         "products": products,
-        "capacity1st": None,
-        "capacity2nd": None,
+        **dict(
+            zip(
+                ("capacity1st", "capacity2nd"),
+                highest_capacity(
+                    [p for s in sections if s["journey"] for p in s["journey"]["passList"]]
+                ),
+                strict=True,
+            )
+        ),
         "sections": sections or None,
     }
 
@@ -341,7 +372,7 @@ def _transfer_within_station(leg: dict) -> bool:
     )
 
 
-def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
+def _section(leg: dict, stations: dict, trips: dict, forecast: dict, now: datetime) -> dict:
     live = leg.get("realTime")
     departure = _stop(leg["from"], stations, now, live, departs=True)
     arrival = _stop(leg["to"], stations, now, live, arrives=True)
@@ -356,7 +387,8 @@ def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
         if leg.get("mode") == "RENTAL":
             section["rental"] = _rental(leg.get("rental") or {})
         return section
-    trip = trips.get(_trip_id(leg["tripId"])) or _trip_of_leg(leg)
+    known = trips.get(_trip_id(leg["tripId"]))
+    trip = known or _trip_of_leg(leg)
     pass_list = [
         departure,
         *(
@@ -365,15 +397,22 @@ def _section(leg: dict, stations: dict, trips: dict, now: datetime) -> dict:
         ),
         arrival,
     ]
+    if _is_train(known):
+        levels = forecast.get((_service_day(leg["tripId"]), known["short_name"]))
+        # Where the train leaves from: not where this section gets off.
+        for checkpoint in pass_list[:-1]:
+            set_capacity(checkpoint, occupancy.at(levels, checkpoint["station"]["id"]))
+    line = journey(
+        trip_short_name=trip["short_name"],
+        route_short_name=trip["route_short_name"],
+        category=trip["category"],
+        operator=trip["operator"],
+        headsign=leg.get("headsign") or trip["headsign"],
+        pass_list=pass_list,
+    )
+    line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
     return {
-        "journey": journey(
-            trip_short_name=trip["short_name"],
-            route_short_name=trip["route_short_name"],
-            category=trip["category"],
-            operator=trip["operator"],
-            headsign=leg.get("headsign") or trip["headsign"],
-            pass_list=pass_list,
-        ),
+        "journey": line,
         "walk": None,
         "departure": departure,
         "arrival": arrival,

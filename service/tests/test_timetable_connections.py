@@ -9,6 +9,7 @@ need nothing.
 import asyncio
 import os
 from contextlib import asynccontextmanager
+from datetime import date, datetime
 
 import asyncpg
 import pytest
@@ -17,6 +18,7 @@ from fastapi.testclient import TestClient
 from gtfs_feed import TODAY, write_feed
 
 from transport_api import errors
+from transport_api.mapping import ZURICH
 from transport_api.models import ConnectionsResponse
 from transport_api.timetable import connections, importer, places
 
@@ -340,8 +342,57 @@ def test_a_walk_between_stations_is_its_seconds():
         "from": {"stopId": "ch_a", "parentId": "ch_A", "name": "A"},
         "to": {"stopId": "ch_b", "parentId": "ch_B", "name": "B"},
     }
-    section = connections._section(leg, {}, {}, None)
+    section = connections._section(leg, {}, {}, {}, None)
     assert section["walk"] == {"duration": 180}
+
+
+def test_a_train_leaves_each_station_as_full_as_forecast():
+    def place(stop_id, at):
+        return {
+            "stopId": f"ch_{stop_id}",
+            "name": stop_id,
+            "scheduledDeparture": at,
+            "scheduledArrival": at,
+        }
+
+    leg = {
+        "mode": "HIGHSPEED_RAIL",
+        "tripId": "20261120_05:25_ch_.ojp-91-1-D",
+        "from": place("bern", "2026-11-20T06:31:00Z"),
+        "intermediateStops": [place("olten", "2026-11-20T06:58:00Z")],
+        "to": place("zurich", "2026-11-20T07:28:00Z"),
+    }
+    stations = {
+        "bern": {"id": "8507000", "name": "Bern", "lat": None, "lon": None},
+        "olten": {"id": "8500218", "name": "Olten", "lat": None, "lon": None},
+        "zurich": {"id": "8503000", "name": "Zürich HB", "lat": None, "lon": None},
+    }
+    trips = {
+        ".ojp-91-1-D": {
+            "short_name": "707",
+            "route_short_name": "IC1",
+            "category": "IC",
+            "operator": "SBB",
+            "headsign": "St. Gallen",
+            "mode": "train",
+        }
+    }
+    # Full in second class from Olten; nothing known at Zürich, where it is left.
+    forecast = {(date(2026, 11, 20), "707"): {8507000: (1, 2), 8500218: (1, 3), 8503000: (2, 2)}}
+    now = datetime(2026, 11, 20, 7, 0, tzinfo=ZURICH)
+    section = connections._section(leg, stations, trips, forecast, now)
+    stops = section["journey"]["passList"]
+    assert [(s["prognosis"]["capacity1st"], s["prognosis"]["capacity2nd"]) for s in stops] == [
+        (1, 2),
+        (1, 3),
+        (None, None),
+    ]
+    assert (section["journey"]["capacity1st"], section["journey"]["capacity2nd"]) == (1, 3)
+
+    # A bus with the same number is not the train.
+    trips[".ojp-91-1-D"]["mode"] = "bus"
+    bus = connections._section(leg, stations, trips, forecast, now)
+    assert bus["journey"]["capacity2nd"] is None
 
 
 @needs_database
