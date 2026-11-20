@@ -346,6 +346,30 @@ def test_a_walk_between_stations_is_its_seconds():
     assert section["walk"] == {"duration": 180}
 
 
+def test_the_line_on_a_map_only_when_asked_for():
+    leg = {
+        "mode": "WALK",
+        "duration": 300,
+        "from": {"stopId": "ch_a", "parentId": "ch_A", "name": "A"},
+        "to": {"stopId": "ch_b", "parentId": "ch_B", "name": "B"},
+        "legGeometry": {"points": "_p~iF~ps|U_ulLnnqC", "precision": 6, "length": 2},
+        "steps": [{"fromLevel": 0.0, "toLevel": -1.0}, {"fromLevel": -1.0, "toLevel": 0.0}],
+    }
+    itinerary = {"legs": [leg], "duration": 300}
+    plain = connections._connection(itinerary, {}, {}, {}, None)
+    assert "geometry" not in plain["sections"][0]
+    drawn = connections._connection(itinerary, {}, {}, {}, None, with_geometry=True)
+    assert drawn["sections"][0]["geometry"] == {
+        "polyline": "_p~iF~ps|U_ulLnnqC",
+        "precision": 6,
+        "levels": [-1, 0],
+    }
+    # At street level, no floors; without a line, nothing.
+    leg["steps"] = [{"fromLevel": 0.0, "toLevel": 0.0}]
+    assert "levels" not in connections._geometry(leg)
+    assert connections._geometry({"mode": "WALK"}) is None
+
+
 def test_a_train_leaves_each_station_as_full_as_forecast():
     def place(stop_id, at):
         return {

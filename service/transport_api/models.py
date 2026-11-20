@@ -160,6 +160,18 @@ class Rental(BaseModel):
     url: str | None = Field(description="Where to book it, when the provider gives one.")
 
 
+class Geometry(BaseModel):
+    """The line a section follows on a map (only with `geometry=1`)."""
+
+    polyline: str = Field(description="Encoded polyline, Google's algorithm.")
+    precision: int = Field(description="Decimals of each coordinate in `polyline`, e.g. 6.")
+    levels: list[float] | None = Field(
+        default=None,
+        description="Lowest and highest floor a walk reaches inside a station, 0 at street "
+        "level; absent when it stays at street level.",
+    )
+
+
 class Section(BaseModel):
     """One leg of a connection: a vehicle, or a walk."""
 
@@ -173,6 +185,11 @@ class Section(BaseModel):
     )
     departure: Stop
     arrival: Stop | None = Field(description="Null on a leg the upstream does not end.")
+    geometry: Geometry | None = Field(
+        default=None,
+        description="Only with `geometry=1`: the line on a map. A walk follows the streets; "
+        "a ride runs straight from stop to stop.",
+    )
 
 
 class Connection(BaseModel):

@@ -216,6 +216,65 @@
         }
             .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
         .api-panel code { word-break: break-all; }
+
+        /* The journey on a map: the list beside the map, a rider on it. */
+        .map-bar { padding: 10px 16px 0; }
+        .play-map { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 16px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; }
+        .play-map:hover { border-color: var(--ink); }
+        .play-map .tri { width: 0; height: 0; border-left: 8px solid var(--long-distance); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+        .with-map { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); align-items: start; }
+        .with-map > .map-bar { grid-column: 1 / -1; }
+        .with-map > .legs { grid-column: 1; grid-row: 2; }
+        .with-map > .trip-stage { grid-column: 2; grid-row: 2; position: sticky; top: 8px; padding: 14px 16px 16px 0; }
+        .trip-map { height: 440px; border: 1px solid var(--line); border-radius: 6px; background: #f2f2f2; }
+        .hud { margin-top: 8px; font-size: 13px; }
+        .hud .controls { display: flex; align-items: center; gap: 8px; }
+        .hud .controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--long-distance); }
+        .hud .clock { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; }
+        .hud .round { width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; border: 0; background: var(--ink); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+        .hud .round svg { width: 16px; height: 16px; fill: currentColor; }
+        .hud .now-doing { margin: 6px 0; color: var(--ink); min-height: 1.4em; }
+        .hud .now-doing .muted { color: var(--muted); }
+        .hud .options { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+        .hud .chip { padding: 1px 9px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--muted); font-size: 12px; }
+        .hud .chip[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: #fff; }
+        .hud .chip.live[aria-pressed=true] { background: var(--late); border-color: var(--late); }
+        .legs > li.now .ride { color: var(--ink); }
+        .legs > li.now .rail::before { width: 5px; background: var(--long-distance); }
+        .legs > li.now.walk .rail::before { width: 0; border-left: 3px dotted var(--long-distance); }
+
+        /* The rider: a disc with the vehicle's icon, its line on a tag. */
+        .rider-icon { background: none; border: 0; }
+        .rider { position: relative; width: 36px; height: 36px; }
+        .rider .disc { position: absolute; inset: 0; border-radius: 50%; background: var(--tone, var(--ink)); color: #fff; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; }
+        .rider .disc svg { width: 20px; height: 20px; transition: transform .25s; }
+        .rider.west .disc svg { transform: scaleX(-1); }
+        .rider .tag { position: absolute; left: 50%; bottom: calc(100% + 3px); transform: translateX(-50%); background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; font-size: 11px; font-weight: 700; white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+        .rider .tag .late { font-size: inherit; }
+        .rider.walk .disc { background: #fff; color: var(--ink); border-color: var(--ink); }
+        .rider.moving.walk .disc { animation: step .42s ease-in-out infinite alternate; }
+        .rider.moving:not(.walk) .disc { animation: rumble .3s linear infinite; }
+        .rider.idle .disc { animation: breathe 1.6s ease-in-out infinite; }
+        .rider.pop .disc { animation: pop .45s cubic-bezier(.3, 1.6, .5, 1); }
+        .rider.arrived .disc { background: var(--long-distance); }
+        .rider.arrived::before, .rider.arrived::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--long-distance); animation: ring 1.4s ease-out infinite; }
+        .rider.arrived::after { animation-delay: .7s; }
+        @keyframes step { from { transform: translateY(0) rotate(-6deg); } to { transform: translateY(-5px) rotate(6deg); } }
+        @keyframes rumble { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(.6px, -.6px); } 75% { transform: translate(-.6px, .6px); } }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        @keyframes pop { 0% { transform: scale(.3); } 100% { transform: scale(1); } }
+        @keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(2.6); opacity: 0; } }
+        .stop-label { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; font-size: 11px; font-weight: 600; box-shadow: none; }
+        .stop-label::before { display: none; }
+        @media (prefers-reduced-motion: reduce) {
+            .rider .disc, .rider.arrived::before, .rider.arrived::after { animation: none !important; }
+        }
+        @media (max-width: 767px) {
+            .with-map { grid-template-columns: minmax(0, 1fr); }
+            .with-map > .trip-stage { grid-column: 1; grid-row: 2; position: static; padding: 10px 12px 0; }
+            .with-map > .legs { grid-row: 3; }
+            .trip-map { height: 320px; }
+        }
     </style>
 </head>
 
@@ -298,6 +357,7 @@
     // Read before the address is rewritten by the first search.
     var openOnLoad = parseInt(new URLSearchParams(location.search).get('open'), 10) || 0;
     var asked = null;
+    var mapOnLoad = new URLSearchParams(location.search).get('map') === '1';
 
     // Categories that run between cities, drawn red as on the station
     // displays; S-Bahn and regional trains blue; everything else grey.
@@ -509,7 +569,7 @@
                     ride.push(el('br'), toggle, listOf);
                 }
             }
-            list.appendChild(el('li', {class: walk ? 'walk' : ''}, [
+            list.appendChild(el('li', {class: walk ? 'walk' : '', 'data-section': String(index)}, [
                 el('span', {}), el('span', {class: 'rail'}), el('div', {class: 'ride'}, ride), el('span', {})
             ]));
 
@@ -589,7 +649,11 @@
         button.addEventListener('click', function () {
             var open = box.classList.toggle('open');
             button.setAttribute('aria-expanded', open ? 'true' : 'false');
-            if (open && !details.firstChild) details.appendChild(legs(connection));
+            if (open && !details.firstChild) {
+                var list = legs(connection);
+                details.appendChild(mapBar(connection, details, list));
+                details.appendChild(list);
+            }
             details.hidden = !open;
         });
         return box;
@@ -638,6 +702,514 @@
         document.getElementById('later-row').hidden = !any;
     }
 
+    // --- The journey on a map -----------------------------------------------
+    // With geometry=1 each section carries the line it follows: a walk the
+    // streets (and the floors of a station), a ride straight from stop to
+    // stop. The player moves a rider along it by the timetable, each part of
+    // the journey given screen time by how long it lasts, but less than in
+    // proportion, so that a four-minute walk is not over in a blink beside an
+    // hour on the train.
+
+    var LEAFLET = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/';
+    var leaflet = null;
+    function loadLeaflet() {
+        if (leaflet) return leaflet;
+        leaflet = new Promise(function (resolve, reject) {
+            var css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = LEAFLET + 'leaflet.min.css';
+            document.head.appendChild(css);
+            var script = document.createElement('script');
+            script.src = LEAFLET + 'leaflet.min.js';
+            script.onload = function () { resolve(window.L); };
+            script.onerror = function () { leaflet = null; reject(new Error('The map library did not load.')); };
+            document.head.appendChild(script);
+        });
+        return leaflet;
+    }
+
+    var REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var TONES = {'long-distance': '#c60018', regional: '#2d327d', local: '#5a5f66', walk: '#383a3d'};
+
+    function toneOf(section) {
+        if (!section.journey) return 'walk';
+        var head = (section.journey.category || '').toUpperCase();
+        return LONG_DISTANCE.indexOf(head) >= 0 ? 'long-distance' : REGIONAL.indexOf(head) >= 0 ? 'regional' : 'local';
+    }
+
+    // Google's encoded polyline, as the router writes it.
+    function decode(text, precision) {
+        var points = [], lat = 0, lon = 0, i = 0, factor = Math.pow(10, precision || 6);
+        while (text && i < text.length) {
+            var shift = 0, result = 0, b;
+            do { b = text.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+            lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+            shift = 0; result = 0;
+            do { b = text.charCodeAt(i++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+            lon += (result & 1) ? ~(result >> 1) : (result >> 1);
+            points.push([lat / factor, lon / factor]);
+        }
+        return points;
+    }
+
+    // Metres between two points, flat: close enough within a country.
+    function metres(a, b) {
+        var dy = (b[0] - a[0]) * 110540;
+        var dx = (b[1] - a[1]) * 111320 * Math.cos((a[0] + b[0]) * Math.PI / 360);
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // A path with the distance run at each of its points.
+    function path(points) {
+        if (points.length === 1) points = [points[0], points[0]];
+        var cum = [0];
+        for (var i = 1; i < points.length; i++) cum.push(cum[i - 1] + metres(points[i - 1], points[i]));
+        return {points: points, cum: cum, length: cum[cum.length - 1]};
+    }
+
+    // The point at a distance along a path, and the index of the point before it.
+    function along(p, d) {
+        var lo = 0, hi = p.cum.length - 1;
+        if (d <= 0) return {at: p.points[0], index: 0};
+        if (d >= p.length) return {at: p.points[hi], index: hi};
+        while (hi - lo > 1) {
+            var mid = (lo + hi) >> 1;
+            if (p.cum[mid] <= d) lo = mid; else hi = mid;
+        }
+        var span = p.cum[hi] - p.cum[lo] || 1, f = (d - p.cum[lo]) / span;
+        var a = p.points[lo], b = p.points[hi];
+        return {at: [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f], index: lo};
+    }
+
+    function coordinate(stop) {
+        var where = stop && (stop.station || stop.location);
+        var c = where && where.coordinate;
+        return c && c.x != null && c.y != null ? [c.x, c.y] : null;
+    }
+
+    // When a stop is left or reached, expected if real time knows it.
+    function expected(stop, which) {
+        var value = (stop.prognosis && stop.prognosis[which]) || stop[which];
+        return value ? parse(value).getTime() : null;
+    }
+
+    // The parts of a journey: each a path, the times at which the rider is
+    // where along it, and what it is. Changes and waits fill the gaps, so
+    // that one part ends when the next begins.
+    function scenesOf(connection) {
+        var scenes = [];
+        var sections = connection.sections || [];
+        var last = null;    // {t, at}: where and when the previous part ended
+
+        function push(scene) {
+            scene.t0 = scene.keys[0].t;
+            scene.t1 = scene.keys[scene.keys.length - 1].t;
+            scenes.push(scene);
+            last = {t: scene.t1, at: scene.path.points[scene.path.points.length - 1]};
+        }
+
+        function between(to, tUntil, index) {
+            if (!last) return;
+            var gap = tUntil - last.t;
+            var p = path([last.at, to]);
+            // A gap of a few metres and under a minute is no part of its own.
+            if (gap < 60000 && p.length < 80) return;
+            // After a ride it is a change; after a walk, waiting for the next.
+            var before = scenes[scenes.length - 1];
+            var change = before && before.type === 'section' && before.data.journey;
+            // Walk over at a stroll, then wait.
+            var walking = Math.min(Math.max(gap, 0), p.length / 1.2 * 1000);
+            var keys = [{t: last.t, d: 0}, {t: last.t + walking, d: p.length}];
+            if (tUntil > keys[1].t) keys.push({t: tUntil, d: p.length});
+            push({type: change ? 'change' : 'wait', kind: p.length > 30 ? 'walk' : 'wait', tone: 'walk', path: p, keys: keys, section: index});
+        }
+
+        sections.forEach(function (section, index) {
+            var start = expected(section.departure, 'departure');
+            var end = section.arrival ? expected(section.arrival, 'arrival') : null;
+            var points = section.geometry ? decode(section.geometry.polyline, section.geometry.precision) : [];
+            var stops = section.journey ? (section.journey.passList || []) : [section.departure, section.arrival];
+            if (points.length < 2) {
+                points = stops.map(coordinate).filter(Boolean);
+            }
+            if (!points.length) return;
+            if (start == null) start = last ? last.t : null;
+            if (start == null) return;
+            if (end == null || end < start) end = start;
+            between(points[0], start, index);
+            if (last && start < last.t) start = last.t;
+            var p = path(points);
+            var keys;
+            if (!section.journey) {
+                // A walk takes its own duration, then waits for what comes next.
+                var walking = section.walk && section.walk.duration ? section.walk.duration * 1000 : end - start;
+                var arrive = Math.min(end, start + walking);
+                keys = [{t: start, d: 0}, {t: Math.max(arrive, start + 1), d: p.length}];
+                if (end > keys[1].t) keys.push({t: end, d: p.length});
+            } else {
+                // A ride stops at each stop of its pass list, at its times.
+                keys = [];
+                var from = 0;
+                stops.forEach(function (stop, k) {
+                    var c = coordinate(stop);
+                    if (!c) return;
+                    var best = from, bestD = Infinity;
+                    for (var i = from; i < p.points.length; i++) {
+                        var d = metres(p.points[i], c);
+                        if (d < bestD) { bestD = d; best = i; }
+                    }
+                    from = best;
+                    var d0 = p.cum[best];
+                    var a = k === 0 ? start : expected(stop, 'arrival');
+                    var b = k === stops.length - 1 ? end : expected(stop, 'departure');
+                    [a, b].forEach(function (t) {
+                        if (t == null) return;
+                        var prev = keys[keys.length - 1];
+                        if (prev && (t < prev.t || d0 < prev.d)) return;
+                        keys.push({t: t, d: d0});
+                    });
+                });
+                if (!keys.length || keys[0].t > start) keys.unshift({t: start, d: 0});
+                var tail = keys[keys.length - 1];
+                if (tail.d < p.length || tail.t < end) keys.push({t: Math.max(end, tail.t), d: p.length});
+            }
+            push({
+                type: 'section', kind: kindOf(section), tone: toneOf(section), path: p, keys: keys,
+                section: index, data: section
+            });
+        });
+
+        // Screen time: grows with the square root of the minutes, within bounds.
+        var screen = 0;
+        scenes.forEach(function (scene) {
+            var minutes = Math.max(0, (scene.t1 - scene.t0) / 60000);
+            var seconds = scene.type !== 'section'
+                ? Math.min(4, Math.max(1, 0.8 * Math.sqrt(minutes)))
+                : Math.min(14, Math.max(2, 1.6 * Math.sqrt(minutes)));
+            scene.s0 = screen;
+            scene.s1 = screen += seconds;
+        });
+        return scenes;
+    }
+
+    function distanceAt(scene, t) {
+        var keys = scene.keys;
+        if (t <= keys[0].t) return keys[0].d;
+        for (var i = 1; i < keys.length; i++) {
+            if (t <= keys[i].t) {
+                var a = keys[i - 1], b = keys[i], span = b.t - a.t;
+                return span > 0 ? a.d + (b.d - a.d) * (t - a.t) / span : b.d;
+            }
+        }
+        return keys[keys.length - 1].d;
+    }
+
+    var PLAY = '<path d="M7 4l13 8l-13 8z"/>';
+    var PAUSE = '<path d="M6 4h4v16h-4zM14 4h4v16h-4z"/>';
+    var REPLAY = '<path d="M12 4a8 8 0 1 1 -7.4 5h3a5.2 5.2 0 1 0 4.4 -2.4v3l-5 -4.5l5 -4.5z"/>';
+    function glyph(paths) {
+        var svg = document.createElementNS(SVG, 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.innerHTML = paths;
+        return svg;
+    }
+
+    // The button that opens the map, above a connection's legs.
+    function mapBar(connection, details, list) {
+        var button = el('button', {type: 'button', class: 'play-map'}, [el('span', {class: 'tri'}), 'Play the journey on a map']);
+        var bar = el('div', {class: 'map-bar'}, [button]);
+        button.addEventListener('click', function () {
+            if (details.classList.contains('with-map')) return;
+            button.disabled = true;
+            loadLeaflet().then(function (L) {
+                bar.hidden = true;
+                details.classList.add('with-map');
+                var stage = el('div', {class: 'trip-stage'});
+                details.insertBefore(stage, list);
+                player(L, connection, stage, list);
+                stage.scrollIntoView({behavior: REDUCED_MOTION ? 'auto' : 'smooth', block: 'nearest'});
+                var box = details.parentNode;
+                var params = new URLSearchParams(location.search);
+                params.set('open', String(parseInt(box.getAttribute('data-index'), 10) + 1));
+                params.set('map', '1');
+                history.replaceState({}, '', '?' + params);
+            }).catch(function (error) {
+                button.disabled = false;
+                fail(error);
+            });
+        });
+        return bar;
+    }
+
+    function player(L, connection, stage, list) {
+        var scenes = scenesOf(connection);
+        if (!scenes.length) {
+            stage.appendChild(el('p', {class: 'muted', text: 'No positions known for this connection.'}));
+            return;
+        }
+        var total = scenes[scenes.length - 1].s1;
+        var start = scenes[0].t0, end = scenes[scenes.length - 1].t1;
+
+        var mapNode = el('div', {class: 'trip-map', role: 'region', 'aria-label': 'Map of the journey'});
+        var playButton = el('button', {type: 'button', class: 'round', 'aria-label': 'Play'}, [glyph(PLAY)]);
+        var slider = el('input', {type: 'range', min: '0', max: '1000', value: '0', 'aria-label': 'Time in the journey'});
+        var clockNode = el('span', {class: 'clock'});
+        var doing = el('div', {class: 'now-doing', 'aria-live': 'polite'});
+        var speeds = [1, 2, 4].map(function (n) {
+            return el('button', {type: 'button', class: 'chip', 'aria-pressed': n === 1 ? 'true' : 'false', 'data-speed': String(n), text: n + '×'});
+        });
+        var followChip = el('button', {type: 'button', class: 'chip', 'aria-pressed': 'true', text: 'Follow'});
+        var liveChip = el('button', {type: 'button', class: 'chip live', 'aria-pressed': 'false', text: '● Now', title: 'Where the journey is now, in real time'});
+        stage.appendChild(mapNode);
+        stage.appendChild(el('div', {class: 'hud'}, [
+            el('div', {class: 'controls'}, [playButton, slider, clockNode]),
+            doing,
+            el('div', {class: 'options'}, speeds.concat([followChip, liveChip]))
+        ]));
+
+        var map = L.map(mapNode, {zoomSnap: 0.25, maxZoom: 18});
+        L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg', {
+            maxZoom: 18, opacity: 0.55,
+            attribution: '© <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a>'
+        }).addTo(map);
+
+        // The whole route, faint, and on it the part already travelled.
+        var trails = scenes.map(function (scene) {
+            var colour = TONES[scene.tone];
+            var walk = scene.tone === 'walk';
+            L.polyline(scene.path.points, {
+                color: colour, weight: walk ? 4 : 6, opacity: walk ? 0.5 : 0.3,
+                dashArray: walk ? '1 8' : null, lineCap: 'round', interactive: false
+            }).addTo(map);
+            return L.polyline([], {
+                color: walk ? TONES['long-distance'] : colour, weight: walk ? 6 : 7, opacity: 0.95,
+                dashArray: walk ? '1 10' : null, lineCap: 'round', interactive: false
+            }).addTo(map);
+        });
+
+        // Stops: every one a dot; the ends and the changes named.
+        (connection.sections || []).forEach(function (section, index, all) {
+            var stops = section.journey ? section.journey.passList || [] : [];
+            stops.forEach(function (stop) {
+                var c = coordinate(stop);
+                if (c) {
+                    L.circleMarker(c, {radius: 3.5, color: TONES[toneOf(section)], weight: 2, fillColor: '#fff', fillOpacity: 1})
+                        .bindTooltip(stationName(stop) + ' ' + clock(stop.departure || stop.arrival)).addTo(map);
+                }
+            });
+            [[section.departure, index === 0], [section.arrival, index === all.length - 1]].forEach(function (pair) {
+                var c = pair[0] && coordinate(pair[0]);
+                if (!c) return;
+                L.circleMarker(c, {radius: 5, color: TONES.walk, weight: 2.5, fillColor: '#fff', fillOpacity: 1})
+                    .bindTooltip(stationName(pair[0]), {permanent: true, direction: 'right', offset: [6, 0], className: 'stop-label'})
+                    .addTo(map);
+            });
+        });
+
+        var rider = L.marker(scenes[0].path.points[0], {keyboard: false, interactive: false, zIndexOffset: 1000}).addTo(map);
+        var all = L.latLngBounds([]);
+        scenes.forEach(function (scene) { all.extend(scene.path.points); });
+        map.fitBounds(all, {padding: [30, 30]});
+
+        var state = {s: 0, playing: false, speed: 1, follow: true, live: false, scene: -1, flying: false, last: null, west: false};
+
+        function iconFor(scene, done) {
+            var kind = done ? 'pin' : scene.kind === 'wait' ? 'walk' : scene.kind;
+            var tag = '';
+            if (done) {
+                tag = 'Arrived';
+            } else if (scene.type === 'section' && scene.data.journey) {
+                var dep = scene.data.departure;
+                tag = vehicle(scene.data.journey) + (dep.delay > 0 ? ' <span class="late">+' + dep.delay + '</span>' : '');
+            } else if (scene.type !== 'section') {
+                tag = (scene.type === 'change' ? 'Change · ' : 'Wait · ') + Math.max(1, Math.round((scene.t1 - scene.t0) / 60000)) + '′';
+            }
+            var classes = 'rider ' + (scene.tone === 'walk' && !done ? 'walk' : '') + (done ? ' arrived' : '') + (REDUCED_MOTION ? '' : ' pop');
+            var svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[kind] || ICONS.train) + '</svg>';
+            return L.divIcon({
+                className: 'rider-icon', iconSize: [36, 36], iconAnchor: [18, 18],
+                html: '<div class="' + classes + '" style="--tone:' + TONES[done ? 'long-distance' : scene.tone] + '">' +
+                    '<div class="disc">' + svg + '</div>' + (tag ? '<span class="tag">' + tag + '</span>' : '') + '</div>'
+            });
+        }
+
+        function describe(scene, t, done) {
+            doing.textContent = '';
+            if (done) {
+                var to = connection.to;
+                doing.append('Arrived at ', el('strong', {text: stationName(to)}), el('span', {class: 'muted', text: ' · ' + duration(connection.duration)}));
+                return;
+            }
+            if (scene.type !== 'section') {
+                var next = (connection.sections || [])[scene.section];
+                var what = scene.type === 'change' ? (scene.kind === 'walk' ? 'Change, walk over' : 'Change') : 'Wait';
+                doing.append(what, el('span', {class: 'muted', text: ' · ' + Math.max(1, Math.round((scene.t1 - t) / 60000)) + ' min until ' + (next && next.journey ? vehicle(next.journey) : 'the next part')}));
+                return;
+            }
+            var section = scene.data;
+            if (!section.journey) {
+                var levels = section.geometry && section.geometry.levels;
+                var floor = levels && levels[0] < 0 ? ', down to level ' + levels[0] : levels && levels[1] > 0 ? ', up to level ' + levels[1] : '';
+                doing.append(section.rental ? rentalText(section.rental) : 'Walk', ' to ', el('strong', {text: stationName(section.arrival)}),
+                    el('span', {class: 'muted', text: ' · ca. ' + walkMinutes(section) + ' min' + floor}));
+                return;
+            }
+            // The next stop the ride reaches after this moment.
+            var upcoming = (section.journey.passList || []).filter(function (s, k) {
+                var at = k === 0 ? null : expected(s, 'arrival');
+                return at != null && at >= t;
+            })[0];
+            doing.append(el('strong', {text: vehicle(section.journey)}), ' towards ' + (section.journey.to || ''),
+                upcoming ? el('span', {class: 'muted', text: ' · next: ' + stationName(upcoming) + ' ' + clock((upcoming.prognosis && upcoming.prognosis.arrival) || upcoming.arrival)}) : null);
+        }
+
+        function sceneAtScreen(s) {
+            for (var i = 0; i < scenes.length; i++) if (s < scenes[i].s1) return i;
+            return scenes.length - 1;
+        }
+        function sceneAtTime(t) {
+            for (var i = 0; i < scenes.length; i++) if (t < scenes[i].t1) return i;
+            return scenes.length - 1;
+        }
+        function timeAt(i, s) {
+            var scene = scenes[i], f = (s - scene.s0) / (scene.s1 - scene.s0);
+            return scene.t0 + Math.min(1, Math.max(0, f)) * (scene.t1 - scene.t0);
+        }
+        function screenAt(i, t) {
+            var scene = scenes[i], span = scene.t1 - scene.t0;
+            var f = span > 0 ? (t - scene.t0) / span : 1;
+            return scene.s0 + Math.min(1, Math.max(0, f)) * (scene.s1 - scene.s0);
+        }
+
+        function highlight(index) {
+            Array.prototype.forEach.call(list.querySelectorAll('li[data-section]'), function (li) {
+                li.classList.toggle('now', parseInt(li.getAttribute('data-section'), 10) === index);
+            });
+        }
+
+        function camera(scene) {
+            if (!state.follow) return;
+            var bounds = L.latLngBounds(scene.path.points);
+            var walk = scene.tone === 'walk';
+            state.flying = true;
+            map.flyToBounds(bounds.pad(walk ? 0.3 : 0.1), {
+                padding: [40, 40], maxZoom: walk ? 18 : 14,
+                animate: !REDUCED_MOTION, duration: 0.9
+            });
+        }
+        map.on('moveend', function () { state.flying = false; });
+        map.on('dragstart', function () { setFollow(false); });
+
+        function render(i, t, s) {
+            var scene = scenes[i];
+            var done = s >= total;
+            var d = distanceAt(scene, t);
+            var spot = along(scene.path, d);
+            if (i !== state.scene || done !== state.done) {
+                // A new part: every trail redrawn, a fresh icon, the camera along.
+                trails.forEach(function (trail, k) { trail.setLatLngs(k < i ? scenes[k].path.points : []); });
+                rider.setIcon(iconFor(scene, done));
+                highlight(done ? -1 : scene.type === 'section' ? scene.section : -1);
+                if (i !== state.scene && !done) camera(scene);
+                state.scene = i;
+                state.done = done;
+                state.last = null;
+            }
+            trails[i].setLatLngs(scene.path.points.slice(0, spot.index + 1).concat([spot.at]));
+            rider.setLatLng(spot.at);
+
+            var node = rider.getElement() && rider.getElement().firstChild;
+            if (node) {
+                var moved = state.last && metres(state.last, spot.at) > 0.01;
+                if (moved) {
+                    var west = spot.at[1] < state.last[1];
+                    if (Math.abs(spot.at[1] - state.last[1]) > 1e-7) state.west = west;
+                }
+                node.classList.toggle('west', state.west);
+                node.classList.toggle('moving', !!moved && state.playing && !done);
+                node.classList.toggle('idle', !moved && !done);
+            }
+            state.last = spot.at;
+
+            if (state.follow && !state.flying && !done && !map.getBounds().pad(-0.2).contains(spot.at)) {
+                map.panTo(spot.at, {animate: !REDUCED_MOTION, duration: 0.5});
+            }
+            clockNode.textContent = hhmm(new Date(t));
+            slider.value = String(Math.round(s / total * 1000));
+            slider.setAttribute('aria-valuetext', hhmm(new Date(t)));
+            describe(scene, t, done);
+        }
+
+        function show(s) {
+            state.s = Math.min(total, Math.max(0, s));
+            var i = sceneAtScreen(state.s);
+            render(i, timeAt(i, state.s), state.s);
+        }
+
+        var frameAt = null;
+        function frame(now) {
+            if (!state.playing) { frameAt = null; return; }
+            if (state.live) {
+                var t = Date.now();
+                var i = sceneAtTime(t);
+                state.s = t >= end ? total : screenAt(i, t);
+                render(i, Math.min(Math.max(t, start), end), state.s);
+                if (t >= end) setPlaying(false);
+            } else {
+                var dt = frameAt == null ? 0 : (now - frameAt) / 1000;
+                show(state.s + Math.min(dt, 0.1) * state.speed);
+                if (state.s >= total) setPlaying(false);
+            }
+            frameAt = now;
+            if (state.playing) requestAnimationFrame(frame);
+        }
+
+        function setPlaying(on) {
+            if (on && state.s >= total && !state.live) show(0);
+            state.playing = on;
+            playButton.textContent = '';
+            playButton.appendChild(glyph(on ? PAUSE : state.s >= total ? REPLAY : PLAY));
+            playButton.setAttribute('aria-label', on ? 'Pause' : 'Play');
+            if (on) requestAnimationFrame(frame);
+            else show(state.s);
+        }
+        function setFollow(on) {
+            state.follow = on;
+            followChip.setAttribute('aria-pressed', on ? 'true' : 'false');
+            if (on && state.scene >= 0) camera(scenes[state.scene]);
+        }
+        function setLive(on) {
+            state.live = on;
+            liveChip.setAttribute('aria-pressed', on ? 'true' : 'false');
+            if (on) { setFollow(true); setPlaying(true); }
+        }
+
+        playButton.addEventListener('click', function () {
+            if (state.live && state.playing) setLive(false);
+            setPlaying(!state.playing);
+        });
+        slider.addEventListener('input', function () {
+            setLive(false);
+            show(slider.value / 1000 * total);
+        });
+        speeds.forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                state.speed = parseInt(chip.getAttribute('data-speed'), 10);
+                speeds.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+            });
+        });
+        followChip.addEventListener('click', function () { setFollow(!state.follow); });
+        liveChip.addEventListener('click', function () { setLive(!state.live); });
+
+        // "Now" only while the journey is under way.
+        var running = Date.now() >= start && Date.now() < end;
+        liveChip.hidden = !running;
+        show(0);
+        if (running) setLive(true);
+        else setTimeout(function () { setPlaying(true); }, REDUCED_MOTION ? 0 : 700);
+    }
+
     // "API request" opens the panel with the request behind what is shown.
     document.getElementById('api-link').addEventListener('click', function () {
         var panel = document.getElementById('api-panel');
@@ -655,6 +1227,8 @@
     function ask(query) {
         var params = new URLSearchParams();
         Object.keys(query).forEach(function (k) { if (query[k] !== '' && query[k] != null) params.set(k, query[k]); });
+        // Each section with the line it follows, for the map.
+        params.set('geometry', '1');
         // The request behind what is shown, linked next to the source code.
         setApi(location.origin + '/' + api() + '/connections?' + params);
         return fetch('../' + api() + '/connections?' + params).then(function (response) {
@@ -707,6 +1281,10 @@
             var target = openOnLoad && results.querySelectorAll('.connection > button')[openOnLoad - 1];
             openOnLoad = 0;
             if (target) target.click();
+            // &map=1 also plays it on the map.
+            var play = target && mapOnLoad && target.parentNode.querySelector('.play-map');
+            mapOnLoad = false;
+            if (play) play.click();
         }).catch(fail).then(function () { busy(false); });
     }
 
