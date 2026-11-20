@@ -262,6 +262,12 @@
                         <td>defaults to <code>0</code>; with <code>1</code>, shared bikes, scooters and cars (from <a href="https://github.com/SFOE/sharedmobility" rel="external noopener noreferrer">sharedmobility.ch</a>) may take the place of the walk to the first stop and from the last. Such a section has a <a href="#section"><code>rental</code></a>.</td>
                         <td>1</td>
                     </tr>
+                    <tr>
+                        <td><code>geometry</code></td>
+                        <td>optional</td>
+                        <td>defaults to <code>0</code>; with <code>1</code>, each section gives the line it follows on a map, in <a href="#section"><code>geometry</code></a>. The <a href="examples/connections.html">connection search example</a> plays a journey back on it.</td>
+                        <td>1</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -818,6 +824,11 @@
                         <td><code>rental</code></td>
                         <td>Only with <code>sharedMobility=1</code>, on a section taken with a shared vehicle (its <code>walk</code> gives the duration): <code>provider</code>, <code>vehicle</code> (<code>bicycle</code>, <code>scooter_standing</code>, <code>car</code> and others), <code>propulsion</code>, <code>from_station</code>, <code>to_station</code>, <code>url</code></td>
                         <td>{"provider": "PubliBike", "vehicle": "bicycle"}</td>
+                    </tr>
+                    <tr>
+                        <td><code>geometry</code></td>
+                        <td>Only with <code>geometry=1</code>: <code>polyline</code>, the line as an <a href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm" rel="external noopener noreferrer">encoded polyline</a>, and <code>precision</code>, the decimals of its coordinates. A walk follows the streets and, through a station, gives <code>levels</code>, the lowest and highest floor it reaches (0 at street level). A ride runs straight from stop to stop: the timetable has no track shapes.</td>
+                        <td>{"polyline": "o~ywwA{fz~L…", "precision": 6}</td>
                     </tr>
                     <tr>
                         <td><code>departure</code></td>

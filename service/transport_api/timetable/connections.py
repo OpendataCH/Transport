@@ -118,6 +118,13 @@ async def search_connections(
             "stops, besides walking. Off by default.",
         ),
     ] = None,
+    geometry: Annotated[
+        str | None,
+        Query(
+            description="`1` to give each section the line it follows on a map, as an encoded "
+            "polyline (`geometry`). Off by default.",
+        ),
+    ] = None,
     fields_: Annotated[
         list[str] | None,
         Query(alias="fields[]", description="Keep only these parts of the answer."),
@@ -174,7 +181,8 @@ async def search_connections(
         itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
         itineraries = _page(itineraries, limit_value, page_value)
     _name_the_ends(itineraries, origin, destination)
-    page_of = await _connections(pool, itineraries)
+    with_geometry = truthy(geometry) and geometry.lower() not in ("0", "false")
+    page_of = await _connections(pool, itineraries, with_geometry)
 
     origin_location = _endpoint_location(origin)
     # /v1 names the second of search.ch's points as `to`, and with a via stop
@@ -292,7 +300,9 @@ async def _place(pool: asyncpg.Pool, station: asyncpg.Record) -> str:
     return DATASET + rows[0]["stop_id"]
 
 
-async def _connections(pool: asyncpg.Pool, itineraries: list[dict]) -> list[dict]:
+async def _connections(
+    pool: asyncpg.Pool, itineraries: list[dict], with_geometry: bool = False
+) -> list[dict]:
     if not itineraries:
         return []
     stop_ids, trip_ids = set(), set()
@@ -315,7 +325,7 @@ async def _connections(pool: asyncpg.Pool, itineraries: list[dict]) -> list[dict
         },
     )
     now = datetime.now(ZURICH).replace(microsecond=0)
-    return [_connection(i, stations, trips, forecast, now) for i in itineraries]
+    return [_connection(i, stations, trips, forecast, now, with_geometry) for i in itineraries]
 
 
 def _is_train(trip) -> bool:
@@ -331,10 +341,18 @@ def _service_day(motis_trip_id: str) -> date | None:
 
 
 def _connection(
-    itinerary: dict, stations: dict, trips: dict, forecast: dict, now: datetime
+    itinerary: dict,
+    stations: dict,
+    trips: dict,
+    forecast: dict,
+    now: datetime,
+    with_geometry: bool = False,
 ) -> dict:
     legs = [leg for leg in itinerary["legs"] if not _transfer_within_station(leg)]
     sections = [_section(leg, stations, trips, forecast, now) for leg in legs]
+    if with_geometry:
+        for leg, section in zip(legs, sections, strict=True):
+            section["geometry"] = _geometry(leg)
     first, last = legs[0], legs[-1]
     products = [
         _product(trips.get(_trip_id(leg["tripId"])) or _trip_of_leg(leg))
@@ -363,6 +381,31 @@ def _connection(
         ),
         "sections": sections or None,
     }
+
+
+def _geometry(leg: dict) -> dict | None:
+    """The line a leg follows, as the router draws it.
+
+    An encoded polyline (Google's algorithm) with its precision, the number of
+    decimals of each coordinate. A walk follows the street network and, inside
+    a station, says the lowest and highest floor it reaches (`levels`, 0 at
+    street level). A ride runs straight from stop to stop: the timetable has
+    no shapes.
+    """
+    line = leg.get("legGeometry") or {}
+    if not line.get("points"):
+        return None
+    geometry = {"polyline": line["points"], "precision": line.get("precision") or 6}
+    floors = {
+        level
+        for step in leg.get("steps") or []
+        for level in (step.get("fromLevel"), step.get("toLevel"))
+        if level is not None
+    }
+    floors = {int(f) if float(f).is_integer() else f for f in floors}
+    if floors - {0}:
+        geometry["levels"] = [min(floors | {0}), max(floors | {0})]
+    return geometry
 
 
 def _transfer_within_station(leg: dict) -> bool:
