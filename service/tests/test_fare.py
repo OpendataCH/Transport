@@ -158,9 +158,21 @@ def test_the_stops_between_are_sent_and_tell_routes_apart():
     def ride(via):
         leg = section("8507000", "8507483", "2026-11-20T20:34:00+0100", "2026-11-20T21:03:00+0100")
         leg["journey"]["passList"] = [
-            {"station": {"id": "8507000"}, "arrival": None, "departure": "2026-11-20T20:34:00+0100"},
-            {"station": {"id": via}, "arrival": "2026-11-20T20:51:00+0100", "departure": "2026-11-20T20:53:00+0100"},
-            {"station": {"id": "8507483"}, "arrival": "2026-11-20T21:03:00+0100", "departure": None},
+            {
+                "station": {"id": "8507000"},
+                "arrival": None,
+                "departure": "2026-11-20T20:34:00+0100",
+            },
+            {
+                "station": {"id": via},
+                "arrival": "2026-11-20T20:51:00+0100",
+                "departure": "2026-11-20T20:53:00+0100",
+            },
+            {
+                "station": {"id": "8507483"},
+                "arrival": "2026-11-20T21:03:00+0100",
+                "departure": None,
+            },
         ]
         return {"sections": [leg]}
 
