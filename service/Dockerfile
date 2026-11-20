@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 # tzdata, because the image has to know what Europe/Zurich means. The PHP
 # application sets the zone at boot and its timestamps carry no offset, so a
