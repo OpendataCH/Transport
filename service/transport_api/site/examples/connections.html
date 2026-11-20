@@ -131,6 +131,15 @@
         .badge-product.long-distance { background: var(--long-distance); }
         .badge-product.regional { background: var(--regional); }
 
+        /* Expected occupancy, as the railways forecast it: three people per
+           class, as many dark as it is full. */
+        .occupancy { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; color: var(--muted); font-size: 13px; }
+        .occupancy .class { display: inline-flex; align-items: center; gap: 1px; }
+        .occupancy svg { width: 8px; height: 14px; fill: var(--line); }
+        .occupancy svg.on { fill: var(--ink); }
+        .occupancy .class.full svg.on { fill: var(--late); }
+        .ride .occupancy { margin-left: 8px; }
+
         .late { color: var(--late); font-weight: 600; font-size: .85em; }
         .changed { color: var(--late); }
         .muted { color: var(--muted); }
@@ -339,6 +348,30 @@
         return el('span', {class: changed ? 'changed' : '', title: changed ? 'Platform changed' : ''}, ['Pl. ' + value]);
     }
 
+    // capacity1st/capacity2nd: 1 low, 2 medium, 3 high, null unknown.
+    var LOADS = {1: 'low', 2: 'medium', 3: 'high'};
+    var PERSON = 'M4 0a2 2 0 1 1 0 4a2 2 0 1 1 0-4zM1 5h6v5H6v4H2v-4H1z';
+    function occupancy(first, second) {
+        if (!first && !second) return null;
+        function oneClass(label, level) {
+            var people = [1, 2, 3].map(function (n) {
+                var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('viewBox', '0 0 8 14');
+                svg.setAttribute('aria-hidden', 'true');
+                if (level && n <= level) svg.setAttribute('class', 'on');
+                var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', PERSON);
+                svg.appendChild(path);
+                return svg;
+            });
+            return el('span', {
+                class: 'class' + (level === 3 ? ' full' : ''),
+                title: label + ' class: ' + (LOADS[level] || 'unknown') + ' occupancy expected'
+            }, [label + '.'].concat(people));
+        }
+        return el('span', {class: 'occupancy'}, [oneClass('1', first), oneClass('2', second)]);
+    }
+
     function badge(text, category) {
         var head = (category || String(text).split(/[\s\d]/)[0]).toUpperCase();
         var kind = LONG_DISTANCE.indexOf(head) >= 0 ? ' long-distance' : REGIONAL.indexOf(head) >= 0 ? ' regional' : '';
@@ -445,7 +478,8 @@
                 var between = (journey.passList || []).slice(1, -1).filter(function (s) { return s.departure || s.arrival; });
                 ride = [
                     icon(kind), el('strong', {text: vehicle(journey)}), ' towards ' + (journey.to || ''),
-                    journey.operator ? el('span', {text: ' · ' + journey.operator}) : null
+                    journey.operator ? el('span', {text: ' · ' + journey.operator}) : null,
+                    occupancy(journey.capacity1st, journey.capacity2nd)
                 ];
                 if (between.length) {
                     var listOf = el('ul', {class: 'between', hidden: ''}, between.map(function (s) {
@@ -523,7 +557,11 @@
                 el('span', {class: 't'}, [clock(to.arrival), delay(to.delay)]),
                 el('span', {class: 'chevron glyphicon glyphicon-chevron-down', 'aria-hidden': 'true'})
             ]),
-            el('div', {class: 'foot'}, [el('span', {text: start}), el('span', {text: duration(connection.duration)})])
+            el('div', {class: 'foot'}, [
+                el('span', {text: start}),
+                occupancy(connection.capacity1st, connection.capacity2nd),
+                el('span', {text: duration(connection.duration)})
+            ])
         ]);
         var box = el('div', {class: 'connection', 'data-index': index}, [button, details]);
         button.addEventListener('click', function () {
