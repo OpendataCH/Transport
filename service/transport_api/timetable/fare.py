@@ -157,7 +157,13 @@ def timetable_year(day: date) -> int:
 def cache_key(legs: list[dict]) -> str:
     year = timetable_year(date.fromisoformat(legs[0]["departure"][:10]))
     route = [
-        (leg["from"], [stop["id"] for stop in leg.get("via", [])], leg["to"], leg["category"], leg["operator"])
+        (
+            leg["from"],
+            [stop["id"] for stop in leg.get("via", [])],
+            leg["to"],
+            leg["category"],
+            leg["operator"],
+        )
         for leg in legs
     ]
     digest = hashlib.sha1(json.dumps([year, route]).encode()).hexdigest()
