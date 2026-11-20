@@ -238,6 +238,10 @@ def licenses(request: Request) -> HTMLResponse:
     <style>
         .lic td {{ font-size: 13px; }}
         .lic td:nth-child(2), .lic td:nth-child(3) {{ white-space: nowrap; }}
+        @media (max-width: 767px) {{
+            .lic td:nth-child(2), .lic td:nth-child(3) {{ white-space: normal; }}
+            .lic {{ display: block; overflow-x: auto; }}
+        }}
         #filter {{ max-width: 22rem; margin-bottom: 8px; }}
     </style>
 </head>
