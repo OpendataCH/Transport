@@ -31,6 +31,20 @@ DATA = [
         "https://opentransportdata.swiss/en/terms-of-use/",
     ),
     (
+        "Occupancy forecast of the railways (SBB, BLS, SOB, Thurbo, zb)",
+        "capacity1st/capacity2nd, occupancy in /ojp20",
+        "opentransportdata.swiss terms of use",
+        "https://data.opentransportdata.swiss/en/dataset/occupancy-forecast-json-dataset",
+        "https://opentransportdata.swiss/en/terms-of-use/",
+    ),
+    (
+        "National fare service NOVA (OJPFare, beta)",
+        "Ticket prices of /fare",
+        "opentransportdata.swiss terms of use",
+        "https://opendata.swiss/en/perma/ojpfare@oevch",
+        "https://opentransportdata.swiss/en/terms-of-use/",
+    ),
+    (
         "OpenStreetMap, Swiss extract by Geofabrik",
         "Streets for walks, addresses and places",
         "ODbL 1.0, © OpenStreetMap contributors",

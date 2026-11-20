@@ -347,6 +347,7 @@ class _Part:
     services: set = field(default_factory=set)
     trips: set = field(default_factory=set)
     rename: dict = field(default_factory=dict)  # column -> (prefix, ids to prefix or None = all)
+    tangled: set = field(default_factory=set)  # trips whose stay-seated transfers are dropped
 
 
 def _feed_dates(feed: zipfile.ZipFile) -> tuple[str, date, date]:
@@ -354,6 +355,69 @@ def _feed_dates(feed: zipfile.ZipFile) -> tuple[str, date, date]:
     start = datetime.strptime(info.get("feed_start_date") or "19700101", "%Y%m%d").date()
     end = datetime.strptime(info.get("feed_end_date") or "99991231", "%Y%m%d").date()
     return info.get("feed_version") or "", start, end
+
+
+STAY_SEATED = "4"
+# The most ways a vehicle may go on from one trip, staying seated, in a day.
+# A normal day of the Swiss feed has at most 78; 12 December 2026, the last
+# day of the 2026 feed, has trips of one bus company with four successors
+# each, a million chains from one trip - and MOTIS 2.11.4, which follows
+# every chain when it imports, never finishes.
+MAX_STAY_SEATED_CHAINS = 10_000
+
+
+def tangled_trips(feed: zipfile.ZipFile, days: dict, service_of: dict) -> set:
+    """Trips from which staying seated branches into too many chains on some day.
+
+    Their stay-seated transfers are left out of the window: passengers are
+    told to change where they could have stayed on, and the router imports.
+    """
+    if "transfers.txt" not in feed.namelist():
+        return set()
+    edges: dict[tuple[str, str], None] = {}
+    for row in rows(feed, "transfers.txt"):
+        if row.get("transfer_type") != STAY_SEATED:
+            continue
+        a, b = row.get("from_trip_id", ""), row.get("to_trip_id", "")
+        if a in service_of and b in service_of:
+            edges[(a, b)] = None
+    on_day: dict[date, dict[str, list[str]]] = {}
+    running = {service: set(dates) for service, dates in days.items()}
+    for a, b in edges:
+        for day in running.get(service_of[a], set()) & running.get(service_of[b], set()):
+            on_day.setdefault(day, {}).setdefault(a, []).append(b)
+
+    tangled: set = set()
+    for day, out in on_day.items():
+        counted: dict[str, int] = {}
+        found = {
+            trip
+            for trip in out
+            if _chains(trip, out, counted, frozenset()) > MAX_STAY_SEATED_CHAINS
+        }
+        if found:
+            log.warning(
+                "%d trips branch into over %d stay-seated chains on %s; transfers left out",
+                len(found),
+                MAX_STAY_SEATED_CHAINS,
+                day,
+            )
+        tangled |= found
+    return tangled
+
+
+def _chains(trip: str, out: dict, counted: dict, seen: frozenset) -> int:
+    """The chains of trips a vehicle may run from `trip` on, counted up to just past the limit."""
+    if trip in counted:
+        return counted[trip]
+    total = 1
+    for successor in out.get(trip, ()):
+        if successor not in seen:  # a cycle, in bad data, counts once
+            total += _chains(successor, out, counted, seen | {trip})
+        if total > MAX_STAY_SEATED_CHAINS:
+            break
+    counted[trip] = total
+    return total
 
 
 def _write_window(feeds, target: Path, first: date, last: date | None, walks: bool) -> dict:
@@ -368,12 +432,15 @@ def _write_window(feeds, target: Path, first: date, last: date | None, walks: bo
         raise ValueError(f"no feed covers {first}..{last}")
 
     for part in parts:
-        part.services = set(service_days(part.feed, part.first, part.last))
-        part.trips = {
-            row["trip_id"]
+        days = service_days(part.feed, part.first, part.last)
+        part.services = set(days)
+        service_of = {
+            row["trip_id"]: row["service_id"]
             for row in rows(part.feed, "trips.txt")
             if row["service_id"] in part.services
         }
+        part.trips = set(service_of)
+        part.tangled = tangled_trips(part.feed, days, service_of)
 
     # Ids the later feeds must change so as not to meet the earlier ones'.
     seen_routes: set = set()
@@ -383,6 +450,10 @@ def _write_window(feeds, target: Path, first: date, last: date | None, walks: bo
         if i:
             prefix = f"{part.version or i}:"
             part.rename["service_id"] = (prefix, None)
+            # Block ids are bare numbers, the same in both years (all 62 544 of
+            # 2027 are in 2026): kept apart, so that no vehicle runs on from a
+            # trip of one year into one of the other.
+            part.rename["block_id"] = (prefix, None)
             if routes & seen_routes:
                 part.rename["route_id"] = (prefix, routes & seen_routes)
             if part.trips & seen_trips:
@@ -422,7 +493,15 @@ def _write_window(feeds, target: Path, first: date, last: date | None, walks: bo
             "trips.txt": lambda r, c: r[c["trip_id"]] in trips,
             "stop_times.txt": lambda r, c: r[c["trip_id"]] in trips,
             "frequencies.txt": lambda r, c: r[c["trip_id"]] in trips,
-            "transfers.txt": lambda r, c: ok(r, c, "from_trip_id", "to_trip_id"),
+            "transfers.txt": lambda r, c: (
+                ok(r, c, "from_trip_id", "to_trip_id")
+                and not (
+                    "transfer_type" in c
+                    and "from_trip_id" in c
+                    and r[c["transfer_type"]] == STAY_SEATED
+                    and r[c["from_trip_id"]] in part.tangled
+                )
+            ),
         }.get(name)
 
     names = []
