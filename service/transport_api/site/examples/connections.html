@@ -235,7 +235,7 @@
         .big-play .disc svg { width: 30px; height: 30px; fill: currentColor; margin-left: 4px; }
         .big-play .label { background: #fff; color: var(--ink); font-weight: 700; font-size: 13px; padding: 2px 10px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
         .big-play:hover .disc { transform: scale(1.08); }
-        .big-play.docked { top: auto; bottom: 12px; transform: translateX(-50%); flex-direction: row; }
+        .big-play.docked { top: auto; left: 12px; bottom: 12px; transform: none; flex-direction: row; }
         .big-play.docked .disc { width: 40px; height: 40px; }
         .big-play.docked .disc svg { width: 18px; height: 18px; margin-left: 2px; }
         .with-map .legs [data-at], .with-map .legs [data-section] { cursor: pointer; }
@@ -1016,6 +1016,8 @@
         });
 
         // Stops: every one a dot; the ends and the changes named.
+        var labels = [];
+        var focused = null;     // the named stop clicked in the list
         (connection.sections || []).forEach(function (section, index, all) {
             var stops = section.journey ? section.journey.passList || [] : [];
             stops.forEach(function (stop) {
@@ -1025,19 +1027,48 @@
                         .bindTooltip(stationName(stop) + ' ' + clock(stop.departure || stop.arrival)).addTo(map);
                 }
             });
-            [[section.departure, index === 0], [section.arrival, index === all.length - 1]].forEach(function (pair) {
+            [[section.departure, index === 0 ? 0 : 2], [section.arrival, index === all.length - 1 ? 1 : 2]].forEach(function (pair) {
                 var c = pair[0] && coordinate(pair[0]);
                 if (!c) return;
-                L.circleMarker(c, {radius: 5, color: TONES.walk, weight: 2.5, fillColor: '#fff', fillOpacity: 1})
-                    .bindTooltip(stationName(pair[0]), {permanent: true, direction: 'right', offset: [6, 0], className: 'stop-label'})
+                var name = stationName(pair[0]);
+                // Where one part ends and the next begins: one dot, one name.
+                var same = labels.filter(function (l) { return l.name === name && metres(l.at, c) < 60; })[0];
+                if (same) { same.rank = Math.min(same.rank, pair[1]); return; }
+                var layer = L.circleMarker(c, {radius: 5, color: TONES.walk, weight: 2.5, fillColor: '#fff', fillOpacity: 1})
+                    .bindTooltip(name, {permanent: true, direction: 'right', offset: [6, 0], className: 'stop-label'})
                     .addTo(map);
+                labels.push({name: name, at: c, rank: pair[1], layer: layer});
             });
         });
+
+        // Names that would overlap another are left out, the start and the
+        // end first, then the changes; again after every move of the map.
+        function declutter() {
+            var taken = [];
+            function free(node) {
+                if (!node) return false;
+                node.style.visibility = '';
+                var box = node.getBoundingClientRect();
+                var clash = taken.some(function (t) {
+                    return box.left < t.right && box.right > t.left && box.top < t.bottom && box.bottom > t.top;
+                });
+                if (clash) node.style.visibility = 'hidden';
+                else taken.push(box);
+                return !clash;
+            }
+            // The play button over the map is in the way too.
+            if (!bigPlay.hidden) taken.push(bigPlay.getBoundingClientRect());
+            if (spot && spot.getTooltip()) free(spot.getTooltip().getElement());
+            labels.slice().sort(function (a, b) { return (b === focused) - (a === focused) || a.rank - b.rank; })
+                .forEach(function (l) { free(l.layer.getTooltip().getElement()); });
+        }
+        map.on('zoomend moveend', declutter);
 
         var rider = L.marker(scenes[0].path.points[0], {keyboard: false, interactive: false, zIndexOffset: 1000}).addTo(map);
         var all = L.latLngBounds([]);
         scenes.forEach(function (scene) { all.extend(scene.path.points); });
         map.fitBounds(all, {padding: [30, 30]});
+        declutter();
 
         var state = {s: 0, playing: false, speed: 1, follow: true, live: false, scene: -1, flying: false, last: null, west: false};
 
@@ -1213,10 +1244,11 @@
         // The first play: the button over the map goes, the camera starts to follow.
         function start_() {
             bigPlay.hidden = true;
+            declutter();
             if (state.started) return;
             state.started = true;
             // The show begins: the camera follows, whatever was looked at before.
-            if (spot) { map.removeLayer(spot); spot = null; }
+            if (spot) { map.removeLayer(spot); spot = null; focused = null; }
             state.follow = true;
             followChip.setAttribute('aria-pressed', 'true');
             if (state.scene >= 0) camera(scenes[state.scene]);
@@ -1251,7 +1283,11 @@
             spot = L.marker(latlon, {
                 interactive: false, keyboard: false, zIndexOffset: 500,
                 icon: L.divIcon({className: 'spot-icon', iconSize: [18, 18], iconAnchor: [9, 9], html: '<span></span>'})
-            }).bindTooltip(name, {permanent: true, direction: 'top', offset: [0, -10], className: 'stop-label'}).addTo(map);
+            }).addTo(map);
+            // A stop already named on the map keeps its name; others get one.
+            focused = labels.filter(function (l) { return l.name === name && metres(l.at, latlon) < 60; })[0] || null;
+            if (!focused) spot.bindTooltip(name, {permanent: true, direction: 'top', offset: [0, -10], className: 'stop-label'}).openTooltip();
+            declutter();
         }
         list.addEventListener('click', function (event) {
             if (event.target.closest('button, a')) return;
@@ -1260,6 +1296,7 @@
             setFollow(false);
             // Out of the way of what is shown, but still there.
             bigPlay.classList.add('docked');
+            declutter();
             var where = row.getAttribute('data-at');
             if (where) {
                 var latlon = where.split(',').map(Number);
@@ -1271,7 +1308,7 @@
             var section = row.getAttribute('data-section');
             var scene = section != null && scenes.filter(function (sc) { return sc.type === 'section' && String(sc.section) === section; })[0];
             if (scene) {
-                if (spot) { map.removeLayer(spot); spot = null; }
+                if (spot) { map.removeLayer(spot); spot = null; focused = null; }
                 fly(L.latLngBounds(scene.path.points).pad(0.1), {padding: [30, 30], maxZoom: scene.tone === 'walk' ? 18 : 15});
             }
         });
