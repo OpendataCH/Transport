@@ -226,6 +226,24 @@
         .with-map > .map-bar { grid-column: 1 / -1; }
         .with-map > .legs { grid-column: 1; grid-row: 2; }
         .with-map > .trip-stage { grid-column: 2; grid-row: 2; position: sticky; top: 8px; padding: 14px 16px 16px 0; }
+        .map-wrap { position: relative; }
+        .trip-map.flying .leaflet-overlay-pane, .trip-map.flying .leaflet-tooltip-pane { opacity: 0; }
+        .trip-map .leaflet-overlay-pane, .trip-map .leaflet-tooltip-pane { transition: opacity .35s; }
+        .trip-map .leaflet-container, .trip-map.leaflet-container { background: #ebebeb; }
+        .big-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 0; background: none; padding: 0; }
+        .big-play .disc { width: 72px; height: 72px; border-radius: 50%; background: var(--long-distance); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,.3); transition: transform .15s; }
+        .big-play .disc svg { width: 30px; height: 30px; fill: currentColor; margin-left: 4px; }
+        .big-play .label { background: #fff; color: var(--ink); font-weight: 700; font-size: 13px; padding: 2px 10px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+        .big-play:hover .disc { transform: scale(1.08); }
+        .big-play.docked { top: auto; bottom: 12px; transform: translateX(-50%); flex-direction: row; }
+        .big-play.docked .disc { width: 40px; height: 40px; }
+        .big-play.docked .disc svg { width: 18px; height: 18px; margin-left: 2px; }
+        .with-map .legs [data-at], .with-map .legs [data-section] { cursor: pointer; }
+        .with-map .legs .stop[data-at]:hover .name, .with-map .legs .between li:hover { text-decoration: underline; }
+        .with-map .legs li[data-section]:not(.walk):hover .rail::before { width: 6px; }
+        .with-map .legs li[data-section].walk:hover .rail::before { border-left-width: 4px; }
+        .spot-icon span { display: block; width: 18px; height: 18px; border-radius: 50%; background: var(--long-distance); border: 3px solid #fff; box-shadow: 0 0 0 0 rgba(198,0,24,.6); animation: spot 1.4s ease-out infinite; }
+        @keyframes spot { to { box-shadow: 0 0 0 16px rgba(198,0,24,0); } }
         .trip-map { height: 440px; border: 1px solid var(--line); border-radius: 6px; background: #f2f2f2; }
         .hud { margin-top: 8px; font-size: 13px; }
         .hud .controls { display: flex; align-items: center; gap: 8px; }
@@ -267,7 +285,7 @@
         .stop-label { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; font-size: 11px; font-weight: 600; box-shadow: none; }
         .stop-label::before { display: none; }
         @media (prefers-reduced-motion: reduce) {
-            .rider .disc, .rider.arrived::before, .rider.arrived::after { animation: none !important; }
+            .rider .disc, .rider.arrived::before, .rider.arrived::after, .spot-icon span { animation: none !important; }
         }
         @media (max-width: 767px) {
             .with-map { grid-template-columns: minmax(0, 1fr); }
@@ -533,6 +551,12 @@
         return minutesBetween(section.departure.departure, section.arrival.arrival);
     }
 
+    // "lat,lon" of a stop, for a click in the list to find it on the map.
+    function at(stop) {
+        var c = coordinate(stop);
+        return c ? c.join(',') : '';
+    }
+
     function legs(connection) {
         var list = el('ol', {class: 'legs'});
         var sections = connection.sections || [];
@@ -540,7 +564,7 @@
             var dep = section.departure, arr = section.arrival, journey = section.journey;
             var kind = kindOf(section);
             var walk = !journey;
-            list.appendChild(el('li', {class: 'stop' + (index === 0 ? ' first' : '') + (walk ? ' walk' : '')}, [
+            list.appendChild(el('li', {class: 'stop' + (index === 0 ? ' first' : '') + (walk ? ' walk' : ''), 'data-at': at(dep)}, [
                 el('span', {class: 't'}, [clock(dep.departure), delay(dep.delay)]),
                 el('span', {class: 'rail'}),
                 el('span', {class: 'name', text: stationName(dep)}),
@@ -558,7 +582,7 @@
                 ];
                 if (between.length) {
                     var listOf = el('ul', {class: 'between', hidden: ''}, between.map(function (s) {
-                        return el('li', {}, [el('span', {class: 'bt', text: clock(s.departure || s.arrival)}), el('span', {text: stationName(s)})]);
+                        return el('li', {'data-at': at(s)}, [el('span', {class: 'bt', text: clock(s.departure || s.arrival)}), el('span', {text: stationName(s)})]);
                     }));
                     var toggle = el('button', {type: 'button', class: 'stops-toggle', 'aria-expanded': 'false'},
                         [between.length + (between.length === 1 ? ' stop' : ' stops') + ' ›']);
@@ -580,7 +604,7 @@
                     (arr.prognosis && arr.prognosis.arrival) || arr.arrival,
                     (next.departure.prognosis && next.departure.prognosis.departure) || next.departure.departure
                 );
-                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : ''), 'data-at': at(arr)}, [
                     el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
                     el('span', {class: 'rail'}),
                     el('span', {class: 'name', text: stationName(arr)}),
@@ -591,7 +615,7 @@
                     expected !== planned ? el('span', {class: 'late', text: ' (' + expected + ' min with delays)'}) : null
                 ]));
             } else if (!next) {
-                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : '')}, [
+                list.appendChild(el('li', {class: 'stop last' + (walk ? ' walk' : ''), 'data-at': at(arr)}, [
                     el('span', {class: 't'}, [clock(arr.arrival), delay(arr.delay)]),
                     el('span', {class: 'rail'}),
                     el('span', {class: 'name', text: stationName(arr)}),
@@ -961,7 +985,8 @@
         });
         var followChip = el('button', {type: 'button', class: 'chip', 'aria-pressed': 'true', text: 'Follow'});
         var liveChip = el('button', {type: 'button', class: 'chip live', 'aria-pressed': 'false', text: '● Now', title: 'Where the journey is now, in real time'});
-        stage.appendChild(mapNode);
+        var bigPlay = el('button', {type: 'button', class: 'big-play'}, [el('span', {class: 'disc'}, [glyph(PLAY)]), el('span', {class: 'label', text: 'Play the journey'})]);
+        stage.appendChild(el('div', {class: 'map-wrap'}, [mapNode, bigPlay]));
         stage.appendChild(el('div', {class: 'hud'}, [
             el('div', {class: 'controls'}, [playButton, slider, clockNode]),
             doing,
@@ -969,8 +994,10 @@
         ]));
 
         var map = L.map(mapNode, {zoomSnap: 0.25, maxZoom: 18});
+        // While the camera flies, the tiles already there stretch along and
+        // the new ones load once it has arrived, instead of a level at a time.
         L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg', {
-            maxZoom: 18, opacity: 0.55,
+            maxZoom: 18, opacity: 0.55, updateWhenZooming: false, keepBuffer: 4,
             attribution: '© <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a>'
         }).addTo(map);
 
@@ -1088,17 +1115,25 @@
             });
         }
 
-        function camera(scene) {
-            if (!state.follow) return;
-            var bounds = L.latLngBounds(scene.path.points);
-            var walk = scene.tone === 'walk';
+        // A flight over many zoom levels would blow the lines and dots up
+        // (they are scaled along until it ends): they fade out for it and
+        // back in once the map has arrived.
+        function fly(target, options) {
             state.flying = true;
-            map.flyToBounds(bounds.pad(walk ? 0.3 : 0.1), {
-                padding: [40, 40], maxZoom: walk ? 18 : 14,
-                animate: !REDUCED_MOTION, duration: 0.9
-            });
+            mapNode.classList.add('flying');
+            var how = Object.assign({animate: !REDUCED_MOTION, duration: 1.2, easeLinearity: 0.35}, options);
+            if (target.lat != null) map.flyTo(target, how.zoom, how);
+            else map.flyToBounds(target, how);
         }
-        map.on('moveend', function () { state.flying = false; });
+        function camera(scene) {
+            if (!state.follow || !state.started) return;
+            var walk = scene.tone === 'walk';
+            fly(L.latLngBounds(scene.path.points).pad(walk ? 0.3 : 0.1), {padding: [40, 40], maxZoom: walk ? 18 : 14});
+        }
+        map.on('moveend', function () {
+            state.flying = false;
+            mapNode.classList.remove('flying');
+        });
         map.on('dragstart', function () { setFollow(false); });
 
         function render(i, t, s) {
@@ -1132,7 +1167,7 @@
             }
             state.last = spot.at;
 
-            if (state.follow && !state.flying && !done && !map.getBounds().pad(-0.2).contains(spot.at)) {
+            if (state.follow && state.started && !state.flying && !done && !map.getBounds().pad(-0.2).contains(spot.at)) {
                 map.panTo(spot.at, {animate: !REDUCED_MOTION, duration: 0.5});
             }
             clockNode.textContent = hhmm(new Date(t));
@@ -1167,6 +1202,7 @@
 
         function setPlaying(on) {
             if (on && state.s >= total && !state.live) show(0);
+            if (on) start_();
             state.playing = on;
             playButton.textContent = '';
             playButton.appendChild(glyph(on ? PAUSE : state.s >= total ? REPLAY : PLAY));
@@ -1174,6 +1210,19 @@
             if (on) requestAnimationFrame(frame);
             else show(state.s);
         }
+        // The first play: the button over the map goes, the camera starts to follow.
+        function start_() {
+            bigPlay.hidden = true;
+            if (state.started) return;
+            state.started = true;
+            // The show begins: the camera follows, whatever was looked at before.
+            if (spot) { map.removeLayer(spot); spot = null; }
+            state.follow = true;
+            followChip.setAttribute('aria-pressed', 'true');
+            if (state.scene >= 0) camera(scenes[state.scene]);
+        }
+        bigPlay.addEventListener('click', function () { setPlaying(true); });
+
         function setFollow(on) {
             state.follow = on;
             followChip.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -1191,7 +1240,40 @@
         });
         slider.addEventListener('input', function () {
             setLive(false);
+            start_();
             show(slider.value / 1000 * total);
+        });
+
+        // A stop in the list shows it on the map; a ride or walk, its stretch.
+        var spot = null;
+        function point(latlon, name) {
+            if (spot) map.removeLayer(spot);
+            spot = L.marker(latlon, {
+                interactive: false, keyboard: false, zIndexOffset: 500,
+                icon: L.divIcon({className: 'spot-icon', iconSize: [18, 18], iconAnchor: [9, 9], html: '<span></span>'})
+            }).bindTooltip(name, {permanent: true, direction: 'top', offset: [0, -10], className: 'stop-label'}).addTo(map);
+        }
+        list.addEventListener('click', function (event) {
+            if (event.target.closest('button, a')) return;
+            var row = event.target.closest('li');
+            if (!row || !list.contains(row)) return;
+            setFollow(false);
+            // Out of the way of what is shown, but still there.
+            bigPlay.classList.add('docked');
+            var where = row.getAttribute('data-at');
+            if (where) {
+                var latlon = where.split(',').map(Number);
+                var name = row.querySelector('.name') || row.lastChild;
+                point(latlon, name ? name.textContent : '');
+                fly(L.latLng(latlon), {zoom: 17});
+                return;
+            }
+            var section = row.getAttribute('data-section');
+            var scene = section != null && scenes.filter(function (sc) { return sc.type === 'section' && String(sc.section) === section; })[0];
+            if (scene) {
+                if (spot) { map.removeLayer(spot); spot = null; }
+                fly(L.latLngBounds(scene.path.points).pad(0.1), {padding: [30, 30], maxZoom: scene.tone === 'walk' ? 18 : 15});
+            }
         });
         speeds.forEach(function (chip) {
             chip.addEventListener('click', function () {
@@ -1206,8 +1288,6 @@
         var running = Date.now() >= start && Date.now() < end;
         liveChip.hidden = !running;
         show(0);
-        if (running) setLive(true);
-        else setTimeout(function () { setPlaying(true); }, REDUCED_MOTION ? 0 : 700);
     }
 
     // "API request" opens the panel with the request behind what is shown.
