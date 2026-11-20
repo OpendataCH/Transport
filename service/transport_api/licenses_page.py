@@ -93,11 +93,11 @@ SERVICES = [
 
 BROWSER = [
     (
-        "Bootstrap 3.3.6",
+        "Bootstrap 3.4.1",
         "Layout of the pages",
         "MIT",
-        "https://getbootstrap.com/docs/3.3/",
-        "https://github.com/twbs/bootstrap/blob/v3.3.6/LICENSE",
+        "https://getbootstrap.com/docs/3.4/",
+        "https://github.com/twbs/bootstrap/blob/v3.4.1/LICENSE",
     ),
     (
         "Leaflet 1.9.4",
@@ -121,25 +121,25 @@ BROWSER = [
         "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
     ),
     (
-        "jQuery 2.2.4",
+        "jQuery 3.7.1",
         "Statistics page",
         "MIT",
         "https://jquery.com/",
         "https://jquery.org/license/",
     ),
     (
-        "Chart.js 2.9.4, chartjs-plugin-zoom 0.7.7",
+        "Chart.js 4.5.1, chartjs-plugin-zoom 2.2.0, chartjs-adapter-moment 1.0.1",
         "Charts of the statistics page",
         "MIT",
         "https://www.chartjs.org/",
-        "https://github.com/chartjs/Chart.js/blob/v2.9.4/LICENSE.md",
+        "https://github.com/chartjs/Chart.js/blob/v4.5.1/LICENSE.md",
     ),
     (
-        "Moment.js 2.29.4, Hammer.js 2.0.8",
+        "Moment.js 2.30.1, Hammer.js 2.0.8",
         "Time axis and zoom of the statistics page",
         "MIT",
         "https://momentjs.com/",
-        "https://github.com/moment/moment/blob/2.29.4/LICENSE",
+        "https://github.com/moment/moment/blob/2.30.1/LICENSE",
     ),
 ]
 
@@ -240,7 +240,7 @@ def licenses(request: Request) -> HTMLResponse:
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#E61414" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="media/css/layout.css" />
     <style>
         .lic td {{ font-size: 13px; }}
