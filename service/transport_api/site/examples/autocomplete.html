@@ -1,52 +1,117 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    
-    <title>Transport API</title>
+    <meta charset="utf-8" />
+
+    <title>Autocomplete - Transport</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#E61414" />
-    
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" />
-    
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-    <script>
-    
-    $(function () {
-        $('#from, #to').autocomplete({
-            source: function (request, response) {
-                $.get('../v1/locations', {query: request.term, type: 'station'}, function(data) {
-                    response($.map(data.stations, function(station) {
-                        return {
-                            label: station.name,
-                            station: station
-                        }
-                    }));
-                }, 'json');
-            },
-            select: function (event, ui) {
-                console.log(ui.item.station.id);
-            }
-        });
-    });
-    
-    </script>
+    <meta name="description" content="Station suggestions as one types, from the open Swiss public transport API, in a few lines of plain JavaScript." />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../media/css/layout.css" />
+
+    <style>
+        .stations { clear: both; }
+        .stations .form-group { margin-bottom: 16px; }
+        /* 16px keeps iOS from zooming into the field on focus */
+        @media (max-width: 639px) { .stations .form-control { height: 40px; font-size: 16px; } }
+        .picked { color: #767a80; font-size: 13px; margin-top: 4px; min-height: 1.4em; }
+        .picked code { color: inherit; background: none; padding: 0; }
+    </style>
 </head>
 <body>
 
-<div class="ui-widget">
-    <label>Von:</label>
-    <input id="from" />
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+
+    <header>
+        <h1><a href="../"><img class="logo" src="/media/images/logo.svg" alt="" />Transport</a></h1>
+        <p>Swiss public transport API</p>
+    </header>
+
+    <article>
+        <p class="pull-right">
+            <a class="btn btn-link" href="https://gitlab.com/opendata.ch/Transport/-/blob/master/service/transport_api/site/examples/autocomplete.html" target="_blank" rel="noopener">
+                <span class="glyphicon glyphicon-new-window"></span>
+                Source Code
+            </a>
+        </p>
+        <h3>Autocomplete Example</h3>
+        <p>Station suggestions from <code>/locations</code> as one types, with the browser's own <code>&lt;datalist&gt;</code> and no library.</p>
+
+        <form class="stations" autocomplete="off" onsubmit="return false">
+            <div class="form-group">
+                <label for="from">From</label>
+                <input class="form-control" id="from" list="from-list" placeholder="Stop or station" />
+                <datalist id="from-list"></datalist>
+                <div class="picked" id="from-picked" aria-live="polite"></div>
+            </div>
+            <div class="form-group">
+                <label for="to">To</label>
+                <input class="form-control" id="to" list="to-list" placeholder="Stop or station" />
+                <datalist id="to-list"></datalist>
+                <div class="picked" id="to-picked" aria-live="polite"></div>
+            </div>
+        </form>
+    </article>
+
+    <footer class="footer">
+        <hr>
+        <p>Timetable data: <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> · Powered by <a href="https://opendata.ch/">Opendata.ch</a> · <a href="/privacy.html">Privacy policy</a> · <a href="/licenses.html">Licenses</a></p>
+    </footer>
+
+    </div>
 </div>
 
-<div class="ui-widget">
-    <label>Nach:</label>
-    <input id="to" />
-</div>
+<script>
+(function () {
+    // One field: ask /locations a moment after the last key, offer the names,
+    // and show the id of the station picked.
+    function autocomplete(input) {
+        var list = document.getElementById(input.id + '-list');
+        var picked = document.getElementById(input.id + '-picked');
+        var stations = {};
+        var waiting = null;
+
+        input.addEventListener('input', function () {
+            clearTimeout(waiting);
+            var term = input.value.trim();
+            picked.textContent = '';
+            if (stations[input.value]) {
+                var s = stations[input.value];
+                picked.innerHTML = 'Station id: <code></code>';
+                picked.querySelector('code').textContent = s.id;
+                return;
+            }
+            if (term.length < 2) return;
+            waiting = setTimeout(function () {
+                fetch('../v1/locations?type=station&query=' + encodeURIComponent(term))
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        list.textContent = '';
+                        stations = {};
+                        (data.stations || []).forEach(function (s) {
+                            if (!s.id || !s.name) return;
+                            stations[s.name] = s;
+                            var option = document.createElement('option');
+                            option.value = s.name;
+                            list.appendChild(option);
+                        });
+                    }).catch(function () {});
+            }, 200);
+        });
+    }
+
+    autocomplete(document.getElementById('from'));
+    autocomplete(document.getElementById('to'));
+})();
+</script>
 
 </body>
 </html>

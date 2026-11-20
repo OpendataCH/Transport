@@ -121,11 +121,25 @@ BROWSER = [
         "https://github.com/lucide-icons/lucide/blob/main/LICENSE",
     ),
     (
-        "jQuery 1.7.1, jQuery UI 1.8.16",
-        "The autocomplete example",
+        "jQuery 2.2.4",
+        "Statistics page",
         "MIT",
         "https://jquery.com/",
         "https://jquery.org/license/",
+    ),
+    (
+        "Chart.js 2.9.4, chartjs-plugin-zoom 0.7.7",
+        "Charts of the statistics page",
+        "MIT",
+        "https://www.chartjs.org/",
+        "https://github.com/chartjs/Chart.js/blob/v2.9.4/LICENSE.md",
+    ),
+    (
+        "Moment.js 2.29.4, Hammer.js 2.0.8",
+        "Time axis and zoom of the statistics page",
+        "MIT",
+        "https://momentjs.com/",
+        "https://github.com/moment/moment/blob/2.29.4/LICENSE",
     ),
 ]
 

@@ -16,7 +16,7 @@ stages:
 
 test:service:
   stage: test
-  image: python:3.13-slim
+  image: python:3.14-slim
   # The /v2 timetable tests need a real Postgres; without one they skip, and
   # the coverage below would fall short for the wrong reason.
   services:
@@ -93,7 +93,7 @@ build:image:service:
 # `latest`.
 smoke:image:
   stage: verify
-  image: python:3.13-slim
+  image: python:3.14-slim
   rules:
     - if: $CI_COMMIT_BRANCH
   services:
@@ -106,7 +106,7 @@ smoke:image:
 # deploying is a step on the server and not part of this pipeline.
 .smoke:host:
   stage: verify
-  image: python:3.13-slim
+  image: python:3.14-slim
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: manual
