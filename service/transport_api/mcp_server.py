@@ -27,8 +27,9 @@ from typing import Annotated, Any
 
 import httpx
 from mcp.server.mcpserver import Context, MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
-from mcp.types import ToolAnnotations
+from mcp.types import Icon, ToolAnnotations
 from pydantic import Field
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
@@ -41,13 +42,20 @@ SITE = "https://transport.opendata.ch"
 #: Part of every User-Agent the tools send to /v1; statistics.AI_CLIENTS names it.
 USER_AGENT = f"transport.opendata.ch-mcp/{settings.VERSION}"
 
-READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=True)
+READ_ONLY = ToolAnnotations(
+    readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=True
+)
+
+#: The tools answer in short text (see the module docstring); a copy of the same
+#: text as structured content would only double every answer.
+TOOL = {"annotations": READ_ONLY, "structured_output": False}
 
 mcp = MCPServer(
     name="transport.opendata.ch",
     title="Swiss public transport (transport.opendata.ch)",
     description="Stations, connections and departures of Swiss public transport.",
     website_url=SITE,
+    icons=[Icon(src=f"{SITE}/favicon.svg", mime_type="image/svg+xml")],
     version=settings.VERSION,
     instructions=(
         "Swiss public transport timetable with real-time delays, from the national timetable "
@@ -164,8 +172,8 @@ async def _get(path: str, params: list[tuple[str, str]], ctx: Context | None) ->
     return body
 
 
-class ToolFailure(Exception):
-    """An answer of /v1 that is an error; the model gets its message."""
+class ToolFailure(ToolError):
+    """An answer of /v1 that is an error; the model gets its message, flagged as an error."""
 
 
 # --- Formatting -----------------------------------------------------------------
@@ -208,7 +216,11 @@ def _stop(stop: dict, time_key: str) -> str:
 def _line(journey: dict) -> str:
     """'IC 1 to St. Gallen (SBB)'."""
     category = journey.get("category") or ""
-    number = journey.get("number") or ""
+    # The line ('1' of IC 1), or for a train without one its number, zero-padded
+    # ('000377' of an ICE); '?' when the timetable has neither.
+    number = (journey.get("number") or "").lstrip("0")
+    if number == "?":
+        number = ""
     label = f"{category} {number}".strip() or journey.get("name") or "?"
     if journey.get("to"):
         label += f" to {journey['to']}"
@@ -243,7 +255,7 @@ def _connection(index: int, c: dict) -> str:
 # --- Tools ----------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Find stations", **TOOL)
 async def find_stations(
     query: Annotated[
         str, Field(description="Name or part of a name, e.g. 'Bern' or 'Basel, Bank'.")
@@ -251,10 +263,7 @@ async def find_stations(
     ctx: Context,
 ) -> str:
     """Find stations and stops by name. Returns their exact names and ids, best match first."""
-    try:
-        body = await _get("/v1/locations", [("query", query), ("type", "station")], ctx)
-    except ToolFailure as e:
-        return f"Error: {e}"
+    body = await _get("/v1/locations", [("query", query), ("type", "station")], ctx)
     stations = body.get("stations") or []
     if not stations:
         return f"No station found for '{query}'."
@@ -264,17 +273,14 @@ async def find_stations(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Stops nearby", **TOOL)
 async def stations_nearby(
     latitude: Annotated[float, Field(description="WGS84 latitude, e.g. 46.9488.")],
     longitude: Annotated[float, Field(description="WGS84 longitude, e.g. 7.4391.")],
     ctx: Context,
 ) -> str:
     """The stops closest to a point, with their distance in metres."""
-    try:
-        body = await _get("/v1/locations", [("x", str(latitude)), ("y", str(longitude))], ctx)
-    except ToolFailure as e:
-        return f"Error: {e}"
+    body = await _get("/v1/locations", [("x", str(latitude)), ("y", str(longitude))], ctx)
     stations = [s for s in body.get("stations") or [] if s.get("id")]
     if not stations:
         return "No stop found near that point."
@@ -283,7 +289,7 @@ async def stations_nearby(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Connections", **TOOL)
 async def connections(
     origin: Annotated[str, Field(description="Start: station name or id, address or place.")],
     destination: Annotated[str, Field(description="Destination, like origin.")],
@@ -309,10 +315,7 @@ async def connections(
     if arrive_by:
         params.append(("isArrivalTime", "1"))
     params.extend(("via[]", v) for v in (via or [])[:2])
-    try:
-        body = await _get("/v1/connections", params, ctx)
-    except ToolFailure as e:
-        return f"Error: {e}"
+    body = await _get("/v1/connections", params, ctx)
     found = body.get("connections") or []
     if not found:
         return f"No connection found from '{origin}' to '{destination}'."
@@ -323,7 +326,7 @@ async def connections(
     return "\n".join(lines)
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Departures", **TOOL)
 async def departures(
     station: Annotated[str, Field(description="Station name or id.")],
     ctx: Context,
@@ -341,16 +344,14 @@ async def departures(
         params.append(("datetime", when))
     if arrivals:
         params.append(("type", "arrival"))
-    try:
-        body = await _get("/v1/stationboard", params, ctx)
-    except ToolFailure as e:
-        return f"Error: {e}"
+    body = await _get("/v1/stationboard", params, ctx)
     board = body.get("stationboard") or []
     name = (body.get("station") or {}).get("name") or station
     if not board:
         return f"No {'arrivals' if arrivals else 'departures'} found for '{name}'."
     key = "arrival" if arrivals else "departure"
-    lines = [f"{'Arrivals at' if arrivals else 'Departures from'} {name}:"]
+    first = ((board[0].get("stop") or {}).get(key)) if board else None
+    lines = [f"{'Arrivals at' if arrivals else 'Departures from'} {name}, {_day(first)}:"]
     for entry in board:
         stop = entry.get("stop") or {}
         when_ = stop.get(key)

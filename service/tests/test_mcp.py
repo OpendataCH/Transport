@@ -258,7 +258,7 @@ def test_departures_are_one_line_each(mcp_client, monkeypatch):
     )
     assert ("datetime", "2026-11-21 16:00") in asked["params"]
     assert text.splitlines() == [
-        "Departures from Bern:",
+        "Departures from Bern, Sat 2026-11-21:",
         "- 16:06 S 6 to Schwarzenburg (BLS-bls) · platform 13D-F, +2 min",
         "- ? IR 15 to Luzern",
     ]
@@ -282,7 +282,30 @@ def test_arrivals_are_asked_for_as_type_arrival(mcp_client, monkeypatch):
 )
 def test_a_failure_of_v1_is_told_to_the_model(mcp_client, monkeypatch, tool, arguments):
     fake_v1(monkeypatch, error="Timetable not available")
-    assert call(mcp_client, tool, arguments) == "Error: Timetable not available"
+    body = rpc(mcp_client, "tools/call", {"name": tool, "arguments": arguments})
+    assert body["result"]["isError"] is True
+    assert body["result"]["content"][0]["text"].endswith(": Timetable not available")
+
+
+def test_tools_answer_in_text_only_and_say_they_only_read(mcp_client, monkeypatch):
+    tools = rpc(mcp_client, "tools/list", {})["result"]["tools"]
+    for tool in tools:
+        assert tool["title"]
+        assert "outputSchema" not in tool
+        assert tool["annotations"]["readOnlyHint"] is True
+        assert tool["annotations"]["idempotentHint"] is True
+    fake_v1(monkeypatch, {"stations": []})
+    body = rpc(mcp_client, "tools/call", {"name": "find_stations", "arguments": {"query": "x"}})
+    assert "structuredContent" not in body["result"]
+
+
+@pytest.mark.parametrize(
+    ("number", "label"),
+    [("1", "IC 1"), ("000377", "ICE 377"), ("?", "ICE"), (None, "ICE")],
+)
+def test_a_line_is_named_without_padding_or_question_mark(number, label):
+    category = "IC" if number == "1" else "ICE"
+    assert mcp_server._line({"category": category, "number": number}) == label
 
 
 def test_connections_with_arrival_time_and_changes(mcp_client, monkeypatch):
