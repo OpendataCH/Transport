@@ -18,6 +18,14 @@ CREATE TABLE IF NOT EXISTS rt.trip_cancelled (
     PRIMARY KEY (trip_id, day)
 );
 
+-- Stops a running trip passes without calling (GTFS-RT SKIPPED).
+CREATE TABLE IF NOT EXISTS rt.stop_skipped (
+    trip_id text    NOT NULL,
+    day     date    NOT NULL,
+    seq     integer NOT NULL,
+    PRIMARY KEY (trip_id, day, seq)
+);
+
 CREATE TABLE IF NOT EXISTS rt.feed (
     fetched_at     timestamptz NOT NULL,
     feed_timestamp timestamptz,

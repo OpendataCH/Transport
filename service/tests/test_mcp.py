@@ -248,20 +248,29 @@ def test_departures_are_one_line_each(mcp_client, monkeypatch):
                     },
                 },
                 {"category": "IR", "number": "15", "to": "Luzern", "stop": {"arrival": None}},
+                {
+                    "category": "IC",
+                    "number": "1",
+                    "to": "Zürich HB",
+                    "cancelled": True,
+                    "stop": {"departure": "2026-11-21T16:32:00+0100", "platform": "8"},
+                },
             ],
         },
     )
     text = call(
         mcp_client,
         "departures",
-        {"station": "Bern", "when": "2026-11-21 16:00", "arrivals": False, "limit": 2},
+        {"station": "Bern", "when": "2026-11-21 16:00", "arrivals": False, "limit": 3},
     )
     assert ("datetime", "2026-11-21 16:00") in asked["params"]
     assert text.splitlines() == [
         "Departures from Bern, Sat 2026-11-21:",
         "- 16:06 S 6 to Schwarzenburg (BLS-bls) · platform 13D-F, +2 min",
         "- ? IR 15 to Luzern",
+        "- 16:32 IC 1 to Zürich HB · CANCELLED, does not run here, platform 8",
     ]
+    assert ("showCancelled", "1") in asked["params"]
 
 
 def test_arrivals_are_asked_for_as_type_arrival(mcp_client, monkeypatch):

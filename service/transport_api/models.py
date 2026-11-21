@@ -130,6 +130,11 @@ class StationBoardJourney(Journey):
     """A line of a station board: a journey, plus the stop it makes here."""
 
     stop: Stop
+    cancelled: bool | None = Field(
+        default=None,
+        description="Only with `showCancelled=1`: true when the journey is cancelled "
+        "or passes this stop without calling.",
+    )
 
 
 class StationBoardResponse(BaseModel):

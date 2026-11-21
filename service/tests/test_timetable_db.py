@@ -60,7 +60,7 @@ def api(feed, monkeypatch):
     monkeypatch.setattr(settings, "DATABASE_URL", DATABASE)
     with TestClient(app) as client:
         yield client
-    run(_sql("TRUNCATE rt.stop_delay, rt.trip_cancelled"))
+    run(_sql("TRUNCATE rt.stop_delay, rt.trip_cancelled, rt.stop_skipped"))
 
 
 def test_import_counts(feed):
@@ -207,6 +207,33 @@ def test_board_drops_a_cancelled_trip(api):
     run(_sql("INSERT INTO rt.trip_cancelled VALUES ('t-morning', $1)", TODAY))
     answer = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00")
     assert answer["stationboard"][0]["stop"]["departure"] != "2026-10-05T08:00:00+0200"
+
+
+def test_board_shows_a_cancelled_trip_marked_when_asked(api):
+    run(_sql("INSERT INTO rt.trip_cancelled VALUES ('t-morning', $1)", TODAY))
+    answer = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00", showCancelled="1")
+    first = answer["stationboard"][0]
+    assert first["stop"]["departure"] == "2026-10-05T08:00:00+0200"
+    assert first["cancelled"] is True
+
+
+def test_board_marks_nothing_unless_asked(api):
+    answer = _board(api, id="8500001", limit="2", datetime=f"{TODAY} 07:00")
+    assert all("cancelled" not in j for j in answer["stationboard"])
+    answer = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00", showCancelled="1")
+    assert answer["stationboard"][0]["cancelled"] is False
+
+
+def test_board_drops_a_trip_that_skips_the_stop(api):
+    # t-morning passes Beta (seq 2) without calling; Alpha's board still has it.
+    run(_sql("INSERT INTO rt.stop_skipped VALUES ('t-morning', $1, 2)", TODAY))
+    beta = _board(api, id="8500002", limit="1", datetime=f"{TODAY} 08:00")
+    assert "2026-10-05T08:12:00+0200" not in [j["stop"]["departure"] for j in beta["stationboard"]]
+    marked = _board(api, id="8500002", limit="1", datetime=f"{TODAY} 08:00", showCancelled="1")
+    assert marked["stationboard"][0]["stop"]["departure"] == "2026-10-05T08:12:00+0200"
+    assert marked["stationboard"][0]["cancelled"] is True
+    alpha = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00")
+    assert alpha["stationboard"][0]["stop"]["departure"] == "2026-10-05T08:00:00+0200"
 
 
 def test_board_without_a_stop_is_empty(api):

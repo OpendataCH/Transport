@@ -57,9 +57,18 @@ ORDER BY departures DESC LIMIT 1
 
 # One half per service day; `{time}` is dep_s or arr_s, `{end}` the end of a
 # trip that cannot be departed from (its last stop) or arrived at (its first).
+# A cancelled trip, and a trip that passes this stop without calling, are left
+# out - unless `{dropped}` (the showCancelled parameter) asks for them, marked.
+CANCELLED = """EXISTS (
+      SELECT 1 FROM rt.trip_cancelled c
+      WHERE c.trip_id = t.trip_id AND c.day = ${p}::date)
+  OR EXISTS (
+      SELECT 1 FROM rt.stop_skipped k
+      WHERE k.trip_id = t.trip_id AND k.day = ${p}::date AND k.seq = st.seq)"""
+
 HALF = """
 SELECT st.trip, st.seq, st.stop, st.arr_s, st.dep_s, ${p}::date AS day,
-       ${p1}::bigint + st.{time} AS at
+       ${p1}::bigint + st.{time} AS at, ({cancelled}) AS cancelled
 FROM gtfs.stop_times st
 JOIN gtfs.trips t ON t.idx = st.trip
 JOIN gtfs.service_dates sd ON sd.service = t.service AND sd.day = ${p}::date
@@ -68,9 +77,7 @@ WHERE st.stop = ANY($1::int[])
   AND st.seq <> t.{end}
   AND st.{flag} <> 1
   AND ($2::text[] IS NULL OR t.mode = ANY($2::text[]))
-  AND NOT EXISTS (
-      SELECT 1 FROM rt.trip_cancelled c
-      WHERE c.trip_id = t.trip_id AND c.day = ${p}::date)
+  AND ($3::boolean OR NOT ({cancelled}))
 """
 
 TRIPS = """
@@ -148,6 +155,15 @@ async def station_board(
         list[str] | None,
         Query(alias="fields[]", description="Keep only these parts of the answer."),
     ] = None,
+    show_cancelled: Annotated[
+        str | None,
+        Query(
+            alias="showCancelled",
+            description="`1` to keep cancelled journeys, and journeys that pass the stop "
+            "without calling, on the board, each marked `cancelled: true`. "
+            "Without it they are left out, and no journey carries `cancelled`.",
+        ),
+    ] = None,
 ) -> Any:
     """The next journeys leaving from (or arriving at) one stop."""
     if over_the_limit(limit):
@@ -169,8 +185,12 @@ async def station_board(
     modes = _modes(as_list(parameter(request, "transportations")))
     count = _count(limit)
 
-    rows = await _calls_at(pool, found["idx"], when, arrivals, modes, count)
+    marked = truthy(show_cancelled)
+    rows = await _calls_at(pool, found["idx"], when, arrivals, modes, count, marked)
     journeys = await _journeys(pool, rows, board_station, arrivals)
+    if marked:
+        for line, row in zip(journeys, rows, strict=True):
+            line["cancelled"] = bool(row["cancelled"])
     return PhpJson(content=fields.apply({"station": board_station, "stationboard": journeys}))
 
 
@@ -204,13 +224,14 @@ async def _calls_at(
     arrivals: bool,
     modes: list[str] | None,
     count: int,
+    marked: bool = False,
 ) -> list[asyncpg.Record]:
     platforms = [
         r["idx"]
         for r in await db.fetch(pool, "SELECT idx FROM gtfs.stops WHERE station = $1", station_idx)
     ]
     for horizon in HORIZONS:
-        rows = await _calls_within(pool, platforms, when, arrivals, modes, count, horizon)
+        rows = await _calls_within(pool, platforms, when, arrivals, modes, count, horizon, marked)
         if len(rows) > count or horizon == HORIZONS[-1]:
             return _cut(rows, count)
     return []
@@ -224,9 +245,10 @@ async def _calls_within(
     modes: list[str] | None,
     count: int,
     horizon: int,
+    marked: bool = False,
 ) -> list[asyncpg.Record]:
     instant = int(when.timestamp())
-    args: list[Any] = [platforms, modes]
+    args: list[Any] = [platforms, modes, marked]
     halves = []
     # Yesterday's service day for the trips past midnight, tomorrow's for a
     # stop whose next departure is in the morning: the horizon reaches it.
@@ -244,6 +266,7 @@ async def _calls_within(
                 time="arr_s" if arrivals else "dep_s",
                 end="first_seq" if arrivals else "last_seq",
                 flag="dropoff" if arrivals else "pickup",
+                cancelled=CANCELLED.format(p=start),
             )
         )
     args.append(count + TIES)

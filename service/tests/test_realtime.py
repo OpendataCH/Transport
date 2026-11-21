@@ -73,6 +73,7 @@ def test_parse_collects_cancellations_and_skips_what_cannot_be_placed():
         )
     )
     assert snapshot.cancelled == [("t-cancelled", date(2026, 10, 5))]
+    assert snapshot.skipped == [("t-2", date(2026, 10, 5), 3)]
     assert snapshot.delays == []
 
 
@@ -165,6 +166,7 @@ def test_store_replaces_the_previous_snapshot():
                 feed(
                     ("t-1", "20261005", SCHEDULED, [(1, 60, 60, 0)]),
                     ("t-x", "20261005", CANCELED, []),
+                    ("t-y", "20261005", SCHEDULED, [(2, None, None, SKIPPED)]),
                 )
             )
             await realtime.store(connection, first)
@@ -172,8 +174,9 @@ def test_store_replaces_the_previous_snapshot():
             await realtime.store(connection, second)
             delays = await connection.fetch("SELECT trip_id, departure_delay FROM rt.stop_delay")
             cancelled = await connection.fetchval("SELECT count(*) FROM rt.trip_cancelled")
-            await connection.execute("TRUNCATE rt.stop_delay, rt.trip_cancelled")
-            return [tuple(r) for r in delays], cancelled
+            skipped = await connection.fetchval("SELECT count(*) FROM rt.stop_skipped")
+            await connection.execute("TRUNCATE rt.stop_delay, rt.trip_cancelled, rt.stop_skipped")
+            return [tuple(r) for r in delays], cancelled + skipped
         finally:
             await connection.close()
 

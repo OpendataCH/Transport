@@ -340,8 +340,8 @@ async def departures(
         bool, Field(description="True for arrivals instead of departures.")
     ] = False,
 ) -> str:
-    """The departure (or arrival) board of a station, with platforms and delays."""
-    params = [("station", station), ("limit", str(limit))]
+    """The departure (or arrival) board of a station, with platforms, delays and cancellations."""
+    params = [("station", station), ("limit", str(limit)), ("showCancelled", "1")]
     if when:
         params.append(("datetime", when))
     if arrivals:
@@ -359,6 +359,8 @@ async def departures(
         when_ = stop.get(key)
         platform = (stop.get("prognosis") or {}).get("platform") or stop.get("platform")
         extra = []
+        if entry.get("cancelled"):
+            extra.append("CANCELLED, does not run here")
         if platform:
             extra.append(f"platform {platform}")
         if stop.get("delay"):

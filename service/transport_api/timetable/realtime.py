@@ -1,4 +1,4 @@
-"""GTFS-RT trip updates into `rt.stop_delay` and `rt.trip_cancelled`.
+"""GTFS-RT trip updates into `rt.stop_delay`, `rt.trip_cancelled` and `rt.stop_skipped`.
 
 The feed is the whole picture every time - every known change in the next
 three hours - so each fetch replaces the tables rather than amending them.
@@ -10,7 +10,7 @@ seconds, so fetching more often than twice a minute buys nothing anyway.
 """
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 
 import asyncpg
@@ -37,6 +37,7 @@ class Snapshot:
     delays: list[tuple[str, date, int, int | None, int | None]]
     cancelled: list[tuple[str, date]]
     trips: int
+    skipped: list[tuple[str, date, int]] = field(default_factory=list)
 
 
 async def fetch(client: httpx.AsyncClient) -> bytes:
@@ -58,7 +59,8 @@ def parse(payload: bytes) -> Snapshot:
     """The trip updates as rows. Delays become whole minutes, as search.ch has them.
 
     A stop time update without a stop sequence cannot be placed in the
-    timetable and is skipped, as are skipped stops and stops without data.
+    timetable and is skipped, as are stops without data. A skipped stop - one
+    the trip passes without calling - is kept apart, for the station boards.
     Trips that are not in the timetable at all (added trips) have no stop
     times to put a delay on, so they come through but match nothing.
     """
@@ -67,6 +69,7 @@ def parse(payload: bytes) -> Snapshot:
 
     delays: list[tuple[str, date, int, int | None, int | None]] = []
     cancelled: list[tuple[str, date]] = []
+    skipped: list[tuple[str, date, int]] = []
     trips = 0
     for entity in feed.entity:
         if not entity.HasField("trip_update"):
@@ -83,7 +86,10 @@ def parse(payload: bytes) -> Snapshot:
         for stop in update.stop_time_update:
             if not stop.HasField("stop_sequence"):
                 continue
-            if stop.schedule_relationship in (SKIPPED, NO_DATA):
+            if stop.schedule_relationship == SKIPPED:
+                skipped.append((trip.trip_id, day, stop.stop_sequence))
+                continue
+            if stop.schedule_relationship == NO_DATA:
                 continue
             arrival = _minutes(stop.arrival) if stop.HasField("arrival") else None
             departure = _minutes(stop.departure) if stop.HasField("departure") else None
@@ -98,6 +104,7 @@ def parse(payload: bytes) -> Snapshot:
         delays=delays,
         cancelled=cancelled,
         trips=trips,
+        skipped=skipped,
     )
 
 
@@ -118,9 +125,10 @@ async def store(connection: asyncpg.Connection, snapshot: Snapshot) -> None:
     async with connection.transaction():
         await connection.execute(
             """
-            DROP TABLE IF EXISTS rt.stop_delay_next, rt.trip_cancelled_next;
+            DROP TABLE IF EXISTS rt.stop_delay_next, rt.trip_cancelled_next, rt.stop_skipped_next;
             CREATE TABLE rt.stop_delay_next (LIKE rt.stop_delay INCLUDING ALL);
             CREATE TABLE rt.trip_cancelled_next (LIKE rt.trip_cancelled INCLUDING ALL);
+            CREATE TABLE rt.stop_skipped_next (LIKE rt.stop_skipped INCLUDING ALL);
             """
         )
         # The feed can repeat a stop; the last word on it wins.
@@ -137,12 +145,20 @@ async def store(connection: asyncpg.Connection, snapshot: Snapshot) -> None:
             columns=("trip_id", "day"),
             records=set(snapshot.cancelled),
         )
+        await connection.copy_records_to_table(
+            "stop_skipped_next",
+            schema_name="rt",
+            columns=("trip_id", "day", "seq"),
+            records=set(snapshot.skipped),
+        )
         await connection.execute(
             """
             DROP TABLE rt.stop_delay;
             DROP TABLE rt.trip_cancelled;
+            DROP TABLE rt.stop_skipped;
             ALTER TABLE rt.stop_delay_next RENAME TO stop_delay;
             ALTER TABLE rt.trip_cancelled_next RENAME TO trip_cancelled;
+            ALTER TABLE rt.stop_skipped_next RENAME TO stop_skipped;
             """
         )
         await connection.execute(
@@ -155,9 +171,10 @@ async def store(connection: asyncpg.Connection, snapshot: Snapshot) -> None:
         # One row per fetch is plenty for a day's look back, not for ever.
         await connection.execute("DELETE FROM rt.feed WHERE fetched_at < now() - interval '1 day'")
     log.info(
-        "real time: %d trips, %d stop delays, %d cancelled, feed version %s",
+        "real time: %d trips, %d stop delays, %d cancelled, %d skipped stops, feed version %s",
         snapshot.trips,
         len(unique),
         len(snapshot.cancelled),
+        len(snapshot.skipped),
         snapshot.version,
     )
