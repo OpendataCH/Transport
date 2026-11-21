@@ -43,7 +43,7 @@
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "With `query`; with `x` and `y`, `station` leaves out the nearest address and gives stops only. Specifies the location type, possible types are:<ul><li>`all` (default): Looks up for all types of locations</li><li>`station`: Looks up for stations (train station, bus station)</li><li>`poi`: Looks up for points of interest (Clock tower, China garden)</li><li>`address`: Looks up for an address (Zurich Bahnhofstrasse 33)</li></ul>",
+                        "description": "Only with `query` parameter. Specifies the location type, possible types are:<ul><li>`all` (default): Looks up for all types of locations</li><li>`station`: Looks up for stations (train station, bus station)</li><li>`poi`: Looks up for points of interest (Clock tower, China garden)</li><li>`address`: Looks up for an address (Zurich Bahnhofstrasse 33)</li></ul>",
                         "type": "string"
                     }
                 ],
@@ -127,20 +127,8 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on. -1 to -10 go back in time: page -1 is the connections just before page 0.",
+                        "description": "0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on.",
                         "type": "integer"
-                    },
-                    {
-                        "name": "walkingSpeed",
-                        "in": "query",
-                        "description": "2 - 10, km/h, default 5: the walk from an address or a coordinate to the first stop and from the last stop to one. Walks between stops are the timetable's.",
-                        "type": "number"
-                    },
-                    {
-                        "name": "minTransferTime",
-                        "in": "query",
-                        "description": "0 - 60, minutes: no change of vehicle shorter than this.",
-                        "type": "number"
                     }
                 ],
                 "responses": {

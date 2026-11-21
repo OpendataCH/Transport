@@ -30,6 +30,7 @@ from .mapping import (
     service_day_start,
     set_capacity,
     stop,
+    trip_ref,
 )
 from .names import normalize
 
@@ -81,7 +82,7 @@ WHERE st.stop = ANY($1::int[])
 """
 
 TRIPS = """
-SELECT t.idx, t.headsign, t.short_name, t.last_seq, t.mode,
+SELECT t.idx, t.trip_id, t.headsign, t.short_name, t.last_seq, t.mode,
        r.short_name AS route_short_name, r.category, a.name AS operator
 FROM gtfs.trips t
 JOIN gtfs.routes r ON r.idx = t.route
@@ -368,6 +369,7 @@ async def _journeys(
             operator=trip["operator"],
             headsign=trip["headsign"],
             pass_list=pass_list,
+            trip=trip_ref(trip["trip_id"], row["day"]),
         )
         line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
         journeys.append({"stop": head(), **line})

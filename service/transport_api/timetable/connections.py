@@ -26,7 +26,15 @@ from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
 from . import db, occupancy, places
 from .locations import _exact_metres
-from .mapping import highest_capacity, journey, line_number, location, set_capacity, stop
+from .mapping import (
+    highest_capacity,
+    journey,
+    line_number,
+    location,
+    set_capacity,
+    stop,
+    trip_ref,
+)
 from .names import normalize, operator_name
 from .router import Motis, get_motis, motis_or_none  # noqa: F401 - re-exported
 from .stationboard import TRANSPORTATIONS, _station
@@ -580,6 +588,7 @@ def _section(leg: dict, stations: dict, trips: dict, forecast: dict, now: dateti
         operator=trip["operator"],
         headsign=leg.get("headsign") or trip["headsign"],
         pass_list=pass_list,
+        trip=trip_ref(_trip_id(leg["tripId"]), _service_day(leg["tripId"])),
     )
     line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
     return {

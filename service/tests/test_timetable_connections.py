@@ -379,6 +379,9 @@ def test_a_connection_in_the_shape_of_v1(api):
     first, second = connection["sections"]
     assert first["journey"]["category"] == "S"
     assert first["journey"]["operator"] == "Test Bahn"
+    # The trip, as /trip takes it; one only real time knows has the router's id.
+    assert first["journey"]["trip"] == {"id": "t-morning", "date": "2026-10-05"}
+    assert second["journey"]["trip"] == {"id": "ojp:extra_20261005", "date": "2026-10-05"}
     assert second["journey"]["category"] == "RE"
     assert second["journey"]["operator"] == "Extra Bahn"
 
