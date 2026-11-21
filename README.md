@@ -9,6 +9,7 @@ front for [timetable.search.ch](https://timetable.search.ch/api/help).
 
 - API documentation: https://transport.opendata.ch/docs.html
 - Statistics: https://transport.opendata.ch/stats
+- For AI assistants: the MCP server at https://transport.opendata.ch/mcp ([how to add it](https://transport.opendata.ch/docs.html#mcp))
 - Operations: the [wiki](https://gitlab.com/opendata.ch/Transport/-/wikis/home)
 
 The application is in [`service/`](service/): FastAPI, serving the API under

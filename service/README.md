@@ -70,6 +70,17 @@ name or stop id need `MOTIS_GEOCODING=1`, i.e. a router built with
 `MOTIS_TILES`: without its place search, MOTIS 2.11.4 crashes on a lookup by
 id.
 
+## /mcp
+
+The API for AI assistants, as an MCP server (streamable HTTP, `mcp_server.py`):
+four read-only tools (`find_stations`, `stations_nearby`, `connections`,
+`departures`) that call `/v1` in process - through the whole middleware stack,
+so the cache, the error envelope and the rate limit are the API's own - and
+answer in a few lines of text instead of the /v1 JSON. Stateless, because the
+service runs several workers. The protocol requests are not counted in /stats;
+each `/v1` call of a tool is, under the caller's address and as the AI client
+`transport.opendata.ch MCP`. `tests/test_mcp.py` speaks the protocol against it.
+
 ## Things this service must keep doing
 
 - **Europe/Zurich.** The image sets `TZ`; `/v1/health` reports the zone with

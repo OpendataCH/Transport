@@ -17,6 +17,7 @@ dependencies = [
     "jinja2>=3.1",
     "asyncpg>=0.30",
     "gtfs-realtime-bindings>=1.0",
+    "mcp>=2.3,<3",
 ]
 
 [project.optional-dependencies]

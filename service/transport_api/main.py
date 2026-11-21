@@ -26,6 +26,7 @@ from . import (
     compat,
     errors,
     licenses_page,
+    mcp_server,
     response_cache,
     settings,
     statistics,
@@ -62,7 +63,9 @@ async def lifespan(app: FastAPI):
     redis = statistics.connect()
     app.state.statistics = statistics.Statistics(redis) if redis is not None else None
     try:
-        yield
+        # The MCP server at /mcp (mcp_server.py) keeps its session manager here.
+        async with mcp_server.running():
+            yield
     finally:
         if app.state.timetable is not None:
             await app.state.timetable.close()
@@ -187,6 +190,9 @@ app.include_router(board_page.router)
 
 app.include_router(stats_page.router)
 app.include_router(licenses_page.router)
+
+# The same API for AI assistants, at /mcp.
+mcp_server.install(app)
 
 
 # The alias gets the same three documents, at its own addresses, so that a

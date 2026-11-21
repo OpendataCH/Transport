@@ -76,6 +76,9 @@ TYPE_ERROR = "TypeError"
 AI_CLIENTS = [
     (name, kind, re.compile(pattern, re.I))
     for name, kind, pattern in [
+        # Our own MCP server at /mcp; its tools call /v1 under this name, with
+        # the assistant's User-Agent in brackets after it - so it comes first.
+        ("transport.opendata.ch MCP", "ai-agent", r"transport\.opendata\.ch-mcp/"),
         ("OpenAI GPTBot", "ai-crawler", r"gptbot"),
         ("OpenAI OAI-SearchBot", "ai-crawler", r"oai-searchbot"),
         ("Anthropic ClaudeBot", "ai-crawler", r"claudebot"),

@@ -1028,6 +1028,34 @@
 
             <hr/>
 
+            <h2 id="mcp">For AI assistants (MCP)</h2>
+
+            <p>The same API answers AI assistants at <code>/mcp</code>, as a <a href="https://modelcontextprotocol.io/" rel="external noopener noreferrer">Model Context Protocol</a> server (streamable HTTP). Add it to Claude, ChatGPT, Cursor, VS Code or any other MCP client, and the assistant can look up stations, connections and departures for you. No key and no login are needed.</p>
+
+            <h3>Server URL</h3>
+            <pre><code>https://transport.opendata.ch/mcp</code></pre>
+
+            <h3>Tools</h3>
+            <ul>
+                <li><code>find_stations</code>: stations and stops by name, with their ids.</li>
+                <li><code>stations_nearby</code>: the stops closest to a coordinate.</li>
+                <li><code>connections</code>: connections from A to B, with platforms, delays and changes.</li>
+                <li><code>departures</code>: the departure or arrival board of a station.</li>
+            </ul>
+            <p>All tools only read. They answer from <a href="#locations">/locations</a>, <a href="#connections">/connections</a> and <a href="#stationboard">/stationboard</a>, as short text, and the <a href="#rate-limiting">rate limit</a> of the API applies to them.</p>
+
+            <h3>Adding it</h3>
+            <p>In Claude: <em>Settings &rsaquo; Connectors &rsaquo; Add custom connector</em>, with the URL above. In Claude Code: <code>claude mcp add --transport http transport https://transport.opendata.ch/mcp</code>. In VS Code or Cursor, in <code>mcp.json</code>:</p>
+            <pre>
+{
+  "servers": {
+    "transport": { "type": "http", "url": "https://transport.opendata.ch/mcp" }
+  }
+}
+            </pre>
+
+            <hr/>
+
             <h3 id="source">Source</h3>
 
             <p>The API keeps its own copy of the Swiss public transport data and answers every request from it.</p>

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ch.opendata/transport",
+  "title": "Swiss public transport",
+  "description": "Stations, connections and departures of Swiss public transport, with real-time delays.",
+  "version": "1.0.0",
+  "websiteUrl": "https://transport.opendata.ch/docs.html#mcp",
+  "repository": {
+    "url": "https://gitlab.com/opendata.ch/Transport",
+    "source": "gitlab"
+  },
+  "icons": [
+    {
+      "src": "https://transport.opendata.ch/favicon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://transport.opendata.ch/mcp"
+    }
+  ]
+}
