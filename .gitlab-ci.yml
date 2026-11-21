@@ -49,6 +49,21 @@ test:service:
         coverage_format: cobertura
         path: service/coverage.xml
 
+# Known vulnerabilities in the locked dependencies (PyPI advisory database).
+# GitLab Free has no Dependabot; the GitHub mirror's alerts are not a place
+# anyone looks. Warns without blocking: a fresh advisory must not stop a
+# deploy, but it shows as an orange pipeline.
+audit:dependencies:
+  stage: test
+  image: ghcr.io/astral-sh/uv:python3.14-bookworm-slim
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH
+  script:
+    - cd service
+    - uv export --frozen --no-dev --no-emit-project -o /tmp/requirements.txt
+    - uvx pip-audit --strict --disable-pip -r /tmp/requirements.txt
+
 # Kaniko rather than docker-in-docker: it needs no privileged runner, and this
 # project has no reason to ask for one.
 .kaniko:
