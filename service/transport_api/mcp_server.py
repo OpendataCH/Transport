@@ -64,7 +64,9 @@ mcp = MCPServer(
         "'Zürich HB', 'Lausanne, gare'); when a name is ambiguous, call find_stations first "
         "and use the exact name or id it returns. Addresses and places of interest work as "
         "start and destination of a connection too. Coverage is Switzerland (and border "
-        "stations); for journeys abroad say that the data ends at the border."
+        "stations); for journeys abroad say that the data ends at the border. The timetable "
+        "covers the days from a week ago to about three months ahead; nothing found for a "
+        "date outside that range means no data, not no service."
     ),
 )
 
