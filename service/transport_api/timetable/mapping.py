@@ -100,8 +100,6 @@ def stop(
     arrival_delay: int | None,
     departure_delay: int | None,
     now: datetime,
-    *,
-    location_: dict | None = None,
 ) -> dict:
     """One checkpoint, with `delay` worked out from the prognosis as /v1 does."""
     forecast = prognosis(arrival, departure, arrival_delay, departure_delay, now)
@@ -120,7 +118,7 @@ def stop(
         "platform": platform,
         "prognosis": forecast,
         "realtimeAvailability": None,
-        "location": location_ if location_ is not None else dict(station),
+        "location": dict(station),
     }
 
 
@@ -166,6 +164,7 @@ def journey(
     operator: str | None,
     headsign: str | None,
     pass_list: list[dict],
+    trip: dict | None = None,
 ) -> dict:
     return {
         "name": journey_name(trip_short_name),
@@ -178,7 +177,15 @@ def journey(
         "passList": pass_list,
         "capacity1st": None,
         "capacity2nd": None,
+        "trip": trip,
     }
+
+
+def trip_ref(trip_id: str | None, day) -> dict | None:
+    """`{"id": trip_id, "date": "YYYY-MM-DD"}`, or None without either."""
+    if not trip_id or day is None:
+        return None
+    return {"id": trip_id, "date": day.isoformat()}
 
 
 def set_capacity(stop_: dict, levels: tuple | None) -> None:

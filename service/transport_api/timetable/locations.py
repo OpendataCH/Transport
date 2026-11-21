@@ -76,7 +76,10 @@ async def search_locations(
     y: Annotated[str | None, Query(description="Longitude to search around.")] = None,
     type: Annotated[  # noqa: A002 - the name is part of the /v1 contract
         str | None,
-        Query(description="`all` (default), `station`, `poi` or `address`; with `query` only."),
+        Query(
+            description="`all` (default), `station`, `poi` or `address`. With `x` and `y`, "
+            "`station` leaves out the nearest address."
+        ),
     ] = None,
     fields_: Annotated[
         list[str] | None,
@@ -91,7 +94,10 @@ async def search_locations(
     elif truthy(x) and truthy(y):
         point = _point(x, y)
         if point is not None:
-            stations = await _near(pool, motis, *point)
+            # Only stops: the nearest address is no answer to `type=station`
+            # (OpendataCH/Transport#176).
+            with_address = (type or "all").lower() != "station"
+            stations = await _near(pool, motis if with_address else None, *point)
 
     return PhpJson(content=fields.apply({"stations": stations}))
 

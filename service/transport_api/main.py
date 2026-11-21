@@ -40,6 +40,7 @@ from .timetable import fare as timetable_fare
 from .timetable import locations as timetable_locations
 from .timetable import map as timetable_map
 from .timetable import stationboard as timetable_stationboard
+from .timetable import trip as timetable_trip
 
 # The prefix a client should use, and the one it may. Both answer the same
 # thing; only the first is described.
@@ -175,6 +176,7 @@ for prefix, api_version in API_VERSIONS.items():
     router.include_router(timetable_locations.router, tags=["locations"])
     router.include_router(timetable_stationboard.router, tags=["stationboard"])
     router.include_router(timetable_connections.router, tags=["connections"])
+    router.include_router(timetable_trip.router, tags=["trip"])
     router.include_router(timetable_fare.router, tags=["fare"])
     app.include_router(router, include_in_schema=prefix == PREFIX)
 

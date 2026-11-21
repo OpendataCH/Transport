@@ -26,7 +26,15 @@ from ..models import ConnectionsResponse, Errors
 from ..query import as_list, parameter, truthy
 from . import db, occupancy, places
 from .locations import _exact_metres
-from .mapping import highest_capacity, journey, line_number, location, set_capacity, stop
+from .mapping import (
+    highest_capacity,
+    journey,
+    line_number,
+    location,
+    set_capacity,
+    stop,
+    trip_ref,
+)
 from .names import normalize, operator_name
 from .router import Motis, get_motis, motis_or_none  # noqa: F401 - re-exported
 from .stationboard import TRANSPORTATIONS, _station
@@ -41,11 +49,19 @@ DEFAULT_PAGE = 0
 
 MAX_LIMIT = 16
 MAX_PAGE = 10
+# Earlier connections: page -1 is the `limit` connections before page 0.
+MIN_PAGE = -10
 # What MOTIS takes. search.ch took five.
 MAX_VIA = 2
 
 # A page is cut out of the first sixteen connections, as /v1 always has.
 WINDOW = 16
+
+# `walkingSpeed`, km/h, on the way to the first stop and from the last.
+MIN_WALKING_SPEED = 2.0
+MAX_WALKING_SPEED = 10.0
+# `minTransferTime`, minutes: no change of vehicle is shorter.
+MAX_TRANSFER_MINUTES = 60
 
 # /v1's means of transport, as MOTIS modes.
 MODES = {
@@ -105,7 +121,30 @@ async def search_connections(
         str | None, Query(description="`1` or `true` if the given time is the arrival time.")
     ] = None,
     limit: Annotated[str | None, Query(description="1 - 16; the default is 4.")] = None,
-    page: Annotated[str | None, Query(description="0 - 10. Zero-based page.")] = None,
+    page: Annotated[
+        str | None,
+        Query(
+            description="0 - 10. Zero-based page. -1 to -10 for the connections before "
+            "the time asked for: -1 is the ones just before page 0."
+        ),
+    ] = None,
+    walking_speed: Annotated[
+        str | None,
+        Query(
+            alias="walkingSpeed",
+            description="km/h, 2 - 10, on the way from an address or a coordinate to the "
+            "first stop and from the last stop to one. The default is 5. Walks between stops "
+            "are the timetable's.",
+        ),
+    ] = None,
+    min_transfer_time: Annotated[
+        str | None,
+        Query(
+            alias="minTransferTime",
+            description="Minutes, 0 - 60: no change of vehicle shorter than this, even where "
+            "the timetable allows one.",
+        ),
+    ] = None,
     transportations: Annotated[
         list[str] | None,
         Query(alias="transportations[]", description="Means of transport to allow."),
@@ -135,16 +174,31 @@ async def search_connections(
     if not (truthy(from_) and truthy(to)):
         return PhpJson(content=fields.apply(empty))
 
-    places = as_list(parameter(request, "via"))
+    via_names = as_list(parameter(request, "via"))
     limit_value = _number(limit, DEFAULT_LIMIT)
     page_value = _number(page, DEFAULT_PAGE)
-    problems = _validate(limit_value, page_value, places)
+    problems = _validate(limit_value, page_value, via_names)
+    speed = _decimal(walking_speed)
+    if truthy(walking_speed) and (
+        speed is None or not MIN_WALKING_SPEED <= speed <= MAX_WALKING_SPEED
+    ):
+        problems.append(
+            f"Argument `walkingSpeed` must be between {MIN_WALKING_SPEED:g} "
+            f"and {MAX_WALKING_SPEED:g} (km/h)."
+        )
+    transfer = _decimal(min_transfer_time)
+    if truthy(min_transfer_time) and (
+        transfer is None or not 0 <= transfer <= MAX_TRANSFER_MINUTES
+    ):
+        problems.append(
+            f"Argument `minTransferTime` must be between 0 and {MAX_TRANSFER_MINUTES} (minutes)."
+        )
     if problems:
         return PhpErrorJson(status_code=400, content={"errors": problems})
 
     origin = await _endpoint(pool, motis, from_)
     destination = await _endpoint(pool, motis, to)
-    stops_via = [await _station(pool, place) for place in places]
+    stops_via = [await _station(pool, place) for place in via_names]
     if origin is None or destination is None or None in stops_via:
         return PhpJson(content=fields.apply(empty))
 
@@ -155,14 +209,20 @@ async def search_connections(
         "toPlace": await _router_place(pool, destination),
         "time": when.astimezone(ZURICH).isoformat(),
         "arriveBy": "true" if arrival else "false",
-        "numItineraries": str(limit_value if arrival else (page_value + 1) * limit_value),
+        "numItineraries": str(
+            limit_value if arrival or page_value < 0 else (page_value + 1) * limit_value
+        ),
         # Walking all the way is not a connection /v1 has ever offered.
         "directModes": "",
         "detailedTransfers": "false",
         "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
-        "pedestrianSpeed": settings.MOTIS_PEDESTRIAN_SPEED,
+        "pedestrianSpeed": settings.MOTIS_PEDESTRIAN_SPEED
+        if speed is None
+        else f"{speed / 3.6:.3f}",
     }
+    if transfer is not None:
+        params["minTransferTime"] = str(int(transfer))
     if truthy(shared_mobility) and shared_mobility.lower() not in ("0", "false"):
         # A shared vehicle may take the place of the walk to the first stop
         # and from the last; between stops it is still walking.
@@ -174,12 +234,15 @@ async def search_connections(
     if modes:
         params["transitModes"] = ",".join(modes)
 
-    if arrival:
-        itineraries = await _arrival_page(motis, params, limit_value, page_value)
-    else:
-        plan = await motis.plan(params)
-        itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
-        itineraries = _page(itineraries, limit_value, page_value)
+    itineraries = await _itineraries(motis, params, arrival, limit_value, page_value)
+    if (
+        not itineraries
+        and page_value == 0
+        and (isinstance(origin, places.Place) or isinstance(destination, places.Place))
+    ):
+        # An address far from any stop: walk further, and on foot all the
+        # way when that is the only way (OpendataCH/Transport#206).
+        itineraries = await _far_walk(motis, params, arrival, limit_value)
     _name_the_ends(itineraries, origin, destination)
     with_geometry = truthy(geometry) and geometry.lower() not in ("0", "false")
     page_of = await _connections(pool, itineraries, with_geometry)
@@ -199,6 +262,75 @@ async def search_connections(
             }
         )
     )
+
+
+async def _itineraries(
+    motis: "Motis", params: dict, arrival: bool, limit: int, page: int
+) -> list[dict]:
+    """The page of connections asked for, in the order they leave."""
+    if page < 0:
+        return await _earlier_page(motis, params, arrival, limit, page)
+    if arrival:
+        return await _arrival_page(motis, params, limit, page)
+    plan = await motis.plan(params)
+    itineraries = sorted(plan.get("itineraries") or [], key=lambda i: i["startTime"])
+    return _page(itineraries, limit, page)
+
+
+async def _far_walk(motis: "Motis", params: dict, arrival: bool, limit: int) -> list[dict]:
+    """Connections with a walk of up to an hour to the first stop or from the last.
+
+    Without any, the walk itself - from a remote address to the next village
+    walking is the connection - when it takes no longer than that either.
+    """
+    seconds = str(settings.MOTIS_MAX_FAR_WALK_SECONDS)
+    far = {
+        **params,
+        "maxPreTransitTime": seconds,
+        "maxPostTransitTime": seconds,
+        "directModes": "WALK",
+        "maxDirectTime": seconds,
+        "numItineraries": str(limit),
+    }
+    plan = await motis.plan(far)
+    key = "endTime" if arrival else "startTime"
+    found = sorted(plan.get("itineraries") or [], key=lambda i: i[key])
+    found = found[-limit:] if arrival else found[:limit]
+    if not found:
+        found = (plan.get("direct") or [])[:1]
+    return sorted(found, key=lambda i: i["startTime"])
+
+
+async def _earlier_page(
+    motis: "Motis", params: dict, arrival: bool, limit: int, page: int
+) -> list[dict]:
+    """Page -1, -2, ...: the connections before page 0, going back in time.
+
+    The router's cursor to the previous time window is followed until there
+    are enough. For a departure, page 0 begins at the time asked for; for an
+    arrival it is the connections arriving last before it, and what the first
+    window has before those belongs to page -1.
+    """
+    key = "endTime" if arrival else "startTime"
+    plan = await motis.plan(params)
+    first = sorted(plan.get("itineraries") or [], key=lambda i: i[key])
+    seen = {i["startTime"] + i["endTime"] for i in first}
+    earlier = first[:-limit] if arrival else []
+    wanted = -page * limit
+    cursor = plan.get("previousPageCursor")
+    for _ in range(-page * 3):
+        if len(earlier) >= wanted or not cursor:
+            break
+        more = await motis.plan({**params, "pageCursor": cursor})
+        for itinerary in more.get("itineraries") or []:
+            mark = itinerary["startTime"] + itinerary["endTime"]
+            if mark not in seen:
+                seen.add(mark)
+                earlier.append(itinerary)
+        cursor = more.get("previousPageCursor")
+    latest_first = sorted(earlier, key=lambda i: i[key], reverse=True)
+    chosen = latest_first[(-page - 1) * limit : -page * limit]
+    return sorted(chosen, key=lambda i: i["startTime"])
 
 
 async def _arrival_page(motis: "Motis", params: dict, limit: int, page: int) -> list[dict]:
@@ -409,10 +541,14 @@ def _geometry(leg: dict) -> dict | None:
 
 
 def _transfer_within_station(leg: dict) -> bool:
-    """A walk from one platform to another of the same station is no section in /v1."""
-    return leg["mode"] == "WALK" and (leg["from"].get("parentId") or leg["from"].get("stopId")) == (
-        leg["to"].get("parentId") or leg["to"].get("stopId")
-    )
+    """A walk from one platform to another of the same station is no section in /v1.
+
+    A walk between two places that are no stops - an address to an address -
+    is the whole connection.
+    """
+    start = leg["from"].get("parentId") or leg["from"].get("stopId")
+    end = leg["to"].get("parentId") or leg["to"].get("stopId")
+    return leg["mode"] == "WALK" and start is not None and start == end
 
 
 def _section(leg: dict, stations: dict, trips: dict, forecast: dict, now: datetime) -> dict:
@@ -452,6 +588,7 @@ def _section(leg: dict, stations: dict, trips: dict, forecast: dict, now: dateti
         operator=trip["operator"],
         headsign=leg.get("headsign") or trip["headsign"],
         pass_list=pass_list,
+        trip=trip_ref(_trip_id(leg["tripId"]), _service_day(leg["tripId"])),
     )
     line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
     return {
@@ -614,6 +751,8 @@ def _validate(limit: int, page: int, via: list[str]) -> list[str]:
         problems.append(f"Maximal value of argument `limit` is {MAX_LIMIT}.")
     if page > MAX_PAGE:
         problems.append(f"Maximal value of argument `page` is {MAX_PAGE}.")
+    if page < MIN_PAGE:
+        problems.append(f"Minimal value of argument `page` is {MIN_PAGE}.")
     if len(via) > MAX_VIA:
         problems.append(f"Invalid via count (max {MAX_VIA} allowed).")
     return problems
@@ -627,6 +766,17 @@ def _number(value: str | None, default: int) -> int:
         return int(float(value))
     except ValueError:
         return default
+
+
+def _decimal(value: str | None) -> float | None:
+    """A number with decimals, or None when there is none to read."""
+    if not truthy(value):
+        return None
+    try:
+        number = float(value.replace(",", "."))
+    except ValueError:
+        return None
+    return number if number == number else None
 
 
 def _is_arrival_time(value: str | None) -> bool:

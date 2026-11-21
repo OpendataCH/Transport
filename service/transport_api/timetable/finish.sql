@@ -5,6 +5,8 @@ CREATE INDEX ON gtfs_next.stop_times (stop, dep_s);
 CREATE INDEX ON gtfs_next.stop_times (stop, arr_s);
 CREATE INDEX ON gtfs_next.service_dates (service, day);
 CREATE UNIQUE INDEX ON gtfs_next.trips (trip_id);
+-- /trip?number=: train numbers without the leading zeros /v1 writes.
+CREATE INDEX ON gtfs_next.trips (ltrim(short_name, '0'));
 CREATE INDEX ON gtfs_next.stops (station);
 
 -- What /v2/locations searches: one row per station. `departures` ranks the

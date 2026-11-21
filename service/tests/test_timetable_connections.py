@@ -100,6 +100,87 @@ def test_arrival_pages_are_cut_as_v1_cuts_them(page, expected):
     assert [i["endTime"][11:16] for i in got] == expected
 
 
+class EarlierMotis:
+    """Departures from 09:00, and two earlier windows behind the previous cursor."""
+
+    def __init__(self) -> None:
+        self.calls = []
+
+    async def plan(self, params):
+        self.calls.append(params)
+        windows = {
+            None: [trip("09:00", "09:30"), trip("09:20", "09:50"), trip("09:40", "10:10")],
+            "prev-1": [trip("08:20", "08:50"), trip("08:40", "09:10")],
+            "prev-2": [trip("07:20", "07:50"), trip("07:40", "08:10"), trip("08:00", "08:30")],
+        }
+        cursor = params.get("pageCursor")
+        earlier = {None: "prev-1", "prev-1": "prev-2", "prev-2": None}[cursor]
+        return {"itineraries": windows[cursor], "previousPageCursor": earlier}
+
+
+@pytest.mark.parametrize(
+    ("page", "expected"),
+    [(-1, ["08:20", "08:40"]), (-2, ["07:40", "08:00"]), (-3, ["07:20"]), (-4, [])],
+)
+def test_earlier_departures_go_back_page_by_page(page, expected):
+    got = asyncio.run(
+        connections._itineraries(EarlierMotis(), {"arriveBy": "false"}, False, 2, page)
+    )
+    assert [i["startTime"][11:16] for i in got] == expected
+
+
+def test_earlier_arrivals_begin_before_those_of_page_0():
+    # Page 0 of an arrival search is the last two of the first window
+    # (arriving 09:50 and 10:10); what it leaves, and the window before,
+    # come next.
+    got = asyncio.run(connections._itineraries(EarlierMotis(), {"arriveBy": "true"}, True, 2, -1))
+    assert [i["endTime"][11:16] for i in got] == ["09:10", "09:30"]
+
+
+class FarMotis:
+    """Nothing within the usual walk; with a longer one only the walk itself."""
+
+    def __init__(self, itineraries=()) -> None:
+        self.calls = []
+        self.itineraries = list(itineraries)
+
+    async def plan(self, params):
+        self.calls.append(params)
+        if params.get("directModes") != "WALK":
+            return {"itineraries": []}
+        walk = {
+            "duration": 2700,
+            "startTime": "2026-10-05T07:00:00Z",
+            "endTime": "2026-10-05T07:45:00Z",
+            "transfers": 0,
+            "legs": [
+                {
+                    "mode": "WALK",
+                    "duration": 2700,
+                    "from": {"name": "START", "lat": 46.49, "lon": 7.14},
+                    "to": {"name": "END", "lat": 46.47, "lon": 7.13},
+                }
+            ],
+        }
+        return {"itineraries": self.itineraries, "direct": [walk]}
+
+
+def test_a_remote_address_walks_further_then_all_the_way():
+    motis = FarMotis()
+    got = asyncio.run(connections._far_walk(motis, {"directModes": ""}, False, 4))
+    assert motis.calls[0]["maxPreTransitTime"] == "3600"
+    assert motis.calls[0]["maxDirectTime"] == "3600"
+    assert [leg["mode"] for leg in got[0]["legs"]] == ["WALK"]
+    # The walk alone is a section, not a change within a station.
+    assert not connections._transfer_within_station(got[0]["legs"][0])
+
+
+def test_a_longer_walk_to_a_vehicle_wins_over_walking_all_the_way():
+    found = [trip("07:30", "08:40"), trip("07:10", "08:20")]
+    got = asyncio.run(connections._far_walk(FarMotis(found), {}, False, 1))
+    assert [i["startTime"][11:16] for i in got] == ["07:10"]
+
+
 DATABASE = os.environ.get("TEST_DATABASE_URL")
 needs_database = pytest.mark.skipif(not DATABASE, reason="TEST_DATABASE_URL is not set")
 
@@ -298,6 +379,9 @@ def test_a_connection_in_the_shape_of_v1(api):
     first, second = connection["sections"]
     assert first["journey"]["category"] == "S"
     assert first["journey"]["operator"] == "Test Bahn"
+    # The trip, as /trip takes it; one only real time knows has the router's id.
+    assert first["journey"]["trip"] == {"id": "t-morning", "date": "2026-10-05"}
+    assert second["journey"]["trip"] == {"id": "ojp:extra_20261005", "date": "2026-10-05"}
     assert second["journey"]["category"] == "RE"
     assert second["journey"]["operator"] == "Extra Bahn"
 
@@ -541,3 +625,51 @@ def test_the_category_gives_the_product_class_as_hafas_numbered_it():
     ]
     assert category_code(None) is None
     assert category_code("XYZ") is None
+
+
+@needs_database
+def test_walking_speed_and_transfer_time_go_to_the_router(api):
+    api.get(
+        "/v2/connections",
+        params={
+            "from": "Alpha",
+            "to": "8500003",
+            "datetime": f"{TODAY} 07:55",
+            "walkingSpeed": "3.6",
+            "minTransferTime": "7",
+        },
+    )
+    assert api.motis.params["pedestrianSpeed"] == "1.000"
+    assert api.motis.params["minTransferTime"] == "7"
+
+
+@needs_database
+@pytest.mark.parametrize(
+    ("name", "value"), [("walkingSpeed", "50"), ("walkingSpeed", "fast"), ("minTransferTime", "90")]
+)
+def test_walking_speed_and_transfer_time_out_of_range_are_refused(api, name, value):
+    response = api.get("/v2/connections", params={"from": "Alpha", "to": "Beta", name: value})
+    assert response.status_code == 400
+    assert name in response.json()["errors"][0]
+
+
+@needs_database
+def test_a_page_before_minus_ten_is_refused(api):
+    response = api.get("/v2/connections", params={"from": "Alpha", "to": "Beta", "page": "-11"})
+    assert response.status_code == 400
+
+
+@needs_database
+def test_a_remote_address_gets_the_walk_instead_of_nothing(api, monkeypatch):
+    far = FarMotis()
+    monkeypatch.setattr(api.motis, "plan", far.plan)
+    answer = api.get(
+        "/v2/connections",
+        params={"from": "Neufeldstrasse 101, Bern", "to": "8500003", "datetime": f"{TODAY} 07:55"},
+    ).json()
+    ConnectionsResponse.model_validate(answer)
+    assert len(far.calls) == 2
+    (connection,) = answer["connections"]
+    assert connection["products"] == []
+    assert connection["sections"][0]["walk"] == {"duration": 2700}
+    assert connection["from"]["station"]["name"] == "Bern, Neufeldstrasse 101"

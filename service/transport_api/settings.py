@@ -130,6 +130,12 @@ GTFS_WALK_SETS_TRANSFER = os.environ.get("GTFS_WALK_SETS_TRANSFER", "1") not in 
 # at either end (Yverdon-les-Bains to Philosophes).
 MOTIS_MAX_WALK_SECONDS = int(os.environ.get("MOTIS_MAX_WALK_SECONDS", "1200"))
 
+# When a connection from or to an address finds nothing within that walk -
+# a farm above the village - it is asked again with a walk of up to this,
+# and the walk alone is the answer when nothing else is. The router's own
+# ceiling for these walks is an hour.
+MOTIS_MAX_FAR_WALK_SECONDS = int(os.environ.get("MOTIS_MAX_FAR_WALK_SECONDS", "3600"))
+
 # Walking speed, metres a second, on the way to the first stop and from the
 # last. The router walks along the streets to the platform itself, at about
 # 1.2 by default: near a large station that came out minutes longer than

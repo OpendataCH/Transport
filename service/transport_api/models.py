@@ -104,6 +104,15 @@ class Stop(BaseModel):
     )
 
 
+class TripRef(BaseModel):
+    """Which run of a vehicle a journey is: what `/trip` takes, and GTFS-RT matches on."""
+
+    id: str = Field(description="The trip's `trip_id` in the national GTFS feed.")
+    date: str = Field(
+        description="Its service day, `YYYY-MM-DD` - the day it starts, also after midnight."
+    )
+
+
 class Journey(BaseModel):
     """A line, and every stop of it the upstream mentions."""
 
@@ -124,6 +133,10 @@ class Journey(BaseModel):
         "From the railways' forecast (SBB, BLS, SOB, Thurbo, zb trains); null otherwise."
     )
     capacity2nd: int | None = Field(description="The same for second class.")
+    trip: TripRef | None = Field(
+        default=None,
+        description="The trip, to ask `/trip` for all its stops; null when it is not known.",
+    )
 
 
 class StationBoardJourney(Journey):
@@ -251,3 +264,17 @@ class ApiInfo(BaseModel):
     date: str = Field(description="Now, ISO 8601 with offset.")
     author: str
     version: str
+
+
+class TripJourney(Journey):
+    """One trip of `/trip`: every stop, with the platform and real time at each."""
+
+    cancelled: bool = Field(description="True when the trip does not run today after all.")
+
+
+class TripResponse(BaseModel):
+    """The answer of `/v1/trip`."""
+
+    trips: list[TripJourney] = Field(
+        description="One for an id; for a number every trip of that number on the day."
+    )

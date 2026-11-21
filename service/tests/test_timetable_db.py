@@ -20,7 +20,7 @@ from gtfs_feed import CLOCKS_BACK, TODAY, write_feed
 from transport_api import settings
 from transport_api.main import app
 from transport_api.mapping import ZURICH
-from transport_api.models import LocationsResponse, StationBoardResponse
+from transport_api.models import LocationsResponse, StationBoardResponse, TripResponse
 from transport_api.timetable import board_page, importer
 
 DATABASE = os.environ.get("TEST_DATABASE_URL")
@@ -125,11 +125,14 @@ def test_board_by_id(api):
     assert first["number"] == "1"
     assert first["to"] == "Gamma, Dorf"
     assert first["operator"] == "Test Bahn"
-    # /v1: the stop's location and the head of the pass list carry only the
-    # terminal's id.
-    assert first["stop"]["location"]["id"] == "8500003"
-    assert first["stop"]["location"]["name"] is None
-    assert [s["station"]["id"] for s in first["passList"]] == ["8500003", "8500002", "8500003"]
+    # The stop's location and the head of the pass list are the board stop,
+    # not the terminal's id without a name as the PHP had them (#175).
+    assert first["stop"]["location"]["id"] == "8500001"
+    assert first["stop"]["location"]["name"] == "Alpha"
+    head = first["passList"][0]
+    assert head["station"]["name"] == "Alpha" and head["location"]["id"] == "8500001"
+    assert head["departure"] == first["stop"]["departure"]
+    assert [s["station"]["id"] for s in first["passList"]] == ["8500001", "8500002", "8500003"]
     assert first["passList"][-1]["departure"] is None
 
 
@@ -283,6 +286,20 @@ def test_locations_by_coordinate_name_the_nearest_address_first(api):
     assert answer["stations"][1]["name"] == "Beta"
 
 
+def test_locations_by_coordinate_of_type_station_are_only_stops(api):
+    from transport_api.timetable.router import motis_or_none
+
+    app.dependency_overrides[motis_or_none] = lambda: _ReverseGeocoder()
+    try:
+        answer = api.get(
+            "/v2/locations", params={"x": "47.0", "y": "7.5", "type": "station"}
+        ).json()
+    finally:
+        app.dependency_overrides.pop(motis_or_none)
+    assert answer["stations"][0]["name"] == "Beta"
+    assert all(s["id"] for s in answer["stations"])
+
+
 def test_a_linked_station_board_is_drawn_on_the_server(api, monkeypatch):
     # The page asks for the departures after "now"; the feed only runs from
     # TODAY for 21 days, so the clock is set to the morning of TODAY — with
@@ -325,3 +342,41 @@ def test_robots_let_everybody_call_the_api(api):
     url = "https://transport.opendata.ch/v1/connections?from=Bern&to=Basel"
     for agent in ("Claude-User", "ClaudeBot", "Googlebot", "GPTBot"):
         assert robots.can_fetch(agent, url), agent
+
+
+def test_a_board_names_each_trip(api):
+    first = _board(api, id="8500001", limit="1", datetime=f"{TODAY} 07:00")["stationboard"][0]
+    assert first["trip"] == {"id": "t-morning", "date": TODAY.isoformat()}
+
+
+def test_a_trip_by_its_id_has_every_stop(api):
+    answer = api.get("/v2/trip", params={"id": "t-morning", "date": TODAY.isoformat()}).json()
+    TripResponse.model_validate(answer)
+    (trip,) = answer["trips"]
+    assert trip["name"] == "001234"
+    assert trip["trip"] == {"id": "t-morning", "date": TODAY.isoformat()}
+    assert trip["cancelled"] is False
+    names = [s["station"]["name"] for s in trip["passList"]]
+    assert names == ["Alpha", "Beta", "Gamma, Dorf"]
+    first, middle, last = trip["passList"]
+    assert first["arrival"] is None and first["departure"] == "2026-10-05T08:00:00+0200"
+    assert first["platform"] == "1"
+    assert middle["arrival"][11:16] == "08:10" and middle["departure"][11:16] == "08:12"
+    assert last["departure"] is None and last["arrival"][11:16] == "08:30"
+
+
+def test_a_trip_by_its_number_as_name_writes_it(api):
+    answer = api.get("/v2/trip", params={"number": "001234", "date": TODAY.isoformat()}).json()
+    assert [t["trip"]["id"] for t in answer["trips"]] == ["t-morning"]
+
+
+def test_a_trip_on_a_day_it_does_not_run_is_not_found(api):
+    tuesday = (TODAY + timedelta(days=1)).isoformat()
+    assert api.get("/v2/trip", params={"id": "t-morning", "date": tuesday}).json() == {"trips": []}
+
+
+@pytest.mark.parametrize("params", [{}, {"id": "t-morning", "date": "5.10.2026"}])
+def test_a_trip_needs_an_id_or_number_and_a_readable_date(api, params):
+    response = api.get("/v2/trip", params=params)
+    assert response.status_code == 400
+    assert response.json()["errors"][0]["message"]
