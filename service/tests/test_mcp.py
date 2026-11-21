@@ -322,4 +322,4 @@ def test_an_error_envelope_becomes_a_tool_failure(mcp_client, monkeypatch, timet
 def test_a_browser_gets_a_pointer_to_the_docs(mcp_client):
     response = mcp_client.get("/mcp", headers={"accept": "text/html,*/*"})
     assert response.status_code == 200
-    assert 'href="/docs#mcp"' in response.text
+    assert 'href="/docs.html#mcp"' in response.text

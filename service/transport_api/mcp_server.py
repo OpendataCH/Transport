@@ -121,7 +121,7 @@ _BROWSER_PAGE = HTMLResponse(
     "<!doctype html><meta charset=utf-8><title>transport.opendata.ch MCP</title>"
     "<p>This is the MCP server of transport.opendata.ch, for AI assistants. "
     "Add <code>https://transport.opendata.ch/mcp</code> to yours: "
-    '<a href="/docs#mcp">how</a>.</p>'
+    '<a href="/docs.html#mcp">how</a>.</p>'
 )
 
 
