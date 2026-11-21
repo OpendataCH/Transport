@@ -1,5 +1,9 @@
 # Transport API
 
+> **Development happens on GitLab:** https://gitlab.com/opendata.ch/Transport —
+> issues and merge requests go there. The repository on GitHub
+> (github.com/OpendataCH/Transport) is a read-only mirror.
+
 The Swiss public transport API behind **https://transport.opendata.ch**, run by
 [Opendata.ch](https://opendata.ch). It answers from its own copy of the national
 timetable and its real-time feed on
