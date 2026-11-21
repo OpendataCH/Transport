@@ -253,8 +253,20 @@
                     <tr>
                         <td><code>page</code></td>
                         <td>optional</td>
-                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on.</td>
+                        <td>0 - 10. Allows pagination of connections. Zero-based, so first page is&#160;0, second is&#160;1, third is&#160;2 and so on. -1 to -10 go back in time: page&#160;-1 is the connections just before page&#160;0, -2 the ones before those.</td>
                         <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><code>walkingSpeed</code></td>
+                        <td>optional</td>
+                        <td>2 - 10, in km/h; defaults to 5. How fast the walk from an address or a coordinate to the first stop, and from the last stop to one, is walked. Walks between two stops are the timetable's and do not change.</td>
+                        <td>3.5</td>
+                    </tr>
+                    <tr>
+                        <td><code>minTransferTime</code></td>
+                        <td>optional</td>
+                        <td>0 - 60, in minutes. No change of vehicle is shorter than this, even where the timetable allows a shorter one.</td>
+                        <td>10</td>
                     </tr>
                     <tr>
                         <td><code>sharedMobility</code></td>
@@ -1085,7 +1097,7 @@
             <h4>Connections</h4>
             <ul>
                 <li><strong>How:</strong> computed here by <a href="https://github.com/motis-project/motis" rel="external noopener noreferrer">MOTIS</a>, an open-source journey planner (MIT licence), on the very file of timetable days the database holds and on the same real-time feed, read every minute. For a journey it finds the connections that are best in arrival time and in the number of changes, and <code>/connections</code> writes them in the form <code>/v1</code> has always used: sections, products, platforms, delays.</li>
-                <li><strong>Changes and walks:</strong> transfer times are those of the national timetable, per station; where the timetable gives a walk to a neighbouring stop that is shorter than the station's transfer time, the walk counts, as in the official journey planners. Walks between stops the timetable does not link, and the way from an address or a coordinate to the first stop and from the last stop to the destination, follow the streets of OpenStreetMap - up to 20 minutes on foot. The way to the first stop and from the last is walked at 1.4 m/s (about 5 km/h) to the platform itself, so near a large station it can take a few minutes more than to the station's entrance.</li>
+                <li><strong>Changes and walks:</strong> transfer times are those of the national timetable, per station; where the timetable gives a walk to a neighbouring stop that is shorter than the station's transfer time, the walk counts, as in the official journey planners. Walks between stops the timetable does not link, and the way from an address or a coordinate to the first stop and from the last stop to the destination, follow the streets of OpenStreetMap - up to 20 minutes on foot. From or to an address with no stop within that, the walk may take up to an hour; when walking is the only way, the connection is the walk alone, a single section with <code>walk</code> and no products. The way to the first stop and from the last is walked at 1.4 m/s (about 5 km/h) to the platform itself, so near a large station it can take a few minutes more than to the station's entrance.</li>
                 <li><strong>In the API:</strong> each new timetable and each weekly move of the days held rebuilds the planner, which takes 10 to 20 minutes. It is built beside the running one, which keeps answering until the new one takes over within seconds.</li>
             </ul>
 

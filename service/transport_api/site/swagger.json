@@ -127,8 +127,20 @@
                     {
                         "name": "page",
                         "in": "query",
-                        "description": "0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on.",
+                        "description": "0 - 10. Allows pagination of connections. Zero-based, so first page is 0, second is 1, third is 2 and so on. -1 to -10 go back in time: page -1 is the connections just before page 0.",
                         "type": "integer"
+                    },
+                    {
+                        "name": "walkingSpeed",
+                        "in": "query",
+                        "description": "2 - 10, km/h, default 5: the walk from an address or a coordinate to the first stop and from the last stop to one. Walks between stops are the timetable's.",
+                        "type": "number"
+                    },
+                    {
+                        "name": "minTransferTime",
+                        "in": "query",
+                        "description": "0 - 60, minutes: no change of vehicle shorter than this.",
+                        "type": "number"
                     }
                 ],
                 "responses": {
