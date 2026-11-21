@@ -125,11 +125,14 @@ def test_board_by_id(api):
     assert first["number"] == "1"
     assert first["to"] == "Gamma, Dorf"
     assert first["operator"] == "Test Bahn"
-    # /v1: the stop's location and the head of the pass list carry only the
-    # terminal's id.
-    assert first["stop"]["location"]["id"] == "8500003"
-    assert first["stop"]["location"]["name"] is None
-    assert [s["station"]["id"] for s in first["passList"]] == ["8500003", "8500002", "8500003"]
+    # The stop's location and the head of the pass list are the board stop,
+    # not the terminal's id without a name as the PHP had them (#175).
+    assert first["stop"]["location"]["id"] == "8500001"
+    assert first["stop"]["location"]["name"] == "Alpha"
+    head = first["passList"][0]
+    assert head["station"]["name"] == "Alpha" and head["location"]["id"] == "8500001"
+    assert head["departure"] == first["stop"]["departure"]
+    assert [s["station"]["id"] for s in first["passList"]] == ["8500001", "8500002", "8500003"]
     assert first["passList"][-1]["departure"] is None
 
 
@@ -281,6 +284,20 @@ def test_locations_by_coordinate_name_the_nearest_address_first(api):
     assert first["icon"] is None
     assert 10 < first["distance"] < 15 and not float(first["distance"]).is_integer()
     assert answer["stations"][1]["name"] == "Beta"
+
+
+def test_locations_by_coordinate_of_type_station_are_only_stops(api):
+    from transport_api.timetable.router import motis_or_none
+
+    app.dependency_overrides[motis_or_none] = lambda: _ReverseGeocoder()
+    try:
+        answer = api.get(
+            "/v2/locations", params={"x": "47.0", "y": "7.5", "type": "station"}
+        ).json()
+    finally:
+        app.dependency_overrides.pop(motis_or_none)
+    assert answer["stations"][0]["name"] == "Beta"
+    assert all(s["id"] for s in answer["stations"])
 
 
 def test_a_linked_station_board_is_drawn_on_the_server(api, monkeypatch):

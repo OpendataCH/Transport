@@ -100,8 +100,6 @@ def stop(
     arrival_delay: int | None,
     departure_delay: int | None,
     now: datetime,
-    *,
-    location_: dict | None = None,
 ) -> dict:
     """One checkpoint, with `delay` worked out from the prognosis as /v1 does."""
     forecast = prognosis(arrival, departure, arrival_delay, departure_delay, now)
@@ -120,7 +118,7 @@ def stop(
         "platform": platform,
         "prognosis": forecast,
         "realtimeAvailability": None,
-        "location": location_ if location_ is not None else dict(station),
+        "location": dict(station),
     }
 
 

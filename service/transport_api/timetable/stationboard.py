@@ -82,13 +82,10 @@ WHERE st.stop = ANY($1::int[])
 
 TRIPS = """
 SELECT t.idx, t.headsign, t.short_name, t.last_seq, t.mode,
-       r.short_name AS route_short_name, r.category, a.name AS operator,
-       term.id AS terminal_id
+       r.short_name AS route_short_name, r.category, a.name AS operator
 FROM gtfs.trips t
 JOIN gtfs.routes r ON r.idx = t.route
 LEFT JOIN gtfs.agency a ON a.idx = r.agency
-JOIN gtfs.stops ls ON ls.idx = t.last_stop
-JOIN gtfs.station term ON term.idx = ls.station
 WHERE t.idx = ANY($1::int[])
 """
 
@@ -319,32 +316,33 @@ async def _journeys(
         trip = trips[row["trip"]]
         levels = forecast.get((row["day"], trip["short_name"])) if trip["mode"] == "train" else None
         here = next(c for c in calls[row["trip"]] if c["seq"] == row["seq"])
-        terminal = location(trip["terminal_id"], None, None, None)
         at = moment(row["day"], row["arr_s"] if arrivals else row["dep_s"])
         delay = here["arrival_delay"] if arrivals else here["departure_delay"]
 
         # /v1 reads the board's time into `departure` whichever way the board
-        # faces, and builds the head stop's station from the terminal.
-        # A train that ends here leaves with nobody.
+        # faces. A train that ends here leaves with nobody.
+        #
+        # The PHP built the stop's `location`, and the head of the pass list,
+        # with the terminal's id and no name (search.ch's `terminal.id`
+        # overwrote the stop's own): the board stop's time and platform under
+        # another stop's id (OpendataCH/Transport#175). Both are the board
+        # stop now.
         leaving = occupancy.at(levels, here["id"]) if row["seq"] != trip["last_seq"] else None
 
-        def head(
-            station: dict, _at=at, _delay=delay, _here=here, _terminal=terminal, _leaving=leaving
-        ) -> dict:
+        def head(_at=at, _delay=delay, _here=here, _leaving=leaving) -> dict:
             board_stop = stop(
-                station,
+                dict(board_station),
                 None,
                 _at,
                 _here["platform"],
                 _here["arrival_delay"],
                 _delay,
                 now,
-                location_=dict(_terminal),
             )
             set_capacity(board_stop, _leaving)
             return board_stop
 
-        pass_list = [head(dict(terminal))]
+        pass_list = [head()]
         for call in calls[row["trip"]]:
             if call["seq"] <= row["seq"]:
                 continue
@@ -372,7 +370,7 @@ async def _journeys(
             pass_list=pass_list,
         )
         line["capacity1st"], line["capacity2nd"] = highest_capacity(pass_list)
-        journeys.append({"stop": head(board_station), **line})
+        journeys.append({"stop": head(), **line})
     return journeys
 
 
