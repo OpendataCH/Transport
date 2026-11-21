@@ -109,6 +109,13 @@
         @media (max-width: 639px) {
             .board .op { display: none; }
             .occ-class:first-child:not(:last-child) { display: none; }
+            /* The word is wider than the dots below it and pushes the
+               platform off a phone screen; screen readers still get it. */
+            .board th.occ { font-size: 0; padding-left: 0; padding-right: 0; }
+            .board td.occ { padding-left: 4px; padding-right: 4px; }
+            .occ-class { margin-right: 0; }
+            .board th.pl { font-size: 0; }
+            .board th.pl::after { content: 'Pl.'; font-size: 12px; }
         }
             .api-panel { background: var(--surface, #f6f7f8); border: 1px solid var(--line, #e2e4e7); border-radius: 6px; padding: 10px 14px; margin: 8px 0 16px; font-size: 13px; }
         .api-panel code { word-break: break-all; }
