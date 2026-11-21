@@ -34,6 +34,7 @@ from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Route
 
 from . import settings
+from .website import SITE as SITE_DIR
 
 SITE = "https://transport.opendata.ch"
 
@@ -117,12 +118,9 @@ class _Uncounted:
         await _endpoint(scope, receive, send)
 
 
-_BROWSER_PAGE = HTMLResponse(
-    "<!doctype html><meta charset=utf-8><title>transport.opendata.ch MCP</title>"
-    "<p>This is the MCP server of transport.opendata.ch, for AI assistants. "
-    "Add <code>https://transport.opendata.ch/mcp</code> to yours: "
-    '<a href="/docs.html#mcp">how</a>.</p>'
-)
+# What someone who opens /mcp in a browser sees: what the address is for and
+# how to add it. A page of the website, read once at import.
+_BROWSER_PAGE = HTMLResponse((SITE_DIR / "mcp.html").read_text(encoding="utf-8"))
 
 
 def _is_browser(scope) -> bool:

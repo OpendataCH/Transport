@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>MCP server - Transport API</title>
+    <meta name="description" content="Swiss public transport for AI assistants: add https://transport.opendata.ch/mcp to Claude, ChatGPT, Cursor or VS Code. No key, no login.">
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#E61414" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/media/css/base.css" />
+    <link rel="stylesheet" href="/media/css/layout.css" />
+    <style>
+        .mcp-url { display: flex; gap: .5em; align-items: stretch; margin: 1em 0 1.5em; }
+        .mcp-url code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; font-size: 1.15em;
+            padding: .6em .8em; border: 2px solid #E61414; border-radius: 4px; background: #fff; }
+        .mcp-url button { padding: 0 1em; border: 0; border-radius: 4px; background: #E61414; color: #fff;
+            font: inherit; font-weight: bold; cursor: pointer; }
+        .mcp-note { color: #555; }
+        pre { white-space: pre-wrap; word-break: break-all; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <header>
+            <h1><a href="/"><img class="logo" src="/media/images/logo.svg" alt="" />Transport</a></h1>
+            <p>Swiss public transport API</p>
+        </header>
+
+        <article>
+        <h2 id="mcp">MCP server for AI assistants</h2>
+
+        <p>This address is not a web page: it is a <a href="https://modelcontextprotocol.io/" rel="external noopener noreferrer">Model Context Protocol</a> server. Add it to your AI assistant, and it can look up stations, connections and departures of Swiss public transport for you, with platforms and real-time delays. No key and no login.</p>
+
+        <div class="mcp-url">
+            <code id="mcp-address">https://transport.opendata.ch/mcp</code>
+            <button type="button" id="mcp-copy" hidden>Copy</button>
+        </div>
+
+        <h3>Adding it</h3>
+        <ul>
+            <li><strong>Claude</strong> (claude.ai, desktop): <em>Settings &rsaquo; Connectors &rsaquo; Add custom connector</em>, name «Transport», URL above.</li>
+            <li><strong>ChatGPT</strong>: <em>Settings &rsaquo; Apps &amp; Connectors &rsaquo; Create</em> (developer mode), URL above, no authentication.</li>
+            <li><strong>Claude Code</strong>:
+                <pre><code>claude mcp add --transport http transport https://transport.opendata.ch/mcp</code></pre></li>
+            <li><strong>VS Code, Cursor</strong> and other clients, in <code>mcp.json</code>:
+<pre><code>{
+  "servers": {
+    "transport": { "type": "http", "url": "https://transport.opendata.ch/mcp" }
+  }
+}</code></pre></li>
+        </ul>
+        <p class="mcp-note">Then ask, for example: <em>«Next departure from Bern, Engeried?»</em> or <em>«How do I get from Zürich HB to Bern by 9 tomorrow?»</em></p>
+
+        <h3>Tools</h3>
+        <ul>
+            <li><code>find_stations</code>: stations and stops by name, with their ids.</li>
+            <li><code>stations_nearby</code>: the stops closest to a coordinate.</li>
+            <li><code>connections</code>: connections from A to B, with platforms, delays and changes.</li>
+            <li><code>departures</code>: the departure or arrival board of a station.</li>
+        </ul>
+        <p>All tools only read, from the national timetable of opentransportdata.swiss. More in the <a href="/docs.html#mcp">documentation</a>; what happens to a request: <a href="/privacy.html">privacy</a>.</p>
+        </article>
+
+        <footer class="footer">
+            <hr>
+            <p>Powered by <a href="http://opendata.ch/">Opendata.ch.</a> <a href="https://donate.raisenow.io/bxqvn" target="_blank">Donate now to support open data in Switzerland</a> · <a href="/privacy.html">Privacy policy</a> · <a href="/licenses.html">Licenses</a></p>
+        </footer>
+    </div>
+</div>
+
+<script>
+    // Offer a copy button only where the clipboard is available.
+    (function () {
+        var button = document.getElementById('mcp-copy');
+        if (!navigator.clipboard) return;
+        button.hidden = false;
+        button.addEventListener('click', function () {
+            navigator.clipboard.writeText(document.getElementById('mcp-address').textContent).then(function () {
+                button.textContent = 'Copied';
+                setTimeout(function () { button.textContent = 'Copy'; }, 1500);
+            });
+        });
+    })();
+</script>
+
+</body>
+</html>

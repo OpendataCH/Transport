@@ -13,6 +13,7 @@ from transport_api.main import app
         ("/index.html", "text/html"),
         ("/docs.html", "text/html"),
         ("/privacy.html", "text/html"),
+        ("/mcp.html", "text/html"),
         ("/showcase.html", "text/html"),
         ("/examples/", "text/html"),
         ("/examples/connections.html", "text/html"),
