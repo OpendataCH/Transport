@@ -666,6 +666,28 @@ def test_a_page_before_minus_ten_is_refused(api):
 
 
 @needs_database
+@pytest.mark.parametrize(
+    ("query", "asked"),
+    [
+        ({"limit": "-4"}, "4"),
+        ({"limit": "0"}, "4"),
+        ({"limit": "00"}, "4"),
+        ({"limit": "0.9"}, "4"),
+        ({"limit": "-0.5"}, "4"),
+        ({"limit": "-4", "page": "2"}, "12"),
+        ({"limit": "-4", "page": "-1"}, "4"),
+        ({"limit": "-4", "isArrivalTime": "1"}, "4"),
+        ({"limit": "1"}, "1"),
+        ({"limit": "16"}, "16"),
+    ],
+)
+def test_a_limit_below_one_is_the_default(api, query, asked):
+    response = api.get("/v2/connections", params={"from": "Alpha", "to": "Beta", **query})
+    assert response.status_code == 200
+    assert api.motis.params["numItineraries"] == asked
+
+
+@needs_database
 def test_a_remote_address_gets_the_walk_instead_of_nothing(api, monkeypatch):
     far = FarMotis()
     monkeypatch.setattr(api.motis, "plan", far.plan)

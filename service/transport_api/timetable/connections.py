@@ -176,6 +176,8 @@ async def search_connections(
 
     via_names = as_list(parameter(request, "via"))
     limit_value = _number(limit, DEFAULT_LIMIT)
+    if limit_value < 1:
+        limit_value = DEFAULT_LIMIT
     page_value = _number(page, DEFAULT_PAGE)
     problems = _validate(limit_value, page_value, via_names)
     speed = _decimal(walking_speed)
