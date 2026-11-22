@@ -184,9 +184,9 @@
         .formation .board-at .key.first { background: #f5cc3d; border-color: #b8921a; }
         .formation svg { width: 13px; height: 13px; flex: none; }
         .formation .front { color: var(--muted); margin-bottom: 2px; }
-        .formation .scroll { overflow-x: auto; padding: 0 2px 4px; max-width: 100%; }
+        .formation .scroll { position: relative; overflow-x: auto; padding: 0 2px 4px; max-width: 100%; }
         .formation .coaches { display: flex; list-style: none; margin: 0; padding: 0; width: max-content; min-width: min(100%, 420px); }
-        .formation .coaches > li { flex: 1 0 34px; max-width: 64px; display: flex; flex-direction: column; }
+        .formation .coaches > li { position: relative; flex: 1 0 34px; max-width: 64px; display: flex; flex-direction: column; }
         .formation .sector { height: 18px; padding-left: 4px; border-bottom: 2px solid #aeb3b9; margin-bottom: 4px; font-weight: 700; white-space: nowrap; }
         .formation .sector.begins { border-left: 2px solid #aeb3b9; }
         .formation .car { position: relative; height: 34px; margin: 0 1px; border: 1.5px solid #70757b; border-radius: 3px; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 3px; font-weight: 700; }
@@ -202,6 +202,14 @@
         .formation .offers { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; min-height: 14px; }
         .formation .note { margin: 4px 0 0; color: var(--muted); }
         .formation .warning { color: var(--late); font-weight: 600; margin: 0 0 6px; }
+        @media (max-width: 639px) {
+            /* Phone: narrower coaches, so that a train of eight fits; a longer one scrolls. */
+            .formation .coaches { min-width: 0; }
+            .formation .coaches > li { flex-basis: 25px; width: 25px; }
+            .formation .car { gap: 0; font-size: 11px; }
+            .formation .car.restaurant span { display: none; }
+            .formation .offers svg { width: 10px; height: 10px; }
+        }
         .transfer { margin: 0 0 10px 6.3em; font-size: 12px; color: var(--muted); display: block !important; }
         .transfer .late { font-size: inherit; }
 
