@@ -67,6 +67,18 @@ def test_modes_translate_to_motis():
     assert connections._modes(["all"]) is None
 
 
+@pytest.mark.parametrize(
+    ("query", "detailed"),
+    [({}, "false"), ({"geometry": "0"}, "false"), ({"geometry": "1"}, "true")],
+)
+def test_the_router_draws_the_lines_only_when_asked_for(api, query, detailed):
+    api.get(
+        "/v2/connections",
+        params={"from": "Alpha", "to": "8500003", "datetime": f"{TODAY} 07:55", **query},
+    )
+    assert api.motis.params["detailedLegs"] == detailed
+
+
 def trip(start, end):
     return {"startTime": f"2026-10-05T{start}:00Z", "endTime": f"2026-10-05T{end}:00Z"}
 

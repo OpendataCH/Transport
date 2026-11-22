@@ -12,6 +12,7 @@
 # With MOTIS_OSM naming an OpenStreetMap extract (fetched by ingest), the
 # router also walks along streets between stops where the timetable has no
 # transfer; the extract changing (its size) rebuilds just like a new feed.
+# With MOTIS_SHAPES as well, trains and trams follow their tracks on a map.
 #
 # Meant as the entrypoint of the official image (ghcr.io/motis-project/motis),
 # which ships busybox: `sh /motis-run.sh`.
@@ -51,6 +52,7 @@ wanted() {
     if [ -n "$o" ] && [ -n "${MOTIS_TILES:-}" ]; then f="$f+tiles"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_GBFS_URL:-}" ]; then f="$f+gbfs"; fi
     if [ -n "$o" ] && [ -n "${MOTIS_REVERSE_GEOCODING:-}" ]; then f="$f+rgeo"; fi
+    if [ -n "$o" ] && [ -n "${MOTIS_SHAPES:-}" ]; then f="$f+shapes"; fi
     echo "$f+motis${MOTIS_VERSION:-unknown}+r$CONFIG_REVISION"
 }
 loaded() { cat "$DATA/current/FEED" 2>/dev/null | tr -d '[:space:]'; }
@@ -101,11 +103,26 @@ build() {
         # October 2026 (91-A00-7-j26-1), and without a default the whole
         # import fails with "timezone not set".
         echo "  default_timezone: Europe/Zurich"
-        # Vehicles on the map (/api/v6/map/trips), for the map example. The
-        # Swiss feed has no shapes.txt, so they move in straight lines
-        # between stops.
+        # Vehicles on the map (/api/v6/map/trips), for the map example.
         echo "  railviz: true"
-        echo "  with_shapes: false"
+        # The Swiss feed has no shapes.txt, so a ride is a straight line
+        # between stops, unless MOTIS draws it from the rails of the street
+        # network. That takes 1 GB of disk and some minutes of each import;
+        # two threads leave the processors to the router serving meanwhile.
+        # Road and water stay straight: buses are most of the routes. Beyond
+        # the edge of the extract rails are straight lines too.
+        if [ -n "$street" ] && [ -n "${MOTIS_SHAPES:-}" ]; then
+            echo "  with_shapes: true"
+            echo "  route_shapes:"
+            echo "    mode: missing"
+            echo "    n_threads: 2"
+            echo "    clasz:"
+            for class in BUS COACH RIDE_SHARING ODM SHIP; do
+                echo "      $class: false"
+            done
+        else
+            echo "  with_shapes: false"
+        fi
         echo "  update_interval: 60"
         # Longer than the default 15: MOTIS leaves out a walk of exactly the
         # limit, and the timetable has 15-minute ones (Trübsee to the chair

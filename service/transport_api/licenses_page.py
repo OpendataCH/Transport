@@ -53,7 +53,7 @@ DATA = [
     ),
     (
         "OpenStreetMap, Swiss extract by Geofabrik",
-        "Streets for walks, addresses and places",
+        "Streets for walks, tracks on the map, addresses and places",
         "ODbL 1.0, © OpenStreetMap contributors",
         "https://download.geofabrik.de/europe/switzerland.html",
         "https://www.openstreetmap.org/copyright",
