@@ -59,3 +59,31 @@ CREATE TABLE IF NOT EXISTS rt.occupancy (
     second   smallint,
     PRIMARY KEY (day, operator, train, station)
 );
+
+-- Train formations (formation_fetch.py): the last answer per train and service
+-- day, and a note when somebody asked for one ahead of its time.
+CREATE TABLE IF NOT EXISTS rt.formation (
+    day        date    NOT NULL,
+    operator   text    NOT NULL,
+    number     text    NOT NULL,
+    asked_at   timestamptz,
+    updated_at timestamptz,
+    wanted     boolean NOT NULL DEFAULT false,
+    stops      jsonb,
+    PRIMARY KEY (day, operator, number)
+);
+
+-- One row per request to the formation service: the quota is counted from
+-- it, and `changed` says whether asking again found anything new. Kept for
+-- eight days.
+CREATE TABLE IF NOT EXISTS rt.formation_call (
+    id       bigserial PRIMARY KEY,
+    at       timestamptz NOT NULL,
+    day      date NOT NULL,
+    operator text NOT NULL,
+    number   text NOT NULL,
+    reason   text NOT NULL,
+    status   integer,
+    changed  boolean
+);
+CREATE INDEX IF NOT EXISTS formation_call_at ON rt.formation_call (at);

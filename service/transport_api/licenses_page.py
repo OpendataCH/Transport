@@ -38,6 +38,13 @@ DATA = [
         "https://opentransportdata.swiss/en/terms-of-use/",
     ),
     (
+        "Train formations (Train Formation Service of SKI+)",
+        "/formation, the trains drawn in the connections example",
+        "opentransportdata.swiss terms of use",
+        "https://data.opentransportdata.swiss/en/dataset/formations",
+        "https://opentransportdata.swiss/en/terms-of-use/",
+    ),
+    (
         "National fare service NOVA (OJPFare, beta)",
         "Ticket prices of /fare",
         "opentransportdata.swiss terms of use",

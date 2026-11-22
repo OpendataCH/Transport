@@ -272,6 +272,65 @@ class TripJourney(Journey):
     cancelled: bool = Field(description="True when the trip does not run today after all.")
 
 
+class Coach(BaseModel):
+    """One vehicle of a train, as it stands at one stop."""
+
+    position: int = Field(description="Counted from the front, from 1.")
+    sector: str | None = Field(description="The platform's sector, where it has sectors.")
+    number: str | None = Field(description="The number shown on the coach.")
+    type: str = Field(
+        description="`coach`, `family`, `restaurant`, `couchette`, `sleeper`, `baggage`, "
+        "`locomotive`, `parked` or `other`."
+    )
+    classes: list[int] = Field(description="`1`, `2`, both, or none.")
+    offers: list[str] = Field(
+        description="`wheelchair`, `business`, `family`, `stroller`, `lowFloor`, `bicycle`, "
+        "`bicycleReservation`."
+    )
+    closed: bool
+    unattended: bool = Field(description="Open but unattended, as a restaurant can be.")
+    groupsBoarding: bool  # noqa: N815 - the API's spelling
+    groupsInTransit: bool  # noqa: N815 - the API's spelling
+    noPassageAhead: bool  # noqa: N815 - the API's spelling
+    noPassageBehind: bool  # noqa: N815 - the API's spelling
+
+
+class CoachesDestination(BaseModel):
+    """How far a part of the train runs."""
+
+    id: str | None
+    name: str | None
+    fromPosition: int | None  # noqa: N815 - the API's spelling
+    toPosition: int | None  # noqa: N815 - the API's spelling
+
+
+class FormationStop(BaseModel):
+    """The train at one of its stops."""
+
+    station: Location
+    arrival: str | None
+    departure: str | None
+    platform: str | None
+    coaches: list[Coach] = Field(description="The front first, in the direction it leaves in.")
+    destinations: list[CoachesDestination]
+
+
+class FormationResponse(BaseModel):
+    """The answer of `/v1/formation`."""
+
+    status: str = Field(
+        description="`available`; `pending` until `availableFrom`; `none` when the railway "
+        "gives none; `unsupported` for what is no train of a railway that does; `unknown` "
+        "for a trip not in the timetable."
+    )
+    trip: dict[str, str] | None
+    updated: str | None = Field(description="When the formation was fetched.")
+    availableFrom: str | None = Field(  # noqa: N815 - the API's spelling
+        description="When a pending formation is fetched."
+    )
+    stops: list[FormationStop]
+
+
 class TripResponse(BaseModel):
     """The answer of `/v1/trip`."""
 

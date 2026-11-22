@@ -72,6 +72,11 @@ GTFS_CACHE = os.environ.get("GTFS_CACHE", "/tmp/gtfs")
 GTFS_RT_URL = os.environ.get("GTFS_RT_URL", "https://api.opentransportdata.swiss/la/gtfs-rt")
 OTD_API_KEY = os.environ.get("OTD_API_KEY") or None
 
+# Train formations (timetable/formation_fetch.py): a key of its own, 50
+# requests a minute and 20 000 a day. Without one none are fetched.
+OTD_FORMATION_KEY = os.environ.get("OTD_FORMATION_KEY") or None
+FORMATION_PER_DAY = int(os.environ.get("FORMATION_PER_DAY") or "19000")
+
 # The railways' occupancy forecast (timetable/occupancy.py): free, no key, one
 # ZIP a day. Empty switches it off. Days of it kept ahead, today included.
 OCCUPANCY_URL = os.environ.get(
