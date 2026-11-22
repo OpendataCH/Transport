@@ -281,7 +281,8 @@ async def _far_walk(motis: "Motis", params: dict, arrival: bool, limit: int) -> 
     """Connections with a walk of up to an hour to the first stop or from the last.
 
     Without any, the walk itself - from a remote address to the next village
-    walking is the connection - when it takes no longer than that either.
+    walking is the connection - when it takes no longer than that either. Not
+    with a via: the router's direct walk does not pass it.
     """
     seconds = str(settings.MOTIS_MAX_FAR_WALK_SECONDS)
     far = {
@@ -296,7 +297,7 @@ async def _far_walk(motis: "Motis", params: dict, arrival: bool, limit: int) -> 
     key = "endTime" if arrival else "startTime"
     found = sorted(plan.get("itineraries") or [], key=lambda i: i[key])
     found = found[-limit:] if arrival else found[:limit]
-    if not found:
+    if not found and "via" not in params:
         found = (plan.get("direct") or [])[:1]
     return sorted(found, key=lambda i: i["startTime"])
 

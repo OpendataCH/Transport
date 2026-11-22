@@ -181,6 +181,12 @@ def test_a_longer_walk_to_a_vehicle_wins_over_walking_all_the_way():
     assert [i["startTime"][11:16] for i in got] == ["07:10"]
 
 
+def test_walking_all_the_way_does_not_stand_in_for_a_via():
+    # MOTIS answers a direct walk whatever `via` says; it passes none of the stops.
+    got = asyncio.run(connections._far_walk(FarMotis(), {"via": "ch_8500002"}, False, 4))
+    assert got == []
+
+
 DATABASE = os.environ.get("TEST_DATABASE_URL")
 needs_database = pytest.mark.skipif(not DATABASE, reason="TEST_DATABASE_URL is not set")
 
