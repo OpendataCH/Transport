@@ -176,6 +176,7 @@
         .legs .between li { display: flex; gap: 10px; }
         .legs .between .bt { width: 3em; font-variant-numeric: tabular-nums; }
         /* The train as it stands at the platform, its front on the left. */
+        .legs .stops-toggle + .stops-toggle { margin-left: 6px; }
         .formation { margin-top: 10px; color: var(--ink); font-size: 12px; min-width: 0; }
         .formation .board-at { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 6px; padding: 0; list-style: none; }
         .formation .board-at li { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
@@ -682,7 +683,6 @@
             box.appendChild(el('p', {class: 'note', role: 'status', text: answer.loading || when <= new Date()
                 ? 'The train formation is being loaded …'
                 : 'Train formation from about ' + hhmm(when) + '.'}));
-            box.hidden = false;
             return;
         }
         if (answer.status !== 'available') return;
@@ -786,34 +786,53 @@
         if (coaches.some(function (c) { return c.closed; })) notes.push('hatched: closed' + (endsAt.length ? ' or going elsewhere' : ''));
         notes.push('as of ' + clock(answer.updated) + ', can change at short notice');
         box.appendChild(el('p', {class: 'note', text: notes.join(' · ')}));
-        box.hidden = false;
     }
 
+    // A button and the train below it: nothing is asked or shown before the click.
     function formationOf(section) {
         var journey = section.journey, trip = journey.trip;
         if (!trip || kindOf(section) !== 'train' || FORMATION_OPERATORS.indexOf(journey.operator) < 0) return null;
         if (!section.departure.station || !section.arrival || !section.arrival.station) return null;
         var box = el('div', {class: 'formation', hidden: ''});
+        var button = el('button', {type: 'button', class: 'stops-toggle', 'aria-expanded': 'false'}, ['Train formation ›']);
         var url = '../' + api() + '/formation?' + new URLSearchParams({id: trip.id, date: trip.date});
+        var opened = 0;     // counts the clicks, so that an older answer draws nothing
+        function say(text) {
+            box.textContent = '';
+            box.appendChild(el('p', {class: 'note', role: 'status', text: text}));
+        }
         // Asking moves a train to the front of the queue: it is there within
         // seconds, up to ten hours ahead (seven before `availableFrom`).
-        function load(attempt) {
-            if (attempt && !box.isConnected) return;
+        function load(attempt, click) {
+            function current() { return click === opened && box.isConnected && !box.hidden; }
+            if (!current()) return;
             fetch(url)
-                .then(function (response) { return response.ok ? response.json() : null; })
+                .then(function (response) {
+                    if (!response.ok) throw new Error(response.status);
+                    return response.json();
+                })
                 .then(function (answer) {
-                    if (!answer) return;
+                    if (!current()) return;
                     answer.loading = answer.status === 'pending' && attempt < 12
                         && parse(answer.availableFrom) - new Date() <= 7 * 3600000;
                     box.textContent = '';
-                    box.hidden = true;
                     drawFormation(box, answer, section);
-                    if (answer.loading) setTimeout(function () { load(attempt + 1); }, 5000);
+                    if (!box.firstChild) say('No formation is known for this train.');
+                    if (answer.loading) setTimeout(function () { load(attempt + 1, click); }, 5000);
                 })
-                .catch(function () {});  // the connection is complete without it
+                .catch(function () {
+                    if (current()) say('The train formation could not be loaded.');
+                });
         }
-        load(0);
-        return box;
+        button.addEventListener('click', function () {
+            box.hidden = !box.hidden;
+            button.setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
+            opened++;
+            if (box.hidden) return;
+            say('Loading the train formation …');
+            load(0, opened);
+        });
+        return {button: button, box: box};
     }
 
     function legs(connection) {
@@ -839,6 +858,7 @@
                     journey.operator ? el('span', {text: ' · ' + journey.operator}) : null,
                     occupancy(journey.capacity1st, journey.capacity2nd)
                 ];
+                var buttons = [], panels = [];
                 if (between.length) {
                     var listOf = el('ul', {class: 'between', hidden: ''}, between.map(function (s) {
                         return el('li', {'data-at': at(s)}, [el('span', {class: 'bt', text: clock(s.departure || s.arrival)}), el('span', {text: stationName(s)})]);
@@ -849,9 +869,15 @@
                         listOf.hidden = !listOf.hidden;
                         toggle.setAttribute('aria-expanded', listOf.hidden ? 'false' : 'true');
                     });
-                    ride.push(el('br'), toggle, listOf);
+                    buttons.push(toggle);
+                    panels.push(listOf);
                 }
-                ride.push(formationOf(section));
+                var train = formationOf(section);
+                if (train) {
+                    buttons.push(train.button);
+                    panels.push(train.box);
+                }
+                if (buttons.length) ride.push.apply(ride, [el('br')].concat(buttons, panels));
             }
             list.appendChild(el('li', {class: walk ? 'walk' : '', 'data-section': String(index)}, [
                 el('span', {}), el('span', {class: 'rail'}), el('div', {class: 'ride'}, ride), el('span', {})
