@@ -390,9 +390,10 @@ def _modes(transportations: list[str]) -> list[str] | None:
 
 def _count(limit: str) -> int:
     try:
-        return max(int(float(limit)), 1)
+        number = float(limit)
     except ValueError:
         return int(DEFAULT_LIMIT)
+    return int(DEFAULT_LIMIT) if number != number else int(max(number, 1))
 
 
 def over_the_limit(limit: str) -> bool:

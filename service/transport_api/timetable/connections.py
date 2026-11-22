@@ -49,6 +49,7 @@ DEFAULT_PAGE = 0
 
 MAX_LIMIT = 16
 MAX_PAGE = 10
+BEYOND_RANGE = 10**9
 # Earlier connections: page -1 is the `limit` connections before page 0.
 MIN_PAGE = -10
 # What MOTIS takes. search.ch took five.
@@ -766,7 +767,9 @@ def _number(value: str | None, default: int) -> int:
     if not truthy(value):
         return default
     try:
-        return int(float(value))
+        number = float(value)
+        # Infinity is only a very large number: out of range, like any other.
+        return int(max(-BEYOND_RANGE, min(number, BEYOND_RANGE))) if number == number else default
     except ValueError:
         return default
 
