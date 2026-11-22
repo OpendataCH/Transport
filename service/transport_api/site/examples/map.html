@@ -420,7 +420,7 @@
         show([el('h4', {text: s.name || 'Trip'}), el('p', {class: 'muted', text: 'Loading its run…'})]);
         getJSON('../v2/map/trip?id=' + encodeURIComponent(s.trip)).then(function (t) {
             if (tripLine) map.removeLayer(tripLine);
-            var line = decode(t.polyline, 5);
+            var line = decode(t.polyline, 6);   // the router writes a trip with six decimals, the segments above with five
             if (line.length < 2) line = t.stops.map(function (x) { return [x.lat, x.lon]; });
             tripLine = L.polyline(line, {color: MODE_COLOURS[ROUTER_MODES[t.mode] || 'bus'], weight: 4, opacity: 0.7}).addTo(map);
             var now = Date.now();
