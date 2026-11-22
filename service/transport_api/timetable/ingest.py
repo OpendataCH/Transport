@@ -16,6 +16,8 @@ takes ten minutes on a slow disk and happens every day.
 - **Real time**, every 30 seconds, when OTD_API_KEY is set.
 - **Occupancy forecast**, checked hourly, fetched twice a day: the next
   OCCUPANCY_DAYS days of it, loaded anew when the file or the day changes.
+- **Train formations**, train by train, when OTD_FORMATION_KEY is set
+  (formation_fetch.py has the plan).
 """
 
 import asyncio
@@ -31,7 +33,7 @@ import asyncpg
 import httpx
 
 from .. import settings
-from . import fetch_log, importer, occupancy, realtime
+from . import fetch_log, formation_fetch, importer, occupancy, realtime
 
 log = logging.getLogger("transport_api.timetable.ingest")
 
@@ -162,7 +164,9 @@ async def run() -> None:
     await connection.execute(importer.sql("realtime.sql"))
     await connection.close()
     state: dict[str, str | None] = {"version": None}
-    await asyncio.gather(_realtime(state), _timetable(state), _occupancy())
+    await asyncio.gather(
+        _realtime(state), _timetable(state), _occupancy(), formation_fetch.keep_current(_connect)
+    )
 
 
 async def _realtime(state: dict[str, str | None]) -> None:

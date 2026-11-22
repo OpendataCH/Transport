@@ -73,6 +73,8 @@ services:
       GTFS_WINDOW_STEP_DAYS: "7"
       GTFS_PAST_DAYS: "7"
       OTD_API_KEY: ${OTD_API_KEY:-}
+      # Train formations: 20 000 requests a day and key.
+      OTD_FORMATION_KEY: ${OTD_FORMATION_KEY:-}
       OSM_URL: https://download.geofabrik.de/europe/switzerland-latest.osm.pbf
     volumes:
       - gtfscache:/var/cache/gtfs

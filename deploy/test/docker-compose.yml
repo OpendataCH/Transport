@@ -56,6 +56,10 @@ services:
       # Three days of the occupancy forecast: this loader has 1.5 GB.
       OCCUPANCY_DAYS: "3"
       OTD_API_KEY: ${OTD_API_KEY:-}
+      # Train formations: 20 000 requests a day and key.
+      OTD_FORMATION_KEY: ${OTD_FORMATION_KEY:-}
+      # Staging takes a sample.
+      FORMATION_PER_DAY: "500"
     volumes:
       - gtfscache:/var/cache/gtfs
     depends_on:
