@@ -253,7 +253,7 @@ async def _formation(pool: asyncpg.Pool, trip_id: str, day: Date) -> dict:
     tried = state is not None and state["asked_at"] is not None
     if moment_now > ends or (tried and state["asked_at"] >= starts - LEAD):
         return {**answer, "status": "none"}
-    if starts - HORIZON <= moment_now < starts - LEAD and not (state and state["wanted"]):
+    if moment_now >= starts - HORIZON and not tried and not (state and state["wanted"]):
         await db.fetch(pool, WANT, *key)
     if tried and moment_now >= starts - LEAD:
         return {**answer, "status": "none"}

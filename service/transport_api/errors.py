@@ -4,6 +4,7 @@ A 429 is the caller's to retry: the router is busy (timetable/router.py).
 A 503 says the timetable or the router is not there.
 """
 
+import asyncpg
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 
@@ -31,6 +32,13 @@ def install(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
     async def _api_error(_: Request, exc: ApiError) -> PhpErrorJson:
         return exc.response()
+
+    @app.exception_handler(asyncpg.CharacterNotInRepertoireError)
+    async def _no_text(_: Request, exc: asyncpg.CharacterNotInRepertoireError) -> PhpErrorJson:
+        # A NUL in a parameter: Postgres takes it in no text, and no name has one.
+        return ApiError(
+            400, "A parameter contains a character that is not valid in text."
+        ).response()
 
     @app.exception_handler(NotAList)
     async def _not_a_list(request: Request, exc: NotAList) -> Response:

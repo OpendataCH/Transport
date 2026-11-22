@@ -360,3 +360,51 @@ def test_one_turn_of_the_loop(api, monkeypatch):
     monkeypatch.setattr(formation_fetch, "fetch_one", fetched)
     run(work)
     assert turns == ["1234"]
+
+
+@needs_database
+def test_who_is_looked_at_comes_first_then_who_is_under_way(api):
+    def a_train(number, starts, ends):
+        return formation_fetch.Train(TODAY, "Test Bahn", number, TODAY, starts, ends, False)
+
+    later = a_train("1", at(11, 0, TODAY), at(12, 0, TODAY))
+    running = a_train("2", at(9, 0, TODAY), at(12, 0, TODAY))
+    nearly_there = a_train("3", at(9, 50, TODAY), at(10, 10, TODAY))
+    looked_at = a_train("4", at(12, 30, TODAY), at(13, 0, TODAY))
+    ahead = a_train("5", at(18, 0, TODAY), at(19, 0, TODAY))
+
+    async def work(connection):
+        for number in ("4", "5"):
+            await connection.fetch(formation.WANT, TODAY, "Test Bahn", number)
+        trains = [later, nearly_there, running, looked_at, ahead]
+        return await formation_fetch.planned(connection, trains, at(10, 0, TODAY), 19000)
+
+    assert [t.number for t, _ in run(work)] == ["4", "5", "2", "3", "1"]
+
+
+@needs_database
+def test_a_train_looked_at_within_the_three_hours_moves_up_too(api):
+    assert get(api)["status"] == "pending"  # 07:00, it starts at 08:00
+    assert [r["wanted"] for r in run(lambda c: c.fetch("SELECT wanted FROM rt.formation"))] == [
+        True
+    ]
+
+
+@needs_database
+@pytest.mark.parametrize(
+    "query",
+    [
+        "locations?query=%00x",
+        "stationboard?station=%00x",
+        "stationboard?id=%00",
+        "connections?from=%00x&to=Beta",
+        "trip?id=%00",
+        "trip?number=%00",
+        "formation?id=%00",
+    ],
+)
+def test_a_null_character_is_the_callers_mistake(api, query):
+    app.state.motis = httpx.AsyncClient(base_url="http://motis")  # never reached
+    response = api.get(f"/v1/{query}")
+    assert response.status_code == 400
+    assert response.json()["errors"]
