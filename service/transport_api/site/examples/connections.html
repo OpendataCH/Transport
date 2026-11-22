@@ -683,21 +683,39 @@
         var here = answer.stops[ride.from], coaches = here.coaches;
         if (!coaches.length) return;
 
-        // A part of the train may end before the stop one gets off at.
+        // A train may divide, also after the last stop this trip has in the
+        // timetable: then the parts' destinations lie beyond it, and where
+        // one gets off says which part is the right one.
+        var target = section.arrival.station.id, beyond = ride.to < 0;
+        var onTheWay = answer.stops.slice(ride.from + 1, beyond ? answer.stops.length : ride.to)
+            .map(function (stop) { return stop.station.id; })
+            .concat((section.journey.passList || []).slice(1, -1).map(function (stop) { return stop.station && stop.station.id; }));
+        var parts = here.destinations.filter(function (part) { return part.id && part.name; });
+        var divides = parts.some(function (part) { return part.name !== parts[0].name; });
+        var oneEndsThere = parts.some(function (part) { return part.id === target; });
         var endsEarly = {}, endsAt = [];
-        here.destinations.forEach(function (part) {
-            for (var i = ride.from + 1; i < ride.to; i++) {
-                if (answer.stops[i].station.id !== part.id) continue;
-                for (var position = part.fromPosition; position <= part.toPosition; position++) endsEarly[position] = part.name;
-                if (endsAt.indexOf(part.name) < 0) endsAt.push(part.name);
-            }
+        parts.forEach(function (part) {
+            if (part.id === target) return;
+            if (onTheWay.indexOf(part.id) < 0 && !(divides && beyond && oneEndsThere)) return;
+            for (var position = part.fromPosition; position <= part.toPosition; position++) endsEarly[position] = part.name;
+            if (endsAt.indexOf(part.name) < 0) endsAt.push(part.name);
         });
         function usable(coach) { return !coach.closed && !endsEarly[coach.position]; }
 
-        if (endsAt.length) {
+        if (endsAt.length && coaches.some(usable)) {
             box.appendChild(el('p', {class: 'warning', text:
                 'The train divides: only the solid coaches go to ' + stationName(section.arrival) +
-                '. The hatched ones end in ' + endsAt.join(', ') + '.'}));
+                '. The hatched ones go to ' + endsAt.join(', ') + '.'}));
+        } else if (endsAt.length) {
+            endsEarly = {};  // every part ends on the way: the answer is of another leg
+            endsAt = [];
+        }
+        // Which part is the right one cannot always be told; where each goes, can.
+        if (divides && beyond && !endsAt.length) {
+            box.appendChild(el('p', {class: 'warning', text: 'The train divides: ' + parts.map(function (part) {
+                var own = coaches.filter(function (c) { return c.position >= part.fromPosition && c.position <= part.toPosition; });
+                return own.length ? whereInTrain(own, coaches) + ' to ' + part.name : '';
+            }).filter(Boolean).join(', ') + '.'}));
         }
 
         var boardAt = PLACES.map(function (place) {
@@ -737,7 +755,7 @@
             if (coach.groupsBoarding) words.push('groups board here');
             if (coach.groupsInTransit) words.push('partly reserved for groups');
             if (coach.closed) words.push('closed');
-            if (endsEarly[coach.position]) words.push('ends in ' + endsEarly[coach.position]);
+            if (endsEarly[coach.position]) words.push('goes to ' + endsEarly[coach.position]);
             var said = words.join(', ');
 
             var shown = PLACES.filter(function (place) {
@@ -757,7 +775,7 @@
         var notes = [];
         var lowFloor = coaches.filter(function (c) { return usable(c) && offers('lowFloor')(c); });
         if (lowFloor.length) notes.push('Low-floor entry: ' + whereInTrain(lowFloor, coaches));
-        if (coaches.some(function (c) { return c.closed; })) notes.push('hatched: closed' + (endsAt.length ? ' or ending earlier' : ''));
+        if (coaches.some(function (c) { return c.closed; })) notes.push('hatched: closed' + (endsAt.length ? ' or going elsewhere' : ''));
         notes.push('as of ' + clock(answer.updated) + ', can change at short notice');
         box.appendChild(el('p', {class: 'note', text: notes.join(' · ')}));
         box.hidden = false;
