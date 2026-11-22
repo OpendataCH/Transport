@@ -679,9 +679,9 @@
     function drawFormation(box, answer, section) {
         if (answer.status === 'pending') {
             var when = parse(answer.availableFrom);
-            box.appendChild(el('p', {class: 'note', text: when > new Date()
-                ? 'Train formation from about ' + hhmm(when) + '.'
-                : 'The train formation is being loaded.'}));
+            box.appendChild(el('p', {class: 'note', role: 'status', text: answer.loading || when <= new Date()
+                ? 'The train formation is being loaded …'
+                : 'Train formation from about ' + hhmm(when) + '.'}));
             box.hidden = false;
             return;
         }
@@ -794,10 +794,25 @@
         if (!trip || kindOf(section) !== 'train' || FORMATION_OPERATORS.indexOf(journey.operator) < 0) return null;
         if (!section.departure.station || !section.arrival || !section.arrival.station) return null;
         var box = el('div', {class: 'formation', hidden: ''});
-        fetch('../' + api() + '/formation?' + new URLSearchParams({id: trip.id, date: trip.date}))
-            .then(function (response) { return response.ok ? response.json() : null; })
-            .then(function (answer) { if (answer) drawFormation(box, answer, section); })
-            .catch(function () {});  // the connection is complete without it
+        var url = '../' + api() + '/formation?' + new URLSearchParams({id: trip.id, date: trip.date});
+        // Asking moves a train to the front of the queue: it is there within
+        // seconds, up to ten hours ahead (seven before `availableFrom`).
+        function load(attempt) {
+            if (attempt && !box.isConnected) return;
+            fetch(url)
+                .then(function (response) { return response.ok ? response.json() : null; })
+                .then(function (answer) {
+                    if (!answer) return;
+                    answer.loading = answer.status === 'pending' && attempt < 12
+                        && parse(answer.availableFrom) - new Date() <= 7 * 3600000;
+                    box.textContent = '';
+                    box.hidden = true;
+                    drawFormation(box, answer, section);
+                    if (answer.loading) setTimeout(function () { load(attempt + 1); }, 5000);
+                })
+                .catch(function () {});  // the connection is complete without it
+        }
+        load(0);
         return box;
     }
 

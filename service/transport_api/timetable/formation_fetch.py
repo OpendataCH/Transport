@@ -12,6 +12,10 @@ weekday, so:
 - **retry**: a train without a formation once more an hour before it starts.
 - **early**: a train somebody asked `/v1/formation` for, up to ten hours ahead.
 
+A train somebody looks at and that has not been asked for goes first; then,
+when there is a backlog as after a restart, the trains under way, those with
+the longest still to run first, then the next to leave.
+
 Replayed on the busiest day of the timetable (15 January 2027, 10 891
 trains) that is 18 558 requests in any 24 hours with both caps used up, and
 no train waits more than a minute. Each request is a row in
@@ -42,7 +46,7 @@ log = logging.getLogger("transport_api.timetable.formation")
 URL = "https://api.opentransportdata.swiss/formation/v2/formations_stop_based"
 
 PAUSE = 1.5  # seconds between requests: 40 a minute of the 50 allowed
-PLAN_EVERY = 30  # seconds
+PLAN_EVERY = 10  # seconds: how long who looks at a train waits for its turn
 TRAINS_EVERY = 1800  # seconds
 
 REFRESH_BEFORE = timedelta(minutes=20)
@@ -50,6 +54,7 @@ RETRY_BEFORE = timedelta(minutes=60)
 HALFWAY_FROM = timedelta(hours=1)
 REFRESHED = ["IC", "ICN", "IR", "IRE", "EC", "EN", "ICE", "TGV", "RJX", "RJ", "NJ", "PE", "RE"]
 
+LOOKED_AT = -1
 PRIORITY = {"base": 0, "refresh": 1, "retry": 2, "halfway": 3, "early": 4}
 CAPS = {"early": 2000, "retry": 1500}
 # Of the day's budget, what only trains not asked yet may use.
@@ -220,13 +225,19 @@ async def planned(
     }
     wanted = []
     for train in trains:
-        found = due(train, states.get(train.key), now)
+        state = states.get(train.key)
+        found = due(train, state, now)
         if found:
-            # Trains yet to leave before those on their way.
-            wanted.append((found[0], train.starts < now, train.starts, train.key, train, found[1]))
+            priority, reason = found
+            if state and state.wanted and state.asked_at is None:
+                priority = LOOKED_AT
+            # Under way counts as leaving now; of those, the longest to run first.
+            leaves = max(train.starts, now)
+            order = (priority, leaves, -train.ends.timestamp(), train.key)
+            wanted.append((order, train, reason))
     used = Used(**dict(await connection.fetchrow(USED, now - timedelta(days=1))))
     queue = []
-    for *_, train, reason in sorted(wanted, key=lambda entry: entry[:4]):
+    for _, train, reason in sorted(wanted, key=lambda entry: entry[0]):
         if allowed(reason, used, budget):
             used.add(reason)
             queue.append((train, reason))
