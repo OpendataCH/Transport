@@ -206,7 +206,8 @@ class Section(BaseModel):
     geometry: Geometry | None = Field(
         default=None,
         description="Only with `geometry=1`: the line on a map. A walk follows the streets; "
-        "a ride runs straight from stop to stop.",
+        "trains and trams follow their tracks where known, other rides run straight "
+        "from stop to stop.",
     )
 
 

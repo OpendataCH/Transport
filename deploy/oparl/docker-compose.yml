@@ -98,6 +98,7 @@ services:
       MOTIS_DAYS: "150"
       MOTIS_OSM: /gtfs/osm/switzerland.osm.pbf
       MOTIS_TILES: "1"
+      MOTIS_SHAPES: "1"
       MOTIS_GBFS_URL: https://sharedmobility.ch/v2/gbfs
       MOTIS_GBFS_AUTHORIZATION: transport@opendata.ch
       MOTIS_REVERSE_GEOCODING: "1"

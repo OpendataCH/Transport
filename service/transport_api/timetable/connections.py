@@ -207,6 +207,7 @@ async def search_connections(
 
     arrival = _is_arrival_time(isArrivalTime)
     when = _when(datetime_, date, time)
+    with_geometry = truthy(geometry) and geometry.lower() not in ("0", "false")
     params = {
         "fromPlace": await _router_place(pool, origin),
         "toPlace": await _router_place(pool, destination),
@@ -218,6 +219,9 @@ async def search_connections(
         # Walking all the way is not a connection /v1 has ever offered.
         "directModes": "",
         "detailedTransfers": "false",
+        # The lines along the tracks and the steps of the walks, two thirds of
+        # the router's answer: nothing but `geometry` reads them.
+        "detailedLegs": "true" if with_geometry else "false",
         "maxPreTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "maxPostTransitTime": str(settings.MOTIS_MAX_WALK_SECONDS),
         "pedestrianSpeed": settings.MOTIS_PEDESTRIAN_SPEED
@@ -247,7 +251,6 @@ async def search_connections(
         # way when that is the only way (OpendataCH/Transport#206).
         itineraries = await _far_walk(motis, params, arrival, limit_value)
     _name_the_ends(itineraries, origin, destination)
-    with_geometry = truthy(geometry) and geometry.lower() not in ("0", "false")
     page_of = await _connections(pool, itineraries, with_geometry)
 
     origin_location = _endpoint_location(origin)
@@ -525,8 +528,9 @@ def _geometry(leg: dict) -> dict | None:
     An encoded polyline (Google's algorithm) with its precision, the number of
     decimals of each coordinate. A walk follows the street network and, inside
     a station, says the lowest and highest floor it reaches (`levels`, 0 at
-    street level). A ride runs straight from stop to stop: the timetable has
-    no shapes.
+    street level). A train or tram follows its track where the router was built
+    with shapes (MOTIS_SHAPES) and has the rails; any other ride runs straight
+    from stop to stop, the timetable having no shapes.
     """
     line = leg.get("legGeometry") or {}
     if not line.get("points"):

@@ -49,7 +49,7 @@ tunnel changes; a new service build never touches it.
 
 `motis-run.sh` writes MOTIS's configuration from environment variables and
 rebuilds when they change. A change that takes long to import (map tiles,
-GBFS) can be built beside the running router, without an outage:
+GBFS, the lines along the tracks of `MOTIS_SHAPES`) can be built beside the running router, without an outage:
 
 ```sh
 docker compose run -d --name transport-motis-build --no-deps \

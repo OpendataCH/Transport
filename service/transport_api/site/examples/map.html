@@ -159,7 +159,7 @@
 
     <footer class="footer">
         <hr>
-        <p>Map © <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a> ·
+        <p>Map © <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a> · tracks © <a href="https://www.openstreetmap.org/copyright" rel="external noopener noreferrer">OpenStreetMap</a> ·
             Timetable <a href="https://opentransportdata.swiss/" rel="external noopener noreferrer">opentransportdata.swiss</a> ·
             Powered by <a href="https://opendata.ch/">Opendata.ch</a> · <a href="/privacy.html">Privacy policy</a> · <a href="/licenses.html">Licenses</a></p>
     </footer>
@@ -420,7 +420,7 @@
         show([el('h4', {text: s.name || 'Trip'}), el('p', {class: 'muted', text: 'Loading its run…'})]);
         getJSON('../v2/map/trip?id=' + encodeURIComponent(s.trip)).then(function (t) {
             if (tripLine) map.removeLayer(tripLine);
-            var line = decode(t.polyline, 5);
+            var line = decode(t.polyline, 6);   // the router writes a trip with six decimals, the segments above with five
             if (line.length < 2) line = t.stops.map(function (x) { return [x.lat, x.lon]; });
             tripLine = L.polyline(line, {color: MODE_COLOURS[ROUTER_MODES[t.mode] || 'bus'], weight: 4, opacity: 0.7}).addTo(map);
             var now = Date.now();

@@ -1014,8 +1014,8 @@
 
     // --- The journey on a map -----------------------------------------------
     // With geometry=1 each section carries the line it follows: a walk the
-    // streets (and the floors of a station), a ride straight from stop to
-    // stop. The player moves a rider along it by the timetable, each part of
+    // streets (and the floors of a station), a train or tram its track, any
+    // other ride straight from stop to stop. The player moves a rider along it by the timetable, each part of
     // the journey given screen time by how long it lasts, but less than in
     // proportion, so that a four-minute walk is not over in a blink beside an
     // hour on the train.
@@ -1284,7 +1284,7 @@
         // the new ones load once it has arrived, instead of a level at a time.
         L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg', {
             maxZoom: 18, opacity: 0.55, updateWhenZooming: false, keepBuffer: 4,
-            attribution: '© <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a>'
+            attribution: '© <a href="https://www.swisstopo.admin.ch/" rel="external noopener noreferrer">swisstopo</a>, tracks © <a href="https://www.openstreetmap.org/copyright" rel="external noopener noreferrer">OpenStreetMap</a>'
         }).addTo(map);
 
         // The whole route, faint, and on it the part already travelled.
