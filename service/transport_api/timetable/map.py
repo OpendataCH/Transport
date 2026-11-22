@@ -20,6 +20,7 @@ from .. import errors
 from . import db
 from .connections import Motis, get_motis
 from .connections import _place as router_place
+from .router import plan_slot
 
 router = APIRouter(prefix="/map", tags=["map"])
 
@@ -117,6 +118,12 @@ async def stations(pool: Annotated[asyncpg.Pool, Depends(db.get_pool)]) -> JSONR
     return _cacheable(await _cached(("stations",), STATIONS_SECONDS, produce), STATIONS_SECONDS)
 
 
+async def _one_to_all(motis: Motis, params: dict[str, str]) -> dict:
+    """Everything reachable is a search, and waits for a slot like one."""
+    async with plan_slot():
+        return await motis.get("/api/v6/one-to-all", params)
+
+
 @router.get("/vehicles", summary="Vehicles under way in a box, now")
 async def vehicles(
     motis: Annotated[Motis, Depends(get_motis)],
@@ -189,7 +196,7 @@ async def reachable(
         params = {"one": f"{x},{y}", "maxTravelTime": str(minutes)}
         if time_:
             params["time"] = time_
-        answer = await motis.get("/api/v6/one-to-all", params)
+        answer = await _one_to_all(motis, params)
         start = None
         if not answer.get("all"):
             # Nothing on foot from the point: start at the nearest station.
@@ -197,7 +204,7 @@ async def reachable(
             if rows:
                 start = rows[0]
                 params["one"] = await router_place(pool, start)
-                answer = await motis.get("/api/v6/one-to-all", params)
+                answer = await _one_to_all(motis, params)
         best: dict[str, dict] = {}
         for item in answer.get("all", []):
             place = item.get("place") or {}

@@ -29,8 +29,9 @@ keeps that many: MOTIS 2.11.4 counts a trip with real time twice while it
 collects them and merges the two only afterwards, so Thun asked for ten
 gives eight.
 
-Only the four requests MOTIS knows pass: trip, stop event, trip info and
-location information. A journey plan takes one of the worker's router slots,
+Only the four requests MOTIS knows pass, one at a time: trip, stop event,
+trip info and location information, with the number of results asked for
+kept in range. A journey plan takes one of the worker's router slots,
 as `/v1/connections` does. A location request by name or stop id needs the
 router's place search (`MOTIS_GEOCODING`): without it, MOTIS 2.11.4 crashes
 on the lookup by id instead of refusing it.
@@ -161,6 +162,22 @@ def _translate_ids(root: ET.Element, translate) -> None:
 
 # The most departures the router hands out at once (its stoptimes limit).
 ROUTER_MAX_STOP_EVENTS = 1024
+# NumberOfResults: what is taken when it is below one or no number, and the most.
+RESULTS = {"OJPTripRequest": (5, 32)}
+OTHER_RESULTS = (10, ROUTER_MAX_STOP_EVENTS // 2)
+
+
+def bound_results(root: ET.Element, kind: str) -> None:
+    """Every NumberOfResults as a plain number in range."""
+    default, highest = RESULTS.get(kind, OTHER_RESULTS)
+    for element in root.iter():
+        if _local(element.tag) != "NumberOfResults":
+            continue
+        text = (element.text or "").strip()
+        wanted = int(text) if text.isascii() and text.isdigit() and len(text) < 10 else 0
+        for child in list(element):
+            element.remove(child)
+        element.text = str(min(wanted, highest) if wanted >= 1 else default)
 
 
 def widen_stop_events(root: ET.Element) -> int | None:
@@ -220,6 +237,9 @@ def parse_request(body: bytes) -> tuple[ET.Element, str]:
     service_request = root.find(f"{_o('OJPRequest')}/{_s('ServiceRequest')}")
     if service_request is None:
         raise BadRequest("The request has no OJPRequest/siri:ServiceRequest.")
+    requests = [child for child in service_request if _local(child.tag) in REQUESTS]
+    if len(requests) > 1:
+        raise BadRequest("One request at a time.")
     for kind in REQUESTS:
         found = service_request.find(_o(kind))
         if found is None:
@@ -707,6 +727,7 @@ async def ojp20(request: Request) -> Response:
         return _plain(503, "The router is not configured.")
     try:
         root, kind = parse_request(await request.body())
+        bound_results(root, kind)
         wanted = widen_stop_events(root) if kind == "OJPStopEventRequest" else None
         _translate_ids(root, to_router)
         _translate_days(root, _day_to_router)
